@@ -3,19 +3,23 @@ import {
   CollectionInsertManyError,
 } from "@datastax/astra-db-ts";
 
-const client = new DataAPIClient("AstraCS:x407");
-const database = client.db("https:/a-us-east-2.apps.astra.datastax.com");
+const client = new DataAPIClient(
+  "AstraCS:GcAHBNyZJEGUYJkYkEiJRXbr:c5a57f749b2bd125acb835fa98b1bcf8af879b8dad1876778696b5a2788d4407"
+);
+const database = client.db(
+  "https://a1971aa5-5930-4854-82ef-747bd405cc0a-us-east-2.apps.astra.datastax.com"
+);
 const collection = database.collection("sagawacluster");
 
 (async function () {
   try {
     const result = await collection.insertMany([
       {
-        nama: "Uta",
+        nama: "Mugi my kisah",
         umur: 20,
       },
       {
-        nama_user: "Mugi my Bini",
+        nama_user: "Mugi Blonde",
         hobi: "ngeteh",
         pesan: ["HIDUP BLONDE!"],
       },
