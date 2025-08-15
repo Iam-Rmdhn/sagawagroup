@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
-import { User } from "../models/user.model";
+import { UserModel, type User } from "../models/user.model";
 import { generateToken } from "../utils/jwt";
 
 export async function loginService(email: string, password: string) {
-  const mitra = await User.findOne({ email });
+  const mitra = await UserModel.findOne({ email });
   if (!mitra) throw new Error("Mitra tidak ditemukan");
 
   const isMatch = await bcrypt.compare(password, mitra.password);
@@ -11,7 +11,8 @@ export async function loginService(email: string, password: string) {
 
   const token = generateToken({ id: mitra._id, email: mitra.email });
 
-  const { password: _, ...safeMitra } = mitra.toObject();
+  // Remove password from response
+  const { password: _, ...safeMitra } = mitra;
 
   return {
     user: safeMitra,

@@ -21,7 +21,6 @@ const banks = [
   { name: "Bank Nationalnobu", aliases: ["nobu", "bank nobu"] },
   { name: "Bank KEB Hana (LINE Bank)", aliases: ["hana", "line bank"] },
   { name: "Bank Mandiri", aliases: ["mandiri"] },
-  { name: "Bank Mandiri", aliases: ["mandiri"] },
   { name: "Bank Mayapada", aliases: ["mayapada"] },
   { name: "Bank Mega", aliases: ["mega"] },
   { name: "Bank Mega Syariah", aliases: ["mega syariah"] },
