@@ -1,10 +1,16 @@
-import { approveMitraController } from "../controllers/mitra.controller";
+import {
+  approveMitraController,
+  registerMitraController,
+} from "../controllers/mitra.controller";
 
 export const mitraRoute = (req: Request): Promise<Response> => {
-  if (
-    req.method === "POST" &&
-    new URL(req.url).pathname === "/api/mitra/approve"
-  ) {
+  const url = new URL(req.url);
+
+  if (req.method === "POST" && url.pathname === "/api/mitra/register") {
+    return registerMitraController(req);
+  }
+
+  if (req.method === "POST" && url.pathname === "/api/mitra/approve") {
     return approveMitraController(req);
   }
 
