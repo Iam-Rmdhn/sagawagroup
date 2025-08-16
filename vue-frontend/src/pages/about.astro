@@ -9,33 +9,34 @@ import Footer from '../components/Footer.astro';
 		<Navbar />
 		<main class="flex-1">
 			<!-- Hero Section -->
-			<section class="bg-gradient-to-br from-amber-50 to-orange-50 py-12 sm:py-16 lg:py-20 relative overflow-hidden">
-				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-					<div class="text-center mb-8 sm:mb-12 lg:mb-16">
-						<h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 animate-fade-in-up">
-							Tentang <span class="text-amber-600 hover:text-amber-700 transition-colors duration-300">Sagawa Group</span>
-						</h1>
-						<p class="text-lg sm:text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-							PT Sagawa Pangan Nusantara adalah perusahaan yang bergerak di bidang Food & Beverage (F&B) dengan fokus pada pengembangan usaha melalui sistem kemitraan yang saling menguntungkan. Sejak resmi berdiri pada tahun 2024, kami berkomitmen menghadirkan produk dan layanan berkualitas tinggi yang mampu bersaing di pasar, sekaligus memberikan peluang bisnis yang berkelanjutan bagi para mitra kami di seluruh Indonesia.
-						</p>
-					</div>
-				</div>
-				
-				<!-- Floating Animation Elements -->
-				<div class="absolute top-10 left-10 w-4 h-4 bg-amber-300 rounded-full animate-float opacity-60"></div>
-				<div class="absolute top-32 right-16 w-6 h-6 bg-orange-300 rounded-full animate-float-delay opacity-50"></div>
-				<div class="absolute bottom-20 left-1/4 w-3 h-3 bg-amber-400 rounded-full animate-float-slow opacity-40"></div>
-				
-				<!-- Wave Effect at Bottom -->
-				<div class="absolute bottom-0 left-0 w-full overflow-hidden">
-					<svg class="relative block w-full h-12 sm:h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
-						<path fill="white" d="M0,224L48,208C96,192,192,160,288,149.3C384,139,480,149,576,165.3C672,181,768,203,864,197.3C960,192,1056,160,1152,149.3C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-					</svg>
-				</div>
-			</section>
+			<section class="hero-section relative pt-24 pb-32 md:pt-24 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
+                <!-- Background decorative elements -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-white rounded-full"></div>
+                    <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-amber-300 rounded-full"></div>
+                    <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-orange-300 rounded-full"></div>
+                    <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-red-300 rounded-full"></div>
+                </div>
+                
+                <div class="container mx-auto max-w-4xl relative z-30">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in-up bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">
+                        Tentang Sagawa Group
+                    </h1>
+                    <p class="text-xl md:text-md mb-8 pt-6 animate-fade-in-up delay-200 text-amber-100">
+							PT Sagawa Pangan Nusantara adalah perusahaan yang bergerak di bidang Food & Beverage (F&B) dengan fokus pada pengembangan usaha melalui sistem kemitraan yang saling menguntungkan. Sejak resmi berdiri pada tahun 2024, kami berkomitmen menghadirkan produk dan layanan berkualitas tinggi yang mampu bersaing di pasar, sekaligus memberikan peluang bisnis yang berkelanjutan bagi para mitra kami di seluruh Indonesia.                    </p>
+                </div>
+            
+                <!-- White Wave Effect that overlaps hero section -->
+                <div class="absolute bottom-[-1px] left-0 w-full overflow-hidden z-30">
+                    <!-- Single White Wave -->
+                    <svg class="w-full h-20" viewBox="0 0 1440 70" preserveAspectRatio="none">
+                        <path d="M0,70 L0,40 C240,15 480,50 720,45 C960,40 1200,15 1440,25 L1440,70 Z" fill="#FFFFFF"></path>
+                    </svg>
+                </div>
+            </section>
 
 			<!-- Company Info Section -->
-			<section class="py-12 sm:py-16 lg:py-20 bg-white relative">
+			<section class="pt-12 pb-12 sm:py-16 lg:py-20 bg-white relative mt-[-1px]">
 				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 						<div class="animate-fade-in-left">
@@ -460,4 +461,37 @@ import Footer from '../components/Footer.astro';
 		background-clip: text;
 		color: transparent;
 	}
+
+	/* Hero Section Styles - From FAQ page */
+	.hero-section {
+		background: linear-gradient(135deg, 
+			rgba(245, 158, 11, 0.9) 0%, 
+			rgba(249, 115, 22, 0.8) 25%,
+			rgba(239, 68, 68, 0.8) 50%,
+			rgba(245, 158, 11, 0.9) 75%,
+			rgba(217, 119, 6, 0.9) 100%
+		);
+	}
+
+	@keyframes float {
+		0%, 100% { 
+			transform: translateY(0px); 
+		}
+		50% { 
+			transform: translateY(-10px); 
+		}
+	}
+
+	.animate-float {
+		animation: float 3s ease-in-out infinite;
+	}
+
+	/* Delay classes */
+	.delay-100 { animation-delay: 0.1s; }
+	.delay-200 { animation-delay: 0.2s; }
+	.delay-300 { animation-delay: 0.3s; }
+	.delay-400 { animation-delay: 0.4s; }
+	.delay-500 { animation-delay: 0.5s; }
+	.delay-600 { animation-delay: 0.6s; }
+	.delay-700 { animation-delay: 0.7s; }
 </style>
