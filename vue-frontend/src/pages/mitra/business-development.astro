@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Business Development">
+    <div class="min-h-screen flex flex-col">
+        <Navbar />
+            <main class="container mx-auto px-4 py-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Business Development</h1>
+                <p class="text-lg text-gray-600">
+                Informasi mengenai Business Development akan segera tersedia di sini.
+                </p>
+            </main>
+        <Footer />
+    </div>
+</Layout>
+
+<style>
+.navbar {
+    position: sticky;
+    top: 0;
+}
+.container {
+    max-width: 1200px;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer {
+    position: bottom;
+}
+</style>
