@@ -1,0 +1,69 @@
+---
+const faqs = [
+    {
+        question: "Apa itu Sagawa Group?",
+        answer: "Sagawa Group adalah perusahaan yang bergerak di bidang kuliner, menawarkan berbagai konsep bisnis seperti Kagawa Coffee, Kagawa Ricebowl, dan RM Nusantara."
+    },
+    {
+        question: "Bagaimana cara menjadi mitra Sagawa Group?",
+        answer: "Anda dapat menghubungi tim Business Development kami melalui formulir kontak di website atau email yang tertera untuk informasi lebih lanjut mengenai kemitraan."
+    },
+    {
+        question: "Apa saja jenis kemitraan yang ditawarkan?",
+        answer: "Kami menawarkan berbagai jenis kemitraan, mulai dari franchise gerobak, stand di mall, hingga restoran penuh, disesuaikan dengan kebutuhan dan modal Anda."
+    },
+    {
+        question: "Apakah ada pelatihan yang diberikan untuk mitra baru?",
+        answer: "Ya, kami menyediakan pelatihan komprehensif untuk semua mitra baru, meliputi operasional, manajemen, hingga strategi pemasaran."
+    },
+    {
+        question: "Berapa estimasi modal awal untuk memulai kemitraan?",
+        answer: "Estimasi modal awal bervariasi tergantung jenis kemitraan yang dipilih. Silakan hubungi tim kami untuk mendapatkan rincian proposal yang sesuai."
+    },
+    {
+        question: "Apakah Sagawa Group menyediakan bahan baku?",
+        answer: "Ya, kami memastikan ketersediaan bahan baku berkualitas tinggi untuk semua mitra kami, menjaga standar rasa dan kualitas produk."
+    }
+];
+---
+
+<section class="py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {faqs.map((faq, index) => (
+                <div class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg">
+                    <details class="group">
+                        <summary class="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                            {faq.question}
+                            <span class="transform transition-transform duration-300 group-open:rotate-180">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600 leading-relaxed">
+                            {faq.answer}
+                        </p>
+                    </details>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+    details[open] summary {
+        color: #2563eb; 
+    }
+    details[open] summary + p {
+        animation: fade-in 0.5s ease-out forwards;
+    }
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
