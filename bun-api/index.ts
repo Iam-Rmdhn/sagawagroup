@@ -1,36 +1,66 @@
-import {
-  DataAPIClient,
-  CollectionInsertManyError,
-} from "@datastax/astra-db-ts";
+import { authRoute } from "./src/routes/auth.route";
+import { mitraRoute } from "./src/routes/mitra.route";
+import "./src/lib/db"; // Initialize database connection
+import dotenv from "dotenv";
 
-const client = new DataAPIClient(
-  "AstraCS:GcAHBNyZJEGUYJkYkEiJRXbr:c5a57f749b2bd125acb835fa98b1bcf8af879b8dad1876778696b5a2788d4407"
-);
-const database = client.db(
-  "https://a1971aa5-5930-4854-82ef-747bd405cc0a-us-east-2.apps.astra.datastax.com"
-);
-const collection = database.collection("sagawacluster");
+dotenv.config();
 
-(async function () {
-  try {
-    const result = await collection.insertMany([
-      {
-        nama: "Mugi my kisah",
-        umur: 20,
-      },
-      {
-        nama_user: "Mugi Blonde",
-        hobi: "ngeteh",
-        pesan: ["HIDUP BLONDE!"],
-      },
-    ]);
+const PORT = process.env.PORT || 9999;
 
-    console.log("Data berhasil masuk:", result);
-  } catch (error) {
-    if (error instanceof CollectionInsertManyError) {
-      console.log("Berhasil:", error.insertedIds());
-    } else {
-      console.error("Terjadi kesalahan saat menyisipkan data:", error);
+Bun.serve({
+  port: PORT,
+  async fetch(req) {
+    const url = new URL(req.url);
+
+    // Add CORS headers
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    };
+
+    // Handle preflight requests
+    if (req.method === "OPTIONS") {
+      return new Response(null, {
+        status: 200,
+        headers: corsHeaders,
+      });
     }
-  }
-})();
+
+    try {
+      // Route handling
+      if (url.pathname.startsWith("/api/auth")) {
+        const response = await authRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      if (url.pathname.startsWith("/api/mitra")) {
+        const response = await mitraRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Default response
+      return new Response("API Server is running", {
+        status: 200,
+        headers: corsHeaders,
+      });
+    } catch (error) {
+      console.error("Server error:", error);
+      return new Response("Internal Server Error", {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
+  },
+});
+
+console.log(`Server running on http://localhost:${PORT}`);
+console.log(`AstraDB connection initialized`);
