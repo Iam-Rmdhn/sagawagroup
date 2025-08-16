@@ -23,34 +23,37 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
   <div class="navbar-sticky">
     <Navbar />
   </div>
-  <main class="min-h-screen bg-white pt-16">
-    <!-- Gallery Header Section -->
-      <section class="bg-gradient-to-br from-amber-50 to-orange-50 py-12 sm:py-16 lg:py-20 relative">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div class="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 animate-fade-in-up">
-              Galeri <span class="text-amber-600 hover:text-amber-700 transition-colors duration-300">Sagawa Group</span>
-            </h1>
-            <p class="text-lg sm:text-sm text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-              Koleksi Foto Sagawa Group
-            </p>
-          </div>
+  <main class="min-h-screen bg-white">
+    <!-- Gallery Hero Section -->
+    <section class="hero-section relative pt-24 pb-32 md:pt-24 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-white rounded-full"></div>
+            <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-amber-300 rounded-full"></div>
+            <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-orange-300 rounded-full"></div>
+            <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-red-300 rounded-full"></div>
         </div>
-        <!-- Floating Animation Elements -->
-        <div class="absolute top-10 left-10 w-4 h-4 bg-amber-300 rounded-full animate-float opacity-60"></div>
-        <div class="absolute top-32 right-16 w-6 h-6 bg-orange-300 rounded-full animate-float-delay opacity-50"></div>
-        <div class="absolute bottom-20 left-1/4 w-3 h-3 bg-amber-400 rounded-full animate-float-slow opacity-40"></div>
         
-        <!-- Wave Effect at Bottom -->
-        <div class="absolute bottom-0 left-0 w-full overflow-hidden">
-          <svg class="relative block w-full h-12 sm:h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path fill="white" d="M0,224L48,208C96,192,192,160,288,149.3C384,139,480,149,576,165.3C672,181,768,203,864,197.3C960,192,1056,160,1152,149.3C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-          </svg>
+        <div class="container mx-auto pt-16 pb-16 max-w-4xl relative z-30">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in-up bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">
+                Galeri Sagawa Group
+            </h1>
+            <p class="text-xl md:text-2xl pt-4 mb-8 animate-fade-in-up delay-200 text-amber-100">
+                Koleksi foto dan dokumentasi kegiatan Sagawa Group
+            </p>
         </div>
-      </section>
+    
+        <!-- White Wave Effect that overlaps hero section -->
+        <div class="absolute bottom-0 left-0 w-full overflow-visible z-30">
+            <!-- Single White Wave with extended height and additional overlap -->
+            <svg class="w-full h-24" viewBox="0 0 1440 90" preserveAspectRatio="none">
+                <path d="M0,90 L0,40 C240,15 480,50 720,45 C960,40 1200,15 1440,25 L1440,90 Z" fill="#FFFFFF"></path>
+            </svg>
+        </div>
+    </section>
 
-      <!-- Gallery Grid -->
-      <section class="py-16 px-4 sm:px-6 lg:px-8">
+      <!-- Gallery Grid with strong connection to wave -->
+      <section class="pt-16 pb-16 px-4 sm:px-6 lg:px-8 bg-white relative z-20 mt-[-10px]">
         <div class="max-w-7xl mx-auto">
           <!-- Gallery Grid Container - Custom Layout sesuai spesifikasi -->
           <div class="flex flex-col gap-4 mb-12 mx-auto" style="max-width: 1050px;">
@@ -455,4 +458,48 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     animation: float-slow 5s ease-in-out infinite;
     animation-delay: 1s;
   }
+
+  /* Hero Section Styles - From FAQ page */
+  .hero-section {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.9) 0%, 
+        rgba(249, 115, 22, 0.8) 25%,
+        rgba(239, 68, 68, 0.8) 50%,
+        rgba(245, 158, 11, 0.9) 75%,
+        rgba(217, 119, 6, 0.9) 100%
+    );
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-10px); 
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  /* Delay classes */
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
+  .delay-600 { animation-delay: 0.6s; }
+  .delay-700 { animation-delay: 0.7s; }
 </style>
