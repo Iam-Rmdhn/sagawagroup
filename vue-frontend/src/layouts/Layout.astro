@@ -1,38 +1,229 @@
 ---
 export interface Props {
-	title: string;
+    title: string;
+    description?: string;
+    canonical?: string;
+    image?: string;
 }
 
-const { title } = Astro.props;
+const { 
+    title, 
+    description = "Sagawa Group - Perusahaan F&B dengan sistem kemitraan yang menguntungkan",
+    canonical = Astro.url.href,
+    image = "/assets/img/sagawa_logo.svg" 
+} = Astro.props;
 
 import '../styles/global.css';
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        
+        <!-- Open Graph / Social Media Tags -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+        <meta property="og:url" content={Astro.url} />
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={image} />
+        
+        <!-- Performance Optimizations -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        
+        <!-- Scroll Position Restoration -->
+        <script is:inline>
+            // Enable browser's native scroll restoration
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'auto';
+            }
+            
+            // Store scroll position
+            window.addEventListener('scroll', () => {
+                const currentPath = window.location.pathname;
+                localStorage.setItem('scrollPos_' + currentPath, window.scrollY.toString());
+            });
+            
+            // Restore scroll position
+            document.addEventListener('DOMContentLoaded', () => {
+                const currentPath = window.location.pathname;
+                const savedPosition = localStorage.getItem('scrollPos_' + currentPath);
+                
+                if (savedPosition) {
+                    setTimeout(() => {
+                        window.scrollTo({top: parseInt(savedPosition), behavior: 'auto'});
+                    }, 100);
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <slot />
+        
+        <!-- Intersection Observer for Lazy Loading -->
+        <script is:inline>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Setup intersection observer for lazy loaded elements
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (entry.target.classList.contains('lazy-load')) {
+                                entry.target.classList.add('visible');
+                                observer.unobserve(entry.target);
+                            }
+                        }
+                    });
+                }, {
+                    rootMargin: '100px',
+                    threshold: 0.1
+                });
+                
+                // Observe all elements with lazy-load class
+                document.querySelectorAll('.lazy-load').forEach(el => {
+                    observer.observe(el);
+                });
+            });
+        </script>
+    </body>
+	<script is:inline>
+		// Register Service Worker for PWA
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/service-worker.js')
+				.then(registration => {
+					console.log('ServiceWorker registration successful with scope: ', registration.scope);
+				})
+				.catch(err => {
+					console.error('ServiceWorker registration failed: ', err);
+				});
+		}
+	</script>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		padding: 0;
-		width: 100%;
-		height: 100%;
-	}
-	.navbar {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-	}
+<style is:global>
+    /* Performance optimized CSS loading */
+    :root {
+        --primary-color: #ffc107;
+        --secondary-color: #d50000;
+        --tertiary-color: #689f38;
+        --quaternary-color: #f57c00;
+        --background-color: #f5f7fa;
+        --text-color: #333;
+        --footer-bg: #0f172a;
+        --footer-text: #f8fafc;
+    }
+    
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        scroll-behavior: smooth;
+    }
+    
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        transition: background-color 0.3s, box-shadow 0.3s;
+        will-change: transform;
+        transform: translateZ(0);
+    }
+    
+    /* Core animations for better performance */
+    .fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .lazy-load {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .lazy-load.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Optimize image rendering */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Optimize SVG rendering */
+    svg {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+    
+    :focus {
+        outline: none;
+    }
+    
+    :focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+    
+	.navbar a:focus, 
+    .navbar button:focus,
+    button:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    
+    /* Reduce CLS (Cumulative Layout Shift) for images */
+    .img-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        overflow: hidden;
+    }
+    
+    .img-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    /* Print styles for better accessibility */
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        body {
+            color: black;
+            background: white;
+        }
+        a {
+            text-decoration: underline;
+            color: #000;
+        }
+    }
 </style>

@@ -1,0 +1,68 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  loading?: "lazy" | "eager";
+}
+
+const { 
+  src, 
+  alt, 
+  width, 
+  height,
+  className = "",
+  loading = "lazy"
+} = Astro.props;
+
+// Get file extension
+const ext = src.split('.').pop();
+---
+
+<div class={`img-wrapper ${className}`} style={`aspect-ratio: ${width}/${height}`}>
+  {ext === 'svg' ? (
+    <img 
+      src={src} 
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      class="lazy-load"
+    />
+  ) : (
+    <picture>
+      {/* WebP version */}
+      <source
+        srcset={src.replace(`.${ext}`, '.webp')}
+        type="image/webp"
+      />
+      
+      {/* Original image as fallback */}
+      <img 
+        src={src} 
+        alt={alt} 
+        width={width}
+        height={height}
+        loading={loading}
+        class="lazy-load"
+        onload="this.classList.add('visible')"
+      />
+    </picture>
+  )}
+</div>
+
+<style>
+  .img-wrapper {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>
