@@ -3,8 +3,8 @@
 import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
 ---
 
-<nav class="bg-white shadow-sm sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav class="bg-white sticky top-0 z-50">
+  <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">
@@ -13,10 +13,10 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         </a>
       </div>
 
-      <!-- Desktop Navigation -->
+      <!-- Desktop Navigation (tidak berubah) -->
       <div class="hidden lg:flex">
         <div class="flex items-center space-x-6">
-          <a href="/" class="nav-link flex items-center text-gray-800 px-2 py-2 text-sm font-medium transition-colors duration-200 relative">
+          <a href="/" class="nav-link flex items-center text-gray-600 px-2 py-2 text-sm font-medium transition-colors duration-200 relative">
             <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
             </svg>
@@ -35,12 +35,12 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
                 </svg>
               </button>
             </a>
-            <div id="desktop-mitra-menu" class="absolute z-10 hidden bg-white shadow-lg rounded-md mt-2 w-48">
-              <a href="/mitra/kagawa-ricebowl" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kagawa Ricebowl</a>
-              <a href="/mitra/kagawa-coffee-corner" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kagawa Coffee Corner</a>
-              <a href="/mitra/kagawa-coffee-ricebowl" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kagawa Coffee & Ricebowl</a>
-              <a href="/mitra/rm-nusantara" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">RM Nusantara</a>
-              <a href="/mitra/business-development" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Business Development</a>
+            <div id="desktop-mitra-menu" class="absolute z-10 hidden bg-white shadow-lg border-gray-500 rounded-md mt-2 min-w-full whitespace-nowrap">
+              <a href="/mitra/kagawa-ricebowl" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Kagawa Ricebowl</a>
+              <a href="/mitra/kagawa-coffee-corner" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">Kagawa Coffee Corner</a>
+              <a href="/mitra/kagawa-coffee-ricebowl" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">Kagawa Coffee & Ricebowl</a>
+              <a href="/mitra/rm-nusantara" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100">RM Nusantara</a>
+              <a href="/mitra/indepandant-brand" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Independant Brand</a>
             </div>
           </div>
           
@@ -74,7 +74,7 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         </div>
       </div>
 
-      <!-- Login Button & Mobile Menu Button -->
+      <!-- Login Button & Mobile Menu Button (tidak berubah) -->
       <div class="flex items-center space-x-4">
         <!-- Login Button -->
         <a href="/login" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded text-sm font-medium transition-colors duration-200 flex items-center shadow-sm">
@@ -94,83 +94,73 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         </div>
       </div>
     </div>
-
-    <!-- Mobile Navigation Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden">
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
-        <div class="flex items-center sm:px-3 border-b border-gray-200">
-          <a href="/" class="mobile-nav-link flex items-center text-gray-800 hover:text-red-500 px-3 py-2 text-base font-medium">
+  </div>
+  
+  <div id="mobile-menu" class="lg:hidden hidden fixed inset-x-0 top-16 bg-white z-50 shadow-lg border-t border-gray-200">
+    <div class="w-full">
+      <a href="/" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium w-full border-b border-gray-200">
+        <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+        </svg>
+        Beranda
+      </a>
+      
+      <div class="border-b border-gray-200 w-full">
+        <div class="flex items-center justify-between">
+          <a href="/mitra" class="mobile-nav-link flex-grow flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium">
             <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12c.263 0 .524-.06.767-.175a2 2 0 0 0 .65-.491c.186-.21.333-.46.433-.734.1-.274.15-.568.15-.864a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 12 9.736a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 16 9.736c0 .295.052.588.152.861s.248.521.434.73a2 2 0 0 0 .649.488 1.809 1.809 0 0 0 1.53 0 2.03 2.03 0 0 0 .65-.488c.185-.209.332-.457.433-.73.1-.273.152-.566.152-.861 0-.974-1.108-3.85-1.618-5.121A.983.983 0 0 0 17.466 4H6.456a.986.986 0 0 0-.93.645C5.045 5.962 4 8.905 4 9.736c.023.59.241 1.148.611 1.567.37.418.865.667 1.389.697Zm0 0c.328 0 .651-.091.94-.266A2.1 2.1 0 0 0 7.66 11h.681a2.1 2.1 0 0 0 .718.734c.29.175.613.266.942.266.328 0 .651-.091.94-.266.29-.174.537-.427.719-.734h.681a2.1 2.1 0 0 0 .719.734c.289.175.612.266.94.266.329 0 .652-.091.942-.266.29-.174.536-.427.718-.734h.681c.183.307.43.56.719.734.29.174.613.266.941.266a1.819 1.819 0 0 0 1.06-.351M6 12a1.766 1.766 0 0 1-1.163-.476M5 12v7a1 1 0 0 0 1 1h2v-5h3v5h7a1 1 0 0 0 1-1v-7m-5 3v2h2v-2h-2Z"/>
             </svg>
-            Beranda
+            Produk Kemitraan
           </a>
+          <button id="mobile-mitra-button" class="p-3 pr-4">
+            <svg id="mobile-mitra-arrow" class="w-4 h-4 text-gray-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+            </svg>
+          </button>
         </div>
-        
-        <div class="sm:px-3 border-b border-gray-200">
-          <div class="flex items-center justify-between">
-            <a href="/mitra" class="mobile-nav-link flex-grow flex items-center text-gray-600 hover:text-red-500 px-3 py-2 text-base font-medium">
-              <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12c.263 0 .524-.06.767-.175a2 2 0 0 0 .65-.491c.186-.21.333-.46.433-.734.1-.274.15-.568.15-.864a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 12 9.736a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 16 9.736c0 .295.052.588.152.861s.248.521.434.73a2 2 0 0 0 .649.488 1.809 1.809 0 0 0 1.53 0 2.03 2.03 0 0 0 .65-.488c.185-.209.332-.457.433-.73.1-.273.152-.566.152-.861 0-.974-1.108-3.85-1.618-5.121A.983.983 0 0 0 17.466 4H6.456a.986.986 0 0 0-.93.645C5.045 5.962 4 8.905 4 9.736c.023.59.241 1.148.611 1.567.37.418.865.667 1.389.697Zm0 0c.328 0 .651-.091.94-.266A2.1 2.1 0 0 0 7.66 11h.681a2.1 2.1 0 0 0 .718.734c.29.175.613.266.942.266.328 0 .651-.091.94-.266.29-.174.537-.427.719-.734h.681a2.1 2.1 0 0 0 .719.734c.289.175.612.266.94.266.329 0 .652-.091.942-.266.29-.174.536-.427.718-.734h.681c.183.307.43.56.719.734.29.174.613.266.941.266a1.819 1.819 0 0 0 1.06-.351M6 12a1.766 1.766 0 0 1-1.163-.476M5 12v7a1 1 0 0 0 1 1h2v-5h3v5h7a1 1 0 0 0 1-1v-7m-5 3v2h2v-2h-2Z"/>
-              </svg>
-              Produk Kemitraan
-            </a>
-            <button id="mobile-mitra-button" class="p-2">
-              <svg id="mobile-mitra-arrow" class="w-4 h-4 text-gray-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-              </svg>
-            </button>
-          </div>
-          <div id="mobile-mitra-menu" class="hidden pl-8">
-            <a href="/mitra/kagawa-ricebowl" class="mobile-nav-link block py-2 text-sm text-gray-600 hover:text-red-500">Kagawa Ricebowl</a>
-            <a href="/mitra/kagawa-coffee-corner" class="mobile-nav-link block py-2 text-sm text-gray-600 hover:text-red-500">Kagawa Coffee Corner</a>
-            <a href="/mitra/kagawa-coffee-ricebowl" class="mobile-nav-link block py-2 text-sm text-gray-600 hover:text-red-500">Kagawa Coffee & Ricebowl</a>
-            <a href="/mitra/rm-nusantara" class="mobile-nav-link block py-2 text-sm text-gray-600 hover:text-red-500">RM Nusantara</a>
-            <a href="/mitra/business-development" class="mobile-nav-link block py-2 text-sm text-gray-600 hover:text-red-500">Business Development</a>
-          </div>
+        <div id="mobile-mitra-menu" class="hidden border-t border-gray-100">
+          <a href="/mitra/kagawa-ricebowl" class="submenu-nav-link block py-2 text-sm text-gray-600 hover:text-red-500 pl-11 pr-4">Kagawa Ricebowl</a>
+          <a href="/mitra/kagawa-coffee-corner" class="submenu-nav-link block py-2 text-sm text-gray-600 hover:text-red-500 pl-11 pr-4">Kagawa Coffee Corner</a>
+          <a href="/mitra/kagawa-coffee-ricebowl" class="submenu-nav-link block py-2 text-sm text-gray-600 hover:text-red-500 pl-11 pr-4">Kagawa Coffee & Ricebowl</a>
+          <a href="/mitra/rm-nusantara" class="submenu-nav-link block py-2 text-sm text-gray-600 hover:text-red-500 pl-11 pr-4">RM Nusantara</a>
+          <a href="/mitra/indepandant-brand" class="submenu-nav-link block py-2 text-sm text-gray-600 hover:text-red-500 pl-11 pr-4">Independant Brand</a>
         </div>
-        
-          <div class="flex items-center sm:px-3 border-b border-gray-200">
-            <a href="/menu" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-3 py-2 text-base font-medium">
-              <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.011 13H20c-.367 2.5551-2.32 4.6825-4.9766 5.6162V20H8.97661v-1.3838C6.31996 17.6825 4.36697 15.5551 4 13h14.011Zm0 0c1.0995-.0059 1.989-.8991 1.989-2 0-.8637-.5475-1.59948-1.3143-1.87934M18.011 13H18m0-3.99997c.2409 0 .4718.04258.6857.12063m0 0c.8367-1.0335.7533-2.67022-.2802-3.50694-1.0335-.83672-2.5496-.6772-3.3864.35631-.293-1.50236-1.7485-2.15377-3.2509-1.8607-1.5023.29308-2.48263 1.74856-2.18956 3.25092C8.9805 6.17263 7.6182 5.26418 6.15462 6.00131 4.967 6.59945 4.45094 8.19239 5.04909 9.38002m0 0C4.37083 9.66467 4 10.3357 4 11.1174 4 12.1571 4.84288 13 5.88263 13m-.83354-3.61998c.2866-.12029 1.09613-.40074 2.04494.3418m5.27497-.89091c1.0047-.4589 2.1913-.01641 2.6502.98832"/>
-              </svg>
-              Menu
-            </a>
-          </div>
-
-          <div class="flex items-center sm:px-3 border-b border-gray-200">
-            <a href="/gallery" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-3 py-2 text-base font-medium">
-              <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="m3 16 5-7 6 6.5m6.5 2.5L16 13l-4.286 6M14 10h.01M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
-              </svg>
-              Galeri
-            </a>
-          </div>  
-        
-          <div class="flex items-center sm:px-3 border-b border-gray-200">
-            <a href="/about" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-3 py-2 text-base font-medium">
-              <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-              </svg>
-              Tentang Kami
-            </a>
-          </div>
-
-          <div class="flex items-center sm:px-3 border-b border-gray-200">
-            <a href="/contact" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-3 py-2 text-base font-medium">
-              <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
-              </svg>
-              Kontak
-            </a>
-          </div>
       </div>
+      
+      <a href="/menu" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium w-full border-b border-gray-200">
+        <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.011 13H20c-.367 2.5551-2.32 4.6825-4.9766 5.6162V20H8.97661v-1.3838C6.31996 17.6825 4.36697 15.5551 4 13h14.011Zm0 0c1.0995-.0059 1.989-.8991 1.989-2 0-.8637-.5475-1.59948-1.3143-1.87934M18.011 13H18m0-3.99997c.2409 0 .4718.04258.6857.12063m0 0c.8367-1.0335.7533-2.67022-.2802-3.50694-1.0335-.83672-2.5496-.6772-3.3864.35631-.293-1.50236-1.7485-2.15377-3.2509-1.8607-1.5023.29308-2.48263 1.74856-2.18956 3.25092C8.9805 6.17263 7.6182 5.26418 6.15462 6.00131 4.967 6.59945 4.45094 8.19239 5.04909 9.38002m0 0C4.37083 9.66467 4 10.3357 4 11.1174 4 12.1571 4.84288 13 5.88263 13m-.83354-3.61998c.2866-.12029 1.09613-.40074 2.04494.3418m5.27497-.89091c1.0047-.4589 2.1913-.01641 2.6502.98832"/>
+        </svg>
+        Menu
+      </a>
+
+      <a href="/gallery" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium w-full border-b border-gray-200">
+        <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="m3 16 5-7 6 6.5m6.5 2.5L16 13l-4.286 6M14 10h.01M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+        </svg>
+        Galeri
+      </a>
+
+      <a href="/about" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium w-full border-b border-gray-200">
+        <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        Tentang Kami
+      </a>
+
+      <a href="/contact" class="mobile-nav-link flex items-center text-gray-600 hover:text-red-500 px-4 py-3 text-base font-medium w-full border-b border-gray-200">
+        <svg class="w-4 h-4 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+        </svg>
+        Kontak
+      </a>
     </div>
   </div>
 </nav>
 
 <style>
+  /* Kode style yang sudah ada */
   a {
     font-weight: bold;
   }
@@ -180,12 +170,68 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
     color: #e3342f;
   }
 
-  .mobile-nav-link-active::before {
-    content: '›';
-    margin-right: 0.5rem;
-    font-weight: bold;
+  #desktop-mitra-arrow-button:focus {
+    outline: none;
+    box-shadow: none;
   }
 
+  a:focus, button:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  *:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* PERBAIKAN STYLE UNTUK MOBILE MENU */
+  #mobile-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    overflow-y: auto;
+    max-height: calc(100vh - 4rem);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 0;
+  }
+
+  #mobile-menu > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Style untuk submenu */
+  #mobile-mitra-menu {
+    background-color: #f9fafb;
+    width: 100%;
+  }
+
+  /* Style untuk menu yang aktif */
+  .mobile-nav-link-active {
+    color: #e3342f !important;
+    background-color: rgba(251, 146, 60, 0.1);
+    border-left: 3px solid #e3342f;
+    padding-left: calc(1rem - 3px) !important;
+  }
+
+  /* Perbaikan untuk submenu aktif */
+  .submenu-nav-link.submenu-nav-link-active {
+    color: #e3342f !important;
+    background-color: rgba(251, 146, 60, 0.1);
+    border-left: 3px solid #e3342f;
+    padding-left: calc(2.75rem - 3px) !important; /* 11px - 3px border */
+  }
+
+  /* Menghapus celah yang tidak perlu */
+  .mobile-nav-link-active::before {
+    content: none;
+  }
+
+  /* Style desktop nav tetap sama */
   @media (min-width: 1024px) {
     .nav-link:hover,
     .nav-link.nav-link-active {
@@ -253,6 +299,17 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         const linkPath = new URL(link.href).pathname;
         if (currentPath === linkPath) {
           link.classList.add('mobile-nav-link-active');
+        }
+      }
+    });
+
+    // Set active state untuk submenu links
+    const submenuLinks = document.querySelectorAll('.submenu-nav-link');
+    submenuLinks.forEach(link => {
+      if (link instanceof HTMLAnchorElement) {
+        const linkPath = new URL(link.href).pathname;
+        if (currentPath === linkPath) {
+          link.classList.add('submenu-nav-link-active');
         }
       }
     });
