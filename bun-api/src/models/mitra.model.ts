@@ -13,7 +13,7 @@ export interface Mitra {
   noHp: string;
   email: string;
 
-  // File uploads (URLs atau paths)
+  // File uploads
   fotoKTP: string;
   fotoNPWP: string;
   fotoMitra: string;
