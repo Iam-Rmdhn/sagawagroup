@@ -29,7 +29,10 @@ Bun.serve({
 
     try {
       // Route handling
-      if (url.pathname.startsWith("/api/auth")) {
+      if (
+        url.pathname.startsWith("/api/auth") ||
+        url.pathname.startsWith("/api/admin")
+      ) {
         const response = await authRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
@@ -45,6 +48,30 @@ Bun.serve({
           response.headers.set(key, value);
         });
         return response;
+      }
+
+      // Serve uploaded files
+      if (url.pathname.startsWith("/uploads/")) {
+        try {
+          const filePath = url.pathname.substring(1); // Remove leading slash
+          const file = Bun.file(filePath);
+
+          if (await file.exists()) {
+            return new Response(file, {
+              headers: {
+                ...corsHeaders,
+                "Content-Type": file.type || "application/octet-stream",
+              },
+            });
+          }
+        } catch (error) {
+          console.error("Error serving file:", error);
+        }
+
+        return new Response("File not found", {
+          status: 404,
+          headers: corsHeaders,
+        });
       }
 
       // Default response
