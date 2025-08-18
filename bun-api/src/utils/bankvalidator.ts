@@ -39,7 +39,7 @@ const banks = [
   { name: "Bank Sumsel Babel", aliases: ["sumsel babel"] },
   { name: "Bank Sumut", aliases: ["sumut"] },
   { name: "Bank Syariah Indonesia (BSI)", aliases: ["bsi"] },
-  { name: "Bank Tabungan Negara (BTN)", aliases: ["btn", "bank btn"] },
+  { name: "Bank BTN", aliases: ["bank btn", "btn"] },
   { name: "Krom Bank Indonesia", aliases: ["krom", "krom indonesia"] },
   { name: "Bank UOB Indonesia", aliases: ["uob"] },
   { name: "blu by BCA Digital", aliases: ["blu", "blu bca", "bca digital"] },
