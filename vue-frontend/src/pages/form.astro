@@ -176,22 +176,22 @@ import Layout from '../layouts/Layout.astro';
               <!-- DP Card -->
               <div id="dp-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">DP</h4>
-                <p class="text-2xl font-bold text-gray-600" id="dp-amount">Rp. 5</p>
+                <p class="text-2xl font-bold text-gray-600" id="dp-amount"></p>
               </div>
               
               <!-- Full Payment Card -->
               <div id="full-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">Full Payment</h4>
                 <div class="space-y-1">
-                  <p class="line-through text-gray-400" id="original-price">Rp. 5</p>
-                  <p class="text-2xl font-bold text-gray-600" id="discounted-price">Rp. 4</p>
+                  <p class="line-through text-gray-400" id="original-price"></p>
+                  <p class="text-2xl font-bold text-gray-600" id="discounted-price"></p>
                 </div>
               </div>
               
               <!-- Kekurangan Card -->
               <div id="kekurangan-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">Kekurangan</h4>
-                <p class="text-2xl font-bold text-gray-600" id="kekurangan-amount">Rp. x</p>
+                <p class="text-2xl font-bold text-gray-600" id="kekurangan-amount"></p>
               </div>
             </div>
             
@@ -1067,7 +1067,7 @@ async function submitForm() {
     const formFields = [
       'sistemKemitraan', 'paketUsaha', 'namaMitra', 
       'alamatMitra', 'noHp', 'email', 'nilaiPaket', 'namaPengirim', 
-      'noRekPengirim', 'bankPengirim'
+      'noRekPengirim', 'bankPengirim', 'sales'
     ];
     
     formFields.forEach(key => {
@@ -1076,7 +1076,7 @@ async function submitForm() {
       }
     });
     
-    // Map sales to jenisUsaha for backend compatibility
+    // Also send sales as jenisUsaha for backward compatibility
     submitData.append('jenisUsaha', formData.sales || '');
     
     // Get original price for backend

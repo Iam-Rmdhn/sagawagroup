@@ -5,7 +5,7 @@ export interface User {
   email: string;
   password: string;
   nama: string;
-  jenisUsaha: string;
+  sales: string;
   userID?: string;
   isApproved: boolean;
   createdAt: Date;

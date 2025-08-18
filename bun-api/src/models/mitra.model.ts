@@ -1,10 +1,11 @@
 import { mitraCollection } from "../lib/db";
+import { getCurrentTimestamp } from "../utils/date";
 
 export interface Mitra {
   _id?: string;
   // Data Step 1
   sistemKemitraan: "Autopilot" | "Semi Autopilot" | "Self Managed";
-  jenisUsaha: string;
+  sales: string;
   paketUsaha: string;
 
   // Data Diri Mitra
@@ -41,15 +42,15 @@ export interface Mitra {
   isApproved: boolean;
 
   // Timestamps
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string; // Use ISO string format for AstraDB compatibility
+  updatedAt: string;
 }
 
 export class MitraModel {
   static async create(
     mitraData: Omit<Mitra, "_id" | "createdAt" | "updatedAt">
   ): Promise<Mitra> {
-    const now = new Date();
+    const now = getCurrentTimestamp(); // Use utility function
     const mitra: Mitra = {
       ...mitraData,
       status: mitraData.status || "pending",
@@ -79,7 +80,7 @@ export class MitraModel {
     const result = await mitraCollection.updateOne(filter, {
       $set: {
         ...update,
-        updatedAt: new Date(),
+        updatedAt: getCurrentTimestamp(), // Use utility function
       },
     });
     return result.modifiedCount > 0;

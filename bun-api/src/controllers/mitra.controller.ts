@@ -7,7 +7,7 @@ interface ApproveMitraBody {
 
 interface RegisterMitraBody {
   sistemKemitraan: string;
-  jenisUsaha: string;
+  sales: string;
   paketUsaha: string;
   namaMitra: string;
   alamatMitra: string;
@@ -37,6 +37,14 @@ export const registerMitraController = async (
       if (key !== "documents" && key !== "buktiTransfer") {
         mitraData[key] = value;
       }
+    }
+
+    // Ensure sales field is properly handled (it comes as 'sales' from frontend but might be mapped)
+    if (!mitraData.sales && mitraData.jenisUsaha) {
+      mitraData.sales = mitraData.jenisUsaha;
+    }
+    if (!mitraData.sales) {
+      mitraData.sales = ""; // Set empty string if no sales data provided
     }
 
     // Handle file uploads (for now, we'll just store file names)
