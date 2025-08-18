@@ -117,14 +117,18 @@ export async function getMitraByIdService(mitraId: string) {
     ): Promise<string | undefined> => {
       if (!filename || filename === "") return undefined;
 
-      // If it's already base64 data URL, return it directly
+      // If it's already base64 data URL, return it directly (let browser handle validation)
       if (filename.startsWith("data:")) {
         return filename;
       }
 
-      // If it's a filename (not base64), convert to full URL
-      if (filename && !filename.startsWith("http")) {
-        return `http://localhost:9999/uploads/${filename}`;
+      // For simple filenames without data, return undefined to show "No image" message
+      if (
+        filename === "ktp.jpeg" ||
+        filename === "ktp.jpg" ||
+        filename === "transfer.jpg"
+      ) {
+        return undefined;
       }
 
       return filename;
