@@ -1,0 +1,517 @@
+---
+// Partnership Section Component
+import krbImage from '../assets/img/gerobak/krb.png';
+import kccImage from '../assets/img/gerobak/kcc.png';
+import kcrcImage from '../assets/img/gerobak/kcrc.png';
+import rmwImage from '../assets/img/gerobak/rmw.png';
+import kbdImage from '../assets/img/gerobak/kbd.jpg';
+---
+
+<section class="bg-gradient-to-br from-stone-100 via-amber-50 to-orange-50 py-16 px-6">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Section Title -->
+    <div class="text-center mb-16">
+      <h1 class="text-6xl font-bold text-black mb-4 leading-tight">
+        Peluang Kemitraan
+      </h1>
+      <p class="text-xl text-gray-700 max-w-2xl mx-auto">
+        Bergabunglah dengan keluarga besar Sagawa Group dan rasakan kesuksesan bersama
+      </p>
+    </div>
+
+    <div class="space-y-24">
+      
+      <!-- Kagawa Rice Bowl -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Food Stand Image -->
+        <div class="relative flex justify-center lg:justify-start">
+          <div class="relative">
+            <img 
+              src={krbImage.src} 
+              alt="Kagawa Rice Bowl Stand"
+              class="w-96 h-auto object-contain drop-shadow-2xl"
+            />
+            <!-- Decorative element -->
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-amber-200 to-orange-200 rounded-full opacity-20 -z-10"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="space-y-6">
+          <!-- Title -->
+          <div>
+            <h2 class="text-5xl font-bold text-black mb-6 leading-tight">
+              Kagawa Rice Bowl
+            </h2>
+            
+            <!-- Mitra Benefits -->
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-black mb-5">Mitra Benefit :</h3>
+              
+              <div class="space-y-3">
+                <!-- Each Benefit Item -->
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Bahan Baku & Peralatan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dibantu Mencari Karyawan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">SOP & Training</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Media Promosi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dukungan dari Pusat</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Akses ke jaringan supplier resmi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">E-money special Sagawa Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="space-y-3 pt-6">
+            <!-- Original Price (Strikethrough) -->
+            <div class="text-2xl text-red-500 font-bold">
+              <span class="line-through decoration-2">Rp. 75.000.000</span>
+            </div>
+            
+            <!-- Discounted Price -->
+            <div class="text-5xl font-bold text-red-500 mb-8">
+              Rp. 50.000.000
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3 border-2 border-amber-700">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Daftar Jadi Mitra</span>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Kagawa Coffee Corner -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Food Stand Image -->
+        <div class="relative flex justify-center lg:justify-start">
+          <div class="relative">
+            <img 
+              src={kccImage.src} 
+              alt="Kagawa Coffee Corner"
+              class="w-96 h-auto object-contain drop-shadow-2xl"
+            />
+            <!-- Decorative element -->
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-amber-200 to-orange-200 rounded-full opacity-20 -z-10"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="space-y-6">
+          <!-- Title -->
+          <div>
+            <h2 class="text-5xl font-bold text-black mb-6 leading-tight">
+              Kagawa Rice Bowl
+            </h2>
+            
+            <!-- Mitra Benefits -->
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-black mb-5">Mitra Benefit :</h3>
+              
+              <div class="space-y-3">
+                <!-- Each Benefit Item -->
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Bahan Baku & Peralatan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dibantu Mencari Karyawan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">SOP & Training</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Media Promosi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dukungan dari Pusat</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Akses ke jaringan supplier resmi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">E-money special Sagawa Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="space-y-3 pt-6">
+            <!-- Original Price (Strikethrough) -->
+            <div class="text-2xl text-red-500 font-bold">
+              <span class="line-through decoration-2">Rp. 75.000.000</span>
+            </div>
+            
+            <!-- Discounted Price -->
+            <div class="text-5xl font-bold text-red-500 mb-8">
+              Rp. 50.000.000
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3 border-2 border-amber-700">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Daftar Jadi Mitra</span>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- Kagawa Coffee & Rice Bowl Corner -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Food Stand Image -->
+        <div class="relative flex justify-center lg:justify-start">
+          <div class="relative">
+            <img 
+              src={kcrcImage.src} 
+              alt="Kagawa Coffee & Rice Bowl Corner"
+              class="w-96 h-auto object-contain drop-shadow-2xl"
+            />
+            <!-- Decorative element -->
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-amber-200 to-orange-200 rounded-full opacity-20 -z-10"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="space-y-6">
+          <!-- Title -->
+          <div>
+            <h2 class="text-5xl font-bold text-black mb-6 leading-tight">
+              Kagawa Rice Bowl
+            </h2>
+            
+            <!-- Mitra Benefits -->
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-black mb-5">Mitra Benefit :</h3>
+              
+              <div class="space-y-3">
+                <!-- Each Benefit Item -->
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Bahan Baku & Peralatan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dibantu Mencari Karyawan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">SOP & Training</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Media Promosi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dukungan dari Pusat</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Akses ke jaringan supplier resmi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">E-money special Sagawa Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="space-y-3 pt-6">
+            <!-- Original Price (Strikethrough) -->
+            <div class="text-2xl text-red-500 font-bold">
+              <span class="line-through decoration-2">Rp. 75.000.000</span>
+            </div>
+            
+            <!-- Discounted Price -->
+            <div class="text-5xl font-bold text-red-500 mb-8">
+              Rp. 50.000.000
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3 border-2 border-amber-700">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Daftar Jadi Mitra</span>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- RM Nusantara (WarNas/Warteg, Mas Gaw dan RM Sunda) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Food Stand Image -->
+        <div class="relative flex justify-center lg:justify-start">
+          <div class="relative">
+            <img 
+              src={rmwImage.src} 
+              alt="RM Nusantara (WarNas/Warteg, Mas Gaw dan RM Sunda)"
+              class="w-96 h-auto object-contain drop-shadow-2xl"
+            />
+            <!-- Decorative element -->
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-amber-200 to-orange-200 rounded-full opacity-20 -z-10"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="space-y-6">
+          <!-- Title -->
+          <div>
+            <h2 class="text-5xl font-bold text-black mb-6 leading-tight">
+              Kagawa Rice Bowl
+            </h2>
+            
+            <!-- Mitra Benefits -->
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-black mb-5">Mitra Benefit :</h3>
+              
+              <div class="space-y-3">
+                <!-- Each Benefit Item -->
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Bahan Baku & Peralatan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dibantu Mencari Karyawan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">SOP & Training</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Media Promosi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dukungan dari Pusat</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Akses ke jaringan supplier resmi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">E-money special Sagawa Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="space-y-3 pt-6">
+            <!-- Original Price (Strikethrough) -->
+            <div class="text-2xl text-red-500 font-bold">
+              <span class="line-through decoration-2">Rp. 75.000.000</span>
+            </div>
+            
+            <!-- Discounted Price -->
+            <div class="text-5xl font-bold text-red-500 mb-8">
+              Rp. 50.000.000
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3 border-2 border-amber-700">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Daftar Jadi Mitra</span>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- Business Development -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Food Stand Image -->
+        <div class="relative flex justify-center lg:justify-start">
+          <div class="relative">
+            <img 
+              src={kbdImage.src} 
+              alt="Business Development"
+              class="w-96 h-auto object-contain drop-shadow-2xl"
+            />
+            <!-- Decorative element -->
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-amber-200 to-orange-200 rounded-full opacity-20 -z-10"></div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="space-y-6">
+          <!-- Title -->
+          <div>
+            <h2 class="text-5xl font-bold text-black mb-6 leading-tight">
+              Kagawa Rice Bowl
+            </h2>
+            
+            <!-- Mitra Benefits -->
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-black mb-5">Mitra Benefit :</h3>
+              
+              <div class="space-y-3">
+                <!-- Each Benefit Item -->
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Bahan Baku & Peralatan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dibantu Mencari Karyawan</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">SOP & Training</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Media Promosi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Dukungan dari Pusat</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">Akses ke jaringan supplier resmi</span>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-2 h-2 bg-amber-600 rounded-full mt-3 flex-shrink-0"></div>
+                  <span class="text-black text-lg font-medium leading-relaxed">E-money special Sagawa Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="space-y-3 pt-6">
+            <!-- Original Price (Strikethrough) -->
+            <div class="text-2xl text-red-500 font-bold">
+              <span class="line-through decoration-2">Rp. 75.000.000</span>
+            </div>
+            
+            <!-- Discounted Price -->
+            <div class="text-5xl font-bold text-red-500 mb-8">
+              Rp. 50.000.000
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3 border-2 border-amber-700">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Daftar Jadi Mitra</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional CTA Section -->
+    <div class="text-center mt-20">
+      <div class="bg-white rounded-3xl shadow-2xl p-12 max-w-4xl mx-auto border border-amber-100">
+        <h3 class="text-4xl font-bold text-black mb-6">
+          Siap Bergabung dengan Sagawa Group?
+        </h3>
+        <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+          Dapatkan kesempatan emas untuk memiliki bisnis franchise terpercaya dengan dukungan penuh dari tim profesional kami
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/form" class="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white px-12 py-6 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Konsultasikan Sekarang</span>
+          </a>
+          <a href="/helper/faq" class="bg-white border-2 border-amber-600 text-amber-700 hover:bg-amber-50 px-12 py-6 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-3">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Pelajari Lebih Lanjut</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
