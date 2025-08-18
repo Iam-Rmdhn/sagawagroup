@@ -14,7 +14,7 @@ import Layout from '../layouts/Layout.astro';
               <div id="step-1" class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
                 1
               </div>
-              <div class="ml-2 text-sm font-medium text-blue-600">Form Data</div>
+              <div class="ml-2 text-sm font-medium text-blue-600">Isi Form</div>
             </div>
             
             <!-- Line -->
@@ -265,9 +265,7 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- Next Button -->
           <div class="flex justify-between items-center">
-            <button type="button" id="checkFormBtn" class="px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
-              🔍 Check Form
-            </button>
+
             <button id="nextBtn" type="button" class="px-8 py-3 bg-gray-400 text-white rounded-lg font-semibold cursor-not-allowed transition-colors" disabled>
               Next
             </button>
@@ -344,11 +342,8 @@ function checkFormValidation() {
 function performValidation() {
   const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement;
   if (!nextBtn) {
-    console.log('❌ Next button not found!');
     return;
   }
-
-  console.log('🔍 Starting form validation...');
 
   // Required fields (excluding Sales which is optional)
   const requiredFields = [
@@ -402,8 +397,7 @@ function performValidation() {
       allValid = false;
       invalidFields.push(field.name);
     }
-    
-    console.log(`📝 Field ${field.name}: ${isValid ? '✅' : '❌'} | Value: "${value}" | Element: ${element ? 'found' : 'NOT FOUND'}`);
+  
   }
   
   // Check file uploads
@@ -412,9 +406,7 @@ function performValidation() {
   
   const hasDocuments = documentsInput?.files && documentsInput.files.length > 0;
   const hasBuktiTransfer = buktiTransferInput?.files && buktiTransferInput.files.length > 0;
-  
-  console.log(`📁 Documents: ${hasDocuments ? '✅' : '❌'} | Count: ${documentsInput?.files?.length || 0}`);
-  console.log(`💰 Bukti Transfer: ${hasBuktiTransfer ? '✅' : '❌'} | Has file: ${buktiTransferInput?.files?.length || 0}`);
+
   
   if (!hasDocuments) {
     allValid = false;
@@ -431,17 +423,11 @@ function performValidation() {
     nextBtn.disabled = false;
     nextBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
     nextBtn.classList.add('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
-    console.log('🎉 ✅ Form validation PASSED - Next button enabled!');
   } else {
     nextBtn.disabled = true;
     nextBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
     nextBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-    console.log('🚫 ❌ Form validation FAILED');
-    console.log('Invalid fields:', invalidFields);
-    console.log('Field details:', fieldDetails);
   }
-  
-  console.log('🏁 Validation complete. All valid:', allValid);
 }
 
 // Make performValidation globally accessible for debugging
@@ -623,7 +609,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add debug check button
   const checkFormBtn = document.getElementById('checkFormBtn');
   checkFormBtn?.addEventListener('click', () => {
-    console.log('🔍 Manual form check triggered');
     performValidation();
   });
   
@@ -655,14 +640,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add specific event listeners for radio buttons
   document.querySelectorAll('input[name="sistemKemitraan"]').forEach(radio => {
     radio.addEventListener('change', function(this: HTMLInputElement) {
-      console.log('📻 Sistem Kemitraan changed to:', this.value);
       checkFormValidation();
     });
   });
   
   document.querySelectorAll('input[name="nilaiPaket"]').forEach(radio => {
     radio.addEventListener('change', function(this: HTMLInputElement) {
-      console.log('💰 Nilai Paket changed to:', this.value);
       checkFormValidation();
     });
   });
