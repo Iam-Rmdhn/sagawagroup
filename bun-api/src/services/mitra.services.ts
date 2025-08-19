@@ -31,6 +31,8 @@ export async function registerMitra(mitraData: any) {
       jenisUsaha: mitraData.jenisUsaha, // For debugging mapping
       paketUsaha: mitraData.paketUsaha,
       email: mitraData.email,
+      hargaPaket: mitraData.hargaPaket,
+      yangHarusDibayar: mitraData.yangHarusDibayar,
     });
 
     // Validate and normalize bank name
@@ -38,6 +40,8 @@ export async function registerMitra(mitraData: any) {
     if (validatedBank) {
       mitraData.bankPengirim = validatedBank;
     }
+
+    console.log("Creating mitra record...");
 
     // Create new mitra record
     const newMitra = await MitraModel.create({
@@ -49,15 +53,13 @@ export async function registerMitra(mitraData: any) {
       noHp: mitraData.noHp,
       email: mitraData.email,
       fotoKTP: mitraData.fotoKTP || "",
-      fotoNPWP: mitraData.fotoNPWP || "",
-      fotoMitra: mitraData.fotoMitra || "",
       nilaiPaketUsaha: mitraData.nilaiPaket,
-      hargaPaket: parseInt(mitraData.hargaPaket),
-      nominalDP: parseInt(mitraData.nominalDP),
-      nominalFull: parseInt(mitraData.nominalFull),
-      kekurangan: parseInt(mitraData.kekurangan),
-      diskonHarian: parseInt(mitraData.diskonHarian),
-      yangHarusDibayar: parseInt(mitraData.yangHarusDibayar),
+      hargaPaket: parseInt(mitraData.hargaPaket) || 0,
+      nominalDP: parseInt(mitraData.nominalDP) || 0,
+      nominalFull: parseInt(mitraData.nominalFull) || 0,
+      kekurangan: parseInt(mitraData.kekurangan) || 0,
+      diskonHarian: parseInt(mitraData.diskonHarian) || 0,
+      yangHarusDibayar: parseInt(mitraData.yangHarusDibayar) || 0,
       buktiTransfer: mitraData.buktiTransfer || "",
       namaPengirim: mitraData.namaPengirim,
       noRekPengirim: mitraData.noRekPengirim,
@@ -66,6 +68,8 @@ export async function registerMitra(mitraData: any) {
       isApproved: false,
     });
 
+    console.log("Mitra record created successfully:", newMitra._id);
+
     return {
       success: true,
       mitraId: newMitra._id,
@@ -73,7 +77,14 @@ export async function registerMitra(mitraData: any) {
     };
   } catch (error) {
     console.error("Error registering mitra:", error);
-    throw new Error("Gagal menyimpan data mitra");
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack trace"
+    );
+    throw new Error(
+      "Gagal menyimpan data mitra: " +
+        (error instanceof Error ? error.message : "Unknown error")
+    );
   }
 }
 

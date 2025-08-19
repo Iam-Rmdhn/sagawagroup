@@ -117,20 +117,22 @@ export async function getMitraByIdService(mitraId: string) {
     ): Promise<string | undefined> => {
       if (!filename || filename === "") return undefined;
 
-      // If it's already base64 data URL, return it directly (let browser handle validation)
+      // If it's already base64 data URL, return it directly
       if (filename.startsWith("data:")) {
         return filename;
       }
 
-      // For simple filenames without data, return undefined to show "No image" message
+      // If it's a base64 string without data: prefix, add the prefix
       if (
-        filename === "ktp.jpeg" ||
-        filename === "ktp.jpg" ||
-        filename === "transfer.jpg"
+        filename.length > 100 &&
+        !filename.includes(".") &&
+        !filename.includes("/")
       ) {
-        return undefined;
+        // Assume it's base64 data, add data URL prefix
+        return `data:image/jpeg;base64,${filename}`;
       }
 
+      // For any other case, try to return it as is (might be a filename or URL)
       return filename;
     };
 
@@ -138,18 +140,6 @@ export async function getMitraByIdService(mitraId: string) {
     if (mitraWithImages.fotoKTP) {
       const convertedKTP = await convertImageToBase64(mitraWithImages.fotoKTP);
       if (convertedKTP) mitraWithImages.fotoKTP = convertedKTP;
-    }
-    if (mitraWithImages.fotoNPWP) {
-      const convertedNPWP = await convertImageToBase64(
-        mitraWithImages.fotoNPWP
-      );
-      if (convertedNPWP) mitraWithImages.fotoNPWP = convertedNPWP;
-    }
-    if (mitraWithImages.fotoMitra) {
-      const convertedMitra = await convertImageToBase64(
-        mitraWithImages.fotoMitra
-      );
-      if (convertedMitra) mitraWithImages.fotoMitra = convertedMitra;
     }
     if (mitraWithImages.buktiTransfer) {
       const convertedTransfer = await convertImageToBase64(
@@ -233,20 +223,55 @@ export async function approveMitraService(
         },
       };
     } else {
-      // Reject mitra
-      await MitraModel.updateOne(
-        { _id: mitraId },
-        {
-          status: "rejected",
-          isApproved: false,
+      // Reject mitra - DELETE from database and clean up files
+      
+      // Delete associated files if they exist
+      try {
+        if (mitra.fotoKTP && mitra.fotoKTP.startsWith("http://localhost:9999/uploads/")) {
+          const fileName = mitra.fotoKTP.split("/uploads/")[1];
+          const filePath = `./uploads/${fileName}`;
+          try {
+            const file = Bun.file(filePath);
+            if (await file.exists()) {
+              await Bun.write(filePath, new Uint8Array(0)); // Clear file content
+              console.log(`Deleted file: ${filePath}`);
+            }
+          } catch (fileError) {
+            console.warn(`Could not delete KTP file: ${filePath}`, fileError);
+          }
         }
-      );
+
+        if (mitra.buktiTransfer && mitra.buktiTransfer.startsWith("http://localhost:9999/uploads/")) {
+          const fileName = mitra.buktiTransfer.split("/uploads/")[1];
+          const filePath = `./uploads/${fileName}`;
+          try {
+            const file = Bun.file(filePath);
+            if (await file.exists()) {
+              await Bun.write(filePath, new Uint8Array(0)); // Clear file content
+              console.log(`Deleted file: ${filePath}`);
+            }
+          } catch (fileError) {
+            console.warn(`Could not delete transfer file: ${filePath}`, fileError);
+          }
+        }
+      } catch (cleanupError) {
+        console.warn("File cleanup error (non-critical):", cleanupError);
+        // Don't throw error, continue with database deletion
+      }
+      
+      // Delete from database
+      const deleteResult = await MitraModel.deleteOne({ _id: mitraId });
+      
+      if (!deleteResult) {
+        throw new Error("Gagal menghapus data mitra yang ditolak");
+      }
 
       return {
         success: true,
-        message: "Mitra ditolak",
+        message: "Mitra ditolak dan data telah dihapus dari database",
         data: {
           mitraId,
+          deleted: true,
         },
       };
     }
@@ -268,8 +293,6 @@ export async function updateMitraWithSampleImages() {
       message: "Sample image data prepared",
       data: {
         fotoKTP: sampleBase64,
-        fotoNPWP: sampleBase64,
-        fotoMitra: sampleBase64,
         buktiTransfer: sampleBase64,
       },
     };

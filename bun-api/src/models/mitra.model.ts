@@ -16,8 +16,6 @@ export interface Mitra {
 
   // File uploads
   fotoKTP: string;
-  fotoNPWP: string;
-  fotoMitra: string;
 
   // Nilai Paket Usaha
   nilaiPaketUsaha: "DP" | "Full Payment";
@@ -103,5 +101,10 @@ export class MitraModel {
   static async find(filter: Partial<Mitra> = {}): Promise<Mitra[]> {
     const result = await mitraCollection.find(filter).toArray();
     return result as Mitra[];
+  }
+
+  static async deleteOne(filter: Partial<Mitra>): Promise<boolean> {
+    const result = await mitraCollection.deleteOne(filter);
+    return result.deletedCount > 0;
   }
 }

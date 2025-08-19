@@ -154,9 +154,9 @@ import Layout from '../../layouts/Layout.astro';
 
 <!-- Modal untuk Memperbesar Gambar -->
 <div id="imageModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-90">
-  <div class="flex items-center justify-center min-h-screen p-4">
+  <div class="flex items-center justify-center w-full h-full p-4">
     <!-- Close button -->
-    <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+    <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-20">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
@@ -350,7 +350,10 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     const actionText = action === 'approve' ? 'menyetujui' : 'menolak';
-    if (!confirm(`Apakah Anda yakin ingin ${actionText} mitra ini?`)) {
+    const warningText = action === 'reject' ? 
+      '\n\n⚠️ PERHATIAN: Data mitra yang ditolak akan DIHAPUS PERMANEN dari database!' : '';
+    
+    if (!confirm(`Apakah Anda yakin ingin ${actionText} mitra ini?${warningText}`)) {
       return;
     }
 
@@ -461,6 +464,8 @@ import Layout from '../../layouts/Layout.astro';
     };
 
     content.innerHTML = `
+
+
       <!-- Informasi Dasar -->
       <div class="bg-gray-50 p-4 rounded-lg">
         <h4 class="font-semibold text-gray-900 mb-3">Informasi Dasar</h4>
@@ -517,98 +522,27 @@ import Layout from '../../layouts/Layout.astro';
 
       <!-- File Dokumen -->
       <div class="bg-gray-50 p-4 rounded-lg col-span-2">
-        <h4 class="font-semibold text-gray-900 mb-3">Dokumen & Foto</h4>
+        <h4 class="font-semibold text-gray-900 mb-4">Dokumen & Foto</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Foto KTP -->
           <!-- Foto KTP -->
           <div class="space-y-2">
             <strong>Foto KTP:</strong>
             ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
               <div class="mt-2">
-                ${isBase64OrDataUrl(mitra.fotoKTP) ? `
-                  <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
-                    <img src="${mitra.fotoKTP.startsWith('data:') ? mitra.fotoKTP : 'data:image/jpeg;base64,' + mitra.fotoKTP}" 
-                         alt="Foto KTP" 
-                         class="w-full h-56 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
-                         onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <div class="text-red-500 text-sm p-4 hidden text-center">
-                      <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      <p>Gagal memuat gambar KTP</p>
-                      <p class="text-xs text-gray-500 mt-1">Data gambar rusak atau tidak valid</p>
-                    </div>
+                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
+                  <img src="${mitra.fotoKTP}" 
+                       alt="Foto KTP" 
+                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
+                       onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <div class="text-red-500 text-sm p-4 hidden text-center">
+                    <p>Gagal memuat gambar KTP</p>
                   </div>
-                  <p class="text-xs text-gray-500 mt-2 text-center">📸 Klik untuk memperbesar gambar</p>
-                ` : `
-                  <div class="w-full max-w-sm h-32 border rounded-lg bg-gray-100 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                      <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <p class="text-xs">File: ${mitra.fotoKTP}</p>
-                      <p class="text-xs text-gray-400">Preview tidak tersedia</p>
-                    </div>
-                  </div>
-                `}
+                </div>
+                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
               </div>
             ` : '<span class="text-gray-500">Tidak ada foto KTP</span>'}
-          </div>
-          
-          <!-- Foto NPWP -->
-          <div class="space-y-2">
-            <strong>Foto NPWP:</strong>
-            ${mitra.fotoNPWP && mitra.fotoNPWP !== '' ? `
-              <div class="mt-2">
-                ${isBase64OrDataUrl(mitra.fotoNPWP) ? `
-                  <img src="${mitra.fotoNPWP.startsWith('data:') ? mitra.fotoNPWP : 'data:image/jpeg;base64,' + mitra.fotoNPWP}" 
-                       alt="Foto NPWP" 
-                       class="w-full max-w-sm h-auto border rounded-lg cursor-pointer hover:scale-105 transition-transform"
-                       onclick="openImageModal('${mitra.fotoNPWP}', 'Foto NPWP - ${mitra.namaMitra}')"
-                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                  <p class="text-red-500 text-sm hidden">Gagal memuat gambar</p>
-                  <p class="text-xs text-gray-500 mt-1">Klik untuk memperbesar</p>
-                ` : `
-                  <div class="w-full max-w-sm h-32 border rounded-lg bg-gray-100 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                      <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <p class="text-xs">File: ${mitra.fotoNPWP}</p>
-                      <p class="text-xs text-gray-400">Preview tidak tersedia</p>
-                    </div>
-                  </div>
-                `}
-              </div>
-            ` : '<span class="text-gray-500">Tidak ada foto NPWP</span>'}
-          </div>
-          
-          <!-- Foto Mitra -->
-          <div class="space-y-2">
-            <strong>Foto Mitra:</strong>
-            ${mitra.fotoMitra && mitra.fotoMitra !== '' ? `
-              <div class="mt-2">
-                ${isBase64OrDataUrl(mitra.fotoMitra) ? `
-                  <img src="${mitra.fotoMitra.startsWith('data:') ? mitra.fotoMitra : 'data:image/jpeg;base64,' + mitra.fotoMitra}" 
-                       alt="Foto Mitra" 
-                       class="w-full max-w-sm h-auto border rounded-lg cursor-pointer hover:scale-105 transition-transform"
-                       onclick="openImageModal('${mitra.fotoMitra}', 'Foto Mitra - ${mitra.namaMitra}')"
-                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                  <p class="text-red-500 text-sm hidden">Gagal memuat gambar</p>
-                  <p class="text-xs text-gray-500 mt-1">Klik untuk memperbesar</p>
-                ` : `
-                  <div class="w-full max-w-sm h-32 border rounded-lg bg-gray-100 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                      <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <p class="text-xs">File: ${mitra.fotoMitra}</p>
-                      <p class="text-xs text-gray-400">Preview tidak tersedia</p>
-                    </div>
-                  </div>
-                `}
-              </div>
-            ` : '<span class="text-gray-500">Tidak ada foto mitra</span>'}
           </div>
           
           <!-- Bukti Transfer -->
@@ -616,27 +550,17 @@ import Layout from '../../layouts/Layout.astro';
             <strong>Bukti Transfer:</strong>
             ${mitra.buktiTransfer && mitra.buktiTransfer !== '' ? `
               <div class="mt-2">
-                ${isBase64OrDataUrl(mitra.buktiTransfer) ? `
-                  <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
-                    <img src="${mitra.buktiTransfer.startsWith('data:') ? mitra.buktiTransfer : 'data:image/jpeg;base64,' + mitra.buktiTransfer}" 
-                         alt="Bukti Transfer" 
-                         class="w-full h-56 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
-                         onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <p class="text-red-500 text-sm p-4 hidden">Gagal memuat gambar</p>
+                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
+                  <img src="${mitra.buktiTransfer}" 
+                       alt="Bukti Transfer" 
+                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
+                       onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <div class="text-red-500 text-sm p-4 hidden text-center">
+                    <p>Gagal memuat bukti transfer</p>
                   </div>
-                  <p class="text-xs text-gray-500 mt-2 text-center">📸 Klik untuk memperbesar gambar</p>
-                ` : `
-                  <div class="w-full max-w-sm h-32 border rounded-lg bg-gray-100 flex items-center justify-center">
-                    <div class="text-center text-gray-500">
-                      <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <p class="text-xs">File: ${mitra.buktiTransfer}</p>
-                      <p class="text-xs text-gray-400">Preview tidak tersedia</p>
-                    </div>
-                  </div>
-                `}
+                </div>
+                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
               </div>
             ` : '<span class="text-gray-500">Tidak ada bukti transfer</span>'}
           </div>
@@ -667,8 +591,8 @@ import Layout from '../../layouts/Layout.astro';
     if (!str) return false;
     // Cek jika string dimulai dengan data URL
     if (str.startsWith('data:')) return true;
-    // Cek jika string adalah base64 yang valid (minimal 50 karakter dan tidak mengandung ekstensi file)
-    if (str.length > 50 && !str.includes('.') && /^[A-Za-z0-9+/]*={0,2}$/.test(str)) return true;
+    // Jika string cukup panjang, anggap sebagai base64
+    if (str.length > 50) return true;
     return false;
   }
 
@@ -679,32 +603,39 @@ import Layout from '../../layouts/Layout.astro';
     const titleElement = document.getElementById('modalImageTitle');
     
     if (modal && image && titleElement) {
+      // Show modal first
+      modal.classList.remove('hidden');
+      
       // Handle different image data formats
       let imageSrc = '';
       if (imageData.startsWith('data:')) {
         // Already a data URL
         imageSrc = imageData;
-      } else if (imageData.startsWith('http') || imageData.startsWith('/')) {
-        // URL or path
-        imageSrc = imageData;
       } else {
-        // Assume base64 data
-        imageSrc = `data:image/jpeg;base64,${imageData}`;
+        // Assume base64 data, add data URL prefix
+        imageSrc = `data:image/png;base64,${imageData}`;
       }
+      
+      console.log('Opening image modal with:', { title, imageSrc: imageSrc.substring(0, 50) + '...' });
       
       image.src = imageSrc;
       image.alt = title;
       titleElement.textContent = title;
-      modal.classList.remove('hidden');
-      
-      // Add loading state
-      image.onload = function() {
-        console.log('Image loaded successfully');
-      };
       
       image.onerror = function() {
-        console.error('Failed to load image:', imageSrc);
+        console.error('Failed to load image:', imageSrc.substring(0, 100));
         titleElement.textContent = title + ' (Gagal memuat gambar)';
+        // Show a placeholder message
+        image.style.display = 'none';
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'text-white text-center p-8';
+        errorMsg.innerHTML = `
+          <div class="text-red-500 bg-white p-4 rounded">
+            <p class="text-lg">⚠️ Gagal memuat gambar</p>
+            <p class="text-sm mt-2">Data gambar mungkin rusak</p>
+          </div>
+        `;
+        image.parentElement?.appendChild(errorMsg);
       };
     }
   }
