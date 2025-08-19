@@ -1,28 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 ---
-<Layout title="Register">
+<Layout title="Admin Login">
   <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-100 to-orange-100">
-    <div class="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 sm:p-10 flex flex-col gap-6 animate-fade-in-up">
-      <h1 class="text-2xl font-bold text-center text-amber-600 mb-2">Register Admin</h1>
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 sm:p-10 flex flex-col gap-6 animate-fade-in-up">
+      <h1 class="text-2xl font-bold text-center text-amber-600 mb-2">Admin Login</h1>
       
       <!-- Alert untuk pesan error atau success -->
       <div id="alert" class="hidden p-4 rounded-lg text-sm"></div>
       
-      <!-- Step 1: Input Name, Email, Password -->
-      <form id="registerForm" class="flex flex-col gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-          <input 
-            type="text" 
-            id="nama" 
-            name="nama"
-            placeholder="Nama Lengkap" 
-            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition" 
-            required 
-            minlength="2"
-          />
-        </div>
+      <form id="loginForm" class="flex flex-col gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
           <input 
@@ -34,17 +21,15 @@ import Layout from '../layouts/Layout.astro';
             required 
           />
         </div>
-        <!-- Step 2: Password -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
           <input 
             type="password" 
             id="password" 
             name="password"
-            placeholder="Password (minimal 6 karakter)" 
+            placeholder="Password" 
             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 transition" 
             required 
-            minlength="6"
           />
         </div>
         <button 
@@ -52,19 +37,18 @@ import Layout from '../layouts/Layout.astro';
           id="submitBtn"
           class="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transition disabled:opacity-50 disabled:hover:scale-100"
         >
-          Register
+          Login
         </button>
       </form>
-      
       <div class="text-center text-sm text-gray-600 mt-2">
-        Sudah punya akun?
-        <a href="/admin/login" class="text-amber-600 font-semibold hover:underline">Login</a>
+        Belum punya akun?
+        <a href="/register" class="text-amber-600 font-semibold hover:underline">Register</a>
       </div>
     </div>
   </main>
 
   <script>
-    const form = document.getElementById('registerForm') as HTMLFormElement;
+    const form = document.getElementById('loginForm') as HTMLFormElement;
     const alertDiv = document.getElementById('alert') as HTMLDivElement;
     const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
 
@@ -82,22 +66,21 @@ import Layout from '../layouts/Layout.astro';
       }, 5000);
     }
 
+    // Cek apakah sudah login
+    if (localStorage.getItem('adminToken')) {
+      window.location.href = '/admin/dashboard';
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const formData = new FormData(form);
       const data = {
-        nama: formData.get('nama') as string,
         email: formData.get('email') as string,
         password: formData.get('password') as string,
       };
 
       // Validasi client-side
-      if (!data.nama || data.nama.length < 2) {
-        showAlert('Nama minimal 2 karakter', 'error');
-        return;
-      }
-
       if (!data.email || !data.email.includes('@')) {
         showAlert('Email tidak valid', 'error');
         return;
@@ -109,10 +92,10 @@ import Layout from '../layouts/Layout.astro';
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Registering...';
+      submitBtn.textContent = 'Logging in...';
 
       try {
-        const response = await fetch('http://localhost:9999/api/admin/register', {
+        const response = await fetch('http://localhost:9999/api/admin/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -127,21 +110,21 @@ import Layout from '../layouts/Layout.astro';
           localStorage.setItem('adminToken', result.token);
           localStorage.setItem('adminUser', JSON.stringify(result.user));
           
-          showAlert('Registrasi berhasil! Mengalihkan ke dashboard...', 'success');
+          showAlert('Login berhasil! Mengalihkan ke dashboard...', 'success');
           
-          // Redirect ke dashboard setelah 2 detik
+          // Redirect ke dashboard setelah 1 detik
           setTimeout(() => {
             window.location.href = '/admin/dashboard';
-          }, 2000);
+          }, 1000);
         } else {
-          showAlert(result.error || 'Registrasi gagal', 'error');
+          showAlert(result.error || 'Login gagal', 'error');
         }
       } catch (error) {
         console.error('Error:', error);
         showAlert('Terjadi kesalahan. Silakan coba lagi.', 'error');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Register';
+        submitBtn.textContent = 'Login';
       }
     });
   </script>

@@ -53,233 +53,141 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     </section>
 
       <!-- Gallery Grid with strong connection to wave -->
-      <section class="pt-16 pb-16 px-4 sm:px-6 lg:px-8 bg-white relative z-20 mt-[-10px]">
+      <section class="gallery-section pt-16 pb-16 px-4 sm:px-6 lg:px-8 bg-white relative z-10 mt-[-10px]">
         <div class="max-w-7xl mx-auto">
-          <!-- Gallery Grid Container - Custom Layout sesuai spesifikasi -->
-          <div class="flex flex-col gap-4 mb-12 mx-auto" style="max-width: 1050px;">
-            
-            <!-- Baris 1 & 2: Layout khusus dengan gambar tinggi di kanan -->
-            <div class="flex gap-4 items-start">
-              <!-- Kolom kiri untuk gambar 1,2,4,5 -->
-              <div class="flex flex-col gap-4">
-                <!-- Baris 1: gambar1(255x255) + gambar2(545x255) -->
-                <div class="flex gap-4">
-                  <!-- Gambar 1 - KCC Mall (255x255) -->
-                  <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                    <img 
-                      src={kccmall} 
-                      alt="Kagawa Coffee Corner Mall" 
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Corner</h3>
-                      <p class="text-xs text-white/90">Kagawa Coffee Corner</p>
-                    </div>
-                  </div>
-
-                  <!-- Gambar 2 - Sagawa Papan (545x255) -->
-                  <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-545x255">
-                    <img 
-                      src={sagawaPapan} 
-                      alt="Sagawa Group Papan" 
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 class="text-sm font-semibold mb-1">Logo Sagawa Group</h3>
-                      <p class="text-xs text-white/90">Brand Signage</p>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Baris 2: gambar4(545x255) + gambar5(255x255) -->
-                <div class="flex gap-4">
-                  <!-- Gambar 4 - Sagawa Desk (545x255) -->
-                  <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-545x255">
-                    <img 
-                      src={sagawaDesk} 
-                      alt="Sagawa Desk Display" 
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 class="text-sm font-semibold mb-1">Standee Sagawa Desk</h3>
-                      <p class="text-xs text-white/90">Office Display</p>
-                    </div>
-                  </div>
-
-                  <!-- Gambar 5 - KCR Mall (255x255) -->
-                  <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                    <img 
-                      src={kcrmall} 
-                      alt="Kagawa Coffee Rice Mall" 
-                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee & Rice Bowl Corner</h3>
-                      <p class="text-xs text-white/90">Coffee & Ricebowl Corner</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Gambar 3 - KRBS Gerobak (250x550) - Tinggi melintasi 2 baris -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-250x550">
-                <img 
-                  src={krbs} 
-                  alt="Kagawa Rice Bowl Special" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Rice Bowl</h3>
-                  <p class="text-xs text-white/90">Rice Bowl Special</p>
-                </div>
+          <!-- Responsive Gallery Grid Container -->
+          <div class="gallery-grid">
+            <!-- Image 1 -->
+            <div class="gallery-item item-1 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={kccmall} alt="Kagawa Coffee Corner Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Corner</h3>
+                <p class="text-xs text-white/90">Kagawa Coffee Corner</p>
               </div>
             </div>
-
-            <!-- Baris 3: gambar6(255x255) + gambar7(255x255) + gambar8(545x255) -->
-            <div class="flex gap-4">
-              <!-- Gambar 6 - Teh Menu (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={teh} 
-                  alt="Tea Menu" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Segelas Teh Hijau Kagawa</h3>
-                  <p class="text-xs text-white/90">Premium Tea</p>
-                </div>
-              </div>
-
-              <!-- Gambar 7 - RM Mall (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={rmmall} 
-                  alt="RM Nusantara Mall" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Kedai RM Nusantara</h3>
-                  <p class="text-xs text-white/90">RM Nusantara</p>
-                </div>
-              </div>
-
-              <!-- Gambar 8 - Sagawa Luar (545x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-545x255">
-                <img 
-                  src={sagawaLuar} 
-                  alt="Sagawa Outdoor Display" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Papan Nama Sagawa Group</h3>
-                  <p class="text-xs text-white/90">Outdoor Display</p>
-                </div>
+            <!-- Image 2 -->
+            <div class="gallery-item item-2 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={sagawaPapan} alt="Sagawa Group Papan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Logo Sagawa Group</h3>
+                <p class="text-xs text-white/90">Brand Signage</p>
               </div>
             </div>
-
-            <!-- Baris 4: gambar9(255x255) + gambar10(545x255) + gambar11(255x255) -->
-            <div class="flex gap-4">
-              <!-- Gambar 9 - KCR Mall (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={kcrmall} 
-                  alt="Kagawa Coffee Rice Mall" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Mall</h3>
-                  <p class="text-xs text-white/90">Store Interior</p>
-                </div>
-              </div>
-
-              <!-- Gambar 10 - Kopi Menu (545x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-545x255">
-                <img 
-                  src={kopi} 
-                  alt="Coffee Menu" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Menu Kopi</h3>
-                  <p class="text-xs text-white/90">Premium Coffee</p>
-                </div>
-              </div>
-
-              <!-- Gambar 11 - Mas Gaw (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={masgaw} 
-                  alt="Mas Gaw Food Cart" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Kedai Mas Gaw</h3>
-                  <p class="text-xs text-white/90">MasGaw Food Cart</p>
-                </div>
+            <!-- Image 3 -->
+            <div class="gallery-item item-3 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={krbs} alt="Kagawa Rice Bowl Special" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Rice Bowl</h3>
+                <p class="text-xs text-white/90">Rice Bowl Special</p>
               </div>
             </div>
-
-            <!-- Baris 5: gambar12(545x255) + gambar13(255x255) + gambar14(255x255) -->
-            <div class="flex gap-4">
-              <!-- Gambar 12 - Squash Menu (545x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-545x255">
-                <img 
-                  src={squash} 
-                  alt="Squash Drink Menu" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Pinaple Squash</h3>
-                  <p class="text-xs text-white/90">Fresh Pineapple Squash</p>
-                </div>
-              </div>
-
-              <!-- Gambar 13 - KBD Gerobak (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={kbd} 
-                  alt="Kagawa Beverages & Dim Sum" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Ruko Development Business</h3>
-                  <p class="text-xs text-white/90">Development Business</p>
-                </div>
-              </div>
-
-              <!-- Gambar 14 - Sagawa Balon (255x255) -->
-              <div class="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-white size-255">
-                <img 
-                  src={sagawaBalon} 
-                  alt="Sagawa Balloon Display" 
-                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 class="text-sm font-semibold mb-1">Sagawa Balon</h3>
-                  <p class="text-xs text-white/90">Promotional Display</p>
-                </div>
+            <!-- Image 4 -->
+            <div class="gallery-item item-4 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={sagawaDesk} alt="Sagawa Desk Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Standee Sagawa Desk</h3>
+                <p class="text-xs text-white/90">Office Display</p>
               </div>
             </div>
-
+            <!-- Image 5 -->
+            <div class="gallery-item item-5 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={kcrmall} alt="Kagawa Coffee Rice Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee & Rice Bowl Corner</h3>
+                <p class="text-xs text-white/90">Coffee & Ricebowl Corner</p>
+              </div>
+            </div>
+            <!-- Image 6 -->
+            <div class="gallery-item item-6 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={teh} alt="Tea Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Segelas Teh Hijau Kagawa</h3>
+                <p class="text-xs text-white/90">Premium Tea</p>
+              </div>
+            </div>
+            <!-- Image 7 -->
+            <div class="gallery-item item-7 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={rmmall} alt="RM Nusantara Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai RM Nusantara</h3>
+                <p class="text-xs text-white/90">RM Nusantara</p>
+              </div>
+            </div>
+            <!-- Image 8 -->
+            <div class="gallery-item item-8 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={sagawaLuar} alt="Sagawa Outdoor Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Papan Nama Sagawa Group</h3>
+                <p class="text-xs text-white/90">Outdoor Display</p>
+              </div>
+            </div>
+            <!-- Image 9 -->
+            <div class="gallery-item item-9 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={kcrmall} alt="Kagawa Coffee Rice Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Mall</h3>
+                <p class="text-xs text-white/90">Store Interior</p>
+              </div>
+            </div>
+            <!-- Image 10 -->
+            <div class="gallery-item item-10 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={kopi} alt="Coffee Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Menu Kopi</h3>
+                <p class="text-xs text-white/90">Premium Coffee</p>
+              </div>
+            </div>
+            <!-- Image 11 -->
+            <div class="gallery-item item-11 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={masgaw} alt="Mas Gaw Food Cart" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Kedai Mas Gaw</h3>
+                <p class="text-xs text-white/90">MasGaw Food Cart</p>
+              </div>
+            </div>
+            <!-- Image 12 -->
+            <div class="gallery-item item-12 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={squash} alt="Squash Drink Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Pinaple Squash</h3>
+                <p class="text-xs text-white/90">Fresh Pineapple Squash</p>
+              </div>
+            </div>
+            <!-- Image 13 -->
+            <div class="gallery-item item-13 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={kbd} alt="Kagawa Beverages & Dim Sum" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Ruko Development Business</h3>
+                <p class="text-xs text-white/90">Development Business</p>
+              </div>
+            </div>
+            <!-- Image 14 -->
+            <div class="gallery-item item-14 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <img src={sagawaBalon} alt="Sagawa Balloon Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <h3 class="text-sm font-semibold mb-1">Sagawa Balon</h3>
+                <p class="text-xs text-white/90">Promotional Display</p>
+              </div>
+            </div>
           </div>
 
           <!-- Additional Info Section -->
-          <div class="text-center">
-            <div class="bg-white rounded-2xl shadow-lg p-8 mx-auto" style="max-width: 1050px;">
+          <div class="text-center mt-12">
+            <div class="bg-white rounded-2xl shadow-lg p-8 mx-auto max-w-4xl">
               <h2 class="text-3xl font-bold text-gray-800 mb-4">Tentang Galeri Kami</h2>
               <p class="text-gray-600 text-lg leading-relaxed">
                 Galeri Sagawa Group menampilkan koleksi foto-foto terbaik dari berbagai outlet dan konsep bisnis kami. 
@@ -326,74 +234,41 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
   .gallery-item:hover {
     transform: translateY(-8px);
   }
-  
-  /* Custom size classes sesuai spesifikasi */
-  .size-255 {
-    width: 255px;
-    height: 255px;
-    min-width: 255px;
-    min-height: 255px;
+
+  .gallery-section {
+    position: relative;
+    z-index: 10;
   }
-  
-  .size-545x255 {
-    width: 545px;
-    height: 255px;
-    min-width: 545px;
-    min-height: 255px;
+
+  .gallery-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
-  
-  .size-250x550 {
-    width: 250px;
-    height: 530px;
-    min-width: 250px;
-    min-height: 530px;
+
+  .gallery-item {
+    aspect-ratio: 1 / 1;
   }
-  
-  /* Responsive untuk layar kecil */
-  @media (max-width: 1024px) {
-    .size-255 {
-      width: 200px;
-      height: 200px;
-      min-width: 200px;
-      min-height: 200px;
+
+  @media (min-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: auto;
     }
-    
-    .size-545x255 {
-      width: 400px;
-      height: 200px;
-      min-width: 400px;
-      min-height: 200px;
-    }
-    
-    .size-250x550 {
-      width: 200px;
-      height: 400px;
-      min-width: 200px;
-      min-height: 400px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .size-255 {
-      width: 150px;
-      height: 150px;
-      min-width: 150px;
-      min-height: 150px;
-    }
-    
-    .size-545x255 {
-      width: 300px;
-      height: 150px;
-      min-width: 300px;
-      min-height: 150px;
-    }
-    
-    .size-250x550 {
-      width: 150px;
-      height: 300px;
-      min-width: 150px;
-      min-height: 300px;
-    }
+    .item-1 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-2 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    .item-3 { grid-column: span 1; grid-row: span 2; aspect-ratio: 1/2; }
+    .item-4 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    .item-5 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-6 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-7 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-8 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    .item-9 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-10 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    .item-11 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-12 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
+    .item-13 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
+    .item-14 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
   }
 
   /* Fade in up animations */

@@ -1,45 +1,60 @@
 ---
 // Admin Dashboard
+import Layout from '../../layouts/Layout.astro';
 ---
-<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start rtl:justify-end">
-        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-            <span class="sr-only">Open sidebar</span>
-            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-               <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-            </svg>
-         </button>
-        <a href="/admin/dashboard" class="flex ms-2 md:me-24">
-          <img src="#" class="h-8 me-3" alt="FlowBite Logo" />
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Admin Panel</span>
-        </a>
-      </div>
-      <div class="flex items-center">
-          <div class="flex items-center ms-3">
-            <div>
-              <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="#" alt="user photo">
-              </button>
-            </div>
-            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-              <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900 dark:text-white" role="none">Admin User</p>
-                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">admin@flowbite.com</p>
+<Layout title="Admin Dashboard">
+  <!-- Authentication Protection Script -->
+  <script>
+    // Cek apakah user sudah login
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('adminToken');
+      const user = localStorage.getItem('adminUser');
+      
+      if (!token || !user) {
+        window.location.href = '/admin/login';
+      }
+    }
+  </script>
+
+  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+              <span class="sr-only">Open sidebar</span>
+              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+              </svg>
+           </button>
+          <a href="/admin/dashboard" class="flex ms-2 md:me-24">
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white text-amber-600">Sagawa Admin</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+            <div class="flex items-center ms-3">
+              <div>
+                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
+                    A
+                  </div>
+                </button>
               </div>
-              <ul class="py-1" role="none">
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a></li>
-              </ul>
+              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                <div class="px-4 py-3" role="none">
+                  <p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name">Admin User</p>
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">admin@sagawa.com</p>
+                </div>
+                <ul class="py-1" role="none">
+                  <li><a href="/admin/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
+                  <li><button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
@@ -74,29 +89,27 @@
       </div>
 
       <div class="mb-4 bg-white rounded-lg shadow dark:bg-gray-800">
-         <h3 class="text-xl font-semibold p-4 text-gray-900 dark:text-white">User Management</h3>
+         <div class="flex justify-between items-center p-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Mitra Management</h3>
+            <button id="refresh-btn" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+               Refresh Data
+            </button>
+         </div>
          <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
-                     <th scope="col" class="px-6 py-3">Name</th>
-                     <th scope="col" class="px-6 py-3">Role</th>
+                     <th scope="col" class="px-6 py-3">Nama Mitra</th>
+                     <th scope="col" class="px-6 py-3">Email</th>
+                     <th scope="col" class="px-6 py-3">No HP</th>
+                     <th scope="col" class="px-6 py-3">Paket Usaha</th>
                      <th scope="col" class="px-6 py-3">Status</th>
-                     <th scope="col" class="px-6 py-3">Action</th>
+                     <th scope="col" class="px-6 py-3">Actions</th>
                   </tr>
                </thead>
-               <tbody>
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Neil Sims</th>
-                     <td class="px-6 py-4">Admin</td>
-                     <td class="px-6 py-4">Online</td>
-                     <td class="px-6 py-4"><a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
-                  </tr>
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Bonnie Green</th>
-                     <td class="px-6 py-4">User</td>
-                     <td class="px-6 py-4">Offline</td>
-                     <td class="px-6 py-4"><a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a></td>
+               <tbody id="mitra-table-body">
+                  <tr>
+                     <td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td>
                   </tr>
                </tbody>
             </table>
@@ -104,3 +117,559 @@
       </div>
    </div>
 </div>
+
+<!-- Modal untuk Detail Mitra -->
+<div id="mitraDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeMitraDetailModal()"></div>
+    
+    <!-- Modal panel -->
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Detail Mitra</h3>
+          <button onclick="closeMitraDetailModal()" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Modal Content -->
+        <div id="mitraDetailContent" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Content akan diisi oleh JavaScript -->
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="mt-6 flex justify-end space-x-3">
+          <button onclick="closeMitraDetailModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal untuk Memperbesar Gambar -->
+<div id="imageModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-90">
+  <div class="flex items-center justify-center w-full h-full p-4">
+    <!-- Close button -->
+    <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-20">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    
+    <!-- Image container -->
+    <div class="max-w-full max-h-full">
+      <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain">
+      <p id="modalImageTitle" class="text-white text-center mt-4 text-lg font-medium"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Load user information
+  document.addEventListener('DOMContentLoaded', function() {
+    const userString = localStorage.getItem('adminUser');
+    if (userString) {
+      try {
+        const user = JSON.parse(userString);
+        
+        // Update user name and email in dropdown
+        const userNameEl = document.getElementById('user-name');
+        const userEmailEl = document.getElementById('user-email');
+        const userAvatarEl = document.getElementById('user-avatar');
+        
+        if (userNameEl) userNameEl.textContent = user.nama || 'Admin User';
+        if (userEmailEl) userEmailEl.textContent = user.email || 'admin@sagawa.com';
+        if (userAvatarEl) userAvatarEl.textContent = (user.nama || 'Admin')[0].toUpperCase();
+        
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+
+    // Load mitra data
+    loadMitraData();
+
+    // Handle dropdown toggle
+    const userMenuButton = document.getElementById('user-menu-button');
+    const dropdownUser = document.getElementById('dropdown-user');
+    
+    if (userMenuButton && dropdownUser) {
+      userMenuButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownUser.classList.toggle('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function() {
+        dropdownUser.classList.add('hidden');
+      });
+    }
+
+    // Handle logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Konfirmasi logout
+        if (confirm('Apakah Anda yakin ingin logout?')) {
+          // Hapus data dari localStorage
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminUser');
+          
+          // Redirect ke login page
+          window.location.href = '/admin/login';
+        }
+      });
+    }
+
+    // Handle refresh button
+    const refreshBtn = document.getElementById('refresh-btn');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadMitraData();
+      });
+    }
+
+    // Handle sidebar toggle
+    const sidebarToggle = document.querySelector('[data-drawer-toggle="logo-sidebar"]');
+    const sidebar = document.getElementById('logo-sidebar');
+    
+    if (sidebarToggle && sidebar) {
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('-translate-x-full');
+      });
+    }
+  });
+
+  // Function to load mitra data
+  async function loadMitraData() {
+    const tableBody = document.getElementById('mitra-table-body') as HTMLTableSectionElement | null;
+    const token = localStorage.getItem('adminToken');
+
+    if (!token) {
+      window.location.href = '/admin/login';
+      return;
+    }
+
+    if (!tableBody) return;
+
+    try {
+      tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
+
+      const response = await fetch('http://localhost:9999/api/admin/mitra', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch mitra data');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const mitras = result.data;
+
+        if (mitras.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">Tidak ada data mitra</td></tr>';
+          return;
+        }
+
+        let tableHTML = '';
+        mitras.forEach((mitra: any) => {
+          const statusColor = mitra.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                             mitra.status === 'approved' ? 'bg-green-100 text-green-800' :
+                             'bg-red-100 text-red-800';
+          
+          const actionButtons = `
+            <div class="flex flex-wrap gap-1">
+              <button onclick="showMitraDetail('${mitra._id}')" class="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition">
+                Detail
+              </button>
+              ${mitra.status === 'pending' ? 
+                `<button onclick="approveMitra('${mitra._id}', 'approve')" class="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition">
+                   Approve
+                 </button>
+                 <button onclick="approveMitra('${mitra._id}', 'reject')" class="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition">
+                   Reject
+                 </button>` :
+                `<span class="text-gray-500 text-xs">${mitra.status === 'approved' ? 'Disetujui' : 'Ditolak'}</span>`
+              }
+            </div>
+          `;
+
+          tableHTML += `
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                ${mitra.namaMitra || 'N/A'}
+              </th>
+              <td class="px-6 py-4">${mitra.email || 'N/A'}</td>
+              <td class="px-6 py-4">${mitra.noHp || 'N/A'}</td>
+              <td class="px-6 py-4">${mitra.paketUsaha || 'N/A'}</td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 text-xs font-medium rounded-full ${statusColor}">
+                  ${mitra.status || 'pending'}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                ${actionButtons}
+              </td>
+            </tr>
+          `;
+        });
+
+        tableBody.innerHTML = tableHTML;
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>';
+      }
+    } catch (error: unknown) {
+      console.error('Error loading mitra data:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Error: ${errorMessage}</td></tr>`;
+    }
+  }
+
+  // Function to approve/reject mitra
+  async function approveMitra(mitraId: string, action: 'approve' | 'reject') {
+    const token = localStorage.getItem('adminToken');
+
+    if (!token) {
+      window.location.href = '/admin/login';
+      return;
+    }
+
+    const actionText = action === 'approve' ? 'menyetujui' : 'menolak';
+    const warningText = action === 'reject' ? 
+      '\n\n⚠️ PERHATIAN: Data mitra yang ditolak akan DIHAPUS PERMANEN dari database!' : '';
+    
+    if (!confirm(`Apakah Anda yakin ingin ${actionText} mitra ini?${warningText}`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:9999/api/admin/mitra/approve', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mitraId: mitraId,
+          action: action
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        alert(result.message);
+        // Reload mitra data
+        loadMitraData();
+      } else {
+        alert(result.error || 'Gagal memproses permintaan');
+      }
+    } catch (error: unknown) {
+      console.error('Error approving mitra:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Terjadi kesalahan saat memproses permintaan: ${errorMessage}`);
+    }
+  }
+
+  // Make functions globally available by extending Window interface
+  declare global {
+    interface Window {
+      approveMitra: (mitraId: string, action: 'approve' | 'reject') => Promise<void>;
+      showMitraDetail: (mitraId: string) => Promise<void>;
+      closeMitraDetailModal: () => void;
+      openImageModal: (imageData: string, title: string) => void;
+      closeImageModal: () => void;
+    }
+  }
+
+  (window as any).approveMitra = approveMitra;
+
+  // Function to show mitra detail modal
+  async function showMitraDetail(mitraId: string) {
+    const token = localStorage.getItem('adminToken');
+    const modal = document.getElementById('mitraDetailModal');
+    const content = document.getElementById('mitraDetailContent');
+
+    if (!token || !modal || !content) {
+      return;
+    }
+
+    try {
+      // Show modal first
+      modal.classList.remove('hidden');
+      content.innerHTML = '<div class="col-span-2 text-center">Loading...</div>';
+
+      const response = await fetch(`http://localhost:9999/api/admin/mitra/${mitraId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch mitra detail');
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        const mitra = result.data;
+        displayMitraDetail(mitra);
+      } else {
+        content.innerHTML = '<div class="col-span-2 text-center text-red-500">Error loading detail</div>';
+      }
+    } catch (error: unknown) {
+      console.error('Error loading mitra detail:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      content.innerHTML = `<div class="col-span-2 text-center text-red-500">Error: ${errorMessage}</div>`;
+    }
+  }
+
+  // Function to display mitra detail in modal
+  function displayMitraDetail(mitra: any) {
+    const content = document.getElementById('mitraDetailContent');
+    if (!content) return;
+
+    const formatCurrency = (amount: number) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(amount);
+    };
+
+    const formatDate = (dateString: string) => {
+      return new Date(dateString).toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    };
+
+    content.innerHTML = `
+
+
+      <!-- Informasi Dasar -->
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Dasar</h4>
+        <div class="space-y-2">
+          <div><strong>Nama Mitra:</strong> ${mitra.namaMitra || 'N/A'}</div>
+          <div><strong>Email:</strong> ${mitra.email || 'N/A'}</div>
+          <div><strong>No HP:</strong> ${mitra.noHp || 'N/A'}</div>
+          <div><strong>Alamat:</strong> ${mitra.alamatMitra || 'N/A'}</div>
+          <div><strong>Status:</strong> 
+            <span class="px-2 py-1 text-xs rounded-full ${mitra.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : mitra.status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+              ${mitra.status || 'pending'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informasi Kemitraan -->
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Kemitraan</h4>
+        <div class="space-y-2">
+          <div><strong>Sistem Kemitraan:</strong> ${mitra.sistemKemitraan || 'N/A'}</div>
+          <div><strong>Sales:</strong> ${mitra.sales || 'N/A'}</div>
+          <div><strong>Paket Usaha:</strong> ${mitra.paketUsaha || 'N/A'}</div>
+          <div><strong>Lokasi Usaha:</strong> ${mitra.lokasi || 'N/A'}</div>
+          <div><strong>Alamat Usaha:</strong> ${mitra.alamatUsaha || 'N/A'}</div>
+        </div>
+      </div>
+
+      <!-- Informasi Keuangan -->
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Keuangan</h4>
+        <div class="space-y-2">
+          <div><strong>Nilai Paket:</strong> ${mitra.nilaiPaketUsaha || 'N/A'}</div>
+          <div><strong>Harga Paket:</strong> ${mitra.hargaPaket ? formatCurrency(mitra.hargaPaket) : 'N/A'}</div>
+          <div><strong>Nominal DP:</strong> ${mitra.nominalDP ? formatCurrency(mitra.nominalDP) : 'N/A'}</div>
+          <div><strong>Nominal Full:</strong> ${mitra.nominalFull ? formatCurrency(mitra.nominalFull) : 'N/A'}</div>
+          <div><strong>Yang Harus Dibayar:</strong> ${mitra.yangHarusDibayar ? formatCurrency(mitra.yangHarusDibayar) : 'N/A'}</div>
+          <div><strong>Kekurangan:</strong> ${mitra.kekurangan ? formatCurrency(mitra.kekurangan) : 'N/A'}</div>
+        </div>
+      </div>
+
+      <!-- Informasi Pembayaran -->
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Pembayaran</h4>
+        <div class="space-y-2">
+          <div><strong>Metode Pembayaran:</strong> ${mitra.metodePembayaran || 'N/A'}</div>
+          <div><strong>Bank:</strong> ${mitra.namaBank || 'N/A'}</div>
+          <div><strong>No Rekening:</strong> ${mitra.nomorRekening || 'N/A'}</div>
+          <div><strong>Nama Rekening:</strong> ${mitra.namaRekening || 'N/A'}</div>
+          <div><strong>Bank Pengirim:</strong> ${mitra.bankPengirim || 'N/A'}</div>
+          <div><strong>Nama Pengirim:</strong> ${mitra.namaPengirim || 'N/A'}</div>
+        </div>
+      </div>
+
+      <!-- File Dokumen -->
+      <div class="bg-gray-50 p-4 rounded-lg col-span-2">
+        <h4 class="font-semibold text-gray-900 mb-4">Dokumen & Foto</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Foto KTP -->
+          <!-- Foto KTP -->
+          <div class="space-y-2">
+            <strong>Foto KTP:</strong>
+            ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
+              <div class="mt-2">
+                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
+                  <img src="${mitra.fotoKTP}" 
+                       alt="Foto KTP" 
+                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
+                       onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <div class="text-red-500 text-sm p-4 hidden text-center">
+                    <p>Gagal memuat gambar KTP</p>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
+              </div>
+            ` : '<span class="text-gray-500">Tidak ada foto KTP</span>'}
+          </div>
+          
+          <!-- Bukti Transfer -->
+          <div class="space-y-2">
+            <strong>Bukti Transfer:</strong>
+            ${mitra.buktiTransfer && mitra.buktiTransfer !== '' ? `
+              <div class="mt-2">
+                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
+                  <img src="${mitra.buktiTransfer}" 
+                       alt="Bukti Transfer" 
+                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
+                       onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                  <div class="text-red-500 text-sm p-4 hidden text-center">
+                    <p>Gagal memuat bukti transfer</p>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
+              </div>
+            ` : '<span class="text-gray-500">Tidak ada bukti transfer</span>'}
+          </div>
+        </div>
+      </div>
+
+      <!-- Informasi Waktu -->
+      <div class="bg-gray-50 p-4 rounded-lg col-span-2">
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Waktu</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><strong>Dibuat:</strong> ${mitra.createdAt ? formatDate(mitra.createdAt) : 'N/A'}</div>
+          <div><strong>Diupdate:</strong> ${mitra.updatedAt ? formatDate(mitra.updatedAt) : 'N/A'}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Function to close mitra detail modal
+  function closeMitraDetailModal() {
+    const modal = document.getElementById('mitraDetailModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  // Helper function untuk mengecek apakah string adalah base64 atau data URL
+  function isBase64OrDataUrl(str: string): boolean {
+    if (!str) return false;
+    // Cek jika string dimulai dengan data URL
+    if (str.startsWith('data:')) return true;
+    // Jika string cukup panjang, anggap sebagai base64
+    if (str.length > 50) return true;
+    return false;
+  }
+
+  // Function to open image modal
+  function openImageModal(imageData: string, title: string) {
+    const modal = document.getElementById('imageModal');
+    const image = document.getElementById('modalImage') as HTMLImageElement;
+    const titleElement = document.getElementById('modalImageTitle');
+    
+    if (modal && image && titleElement) {
+      // Show modal first
+      modal.classList.remove('hidden');
+      
+      // Handle different image data formats
+      let imageSrc = '';
+      if (imageData.startsWith('data:')) {
+        // Already a data URL
+        imageSrc = imageData;
+      } else {
+        // Assume base64 data, add data URL prefix
+        imageSrc = `data:image/png;base64,${imageData}`;
+      }
+      
+      console.log('Opening image modal with:', { title, imageSrc: imageSrc.substring(0, 50) + '...' });
+      
+      image.src = imageSrc;
+      image.alt = title;
+      titleElement.textContent = title;
+      
+      image.onerror = function() {
+        console.error('Failed to load image:', imageSrc.substring(0, 100));
+        titleElement.textContent = title + ' (Gagal memuat gambar)';
+        // Show a placeholder message
+        image.style.display = 'none';
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'text-white text-center p-8';
+        errorMsg.innerHTML = `
+          <div class="text-red-500 bg-white p-4 rounded">
+            <p class="text-lg">⚠️ Gagal memuat gambar</p>
+            <p class="text-sm mt-2">Data gambar mungkin rusak</p>
+          </div>
+        `;
+        image.parentElement?.appendChild(errorMsg);
+      };
+    }
+  }
+
+  // Function to close image modal
+  function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  // Close image modal when clicking outside the image
+  document.addEventListener('click', function(event) {
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    
+    if (imageModal && !imageModal.classList.contains('hidden')) {
+      if (event.target === imageModal && event.target !== modalImage) {
+        closeImageModal();
+      }
+    }
+  });
+
+  // Close image modal with Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeImageModal();
+    }
+  });
+
+  (window as any).showMitraDetail = showMitraDetail;
+  (window as any).closeMitraDetailModal = closeMitraDetailModal;
+  (window as any).openImageModal = openImageModal;
+  (window as any).closeImageModal = closeImageModal;
+</script>
+</Layout>

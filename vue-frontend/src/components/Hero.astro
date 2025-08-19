@@ -2,7 +2,7 @@
 // Hero.astro
 ---
 
-<section class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-[calc(100vh-4rem)] pb-5 flex items-center relative">
+<section class="bg-white min-h-[calc(100vh-4rem)] pb-5 flex items-center relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-16">
       
@@ -68,25 +68,14 @@
     </div>
   </div>
       
-  
-  <!-- Wave transition to connect with footer
-  <div class="absolute bottom-0 left-0 right-0">
-    <svg
-      class="w-full h-12 text-gray-200"
-      preserveAspectRatio="none"
-      viewBox="0 0 1440 54"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M0 22L120 16.7C240 11 480 1.00001 720 0.700012C960 1.00001 1200 11 1320 16.7L1440 22V54H1320C1200 54 960 54 720 54C480 54 240 54 120 54H0V22Z"
-        fill="currentColor"
-      />
-    </svg>
-  </div>
-</section> -->
 
-<style>
+<style>  
+  /* Ensure navbar sticky works properly */
+  .navbar {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+	}
   @keyframes float {
     0%, 100% {
       transform: translateY(0px);
