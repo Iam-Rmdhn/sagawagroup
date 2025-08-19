@@ -20,175 +20,272 @@ import Mochachino from '../assets/img/menu/Mochachino.png?url';
 import Arren from '../assets/img/menu/Arren.png?url';
 import BlackCoffe from '../assets/img/menu/BlackCoffe.png?url';
 
-// Tambahkan import gambar lain jika ada
-
 const menus = [
   // 5 Rice Bowl
   { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl" },
   { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl" },
   { name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl" },
   { name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl" },
-  { name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl" },
+  { name: "Kokonattsueuggu", desc: "Nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl" },
 
-  // 21 Coffe Corner (diberi subcategory)
-  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Donat Original", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Coklat", desc: "Donat dengan topping coklat leleh.", price: "12k", img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
-  // ...lanjutkan hingga 21 menu Coffe Corner...
+  // 21 Coffee Corner (diberi subcategory)
+  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: "Coffee Corner", subcategory: "coffee" },
+  { name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: "Coffee Corner", subcategory: "non-coffee" },
+  { name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: "Coffee Corner", subcategory: "non-coffee" },
+  { name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: "Coffee Corner", subcategory: "non-coffee" },
+  { name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: "Coffee Corner", subcategory: "non-coffee" },
+  { name: "Donat Original", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop", category: "Coffee Corner", subcategory: "donat" },
+  { name: "Donat Coklat", desc: "Donat dengan topping coklat leleh.", price: "12k", img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?w=400&h=200&fit=crop", category: "Coffee Corner", subcategory: "donat" },
 
-  // 20 Rice Bowl & COffe Corner
-    // 5 Rice Bowl
-  { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl" },
-  { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl" },
-  { name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl" },
-  { name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl" },
-  { name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl" },
+  // Rice Bowl & Coffee Corner
+  { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl & Coffee Corner" },
+  { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl & Coffee Corner" },
+  { name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl & Coffee Corner" },
+  { name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl & Coffee Corner" },
+  { name: "Kokonattsueuggu", desc: "Nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl & Coffee Corner" },
 
-  // 21 Coffe Corner (diberi subcategory)
-  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Donat Original", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Coklat", desc: "Donat dengan topping coklat leleh.", price: "12k", img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
-
-
-  // 25 Warung Makan Nusantara
-  { name: "Americano", desc: "Kopi hitam klasik.", price: "Rp 18.000", img: americano, category: "beverage" },
-  { name: "Cappuccino Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 20.000", img: CappLatte, category: "beverage" },
+  // Rumah Makan Nusantara
+  { name: "Americano", desc: "Kopi hitam klasik.", price: "Rp 18.000", img: americano, category: "Rumah Makan Nusantara" },
+  { name: "Cappuccino Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 20.000", img: CappLatte, category: "Rumah Makan Nusantara" },
   // ...lanjutkan hingga 25 menu beverage...
 ];
+
+// Category colors for more consistent design
+const categoryColors: {
+  [key: string]: { bg: string; text: string; hover: string };
+  "Rice Bowl": { bg: string; text: string; hover: string };
+  "Coffee Corner": { bg: string; text: string; hover: string };
+  "Rice Bowl & Coffee Corner": { bg: string; text: string; hover: string };
+  "Rumah Makan Nusantara": { bg: string; text: string; hover: string };
+} = {
+  "Rice Bowl": {
+    bg: "bg-red-500",
+    text: "text-red-600",
+    hover: "hover:bg-red-600"
+  },
+  "Coffee Corner": {
+    bg: "bg-amber-600",
+    text: "text-amber-600",
+    hover: "hover:bg-amber-700"
+  },
+  "Rice Bowl & Coffee Corner": {
+    bg: "bg-purple-500",
+    text: "text-purple-600",
+    hover: "hover:bg-purple-600"
+  },
+  "Rumah Makan Nusantara": {
+    bg: "bg-green-600",
+    text: "text-green-600",
+    hover: "hover:bg-green-700"
+  }
+};
 ---
 
-<Layout title="Sagawa Group - Menu">
+<Layout title="Menu | Sagawa Group" description="Temukan menu pilihan dari brand-brand Sagawa Group">
   <Navbar />
-
-  <main class="food_section py-12 px-4 bg-gradient-to-b from-gray-50 to-white" x-data="{ filter: 'all', subfilter: 'all' }">
+  <main class="py-16 px-4 bg-gray-50" x-data="{ filter: 'all', subfilter: 'all' }">
     <div class="container mx-auto max-w-6xl">
-      <div class="heading_container text-center mb-10">
-        <h2 class="text-3xl md:text-4xl font-bold mb-2">
-          <span class="inline-block align-middle mr-2">🍽️</span> Our Delicious Menu
-        </h2>
+      <!-- Filter Menu -->
+      <div class="mb-12">
+        <h3 class="text-lg font-semibold mb-4 text-center md:text-left text-gray-700">Pilih Kategori</h3>
+        <div class="filters_menu flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
+          <button 
+            :class="filter === 'all' ? 'active-filter' : ''" 
+            @click="filter = 'all'; subfilter = 'all'" 
+            class="filter-btn px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition">
+            Semua Menu
+          </button>
+          <button 
+            :class="filter === 'Rice Bowl' ? 'active-filter' : ''" 
+            @click="filter = 'Rice Bowl'; subfilter = 'all'" 
+            class="filter-btn px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition">
+            Rice Bowl
+          </button>
+          <button 
+            :class="filter === 'Coffee Corner' ? 'active-filter' : ''" 
+            @click="filter = 'Coffee Corner'; subfilter = 'all'" 
+            class="filter-btn px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition">
+            Coffee Corner
+          </button>
+          <button 
+            :class="filter === 'Rice Bowl & Coffee Corner' ? 'active-filter' : ''" 
+            @click="filter = 'Rice Bowl & Coffee Corner'; subfilter = 'all'" 
+            class="filter-btn px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition">
+            Rice Bowl & Coffee Corner
+          </button>
+          <button 
+            :class="filter === 'Rumah Makan Nusantara' ? 'active-filter' : ''" 
+            @click="filter = 'Rumah Makan Nusantara'; subfilter = 'all'" 
+            class="filter-btn px-5 py-2.5 rounded-full font-medium text-sm md:text-base transition">
+            Rumah Makan Nusantara
+          </button>
+        </div>
       </div>
 
-      <!-- Filter Menu -->
-      <ul class="filters_menu flex flex-wrap justify-center gap-3 mb-6">
-        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-5 py-2 rounded-full bg-white shadow font-medium transition">All Items</li>
-        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-5 py-2 rounded-full bg-white shadow font-medium transition">Rice Bowl</li>
-        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-5 py-2 rounded-full bg-white shadow font-medium transition">Coffe Corner</li>
-        <li :class="filter === 'Rice Bowl & COffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & COffe Corner'; subfilter = 'all'" class="cursor-pointer px-5 py-2 rounded-full bg-white shadow font-medium transition">Rice Bowl & Coffe Corner</li>
-        <li :class="filter === 'Rumah Makan Nusantara' ? 'active' : ''" @click="filter = 'Rumah Makan Nusantara'; subfilter = 'all'" class="cursor-pointer px-5 py-2 rounded-full bg-white shadow font-medium transition">Warung Makan Nusantara</li>
-      </ul>
+      <!-- Subfilter for Coffee Corner -->
+      <div x-show="filter === 'Coffee Corner'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="mb-12">
+        <h3 class="text-lg font-semibold mb-4 text-center md:text-left text-gray-700">Pilih Sub-Kategori</h3>
+        <div class="filters_menu flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
+          <button 
+            :class="subfilter === 'all' ? 'active-subfilter' : ''" 
+            @click="subfilter = 'all'" 
+            class="subfilter-btn px-4 py-1.5 rounded-full font-medium text-sm transition">
+            Semua
+          </button>
+          <button 
+            :class="subfilter === 'coffee' ? 'active-subfilter' : ''" 
+            @click="subfilter = 'coffee'" 
+            class="subfilter-btn px-4 py-1.5 rounded-full font-medium text-sm transition">
+            Kopi
+          </button>
+          <button 
+            :class="subfilter === 'non-coffee' ? 'active-subfilter' : ''" 
+            @click="subfilter = 'non-coffee'" 
+            class="subfilter-btn px-4 py-1.5 rounded-full font-medium text-sm transition">
+            Non-Kopi
+          </button>
+          <button 
+            :class="subfilter === 'donat' ? 'active-subfilter' : ''" 
+            @click="subfilter = 'donat'" 
+            class="subfilter-btn px-4 py-1.5 rounded-full font-medium text-sm transition">
+            Donat
+          </button>
+        </div>
+      </div>
 
-      <!-- Subfilter for Coffe Corner -->
-      <template x-if="filter === 'Coffe Corner'">
-        <ul class="filters_menu flex flex-wrap justify-center gap-3 mb-10">
-          <li :class="subfilter === 'all' ? 'active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-4 py-1 rounded-full bg-white shadow font-medium transition">All</li>
-          <li :class="subfilter === 'coffee' ? 'active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-4 py-1 rounded-full bg-white shadow font-medium transition">Coffee</li>
-          <li :class="subfilter === 'non-coffee' ? 'active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-4 py-1 rounded-full bg-white shadow font-medium transition">Non Coffee</li>
-          <li :class="subfilter === 'donat' ? 'active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-4 py-1 rounded-full bg-white shadow font-medium transition">Donat</li>
-        </ul>
-      </template>
+      <!-- Empty State Message -->
+      <div 
+        x-show="!document.querySelector('[x-show]:not([style*=\'display: none\'])')" 
+        x-transition
+        class="text-center py-16 bg-white rounded-lg shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Tidak ada menu yang ditemukan</h3>
+        <p class="text-gray-500">Coba pilih kategori lain atau reset filter.</p>
+        <button @click="filter = 'all'; subfilter = 'all'" class="mt-4 px-5 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+          Reset Filter
+        </button>
+      </div>
 
       <!-- Menu Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {
-          menus.map(menu => (
-            <div
-              x-show={`
-                filter === 'all'
-                || (
-                  filter === '${menu.category}'
-                  ${menu.category === 'Coffe Corner'
-                    ? " && (subfilter === 'all' || subfilter === '" + menu.subcategory + "')"
-                    : ''
-                  }
-                )
-              `}
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 scale-95"
-              x-transition:enter-end="opacity-100 scale-100"
-              x-transition:leave="transition ease-in duration-200"
-              x-transition:leave-start="opacity-100 scale-100"
-              x-transition:leave-end="opacity-0 scale-95"
-              class="box bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col"
-            >
-              <div class="relative">
-                <img src={menu.img} alt={menu.name} class="w-full h-48 object-cover" />
-                <span class={`absolute top-3 right-3 text-white text-xs px-3 py-1 rounded-full ${
-                  menu.category === 'Rice Bowl' ? 'bg-indigo-500' :
-                  menu.category === 'Coffe Corner' ? 'bg-green-500' :
-                  menu.category === 'Rice Bowl & COffe Corner' ? 'bg-pink-500' :
-                  'bg-yellow-500'
-                }`}>
-                  {menu.category}
-                  {menu.subcategory ? ` - ${menu.subcategory.charAt(0).toUpperCase() + menu.subcategory.slice(1)}` : ''}
-                </span>
-              </div>
-              <div class="p-5 flex-1 flex flex-col">
-                <h5 class="font-bold text-lg mb-1">{menu.name}</h5>
-                <p class="text-gray-600 text-sm mb-3 flex-1">{menu.desc}</p>
-                <div class="flex justify-between items-center mt-auto">
-                  <span class={`font-bold text-lg ${
-                    menu.category === 'Rice Bowl' ? 'text-indigo-600' :
-                    menu.category === 'Coffe Corner' ? 'text-green-600' :
-                    menu.category === 'Rice Bowl & COffe Corner' ? 'text-pink-500' :
-                    'text-yellow-600'
-                  }`}>{menu.price}</span>
-                  <button class={`rounded-full w-10 h-10 flex items-center justify-center transition text-white ${
-                    menu.category === 'Rice Bowl' ? 'bg-indigo-500 hover:bg-indigo-600' :
-                    menu.category === 'Coffe Corner' ? 'bg-green-500 hover:bg-green-600' :
-                    menu.category === 'Rice Bowl & COffe Corner' ? 'bg-pink-500 hover:bg-pink-600' :
-                    'bg-yellow-500 hover:bg-yellow-600'
-                  }`}>
-                    <i class="fas fa-shopping-cart"></i>
-                  </button>
+          menus.map(menu => {
+            const categoryData = categoryColors[menu.category] || {
+              bg: "bg-gray-500", 
+              text: "text-gray-600", 
+              hover: "hover:bg-gray-600"
+            };
+            
+            return (
+              <div
+                x-show={`
+                  filter === 'all'
+                  || (
+                    filter === '${menu.category}'
+                    ${menu.subcategory
+                      ? " && (subfilter === 'all' || subfilter === '" + menu.subcategory + "')"
+                      : ''
+                    }
+                  )
+                `}
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="menu-card bg-white rounded-2xl shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col h-full"
+              >
+                <div class="relative h-52 overflow-hidden">
+                  <img src={menu.img} alt={menu.name} class="w-full h-full object-cover transition duration-500 hover:scale-110" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <span class={`absolute bottom-3 left-3 text-white text-xs font-medium px-3 py-1 rounded-full ${categoryData.bg}`}>
+                    {menu.category}
+                    {menu.subcategory ? ` · ${menu.subcategory.charAt(0).toUpperCase() + menu.subcategory.slice(1)}` : ''}
+                  </span>
+                </div>
+                <div class="p-5 flex-1 flex flex-col">
+                  <h5 class="font-bold text-lg mb-2 text-gray-800">{menu.name}</h5>
+                  <p class="text-gray-600 text-sm mb-4 flex-1">{menu.desc}</p>
+                  <div class="mt-auto">
+                    <span class={`font-bold text-base ${categoryData.text}`}>{menu.price}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            )
+          })
         }
       </div>
 
-      <div class="text-center mt-12">
-        <a href="#" class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-3 rounded-full font-bold shadow transition">
-          <i class="fas fa-plus-circle mr-2"></i>View More Items
-        </a>
+      <!-- CTA Section -->
+      <div class="text-center mt-16">
+        <h3 class="text-2xl font-bold mb-4">Tertarik dengan menu kami?</h3>
+        <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Dapatkan pengalaman makan yang luar biasa bersama keluarga dan teman di outlet kami atau bergabunglah menjadi mitra.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium shadow transition">
+            Kunjungi Outlet Kami
+          </a>
+          <a href="/mitra" class="inline-block bg-white border border-red-500 text-red-500 hover:bg-red-50 px-6 py-3 rounded-lg font-medium transition">
+            Jadi Mitra Kami
+          </a>
+        </div>
       </div>
     </div>
   </main>
 
   <Footer />
 
-  <!-- Font Awesome CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
   <!-- Alpine.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <style>
-    .filters_menu li.active {
-      background: linear-gradient(45deg, #667eea, #764ba2) !important;
-      color: #fff !important;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-      transform: translateY(-2px);
-    }
-    .box { transition: box-shadow .2s, transform .2s; }
-    .box:hover { box-shadow: 0 12px 35px rgba(0,0,0,0.12); transform: translateY(-6px);}
-  </style>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </Layout>
+
+<style>
+  /* Filter buttons */
+  .filter-btn {
+    background-color: white;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .filter-btn:hover {
+    background-color: #f7fafc;
+  }
+  
+  .active-filter {
+    background: linear-gradient(45deg, #f56565, #e53e3e) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.25);
+    border: none;
+  }
+  
+  /* Subfilter buttons */
+  .subfilter-btn {
+    background-color: white;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .active-subfilter {
+    background: #f6e05e !important;
+    color: #744210 !important;
+    border: none;
+  }
+  
+  /* Menu card hover effects */
+  .menu-card {
+    transition: all 0.3s ease;
+  }
+  
+  .menu-card:hover {
+    transform: translateY(-5px);
+  }
+</style>
