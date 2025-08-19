@@ -224,10 +224,13 @@ export async function approveMitraService(
       };
     } else {
       // Reject mitra - DELETE from database and clean up files
-      
+
       // Delete associated files if they exist
       try {
-        if (mitra.fotoKTP && mitra.fotoKTP.startsWith("http://localhost:9999/uploads/")) {
+        if (
+          mitra.fotoKTP &&
+          mitra.fotoKTP.startsWith("http://localhost:9999/uploads/")
+        ) {
           const fileName = mitra.fotoKTP.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
           try {
@@ -241,7 +244,10 @@ export async function approveMitraService(
           }
         }
 
-        if (mitra.buktiTransfer && mitra.buktiTransfer.startsWith("http://localhost:9999/uploads/")) {
+        if (
+          mitra.buktiTransfer &&
+          mitra.buktiTransfer.startsWith("http://localhost:9999/uploads/")
+        ) {
           const fileName = mitra.buktiTransfer.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
           try {
@@ -251,17 +257,20 @@ export async function approveMitraService(
               console.log(`Deleted file: ${filePath}`);
             }
           } catch (fileError) {
-            console.warn(`Could not delete transfer file: ${filePath}`, fileError);
+            console.warn(
+              `Could not delete transfer file: ${filePath}`,
+              fileError
+            );
           }
         }
       } catch (cleanupError) {
         console.warn("File cleanup error (non-critical):", cleanupError);
         // Don't throw error, continue with database deletion
       }
-      
+
       // Delete from database
       const deleteResult = await MitraModel.deleteOne({ _id: mitraId });
-      
+
       if (!deleteResult) {
         throw new Error("Gagal menghapus data mitra yang ditolak");
       }
