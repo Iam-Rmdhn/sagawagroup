@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Form</title>
+  </head>
+  <body>
+    <h1>Test Mitra Registration Form</h1>
+    <p>Updated form with only KTP and bukti transfer</p>
+    <form id="testForm">
+      <div>
+        <label>Sistem Kemitraan:</label>
+        <select name="sistemKemitraan" required>
+          <option value="">Choose...</option>
+          <option value="Autopilot">Autopilot</option>
+          <option value="Semi Autopilot">Semi Autopilot</option>
+          <option value="Self Managed">Self Managed</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Sales:</label>
+        <input type="text" name="sales" value="Test Sales" required />
+      </div>
+
+      <div>
+        <label>Paket Usaha:</label>
+        <select name="paketUsaha" required>
+          <option value="">Choose...</option>
+          <option value="Kagawa Coffee Corner">Kagawa Coffee Corner</option>
+          <option value="Kagawa Ricebowl">Kagawa Ricebowl</option>
+          <option value="Kagawa Coffee & Ricebowl Corner">
+            Kagawa Coffee & Ricebowl Corner
+          </option>
+          <option value="RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)">
+            RM Nusantara
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label>Nama Mitra:</label>
+        <input type="text" name="namaMitra" value="Test Mitra" required />
+      </div>
+
+      <div>
+        <label>Alamat:</label>
+        <input type="text" name="alamatMitra" value="Test Address" required />
+      </div>
+
+      <div>
+        <label>No HP:</label>
+        <input type="tel" name="noHp" value="08123456789" required />
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input type="email" name="email" value="test@test.com" required />
+      </div>
+
+      <div>
+        <label>Nilai Paket:</label>
+        <select name="nilaiPaket" required>
+          <option value="">Choose...</option>
+          <option value="DP">DP</option>
+          <option value="Full Payment">Full Payment</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Nama Pengirim:</label>
+        <input type="text" name="namaPengirim" value="Test Sender" required />
+      </div>
+
+      <div>
+        <label>No Rekening:</label>
+        <input type="text" name="noRekPengirim" value="123456789" required />
+      </div>
+
+      <div>
+        <label>Bank:</label>
+        <input type="text" name="bankPengirim" value="BCA" required />
+      </div>
+
+      <button type="submit">Submit Test</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+      document
+        .getElementById("testForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+
+          // Add required numeric fields
+          formData.append("hargaPaket", "100000000");
+          formData.append("nominalDP", "5000000");
+          formData.append("nominalFull", "89000000");
+          formData.append("kekurangan", "95000000");
+          formData.append("diskonHarian", "0");
+          formData.append("yangHarusDibayar", "5000000");
+          formData.append("hargaAsli", "100000000");
+
+          console.log("Form data entries:");
+          for (let [key, value] of formData.entries()) {
+            console.log(key + ": " + value);
+          }
+
+          try {
+            const response = await fetch(
+              "http://localhost:9999/api/mitra/register",
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+
+            const responseText = await response.text();
+            console.log("Response status:", response.status);
+            console.log("Response text:", responseText);
+
+            document.getElementById("result").innerHTML = `<h3>Result</h3>
+                     <p>Status: ${response.status}</p>
+                     <pre>${responseText}</pre>`;
+          } catch (error) {
+            console.error("Error:", error);
+            document.getElementById(
+              "result"
+            ).innerHTML = `<h3>Error</h3><p>${error.message}</p>`;
+          }
+        });
+    </script>
+  </body>
+</html>

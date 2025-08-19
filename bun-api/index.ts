@@ -53,16 +53,23 @@ Bun.serve({
       // Serve uploaded files
       if (url.pathname.startsWith("/uploads/")) {
         try {
-          const filePath = url.pathname.substring(1); // Remove leading slash
+          const fileName = decodeURIComponent(
+            url.pathname.substring("/uploads/".length)
+          ); // Remove /uploads/ and decode URL
+          const filePath = `./uploads/${fileName}`;
+          console.log(`Requested file: "${fileName}" -> Path: "${filePath}"`);
           const file = Bun.file(filePath);
 
           if (await file.exists()) {
+            console.log(`File found: "${filePath}"`);
             return new Response(file, {
               headers: {
                 ...corsHeaders,
                 "Content-Type": file.type || "application/octet-stream",
               },
             });
+          } else {
+            console.log(`File not found: "${filePath}"`);
           }
         } catch (error) {
           console.error("Error serving file:", error);
