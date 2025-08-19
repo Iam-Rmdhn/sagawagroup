@@ -1,0 +1,14 @@
+# Stage 1: Build aplikasi dengan Bun
+FROM oven/bun:1 AS build
+# Tentukan direktori kerja di dalam container
+WORKDIR /app
+# Salin file konfigurasi package.json dan package-lock.json
+COPY package*.json ./
+# Install dependensi menggunakan Bun
+RUN bun install
+# Salin seluruh source code ke dalam container
+COPY . .
+# Expose port 4000 untuk API
+EXPOSE 4000
+# Jalankan server menggunakan Bun
+CMD ["bun", "run", "index.ts"]
