@@ -11,25 +11,31 @@ const transporter = nodemailer.createTransport({
 export const sendMitraApprovalEmail = async (
   email: string,
   namaMitra: string,
-  jenisUsaha: string,
   password: string = "mitrasagawagroup"
 ) => {
   const htmlContent = `
-    <p>Halo! mitra <strong>${namaMitra}</strong>,</p>
-    <p>Saat ini kamu telah bergabung dengan SagawaGroup sebagai <strong>${jenisUsaha}</strong>.</p>
-    <p>Dan berikut adalah akun kamu untuk masuk ke dalam panel mitra SagawaGroup:</p>
+    Halo ${namaMitra},
+
+    Selamat! Registrasi Anda di PT SAGAWA PANGAN NUSANTARA telah berhasil.
+    Berikut detail akun Anda:
+
     <ul>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Password:</strong> ${password}</li>
+    <li><strong>Email:</strong> ${email}</li>
+    <li><strong>Password:</strong> ${password}</li>
     </ul>
-    <p>Silakan gunakan akun ini untuk mengakses panel mitra kami.</p>
-    <p>Sekian, terima kasih.</p>
-  `;
+
+    Silakan login melalui [link login].
+
+    Remainder :
+    Password tidak bisa di ubah, kecuali oleh admin pusat.
+
+    Terima kasih,
+    Admin Support`;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Selamat Bergabung - Panel Mitra SagawaGroup",
+    subject: "Registrasi Berhasil – Akun Anda di PT SAGAWA PANGAN NUSANTARA",
     html: htmlContent,
   };
 
