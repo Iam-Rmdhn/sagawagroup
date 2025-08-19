@@ -47,9 +47,28 @@ const menus = [
   // ...lanjutkan hingga 21 menu Coffe Corner...
 
   // 20 Rice Bowl & COffe Corner
-  { name: "Classic Tiramisu", desc: "Tiramisu klasik dengan kopi dan mascarpone.", price: "Rp 25.000", img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=200&fit=crop", category: "dessert" },
-  { name: "New York Cheesecake", desc: "Cheesecake lembut dengan saus berry.", price: "Rp 27.000", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=200&fit=crop", category: "dessert" },
-  // ...lanjutkan hingga 20 menu dessert...
+    // 5 Rice Bowl
+  { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl" },
+  { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl" },
+  { name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl" },
+  { name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl" },
+  { name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl" },
+
+  // 21 Coffe Corner (diberi subcategory)
+  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: "Coffe Corner", subcategory: "coffee" },
+  { name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: "Coffe Corner", subcategory: "non-coffee" },
+  { name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: "Coffe Corner", subcategory: "non-coffee" },
+  { name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: "Coffe Corner", subcategory: "non-coffee" },
+  { name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: "Coffe Corner", subcategory: "non-coffee" },
+  { name: "Donat Original", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
+  { name: "Donat Coklat", desc: "Donat dengan topping coklat leleh.", price: "12k", img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?w=400&h=200&fit=crop", category: "Coffe Corner", subcategory: "donat" },
+
 
   // 25 Warung Makan Nusantara
   { name: "Americano", desc: "Kopi hitam klasik.", price: "Rp 18.000", img: americano, category: "beverage" },
