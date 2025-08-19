@@ -1,21 +1,32 @@
 ---
-// Footer component for Sagawa Group
 import sagawaLogo from '../assets/img/logo_s.svg?url';
 ---
 
 <footer class="relative bg-gray-900">
-  <svg
-    class="absolute top-0 w-full h-6 -mt-5 sm:-mt-10 sm:h-16 text-gray-900 z-auto"
+  <!-- Wave effect dengan responsive height berdasarkan ukuran layar -->
+  <div class="absolute top-[-40px] md:top-[-59px] left-0 w-full h-[40px] md:h-[60px] overflow-visible">
+    <svg
+      class="absolute bottom-0 w-full h-[40px] md:h-[60px] text-gray-900"
+      preserveAspectRatio="none"
+      viewBox="0 0 1440 60"
+      style="transform: translateZ(0); will-change: transform; filter: drop-shadow(0 -1px 0 rgba(15, 23, 42, 0.1));"
+    >
+      <!-- Path yang lebih rendah untuk mobile -->
+      <path
+        fill="currentColor"
+        d="M0 30L120 27C240 24 480 18 720 17.7C960 18 1200 24 1320 27L1440 30V60H1320C1200 60 960 60 720 60C480 60 240 60 120 60H0V30Z"
+        class="hidden sm:block"
+      />
+      <!-- Path khusus untuk mobile dengan kurva lebih rendah -->
+      <path
+        fill="currentColor"
+        d="M0 40L120 38C240 36 480 32 720 31.7C960 32 1200 36 1320 38L1440 40V60H1320C1200 60 960 60 720 60C480 60 240 60 120 60H0V40Z"
+        class="block sm:hidden"
+      />
+    </svg>
+  </div>
 
-    preserveAspectRatio="none"
-    viewBox="0 0 1440 54"
-  >
-    <path
-      fill="currentColor"
-      d="M0 22L120 16.7C240 11 480 1.00001 720 0.700012C960 1.00001 1200 11 1320 16.7L1440 22V54H1320C1200 54 960 54 720 54C480 54 240 54 120 54H0V22Z"
-    />
-  </svg>
-
+  <!-- Konten footer tetap sama -->
   <div
     class="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8"
   >
@@ -33,6 +44,7 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
         </div>
       </div>
 
+      <!-- Bagian grid tetap sama -->
       <div
         class="grid grid-cols-2 gap-5 row-gap-8 lg:col-span-4 md:grid-cols-3"
       >
@@ -124,7 +136,7 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
                 href="/kemitraan/business-development"
                 class="transition-colors duration-300 text-gray-300 hover:text-red-400"
               >
-                Business Development
+                Independant Brand
               </a>
             </li>
           </ul>
@@ -135,7 +147,7 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
           <ul class="mt-2 space-y-2">
             <li>
               <a
-                href="/bantuan/hubungi-kami"
+                href="/helper/chat"
                 class="transition-colors duration-300 text-gray-300 hover:text-red-400"
               >
                 Hubungi Kami
@@ -151,22 +163,6 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
             </li>
             <li>
               <a
-                href="/bantuan/panduan"
-                class="transition-colors duration-300 text-gray-300 hover:text-red-400"
-              >
-                Panduan
-              </a>
-            </li>
-            <li>
-              <a
-                href="/kebijakan/privasi"
-                class="transition-colors duration-300 text-gray-300 hover:text-red-400"
-              >
-                Kebijakan Privasi
-              </a>
-            </li>
-            <li>
-              <a
                 href="/kebijakan/syarat-ketentuan"
                 class="transition-colors duration-300 text-gray-300 hover:text-red-400"
               >
@@ -178,6 +174,7 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
       </div>
     </div>
 
+    <!-- Bagian copyright dan social media tetap sama -->
     <div
       class="flex flex-col justify-between pt-5 pb-10 border-t border-gray-700 sm:flex-row"
     >
@@ -255,4 +252,120 @@ import sagawaLogo from '../assets/img/logo_s.svg?url';
       </div>
     </div>
   </div>
+  
+  <!-- Connector element tetap sama -->
+  <div class="footer-wave-connector"></div>
 </footer>
+
+<style>
+  footer {
+    position: relative;
+    z-index: 10;
+    margin-top: -2px; 
+    isolation: isolate; 
+  }
+
+  footer svg {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+    display: block; 
+    height: 100%;
+    width: 100%;
+  }
+
+  .footer-wave-connector {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #0f172a; 
+    z-index: -1;
+  }
+  
+  /* Menyesuaikan ukuran dan posisi container wave berdasarkan ukuran layar */
+  footer > div:first-child {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    overflow: visible;
+    line-height: 0;
+    font-size: 0;
+    pointer-events: none;
+  }
+  
+  /* Ukuran dan posisi untuk tablet dan desktop */
+  @media screen and (min-width: 640px) {
+    footer > div:first-child {
+      top: -59px;
+      height: 60px;
+    }
+  }
+  
+  /* Browser-specific fixes tetap sama */
+  @supports (-webkit-overflow-scrolling: touch) {
+    footer > div:first-child {
+      -webkit-transform: translate3d(0,0,0);
+      -webkit-backface-visibility: hidden;
+    }
+  }
+  
+  @-moz-document url-prefix() {
+    footer > div:first-child {
+      transform: translate3d(0,0,0);
+      backface-visibility: hidden;
+    }
+  }
+  
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    footer > div:first-child svg {
+      height: 40px;
+    }
+    
+    @media screen and (min-width: 640px) {
+      footer > div:first-child svg {
+        height: 60px;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Script untuk menghubungkan wave dengan footer tetap sama
+  document.addEventListener('DOMContentLoaded', () => {
+    const footer = document.querySelector('footer');
+    const sections = document.querySelectorAll('section');
+    
+    if (footer && sections.length > 0) {
+      // Find the section right before footer
+      const lastSection = Array.from(sections).filter(section => {
+        const sectionRect = section.getBoundingClientRect();
+        const footerRect = footer.getBoundingClientRect();
+        return sectionRect.bottom <= footerRect.top + 5;
+      }).pop();
+      
+      if (lastSection) {
+        let scrollTimeoutId: ReturnType<typeof setTimeout> | null = null;
+        
+        window.addEventListener('scroll', () => {
+          if (scrollTimeoutId) clearTimeout(scrollTimeoutId);
+          
+          scrollTimeoutId = setTimeout(() => {
+            const footerRect = footer.getBoundingClientRect();
+            const lastSectionRect = lastSection.getBoundingClientRect();
+            
+            if (footerRect.top - lastSectionRect.bottom > 1) {
+              const connector = document.querySelector('.footer-wave-connector');
+              if (connector && connector instanceof HTMLElement) {
+                connector.style.height = '5px';
+              }
+            }
+          }, 100);
+        });
+      }
+    }
+  });
+</script>

@@ -12,11 +12,10 @@ export const sendMitraApprovalEmail = async (
   email: string,
   namaMitra: string,
   jenisUsaha: string,
-  username: string,
   password: string = "mitrasagawagroup"
 ) => {
   const htmlContent = `
-    <p>Assalamualaikum mitra <strong>${namaMitra}</strong>,</p>
+    <p>Halo! mitra <strong>${namaMitra}</strong>,</p>
     <p>Saat ini kamu telah bergabung dengan SagawaGroup sebagai <strong>${jenisUsaha}</strong>.</p>
     <p>Dan berikut adalah akun kamu untuk masuk ke dalam panel mitra SagawaGroup:</p>
     <ul>

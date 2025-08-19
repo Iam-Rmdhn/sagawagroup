@@ -29,7 +29,10 @@ Bun.serve({
 
     try {
       // Route handling
-      if (url.pathname.startsWith("/api/auth")) {
+      if (
+        url.pathname.startsWith("/api/auth") ||
+        url.pathname.startsWith("/api/admin")
+      ) {
         const response = await authRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
@@ -45,6 +48,37 @@ Bun.serve({
           response.headers.set(key, value);
         });
         return response;
+      }
+
+      // Serve uploaded files
+      if (url.pathname.startsWith("/uploads/")) {
+        try {
+          const fileName = decodeURIComponent(
+            url.pathname.substring("/uploads/".length)
+          ); // Remove /uploads/ and decode URL
+          const filePath = `./uploads/${fileName}`;
+          console.log(`Requested file: "${fileName}" -> Path: "${filePath}"`);
+          const file = Bun.file(filePath);
+
+          if (await file.exists()) {
+            console.log(`File found: "${filePath}"`);
+            return new Response(file, {
+              headers: {
+                ...corsHeaders,
+                "Content-Type": file.type || "application/octet-stream",
+              },
+            });
+          } else {
+            console.log(`File not found: "${filePath}"`);
+          }
+        } catch (error) {
+          console.error("Error serving file:", error);
+        }
+
+        return new Response("File not found", {
+          status: 404,
+          headers: corsHeaders,
+        });
       }
 
       // Default response

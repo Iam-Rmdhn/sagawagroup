@@ -7,7 +7,7 @@ interface ApproveMitraBody {
 
 interface RegisterMitraBody {
   sistemKemitraan: string;
-  jenisUsaha: string;
+  sales: string;
   paketUsaha: string;
   namaMitra: string;
   alamatMitra: string;
@@ -39,19 +39,53 @@ export const registerMitraController = async (
       }
     }
 
-    // Handle file uploads (for now, we'll just store file names)
-    // In production, you'd upload these to cloud storage
+    // Ensure sales field is properly handled (it comes as 'sales' from frontend but might be mapped)
+    if (!mitraData.sales && mitraData.jenisUsaha) {
+      mitraData.sales = mitraData.jenisUsaha;
+    }
+    if (!mitraData.sales) {
+      mitraData.sales = ""; // Set empty string if no sales data provided
+    }
+
+    // Handle file uploads - save files and store URLs
     const documents = formData.getAll("documents") as unknown as File[];
     const buktiTransfer = formData.get("buktiTransfer") as unknown as File;
 
+    // Helper function to save file and return URL
+    const saveFileAndGetUrl = async (file: File): Promise<string> => {
+      console.log(`Saving file: ${file.name}, size: ${file.size} bytes`);
+
+      // Generate unique filename to avoid conflicts
+      const timestamp = Date.now();
+      const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_"); // Sanitize filename
+      const fileName = `${timestamp}_${originalName}`;
+
+      // Save file to uploads directory
+      const filePath = `uploads/${fileName}`;
+      await Bun.write(filePath, file);
+
+      // Return URL
+      const url = `http://localhost:9999/uploads/${fileName}`;
+      console.log(`File saved successfully: ${url}`);
+      return url;
+    };
+
+    // Save and get URLs for document files
     if (documents.length > 0) {
-      mitraData.fotoKTP = documents[0]?.name || "";
-      mitraData.fotoNPWP = documents[1]?.name || "";
-      mitraData.fotoMitra = documents[2]?.name || "";
+      if (documents[0] && documents[0].size > 0) {
+        console.log(
+          `Processing KTP file: ${documents[0].name}, size: ${documents[0].size} bytes`
+        );
+        mitraData.fotoKTP = await saveFileAndGetUrl(documents[0]);
+      }
     }
 
-    if (buktiTransfer) {
-      mitraData.buktiTransfer = buktiTransfer.name;
+    // Save and get URL for bukti transfer
+    if (buktiTransfer && buktiTransfer.size > 0) {
+      console.log(
+        `Processing bukti transfer file: ${buktiTransfer.name}, size: ${buktiTransfer.size} bytes`
+      );
+      mitraData.buktiTransfer = await saveFileAndGetUrl(buktiTransfer);
     }
 
     // Validate required fields

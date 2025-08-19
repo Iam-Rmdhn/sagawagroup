@@ -1,46 +1,260 @@
 ---
+
 const faqs = [
     {
-        question: "Bagaimana dengan perpajakan saya sebagai investor?",
-        answer: "Setiap outlet akan dibuatkan PT, anggap saja namanya PT XXX. PT XXX ini seharusnya tidak akan sampai omset 4.8 Milyar/tahun, karena hitungan kita dengan OPTIMIS saja hanya sekitar 1.5 Milyar/tahun. Diperaturan perpajakan bisnis yang di bawah omset 4.8 Milyar/tahun adalah bisnis yang belum PKP, bisnis yg belum PKP tidak akan kena PPN, kenanya adalah PPh final 0,5% dari omset pertahun. Nantinya setiap bulan akan kita potong 0.5% dari bagi hasil untuk ke investor. Lalu terkait nama Investor yang ada di dalam PT sebagai pemegang saham itu terkena pajak kalau bisnisnya mendapatkan keuntungan yang di mana di sebut sebagai DIVIDEN, peraturan perpajakan dimana ada DIVIDEN di bagikan akan di kenakan pajak sebesar 15% yang nanti Investor bayarkan. Noted: Jikalau Investor taat pajak, kita bisa direct transfer dari PT XXX ke pemegang saham langsung namun jikalau memang investor tidak ingin melaporkan keuntungan sebagai dividen kita bisa bantu mekanisme transfernya dimana kita akan tarik tunai dan setor tunai ke rekening pemegang saham."
+        question: "Bagaimana untuk pajak outlet?",
+        answer: {
+            type: "list",
+            content: [
+                "Untuk pajak hanya dikenakan <strong>PPh final sebesar 0,5%</strong>",
+                "Untuk PPN <strong>tidak wajib</strong> dikarenakan pendapatan masih di bawah kategori <strong>4,8 miliar per tahun</strong>"
+            ]
+        }
     },
     {
-        question: "Dimana lokasi bisnis carwash nya?",
-        answer: "Batch 1 di Serua, Ciputat. Batch 2 di Cibinong, Bogor."
+        question: "Bagaimana untuk sertifikasi Halal?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Untuk sertifikasi Halal sedang dalam proses, dan kita bisa jamin untuk bahan baku yang digunakan sudah bersertifikasi halal."
+                },
+                {
+                    type: "paragraph",
+                    text: "Nantinya jika pusat sudah mendapatkan sertifikasi halal, untuk setiap outlet mitra pun harus urus kembali secara mandiri untuk sertifikasi halal karena kebijakan dari pemerintah setiap outlet harus mengurus sertifikasi halalnya masing-masing walaupun 1 Brand."
+                },
+                {
+                    type: "paragraph",
+                    text: "<strong>Detail Pengurusan:</strong>"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Waktu pengurusan: sampai <strong>30 hari</strong>",
+                        "Biaya pengurusan: <strong>5 juta - 25 juta rupiah</strong>"
+                    ]
+                }
+            ]
+        }
     },
     {
-        question: "Berapa pendapatan yang bisa didapatkan?",
-        answer: "Pendapatan/Return yang didapatkan bisa s/d 56% pertahun atau 4.7% perbulan yang dimana nantinya keuntungan akan dibagikan setiap bulannya."
+        question: "Kontrak kerja sama berapa lama?",
+        answer: {
+            type: "simple",
+            content: "Kontrak kerjasama selama <strong>5 tahun</strong>. Setelah 5 tahun, mitra bisa perpanjang lisensi dengan membayar paket sebesar <strong>50% dari harga kemitraan awal</strong>."
+        }
     },
     {
-        question: "Berapa lama proses dari awal sampai operasional?",
-        answer: "Proses pembangunan dimulai ketika dana sudah terkumpul 50% dari total keseluruhan investasi sekitar 6-9 bulan menyesuaikan kondisi lahan."
+        question: "Listrik yang diperlukan outlet berapa watt?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Minimal <strong>7700 watt</strong> untuk outlet yang reguler."
+                },
+                {
+                    type: "paragraph",
+                    text: "Peralatan yang memerlukan listrik:"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Freezer showcase",
+                        "Mesin ice cream",
+                        "Mesin kopi dan grinder"
+                    ]
+                }
+            ]
+        }
     },
     {
-        question: "Bagaimana jikalau bisnisnya mengalami kerugian?",
-        answer: "Jikalau terjadi kerugian investor tidak akan dibebankan lagi. Semua akan ditanggung oleh KBB sebagai pengelola. Di awal, kita sudah sediakan modal kerja yang akan dikelola oleh KBB yang dimana modal kerja itu akan digunakan jikalau adanya kerugian. Dan nantinya jikalau mengalami kerugian terus menerus kita bisa langsung meliquid semua aset-aset dan tidak meneruskan bisnis tsb, namun investor tetap akan mendapatkan guarantee buy back 100% di tahun ke 5 nya nanti."
+        question: "Biji kopi yang digunakan?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Biji kopi yang gunakan:"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "<strong>60% Arabica</strong> dan <strong>40% Robusta</strong> blend",
+                        "Hasil roasting: <strong>Medium to Dark</strong>",
+                        "Masih mengambil dari vendor terpilih"
+                    ]
+                }
+            ]
+        }
     },
     {
-        question: "Bagaimana mekanisme Buy Back Guaranteenya?",
-        answer: "Garansi Buyback terhitung 5 tahun 6 bulan dari investor menyetor full nilai investasinya. Nantinya setelah 5 tahun 6 bulan, kita akan kasih waktu selama 12 bulan untuk Investor mengklaim garansi buybacknya. Buy back akan diberikan dengan perhitungan Total Investasi - Keuntungan yg sudah didapatkan. Dan dari selisih tersebut kita hitungkan presentase kepemilikan saham investor, yang nantinya ketika sudah di buyback kepemilikan saham investor akan berkurang sesuai dengan nilai selisih yang di buyback."
+        question: "Kenapa harus memilih?",
+        answer: {
+            type: "list",
+            content: [
+                "<strong>Keunikan Brand:</strong> Konsep Japan dengan karakter menu yang menyesuaikan selera orang Indonesia",
+                "<strong>Soft Ice Cream Khas:</strong> Memiliki karakter soft ice cream yang terkonsep seperti soft ice cream yang ada di Jepang",
+                "<strong>Kualitas Product Pilihan:</strong> Bahan baku dipilih dengan standar bersertifikasi halal dan equipment mesin ice cream serta kopi yang sudah melalui test uji performa industri",
+                "<strong>Harga Kompetitif:</strong> Harga jual produk tergolong murah dengan penyajian kopi dan ice cream yang baik serta fresh, menciptakan brand image yang kuat dan dapat bersaing dengan kompetitor"
+            ]
+        }
     },
     {
-        question: "Biaya kontigensi di proyeksi financial ini apakah akan terus ada?",
-        answer: "Kontigensi ini sama seperti biaya overhead yang dimana kita gunakan untuk biaya tak terduga, misal: maintenance alat, kelalaian karyawan, bocor dll. Jadi sifatnya jikalau diperlukan saja."
+        question: "Mesin kopi, ice cream dan grinder merk apa?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "<strong>Mesin Kopi & Grinder:</strong>"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Merk: <strong>Ferrari Ferro</strong> single group",
+                        "Grinder: <strong>Ferrari Ferro</strong>",
+                        "Keunggulan: After sales bagus, teknisi tersedia di beberapa kota di Indonesia",
+                        "Ketahanan mesin: sampai <strong>4 tahun</strong> (dengan SOP penggunaan yang benar)"
+                    ]
+                },
+                {
+                    type: "paragraph",
+                    text: "<strong>Mesin Ice Cream:</strong>"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Merk: <strong>Tomori</strong>",
+                        "Keunggulan: Performa bagus dan sudah melalui uji test saat menjalankan operasional di outlet"
+                    ]
+                }
+            ]
+        }
     },
     {
-        question: "Di perjanjian ini ada 3 PT berbeda, ada PT.OBB, PT.KBB dan PT.XXX. Positioning dari ke 3 PT tsb seperti apa?",
-        answer: "PT.OBB pemegang merek Rocket Carwash dan sebagai penyelenggara konsorsium. PT.KBB sebagai pengelola outlet. PT.XXX sebagai pemilik outlet. Mekanisme nya PT.XXX membeli paket kemitraan ke OBB dan akan dikelola oleh KBB."
+        question: "Untuk SDM bagaimana?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Untuk SDM kita bantu pencarian SDM dan nantinya akan di-training."
+                },
+                {
+                    type: "paragraph",
+                    text: "<strong>Struktur Gaji (Acuan Jakarta):</strong>"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Junior Barista: <strong>2,3 juta - 2,5 juta</strong>",
+                        "Senior Barista: <strong>2,5 juta - 2,8 juta</strong>",
+                        "<em>Sifat negosiasi gaji menyesuaikan dengan UMR daerah outlet</em>"
+                    ]
+                }
+            ]
+        }
     },
     {
-        question: "Apakah kepemilikan saham investor bisa dijual?",
-        answer: "Selama belum masuk masa garansi buyback investor bisa jual kepemilikan saham namun sifatnya investor mengurusi sendiri proses penjualannya yg nanti diinfokan ke OBB, namun jikalau sudah masuk garansi buy back bisa dijual ke OBB yang nanti akan didiskusikan dengan investor nilai perlembar sahamnya."
+        question: "Bagaimana terkait Branding?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Untuk branding, kita dari pusat sudah set tim branding dan design yang nantinya akan membantu supply konten Instagram per outlet untuk mitra."
+                },
+                {
+                    type: "paragraph",
+                    text: "<strong>Jadwal Konten:</strong>"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "Feeds and Reels: <strong>2-3 hari 1 post</strong>",
+                        "Story: <strong>1 hari 1 post</strong>"
+                    ]
+                },
+                {
+                    type: "paragraph",
+                    text: "Kita juga akan sediakan file Google Drive agar mempermudah mitra untuk memilih konten yang sudah kita sediakan."
+                }
+            ]
+        }
     },
     {
-        question: "Apakah dana yang sudah masuk bisa di Refund?",
-        answer: "Jikalau dari dana masuk sampai selambat-lambatnya 12 bulan pihak OBB tidak memberikan titik lokasi, dana bisa dikembalikan full 100%. Jikalau dana sudah masuk dan OBB sudah memberikan titik lokasi, namun investor cancel dengan alasan apapun, dana kembali 50%. Jikalau dana masuk, OBB belum memberikan titik lokasi dan belum sampai 12 bulan namun investor cancel dengan alasan apapun, dana dianggap hangus."
+        question: "Bagaimana untuk repeat order bahan baku?",
+        answer: {
+            type: "list",
+            content: [
+                "Jadwal order: <strong>Awal bulan dan pertengahan bulan</strong>",
+                "<strong>Tidak ada minimal order</strong>",
+                "Harga detail tabel akan di-share"
+            ]
+        }
     }
 ];
+
+// Function to render content based on type
+type FAQAnswer =
+  | { type: 'simple'; content: string }
+  | { type: 'paragraphs'; content: string[] }
+  | { type: 'list'; content: string[] }
+  | {
+      type: 'mixed';
+      content: (
+        | { type: 'paragraph'; text: string }
+        | { type: 'list'; items: string[] }
+      )[];
+    };
+
+function renderContent(answer: FAQAnswer | string) {
+    if (typeof answer === 'string') {
+        return `<p class="mt-4 text-gray-600 leading-relaxed border-t border-gray-200 pt-4">${answer}</p>`;
+    }
+
+    let html = '<div class="mt-4 border-t border-gray-200 pt-4">';
+    
+    switch (answer.type) {
+        case 'simple':
+            html += `<p class="text-gray-600 leading-relaxed">${answer.content}</p>`;
+            break;
+            
+        case 'paragraphs':
+            (answer.content as string[]).forEach((paragraph: string) => {
+                html += `<p class="text-gray-600 leading-relaxed mb-3">${paragraph}</p>`;
+            });
+            break;
+            
+        case 'list':
+            html += '<ul class="text-gray-600 leading-relaxed space-y-2">';
+            (answer.content as string[]).forEach((item: string) => {
+                html += `<li class="flex items-start"><span class="w-2 h-2 bg-amber-500 rounded-full mt-2 mr-3 flex-shrink-0"></span><span>${item}</span></li>`;
+            });
+            html += '</ul>';
+            break;
+            
+        case 'mixed':
+            (answer.content as Array<{ type: string; text?: string; items?: string[] }>).forEach((item) => {
+                if (item.type === 'paragraph') {
+                    html += `<p class="text-gray-600 leading-relaxed mb-3">${item.text}</p>`;
+                } else if (item.type === 'list' && item.items) {
+                    html += '<ul class="text-gray-600 leading-relaxed space-y-2 mb-4">';
+                    item.items.forEach((listItem: string) => {
+                        html += `<li class="flex items-start"><span class="w-2 h-2 bg-amber-500 rounded-full mt-2 mr-3 flex-shrink-0"></span><span>${listItem}</span></li>`;
+                    });
+                    html += '</ul>';
+                }
+            });
+            break;
+    }
+    
+    html += '</div>';
+    return html;
+}
+
 ---
 
 <section class="pt-20 pb-12 bg-transparent relative z-10">
@@ -55,16 +269,14 @@ const faqs = [
                     <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-amber-500">
                         <details class="group">
                             <summary class="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 group-hover:text-amber-600 transition-colors duration-300">
-                                {faq.question}
-                                <span class="transform transition-transform duration-300 group-open:rotate-45">
+                                <span class="pr-4">{faq.question}</span>
+                                <span class="transform transition-transform duration-300 group-open:rotate-45 flex-shrink-0">
                                     <svg class="w-6 h-6 text-gray-500 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
                                     </svg>
                                 </span>
                             </summary>
-                            <p class="mt-4 text-gray-600 leading-relaxed border-t border-gray-200 pt-4">
-                                {faq.answer}
-                            </p>
+                            <Fragment set:html={renderContent(faq.answer)} />
                         </details>
                     </div>
                 ))}
@@ -83,7 +295,7 @@ const faqs = [
     details > summary {
         list-style: none;
     }
-    details[open] summary + p {
+    details[open] summary ~ div {
         animation: slide-down 0.3s ease-out forwards;
     }
     @keyframes slide-down {
@@ -95,5 +307,20 @@ const faqs = [
             opacity: 1;
             transform: translateY(0);
         }
+    }
+    
+    /* Custom styles for better list formatting */
+    ul li {
+        text-align: left;
+    }
+    
+    strong {
+        color: #374151;
+        font-weight: 600;
+    }
+    
+    em {
+        color: #6b7280;
+        font-style: italic;
     }
 </style>

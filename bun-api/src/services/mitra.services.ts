@@ -2,21 +2,21 @@ import { UserModel } from "../models/user.model";
 import { MitraModel } from "../models/mitra.model";
 import { validateBankInput } from "../utils/bankvalidator";
 
-export async function generateUserID(jenisUsaha: string) {
+export async function generateUserID(paketUsaha: string) {
   let prefix = "";
-  if (jenisUsaha === "Kagawa Coffee Corner") {
+  if (paketUsaha === "Kagawa Coffee Corner") {
     prefix = "MKC";
-  } else if (jenisUsaha === "Kagawa Ricebowl") {
+  } else if (paketUsaha === "Kagawa Ricebowl") {
     prefix = "MKR";
-  } else if (jenisUsaha === "Kagawa Coffee & Ricebowl Corner") {
+  } else if (paketUsaha === "Kagawa Coffee & Ricebowl Corner") {
     prefix = "MKCR";
-  } else if (jenisUsaha === "RM Nusantara") {
+  } else if (paketUsaha === "RM Nusantara") {
     prefix = "MWN";
   } else {
     throw new Error("Jenis usaha tidak dikenali");
   }
 
-  const count = await MitraModel.countDocuments({ paketUsaha: jenisUsaha });
+  const count = await MitraModel.countDocuments({ paketUsaha: paketUsaha });
   const userID = `${prefix}${(count + 1).toString().padStart(4, "0")}`;
 
   return userID;
@@ -24,31 +24,42 @@ export async function generateUserID(jenisUsaha: string) {
 
 export async function registerMitra(mitraData: any) {
   try {
+    // Log incoming data for debugging
+    console.log("Registering mitra with data:", {
+      sistemKemitraan: mitraData.sistemKemitraan,
+      sales: mitraData.sales,
+      jenisUsaha: mitraData.jenisUsaha, // For debugging mapping
+      paketUsaha: mitraData.paketUsaha,
+      email: mitraData.email,
+      hargaPaket: mitraData.hargaPaket,
+      yangHarusDibayar: mitraData.yangHarusDibayar,
+    });
+
     // Validate and normalize bank name
     const validatedBank = validateBankInput(mitraData.bankPengirim);
     if (validatedBank) {
       mitraData.bankPengirim = validatedBank;
     }
 
+    console.log("Creating mitra record...");
+
     // Create new mitra record
     const newMitra = await MitraModel.create({
       sistemKemitraan: mitraData.sistemKemitraan,
-      jenisUsaha: mitraData.jenisUsaha,
+      sales: mitraData.sales || "", // Handle sales field properly, allow empty string
       paketUsaha: mitraData.paketUsaha,
       namaMitra: mitraData.namaMitra,
       alamatMitra: mitraData.alamatMitra,
       noHp: mitraData.noHp,
       email: mitraData.email,
       fotoKTP: mitraData.fotoKTP || "",
-      fotoNPWP: mitraData.fotoNPWP || "",
-      fotoMitra: mitraData.fotoMitra || "",
       nilaiPaketUsaha: mitraData.nilaiPaket,
-      hargaPaket: parseInt(mitraData.hargaPaket),
-      nominalDP: parseInt(mitraData.nominalDP),
-      nominalFull: parseInt(mitraData.nominalFull),
-      kekurangan: parseInt(mitraData.kekurangan),
-      diskonHarian: parseInt(mitraData.diskonHarian),
-      yangHarusDibayar: parseInt(mitraData.yangHarusDibayar),
+      hargaPaket: parseInt(mitraData.hargaPaket) || 0,
+      nominalDP: parseInt(mitraData.nominalDP) || 0,
+      nominalFull: parseInt(mitraData.nominalFull) || 0,
+      kekurangan: parseInt(mitraData.kekurangan) || 0,
+      diskonHarian: parseInt(mitraData.diskonHarian) || 0,
+      yangHarusDibayar: parseInt(mitraData.yangHarusDibayar) || 0,
       buktiTransfer: mitraData.buktiTransfer || "",
       namaPengirim: mitraData.namaPengirim,
       noRekPengirim: mitraData.noRekPengirim,
@@ -57,6 +68,8 @@ export async function registerMitra(mitraData: any) {
       isApproved: false,
     });
 
+    console.log("Mitra record created successfully:", newMitra._id);
+
     return {
       success: true,
       mitraId: newMitra._id,
@@ -64,7 +77,14 @@ export async function registerMitra(mitraData: any) {
     };
   } catch (error) {
     console.error("Error registering mitra:", error);
-    throw new Error("Gagal menyimpan data mitra");
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack trace"
+    );
+    throw new Error(
+      "Gagal menyimpan data mitra: " +
+        (error instanceof Error ? error.message : "Unknown error")
+    );
   }
 }
 

@@ -14,7 +14,7 @@ import Layout from '../layouts/Layout.astro';
               <div id="step-1" class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
                 1
               </div>
-              <div class="ml-2 text-sm font-medium text-blue-600">Form Data</div>
+              <div class="ml-2 text-sm font-medium text-blue-600">Isi Form</div>
             </div>
             
             <!-- Line -->
@@ -84,10 +84,10 @@ import Layout from '../layouts/Layout.astro';
               <option value="Kagawa Ricebowl" data-original="75000000" data-discounted="50000000">
                 Kagawa Ricebowl - Rp 75.000.000 → Rp 50.000.000
               </option>
-              <option value="Kagawa Coffee & Ricebowl Corner" data-original="100000000" data-discounted="70000000">
+              <option value="Kagawa Coffee & Ricebowl Corner" data-original="175000000" data-discounted="139000000">
                 Kagawa Coffee & Ricebowl Corner - Rp 175.000.000 → Rp 139.000.000
               </option>
-              <option value="RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)" data-original="150000000" data-discounted="105000000">
+              <option value="RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)" data-original="100000000" data-discounted="89000000">
                 RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda) - Rp 100.000.000 → Rp 89.000.000
               </option>
             </select>
@@ -130,16 +130,16 @@ import Layout from '../layouts/Layout.astro';
             
             <!-- File Upload Section -->
             <div class="mt-4">
-              <p class="text-sm text-red-500 mb-4">(Sertakan photo KTP, NPWP & Photo diri mitra)</p>
+              <p class="text-sm text-red-500 mb-4">(Sertakan foto KTP)</p>
               
               <div id="documentsUploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-all duration-200 hover:border-blue-400 hover:bg-blue-50/30">
                 <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                 </svg>
                 <p class="text-gray-600 font-medium">Upload Dokumen</p>
-                <p class="text-sm text-gray-500 mb-2">KTP, NPWP, dan Foto Diri</p>
-                <p class="text-xs text-gray-400 mb-4">Maksimal 5MB per file • JPG, PNG, PDF</p>
-                <input type="file" id="documentsUpload" multiple accept="image/*,application/pdf" class="hidden">
+                <p class="text-sm text-gray-500 mb-2">Foto KTP</p>
+                <p class="text-xs text-gray-400 mb-4">Maksimal 2MB • JPG, PNG, PDF</p>
+                <input type="file" id="documentsUpload" accept="image/*,application/pdf" class="hidden">
                 <button type="button" id="documentsUploadBtn" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -176,22 +176,22 @@ import Layout from '../layouts/Layout.astro';
               <!-- DP Card -->
               <div id="dp-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">DP</h4>
-                <p class="text-2xl font-bold text-gray-600" id="dp-amount">Rp. 5</p>
+                <p class="text-2xl font-bold text-gray-600" id="dp-amount"></p>
               </div>
               
               <!-- Full Payment Card -->
               <div id="full-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">Full Payment</h4>
                 <div class="space-y-1">
-                  <p class="line-through text-gray-400" id="original-price">Rp. 5</p>
-                  <p class="text-2xl font-bold text-gray-600" id="discounted-price">Rp. 4</p>
+                  <p class="line-through text-gray-400" id="original-price"></p>
+                  <p class="text-2xl font-bold text-gray-600" id="discounted-price"></p>
                 </div>
               </div>
               
               <!-- Kekurangan Card -->
               <div id="kekurangan-card" class="border border-gray-300 rounded-lg p-4 text-center opacity-50">
                 <h4 class="font-semibold text-gray-800">Kekurangan</h4>
-                <p class="text-2xl font-bold text-gray-600" id="kekurangan-amount">Rp. x</p>
+                <p class="text-2xl font-bold text-gray-600" id="kekurangan-amount"></p>
               </div>
             </div>
             
@@ -265,9 +265,7 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- Next Button -->
           <div class="flex justify-between items-center">
-            <button type="button" id="checkFormBtn" class="px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
-              🔍 Check Form
-            </button>
+
             <button id="nextBtn" type="button" class="px-8 py-3 bg-gray-400 text-white rounded-lg font-semibold cursor-not-allowed transition-colors" disabled>
               Next
             </button>
@@ -344,11 +342,8 @@ function checkFormValidation() {
 function performValidation() {
   const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement;
   if (!nextBtn) {
-    console.log('❌ Next button not found!');
     return;
   }
-
-  console.log('🔍 Starting form validation...');
 
   // Required fields (excluding Sales which is optional)
   const requiredFields = [
@@ -402,8 +397,7 @@ function performValidation() {
       allValid = false;
       invalidFields.push(field.name);
     }
-    
-    console.log(`📝 Field ${field.name}: ${isValid ? '✅' : '❌'} | Value: "${value}" | Element: ${element ? 'found' : 'NOT FOUND'}`);
+  
   }
   
   // Check file uploads
@@ -412,9 +406,7 @@ function performValidation() {
   
   const hasDocuments = documentsInput?.files && documentsInput.files.length > 0;
   const hasBuktiTransfer = buktiTransferInput?.files && buktiTransferInput.files.length > 0;
-  
-  console.log(`📁 Documents: ${hasDocuments ? '✅' : '❌'} | Count: ${documentsInput?.files?.length || 0}`);
-  console.log(`💰 Bukti Transfer: ${hasBuktiTransfer ? '✅' : '❌'} | Has file: ${buktiTransferInput?.files?.length || 0}`);
+
   
   if (!hasDocuments) {
     allValid = false;
@@ -431,17 +423,11 @@ function performValidation() {
     nextBtn.disabled = false;
     nextBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
     nextBtn.classList.add('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
-    console.log('🎉 ✅ Form validation PASSED - Next button enabled!');
   } else {
     nextBtn.disabled = true;
     nextBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
     nextBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-    console.log('🚫 ❌ Form validation FAILED');
-    console.log('Invalid fields:', invalidFields);
-    console.log('Field details:', fieldDetails);
   }
-  
-  console.log('🏁 Validation complete. All valid:', allValid);
 }
 
 // Make performValidation globally accessible for debugging
@@ -462,39 +448,49 @@ function displayDocumentsPreview(files: FileList | null) {
     fileListContainer.innerHTML = '';
   }
   
-  Array.from(files).forEach((file, index) => {
-    const fileItem = document.createElement('div');
-    fileItem.className = 'flex items-center justify-between p-3 bg-blue-50 rounded-lg';
-    
-    const fileInfo = document.createElement('div');
-    fileInfo.className = 'flex items-center space-x-3';
-    
-    // File icon
-    const icon = document.createElement('div');
-    icon.className = 'w-8 h-8 bg-blue-100 rounded flex items-center justify-center';
-    icon.innerHTML = '<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 1H7a2 2 0 00-2 2v16a2 2 0 002 2z"></path></svg>';
-    
-    const details = document.createElement('div');
-    details.innerHTML = `
-      <p class="text-sm font-medium text-gray-800">${file.name}</p>
-      <p class="text-xs text-gray-500">${formatFileSize(file.size)}</p>
-    `;
-    
-    fileInfo.appendChild(icon);
-    fileInfo.appendChild(details);
-    
-    // Remove button
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'text-red-500 hover:text-red-700';
-    removeBtn.setAttribute('data-action', 'remove-document');
-    removeBtn.setAttribute('data-index', index.toString());
-    removeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
-    
-    fileItem.appendChild(fileInfo);
-    fileItem.appendChild(removeBtn);
-    fileListContainer?.appendChild(fileItem);
-  });
+  // Only show the first file (KTP)
+  const file = files[0];
+  
+  // Check file size (max 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Ukuran file terlalu besar. Maksimal 2MB per file.');
+    const fileInput = document.getElementById('documentsUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+    previewContainer?.classList.add('hidden');
+    return;
+  }
+  
+  const fileItem = document.createElement('div');
+  fileItem.className = 'flex items-center justify-between p-3 bg-blue-50 rounded-lg';
+  
+  const fileInfo = document.createElement('div');
+  fileInfo.className = 'flex items-center space-x-3';
+  
+  // File icon
+  const icon = document.createElement('div');
+  icon.className = 'w-8 h-8 bg-blue-100 rounded flex items-center justify-center';
+  icon.innerHTML = '<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 1H7a2 2 0 00-2 2v16a2 2 0 002 2z"></path></svg>';
+  
+  const details = document.createElement('div');
+  details.innerHTML = `
+    <p class="text-sm font-medium text-gray-800">Foto KTP: ${file.name}</p>
+    <p class="text-xs text-gray-500">${formatFileSize(file.size)}</p>
+  `;
+  
+  fileInfo.appendChild(icon);
+  fileInfo.appendChild(details);
+  
+  // Remove button
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'text-red-500 hover:text-red-700';
+  removeBtn.setAttribute('data-action', 'remove-document');
+  removeBtn.setAttribute('data-index', '0');
+  removeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+  
+  fileItem.appendChild(fileInfo);
+  fileItem.appendChild(removeBtn);
+  fileListContainer?.appendChild(fileItem);
 }
 
 function displayBuktiTransferPreview(file: File | null) {
@@ -623,7 +619,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add debug check button
   const checkFormBtn = document.getElementById('checkFormBtn');
   checkFormBtn?.addEventListener('click', () => {
-    console.log('🔍 Manual form check triggered');
     performValidation();
   });
   
@@ -655,14 +650,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add specific event listeners for radio buttons
   document.querySelectorAll('input[name="sistemKemitraan"]').forEach(radio => {
     radio.addEventListener('change', function(this: HTMLInputElement) {
-      console.log('📻 Sistem Kemitraan changed to:', this.value);
       checkFormValidation();
     });
   });
   
   document.querySelectorAll('input[name="nilaiPaket"]').forEach(radio => {
     radio.addEventListener('change', function(this: HTMLInputElement) {
-      console.log('💰 Nilai Paket changed to:', this.value);
       checkFormValidation();
     });
   });
@@ -967,15 +960,15 @@ function generateConfirmationHTML(data: any) {
   // Generate files list HTML
   let documentsHTML = '';
   if (data.documentsFiles && data.documentsFiles.length > 0) {
-    const filesArray = Array.from(data.documentsFiles as FileList);
-    documentsHTML = filesArray.map((file: any) => `
+    const file = data.documentsFiles[0] as File; // Only handle first file (KTP)
+    documentsHTML = `
       <div class="flex items-center space-x-2">
         <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 1H7a2 2 0 00-2 2v16a2 2 0 002 2z"></path>
         </svg>
-        <span class="text-sm text-gray-600">${file.name} (${formatFileSize(file.size)})</span>
+        <span class="text-sm text-gray-600">Foto KTP: ${file.name} (${formatFileSize(file.size)})</span>
       </div>
-    `).join('');
+    `;
   }
   
   return `
@@ -1021,7 +1014,7 @@ function generateConfirmationHTML(data: any) {
         <h3 class="font-semibold text-gray-800 mb-2">Dokumen Terupload</h3>
         <div class="space-y-2">
           <div>
-            <p class="text-sm font-medium text-gray-700">Dokumen Mitra (${data.documentsFiles?.length || 0} file):</p>
+            <p class="text-sm font-medium text-gray-700">Dokumen KTP:</p>
             <div class="ml-4 space-y-1">
               ${documentsHTML}
             </div>
@@ -1084,7 +1077,7 @@ async function submitForm() {
     const formFields = [
       'sistemKemitraan', 'paketUsaha', 'namaMitra', 
       'alamatMitra', 'noHp', 'email', 'nilaiPaket', 'namaPengirim', 
-      'noRekPengirim', 'bankPengirim'
+      'noRekPengirim', 'bankPengirim', 'sales'
     ];
     
     formFields.forEach(key => {
@@ -1093,7 +1086,7 @@ async function submitForm() {
       }
     });
     
-    // Map sales to jenisUsaha for backend compatibility
+    // Also send sales as jenisUsaha for backward compatibility
     submitData.append('jenisUsaha', formData.sales || '');
     
     // Get original price for backend
@@ -1110,29 +1103,44 @@ async function submitForm() {
     submitData.append('yangHarusDibayar', Math.max(0, finalAmount).toString());
     
     // Add files
-    if (formData.documentsFiles) {
-      for (let i = 0; i < formData.documentsFiles.length; i++) {
-        submitData.append('documents', formData.documentsFiles[i]);
-      }
+    if (formData.documentsFiles && formData.documentsFiles.length > 0) {
+      // Only send the first file (KTP)
+      submitData.append('documents', formData.documentsFiles[0]);
     }
     if (formData.buktiTransferFile) {
       submitData.append('buktiTransfer', formData.buktiTransferFile);
     }
     
     // Submit to backend
+    console.log('Submitting form data to backend...');
+    console.log('Submit data entries:', Array.from(submitData.entries()));
+    
     const response = await fetch('http://localhost:9999/api/mitra/register', {
       method: 'POST',
       body: submitData
     });
     
-    if (!response.ok) {
-      throw new Error('Gagal mengirim formulir');
-    }
+    console.log('Response status:', response.status);
+    const responseText = await response.text();
+    console.log('Response text:', responseText);
     
+    if (!response.ok) {
+      const errorData = responseText ? JSON.parse(responseText) : {};
+      const errorMessage = errorData.error || errorData.details || 'Gagal mengirim formulir';
+      throw new Error(errorMessage);
+    }
+
     console.log('Form submitted successfully');
+    
+    // Move to step 3 (success)
+    updateProgressBar(3);
+    document.getElementById('form-step-2')?.classList.add('hidden');
+    document.getElementById('form-step-3')?.classList.remove('hidden');
+    
   } catch (error) {
     console.error('Error submitting form:', error);
-    alert('Terjadi kesalahan saat mengirim formulir. Silakan coba lagi.');
+    const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim formulir';
+    alert(`Error: ${errorMessage}`);
   }
 }
 
