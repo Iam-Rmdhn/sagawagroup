@@ -17,6 +17,88 @@ import masgaw from '../assets/img/gerobak/masgaw.jpg?url';
 import squash from '../assets/img/menu/squash.jpg?url';
 import kbd from '../assets/img/gerobak/kbd.jpg?url';
 import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
+
+// Data untuk gallery images
+const galleryImages = [
+  { 
+    src: kccmall, 
+    alt: "Kagawa Coffee Corner Mall", 
+    title: "Kedai Kagawa Coffee Corner",
+    subtitle: "Kagawa Coffee Corner"
+  },
+  { 
+    src: sagawaPapan, 
+    alt: "Sagawa Group Papan", 
+    title: "Logo Sagawa Group",
+    subtitle: "Brand Signage"
+  },
+  { 
+    src: krbs, 
+    alt: "Kagawa Rice Bowl Special", 
+    title: "Kedai Kagawa Rice Bowl",
+    subtitle: "Rice Bowl Special"
+  },
+  { 
+    src: sagawaDesk, 
+    alt: "Sagawa Desk Display", 
+    title: "Standee Sagawa Desk",
+    subtitle: "Office Display"
+  },
+  { 
+    src: kcrmall, 
+    alt: "Kagawa Coffee Rice Mall", 
+    title: "Kedai Kagawa Coffee & Rice Bowl Corner",
+    subtitle: "Coffee & Ricebowl Corner"
+  },
+  { 
+    src: teh, 
+    alt: "Tea Menu", 
+    title: "Segelas Teh Hijau Kagawa",
+    subtitle: "Premium Tea"
+  },
+  { 
+    src: rmmall, 
+    alt: "RM Nusantara Mall", 
+    title: "Kedai RM Nusantara",
+    subtitle: "RM Nusantara"
+  },
+  { 
+    src: sagawaLuar, 
+    alt: "Sagawa Outdoor Display", 
+    title: "Papan Nama Sagawa Group",
+    subtitle: "Outdoor Display"
+  },
+  { 
+    src: kopi, 
+    alt: "Coffee Menu", 
+    title: "Menu Kopi",
+    subtitle: "Premium Coffee"
+  },
+  { 
+    src: masgaw, 
+    alt: "Mas Gaw Food Cart", 
+    title: "Kedai Mas Gaw",
+    subtitle: "MasGaw Food Cart"
+  },
+  { 
+    src: squash, 
+    alt: "Squash Drink Menu", 
+    title: "Pinaple Squash",
+    subtitle: "Fresh Pineapple Squash"
+  },
+  { 
+    src: kbd, 
+    alt: "Kagawa Beverages & Dim Sum", 
+    title: "Ruko Development Business",
+    subtitle: "Development Business"
+  },
+  { 
+    src: sagawaBalon, 
+    alt: "Sagawa Balloon Display", 
+    title: "Sagawa Balon",
+    subtitle: "Promotional Display"
+  }
+];
 ---
 
 <Layout title="Galeri - Sagawa Group">
@@ -52,135 +134,81 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
         </div>
     </section>
 
-      <!-- Gallery Grid with strong connection to wave -->
+      <!-- Gallery Swiper Section with strong connection to wave -->
       <section class="gallery-section pt-16 pb-16 px-4 sm:px-6 lg:px-8 bg-white relative z-10 mt-[-10px]">
         <div class="max-w-7xl mx-auto">
-          <!-- Responsive Gallery Grid Container -->
-          <div class="gallery-grid">
-            <!-- Image 1 -->
-            <div class="gallery-item item-1 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={kccmall} alt="Kagawa Coffee Corner Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Corner</h3>
-                <p class="text-xs text-white/90">Kagawa Coffee Corner</p>
+          <!-- Gallery Title -->
+          <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Koleksi Terbaik Sagawa Group</h2>
+            <p class="text-xl text-gray-600">Swipe untuk melihat foto-foto eksklusif dari berbagai outlet kami</p>
+          </div>
+
+          <!-- Simple Gallery Carousel (Fallback jika Swiper tidak berhasil) -->
+          <div class="gallery-carousel-container mb-12">
+            <!-- Main Gallery Display -->
+            <div class="gallery-main relative">
+              <div class="gallery-slides" id="gallery-slides">
+                {galleryImages.map((image, index) => (
+                  <div class={`gallery-slide ${index === 0 ? 'active' : ''}`} data-index={index}>
+                    <div class="relative w-full h-[600px] group overflow-hidden rounded-2xl shadow-2xl">
+                      <img 
+                        src={image.src} 
+                        alt={image.alt} 
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                        loading={index === 0 ? "eager" : "lazy"}
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-2">{image.title}</h3>
+                        <p class="text-lg text-white/90">{image.subtitle}</p>
+                      </div>
+                      
+                      <!-- Image Counter -->
+                      <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <span class="current-number">{index + 1}</span> / {galleryImages.length}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <!-- Navigation buttons -->
+              <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Previous image">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+              </button>
+              <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Next image">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+              
+              <!-- Pagination dots -->
+              <div class="gallery-pagination" id="gallery-pagination">
+                {galleryImages.map((_, index) => (
+                  <button 
+                    class={`gallery-dot ${index === 0 ? 'active' : ''}`} 
+                    data-index={index}
+                    aria-label={`Go to image ${index + 1}`}
+                  ></button>
+                ))}
               </div>
             </div>
-            <!-- Image 2 -->
-            <div class="gallery-item item-2 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={sagawaPapan} alt="Sagawa Group Papan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Logo Sagawa Group</h3>
-                <p class="text-xs text-white/90">Brand Signage</p>
-              </div>
-            </div>
-            <!-- Image 3 -->
-            <div class="gallery-item item-3 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={krbs} alt="Kagawa Rice Bowl Special" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Rice Bowl</h3>
-                <p class="text-xs text-white/90">Rice Bowl Special</p>
-              </div>
-            </div>
-            <!-- Image 4 -->
-            <div class="gallery-item item-4 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={sagawaDesk} alt="Sagawa Desk Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Standee Sagawa Desk</h3>
-                <p class="text-xs text-white/90">Office Display</p>
-              </div>
-            </div>
-            <!-- Image 5 -->
-            <div class="gallery-item item-5 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={kcrmall} alt="Kagawa Coffee Rice Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee & Rice Bowl Corner</h3>
-                <p class="text-xs text-white/90">Coffee & Ricebowl Corner</p>
-              </div>
-            </div>
-            <!-- Image 6 -->
-            <div class="gallery-item item-6 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={teh} alt="Tea Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Segelas Teh Hijau Kagawa</h3>
-                <p class="text-xs text-white/90">Premium Tea</p>
-              </div>
-            </div>
-            <!-- Image 7 -->
-            <div class="gallery-item item-7 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={rmmall} alt="RM Nusantara Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai RM Nusantara</h3>
-                <p class="text-xs text-white/90">RM Nusantara</p>
-              </div>
-            </div>
-            <!-- Image 8 -->
-            <div class="gallery-item item-8 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={sagawaLuar} alt="Sagawa Outdoor Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Papan Nama Sagawa Group</h3>
-                <p class="text-xs text-white/90">Outdoor Display</p>
-              </div>
-            </div>
-            <!-- Image 9 -->
-            <div class="gallery-item item-9 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={kcrmall} alt="Kagawa Coffee Rice Mall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai Kagawa Coffee Mall</h3>
-                <p class="text-xs text-white/90">Store Interior</p>
-              </div>
-            </div>
-            <!-- Image 10 -->
-            <div class="gallery-item item-10 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={kopi} alt="Coffee Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Menu Kopi</h3>
-                <p class="text-xs text-white/90">Premium Coffee</p>
-              </div>
-            </div>
-            <!-- Image 11 -->
-            <div class="gallery-item item-11 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={masgaw} alt="Mas Gaw Food Cart" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Kedai Mas Gaw</h3>
-                <p class="text-xs text-white/90">MasGaw Food Cart</p>
-              </div>
-            </div>
-            <!-- Image 12 -->
-            <div class="gallery-item item-12 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={squash} alt="Squash Drink Menu" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Pinaple Squash</h3>
-                <p class="text-xs text-white/90">Fresh Pineapple Squash</p>
-              </div>
-            </div>
-            <!-- Image 13 -->
-            <div class="gallery-item item-13 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={kbd} alt="Kagawa Beverages & Dim Sum" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Ruko Development Business</h3>
-                <p class="text-xs text-white/90">Development Business</p>
-              </div>
-            </div>
-            <!-- Image 14 -->
-            <div class="gallery-item item-14 group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img src={sagawaBalon} alt="Sagawa Balloon Display" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <h3 class="text-sm font-semibold mb-1">Sagawa Balon</h3>
-                <p class="text-xs text-white/90">Promotional Display</p>
+
+            <!-- Thumbnail Gallery -->
+            <div class="gallery-thumbs-container mt-8">
+              <div class="gallery-thumbs-wrapper" id="gallery-thumbs-wrapper">
+                {galleryImages.map((image, index) => (
+                  <div class={`gallery-thumb ${index === 0 ? 'active' : ''}`} data-index={index}>
+                    <img 
+                      src={image.src} 
+                      alt={image.alt} 
+                      class="w-full h-full object-cover cursor-pointer" 
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -195,11 +223,12 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
                 terbaik Sagawa Group dalam industri food & beverage.
               </p>
               <div class="mt-6 flex flex-wrap justify-center gap-4">
-                <span class="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Coffee Corner</span>
-                <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">RM Nusantara</span>
-                <span class="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium">Mas Gaw</span>
-                <span class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium">Food Cart</span>
-                <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">Mall Stores</span>
+                <span class="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Ricebowl</span>
+                <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Coffee Corner</span>
+                <span class="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Coffee & Ricebowl Corner</span>
+                <span class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Food Cart</span>
+                <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">Kagawa Outlet</span>
+                <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-full text-sm font-medium">RM Nusantara (WarTeg/WarNas, MasGaw, RM Sunda)</span>
               </div>
             </div>
           </div>
@@ -208,6 +237,234 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     </main>
   <Footer />
 </Layout>
+
+<!-- Custom Gallery Slider Script -->
+<script>
+  // @ts-nocheck
+  document.addEventListener('DOMContentLoaded', function() {
+    // Gallery slider variables
+    let currentSlide = 0;
+    let totalSlides = 0;
+    let autoplayInterval = null;
+    let isTransitioning = false;
+
+    // Initialize slider
+    function initSlider() {
+      const slides = document.querySelectorAll('.gallery-slide');
+      totalSlides = slides.length;
+      
+      if (totalSlides === 0) return;
+      
+      bindEvents();
+      startAutoplay();
+      updateSlide(0);
+      console.log('Gallery slider initialized with', totalSlides, 'slides');
+    }
+
+    // Bind all event listeners
+    function bindEvents() {
+      // Navigation buttons
+      const prevBtn = document.getElementById('gallery-prev');
+      const nextBtn = document.getElementById('gallery-next');
+      
+      if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+      if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+      // Pagination dots
+      const dots = document.querySelectorAll('.gallery-dot');
+      dots.forEach(function(dot, index) {
+        dot.addEventListener('click', function() { goToSlide(index); });
+      });
+
+      // Thumbnail clicks
+      const thumbs = document.querySelectorAll('.gallery-thumb');
+      thumbs.forEach(function(thumb, index) {
+        thumb.addEventListener('click', function() { goToSlide(index); });
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+      });
+
+      // Touch/swipe support
+      const slidesContainer = document.getElementById('gallery-slides');
+      if (slidesContainer) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slidesContainer.addEventListener('touchstart', function(e) {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        slidesContainer.addEventListener('touchend', function(e) {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe(touchStartX, touchEndX);
+        });
+
+        // Mouse drag support
+        let isDragging = false;
+        let startX = 0;
+
+        slidesContainer.addEventListener('mousedown', function(e) {
+          isDragging = true;
+          startX = e.clientX;
+          slidesContainer.style.cursor = 'grabbing';
+        });
+
+        slidesContainer.addEventListener('mousemove', function(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+        });
+
+        slidesContainer.addEventListener('mouseup', function(e) {
+          if (!isDragging) return;
+          isDragging = false;
+          slidesContainer.style.cursor = 'grab';
+          
+          const endX = e.clientX;
+          const diff = startX - endX;
+          
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              nextSlide();
+            } else {
+              prevSlide();
+            }
+          }
+        });
+
+        slidesContainer.addEventListener('mouseleave', function() {
+          isDragging = false;
+          slidesContainer.style.cursor = 'grab';
+        });
+      }
+
+      // Pause autoplay on hover
+      const galleryMain = document.querySelector('.gallery-main');
+      if (galleryMain) {
+        galleryMain.addEventListener('mouseenter', pauseAutoplay);
+        galleryMain.addEventListener('mouseleave', startAutoplay);
+      }
+    }
+
+    // Handle swipe gestures
+    function handleSwipe(startX, endX) {
+      const swipeThreshold = 50;
+      const diff = startX - endX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }
+
+    // Navigate to next slide
+    function nextSlide() {
+      if (isTransitioning) return;
+      const next = (currentSlide + 1) % totalSlides;
+      goToSlide(next);
+    }
+
+    // Navigate to previous slide
+    function prevSlide() {
+      if (isTransitioning) return;
+      const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+      goToSlide(prev);
+    }
+
+    // Go to specific slide
+    function goToSlide(index) {
+      if (isTransitioning || index === currentSlide) return;
+      
+      isTransitioning = true;
+      currentSlide = index;
+      updateSlide(index);
+      
+      setTimeout(function() {
+        isTransitioning = false;
+      }, 600);
+    }
+
+    // Update slide display
+    function updateSlide(index) {
+      // Update slides
+      const slides = document.querySelectorAll('.gallery-slide');
+      slides.forEach(function(slide, i) {
+        slide.classList.remove('active', 'prev', 'next');
+        if (i === index) {
+          slide.classList.add('active');
+        } else if (i === (index - 1 + totalSlides) % totalSlides) {
+          slide.classList.add('prev');
+        } else if (i === (index + 1) % totalSlides) {
+          slide.classList.add('next');
+        }
+      });
+
+      // Update pagination dots
+      const dots = document.querySelectorAll('.gallery-dot');
+      dots.forEach(function(dot, i) {
+        if (i === index) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      // Update thumbnails
+      const thumbs = document.querySelectorAll('.gallery-thumb');
+      thumbs.forEach(function(thumb, i) {
+        if (i === index) {
+          thumb.classList.add('active');
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
+
+      // Update counter
+      const counters = document.querySelectorAll('.current-number');
+      counters.forEach(function(counter) {
+        counter.textContent = String(index + 1);
+      });
+    }
+
+    // Start autoplay
+    function startAutoplay() {
+      pauseAutoplay();
+      autoplayInterval = setInterval(function() {
+        nextSlide();
+      }, 5000);
+    }
+
+    // Pause autoplay
+    function pauseAutoplay() {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    }
+
+    // Initialize the slider
+    initSlider();
+
+    // Show instruction tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'fixed bottom-4 left-4 bg-black/80 text-white px-4 py-2 rounded-lg text-sm z-50 opacity-0 transition-opacity duration-300';
+    tooltip.innerHTML = '← → keys, click arrows, or swipe to navigate';
+    document.body.appendChild(tooltip);
+
+    setTimeout(function() {
+      tooltip.style.opacity = '1';
+      setTimeout(function() {
+        tooltip.style.opacity = '0';
+      }, 4000);
+    }, 1000);
+  });
+</script>
 
 <style>
   /* Navbar sticky specifically for gallery page */
@@ -226,52 +483,24 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
 		top: 0;
 		z-index: 50;
 	}
-  
-  .gallery-item {
-    transition: all 0.3s ease;
-  }
-  
-  .gallery-item:hover {
-    transform: translateY(-8px);
-  }
 
   .gallery-section {
     position: relative;
     z-index: 10;
   }
 
-  .gallery-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* Hero Section Styles */
+  .hero-section {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.9) 0%, 
+        rgba(249, 115, 22, 0.8) 25%,
+        rgba(239, 68, 68, 0.8) 50%,
+        rgba(245, 158, 11, 0.9) 75%,
+        rgba(217, 119, 6, 0.9) 100%
+    );
   }
 
-  .gallery-item {
-    aspect-ratio: 1 / 1;
-  }
-
-  @media (min-width: 768px) {
-    .gallery-grid {
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: auto;
-    }
-    .item-1 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-2 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
-    .item-3 { grid-column: span 1; grid-row: span 2; aspect-ratio: 1/2; }
-    .item-4 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
-    .item-5 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-6 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-7 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-8 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
-    .item-9 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-10 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
-    .item-11 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-12 { grid-column: span 2; grid-row: span 1; aspect-ratio: 2/1; }
-    .item-13 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-    .item-14 { grid-column: span 1; grid-row: span 1; aspect-ratio: 1/1; }
-  }
-
-  /* Fade in up animations */
+  /* Animations */
   @keyframes fade-in-up {
     0% {
       opacity: 0;
@@ -283,16 +512,6 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     }
   }
 
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-    opacity: 0;
-  }
-
-  /* Floating Animations */
   @keyframes float {
     0%, 100% {
       transform: translateY(0px);
@@ -320,6 +539,10 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     }
   }
 
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
@@ -334,41 +557,6 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
     animation-delay: 1s;
   }
 
-  /* Hero Section Styles - From FAQ page */
-  .hero-section {
-    background: linear-gradient(135deg, 
-        rgba(245, 158, 11, 0.9) 0%, 
-        rgba(249, 115, 22, 0.8) 25%,
-        rgba(239, 68, 68, 0.8) 50%,
-        rgba(245, 158, 11, 0.9) 75%,
-        rgba(217, 119, 6, 0.9) 100%
-    );
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes float {
-    0%, 100% { 
-      transform: translateY(0px); 
-    }
-    50% { 
-      transform: translateY(-10px); 
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
-
   /* Delay classes */
   .delay-100 { animation-delay: 0.1s; }
   .delay-200 { animation-delay: 0.2s; }
@@ -377,4 +565,205 @@ import sagawaBalon from '../assets/img/papan/balon_sagawa.png?url';
   .delay-500 { animation-delay: 0.5s; }
   .delay-600 { animation-delay: 0.6s; }
   .delay-700 { animation-delay: 0.7s; }
+
+  /* Custom Gallery Slider Styles */
+  .gallery-carousel-container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .gallery-main {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: #000;
+  }
+
+  .gallery-slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+
+  .gallery-slides:active {
+    cursor: grabbing;
+  }
+
+  .gallery-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  .gallery-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 3;
+  }
+
+  .gallery-slide.prev {
+    transform: translateX(-100%);
+    z-index: 2;
+  }
+
+  .gallery-slide.next {
+    transform: translateX(100%);
+    z-index: 2;
+  }
+
+  /* Navigation Buttons */
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(249, 115, 22, 0.8);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-nav:hover {
+    background: rgba(249, 115, 22, 1);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .gallery-prev {
+    left: 20px;
+  }
+
+  .gallery-next {
+    right: 20px;
+  }
+
+  /* Pagination Dots */
+  .gallery-pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .gallery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-dot:hover,
+  .gallery-dot.active {
+    background: rgba(249, 115, 22, 1);
+    transform: scale(1.2);
+  }
+
+  /* Thumbnail Gallery */
+  .gallery-thumbs-container {
+    padding: 0 20px;
+  }
+
+  .gallery-thumbs-wrapper {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+  }
+
+  .gallery-thumbs-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .gallery-thumbs-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .gallery-thumbs-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(249, 115, 22, 0.5);
+    border-radius: 3px;
+  }
+
+  .gallery-thumbs-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(249, 115, 22, 0.8);
+  }
+
+  .gallery-thumb {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .gallery-thumb:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  .gallery-thumb.active {
+    opacity: 1;
+    border-color: rgba(249, 115, 22, 1);
+    transform: scale(1.1);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .gallery-main {
+      height: 400px;
+    }
+    
+    .gallery-nav {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .gallery-prev {
+      left: 10px;
+    }
+    
+    .gallery-next {
+      right: 10px;
+    }
+    
+    .gallery-dot {
+      width: 10px;
+      height: 10px;
+    }
+    
+    .gallery-thumbs-container {
+      padding: 0 10px;
+    }
+    
+    .gallery-thumb {
+      width: 60px;
+      height: 60px;
+    }
+  }
 </style>

@@ -35,7 +35,7 @@ export const sendMitraApprovalEmail = async (
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: "Registrasi Berhasil – Akun Anda di PT SAGAWA PANGAN NUSANTARA",
+    subject: "Registrasi Akun Anda di PT SAGAWA PANGAN NUSANTARA – Berhasil",
     html: htmlContent,
   };
 

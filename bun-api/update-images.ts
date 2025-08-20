@@ -10,6 +10,7 @@ const sampleImages = {
 async function updateMitraImages() {
   try {
     console.log("Updating mitra images to URL format...");
+    3;
 
     // Initialize database connection
     await initializeCollections();
