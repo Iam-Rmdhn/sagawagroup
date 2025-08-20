@@ -8,7 +8,7 @@ COPY package*.json ./
 RUN bun install
 # Salin seluruh source code ke dalam container
 COPY . .
-# Expose port 4000 untuk API
-EXPOSE 4000
+# Expose port 9999 untuk API
+EXPOSE 9999
 # Jalankan server menggunakan Bun
 CMD ["bun", "run", "index.ts"]

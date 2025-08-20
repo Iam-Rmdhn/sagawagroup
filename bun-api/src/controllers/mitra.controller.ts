@@ -64,8 +64,10 @@ export const registerMitraController = async (
       const filePath = `uploads/${fileName}`;
       await Bun.write(filePath, file);
 
-      // Return URL
-      const url = `http://localhost:9999/uploads/${fileName}`;
+      // Return URL - use environment variable or fallback to localhost
+      const baseUrl =
+        process.env.BASE_URL || `http://localhost:${process.env.PORT || 9999}`;
+      const url = `${baseUrl}/uploads/${fileName}`;
       console.log(`File saved successfully: ${url}`);
       return url;
     };

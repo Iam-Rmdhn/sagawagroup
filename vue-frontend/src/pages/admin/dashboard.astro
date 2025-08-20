@@ -153,7 +153,7 @@ import Layout from '../../layouts/Layout.astro';
 </div>
 
 <!-- Modal untuk Memperbesar Gambar -->
-<div id="imageModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-90">
+<div id="imageModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-30">
   <div class="flex items-center justify-center w-full h-full p-4">
     <!-- Close button -->
     <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-20">
@@ -165,12 +165,15 @@ import Layout from '../../layouts/Layout.astro';
     <!-- Image container -->
     <div class="max-w-full max-h-full">
       <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain">
-      <p id="modalImageTitle" class="text-white text-center mt-4 text-lg font-medium"></p>
+      <p id="modalImageTitle" class="text-black text-center mt-4 text-lg font-medium"></p>
     </div>
   </div>
 </div>
 
 <script>
+  // API URL configuration
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
+  
   // Load user information
   document.addEventListener('DOMContentLoaded', function() {
     const userString = localStorage.getItem('adminUser');
@@ -264,7 +267,7 @@ import Layout from '../../layouts/Layout.astro';
     try {
       tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
 
-      const response = await fetch('http://localhost:9999/api/admin/mitra', {
+      const response = await fetch(`${API_URL}/api/admin/mitra`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -358,7 +361,7 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     try {
-      const response = await fetch('http://localhost:9999/api/admin/mitra/approve', {
+      const response = await fetch(`${API_URL}/api/admin/mitra/approve`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -414,7 +417,7 @@ import Layout from '../../layouts/Layout.astro';
       modal.classList.remove('hidden');
       content.innerHTML = '<div class="col-span-2 text-center">Loading...</div>';
 
-      const response = await fetch(`http://localhost:9999/api/admin/mitra/${mitraId}`, {
+      const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -466,9 +469,9 @@ import Layout from '../../layouts/Layout.astro';
     content.innerHTML = `
 
 
-      <!-- Informasi Dasar -->
+      <!-- Informasi Data Pribadi -->
       <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Dasar</h4>
+        <h4 class="font-semibold text-gray-900 mb-3">Informasi Data Pribadi</h4>
         <div class="space-y-2">
           <div><strong>Nama Mitra:</strong> ${mitra.namaMitra || 'N/A'}</div>
           <div><strong>Email:</strong> ${mitra.email || 'N/A'}</div>
@@ -489,8 +492,6 @@ import Layout from '../../layouts/Layout.astro';
           <div><strong>Sistem Kemitraan:</strong> ${mitra.sistemKemitraan || 'N/A'}</div>
           <div><strong>Sales:</strong> ${mitra.sales || 'N/A'}</div>
           <div><strong>Paket Usaha:</strong> ${mitra.paketUsaha || 'N/A'}</div>
-          <div><strong>Lokasi Usaha:</strong> ${mitra.lokasi || 'N/A'}</div>
-          <div><strong>Alamat Usaha:</strong> ${mitra.alamatUsaha || 'N/A'}</div>
         </div>
       </div>
 
@@ -511,11 +512,9 @@ import Layout from '../../layouts/Layout.astro';
       <div class="bg-gray-50 p-4 rounded-lg">
         <h4 class="font-semibold text-gray-900 mb-3">Informasi Pembayaran</h4>
         <div class="space-y-2">
-          <div><strong>Metode Pembayaran:</strong> ${mitra.metodePembayaran || 'N/A'}</div>
-          <div><strong>Bank:</strong> ${mitra.namaBank || 'N/A'}</div>
-          <div><strong>No Rekening:</strong> ${mitra.nomorRekening || 'N/A'}</div>
-          <div><strong>Nama Rekening:</strong> ${mitra.namaRekening || 'N/A'}</div>
+          <div><strong>Metode Pembayaran:</strong> Transfer</div>
           <div><strong>Bank Pengirim:</strong> ${mitra.bankPengirim || 'N/A'}</div>
+          <div><strong>No Rekening:</strong> ${mitra.noRekPengirim || 'N/A'}</div>
           <div><strong>Nama Pengirim:</strong> ${mitra.namaPengirim || 'N/A'}</div>
         </div>
       </div>
@@ -525,9 +524,8 @@ import Layout from '../../layouts/Layout.astro';
         <h4 class="font-semibold text-gray-900 mb-4">Dokumen & Foto</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Foto KTP -->
-          <!-- Foto KTP -->
           <div class="space-y-2">
-            <strong>Foto KTP:</strong>
+            <strong>Foto KTP, NPWP & Foto Mitra:</strong>
             ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
               <div class="mt-2">
                 <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
@@ -585,13 +583,11 @@ import Layout from '../../layouts/Layout.astro';
       modal.classList.add('hidden');
     }
   }
-
-  // Helper function untuk mengecek apakah string adalah base64 atau data URL
+  
   function isBase64OrDataUrl(str: string): boolean {
     if (!str) return false;
     // Cek jika string dimulai dengan data URL
     if (str.startsWith('data:')) return true;
-    // Jika string cukup panjang, anggap sebagai base64
     if (str.length > 50) return true;
     return false;
   }
@@ -613,7 +609,7 @@ import Layout from '../../layouts/Layout.astro';
         imageSrc = imageData;
       } else {
         // Assume base64 data, add data URL prefix
-        imageSrc = `data:image/png;base64,${imageData}`;
+        imageSrc = `${imageData}`;
       }
       
       console.log('Opening image modal with:', { title, imageSrc: imageSrc.substring(0, 50) + '...' });
@@ -631,7 +627,7 @@ import Layout from '../../layouts/Layout.astro';
         errorMsg.className = 'text-white text-center p-8';
         errorMsg.innerHTML = `
           <div class="text-red-500 bg-white p-4 rounded">
-            <p class="text-lg">⚠️ Gagal memuat gambar</p>
+            <p class="text-lg">Gagal memuat gambar</p>
             <p class="text-sm mt-2">Data gambar mungkin rusak</p>
           </div>
         `;

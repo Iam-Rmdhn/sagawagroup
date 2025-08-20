@@ -90,6 +90,9 @@ import Layout from '../layouts/Layout.astro';
               <option value="RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)" data-original="100000000" data-discounted="89000000">
                 RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda) - Rp 100.000.000 → Rp 89.000.000
               </option>
+              <option value="Independent Brand" data-original="100000000" data-discounted="89000000">
+                Independent Brand - Rp 100.000.000 → Rp 89.000.000
+              </option>
             </select>
             
             <!-- Price Display -->
@@ -1115,7 +1118,8 @@ async function submitForm() {
     console.log('Submitting form data to backend...');
     console.log('Submit data entries:', Array.from(submitData.entries()));
     
-    const response = await fetch('http://localhost:9999/api/mitra/register', {
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
+    const response = await fetch(`${API_URL}/api/mitra/register`, {
       method: 'POST',
       body: submitData
     });
