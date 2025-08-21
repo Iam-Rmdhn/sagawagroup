@@ -2,42 +2,8 @@ import bcrypt from "bcryptjs";
 import { UserModel, type User } from "../models/user.model";
 import { AdminModel, type Admin } from "../models/admin.model";
 import { MitraModel, type Mitra } from "../models/mitra.model";
-import { MitraLoginModel, type MitraLogin } from "../models/mitra-login.model";
 import { generateToken } from "../utils/jwt";
 import { sendMitraApprovalEmail } from "../utils/email";
-
-// Login service untuk mitra menggunakan collection mitra_login
-export async function mitraLoginService(email: string, password: string) {
-  const mitraLogin = await MitraLoginModel.findByEmail(email);
-  if (!mitraLogin) throw new Error("Email tidak terdaftar");
-
-  if (!mitraLogin.isActive) throw new Error("Akun tidak aktif");
-
-  const isMatch = await bcrypt.compare(password, mitraLogin.password);
-  if (!isMatch) throw new Error("Password salah");
-
-  // Update last login
-  await MitraLoginModel.updateLastLogin(email);
-
-  // Generate JWT token
-  const token = generateToken({
-    id: mitraLogin._id,
-    email: mitraLogin.email,
-    role: "mitra",
-  });
-
-  // Remove password from response
-  const { password: _, ...safeMitraLogin } = mitraLogin;
-
-  return {
-    success: true,
-    message: "Login berhasil",
-    data: {
-      token,
-      user: safeMitraLogin,
-    },
-  };
-}
 
 export async function loginService(email: string, password: string) {
   const mitra = await UserModel.findOne({ email });
@@ -54,42 +20,6 @@ export async function loginService(email: string, password: string) {
   return {
     user: safeMitra,
     token,
-  };
-}
-
-// Service untuk mendapatkan data mitra login
-export async function getMitraLoginProfileService(mitraLoginId: string) {
-  const mitraLogin = await MitraLoginModel.findById(mitraLoginId);
-  if (!mitraLogin) {
-    throw new Error("Mitra login tidak ditemukan");
-  }
-
-  // Get detailed mitra data
-  const mitraDetail = await MitraModel.findById(mitraLogin.mitraId);
-
-  // Remove password from response
-  const { password: _, ...safeMitraLogin } = mitraLogin;
-
-  return {
-    success: true,
-    data: {
-      ...safeMitraLogin,
-      mitraDetail: mitraDetail || null,
-    },
-  };
-}
-
-// Service untuk mendapatkan semua mitra login (untuk admin)
-export async function getAllMitraLoginService() {
-  const mitraLogins = await MitraLoginModel.findAll();
-
-  // Remove passwords from response
-  const safeLogins = mitraLogins.map(({ password: _, ...login }) => login);
-
-  return {
-    success: true,
-    data: safeLogins,
-    total: safeLogins.length,
   };
 }
 
@@ -253,31 +183,22 @@ export async function approveMitraService(
         }
       );
 
-      // Generate default password for new mitra login
+      // Generate random password for new user
       const defaultPassword = "mitrasagawagroup";
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(defaultPassword, saltRounds);
 
-      // Create mitra login account in mitra_login collection
-      const newMitraLogin = await MitraLoginModel.create({
+      // Create user account
+      const newUser = await UserModel.create({
         email: mitra.email,
         password: hashedPassword,
-        namaMitra: mitra.namaMitra,
-        mitraId: mitraId,
+        nama: mitra.namaMitra,
         sales: mitra.sales,
-        paketUsaha: mitra.paketUsaha,
-        isActive: true,
+        isApproved: true,
       });
 
-      // Update mitra with login reference
-      await MitraModel.updateOne(
-        { _id: mitraId },
-        {
-          userID: newMitraLogin._id,
-          status: "approved",
-          isApproved: true,
-        }
-      );
+      // Update mitra with userID
+      await MitraModel.updateOne({ _id: mitraId }, { userID: newUser._id });
 
       // Send approval email
       try {
@@ -294,10 +215,10 @@ export async function approveMitraService(
 
       return {
         success: true,
-        message: "Mitra berhasil disetujui dan akun login telah dibuat",
+        message: "Mitra berhasil disetujui dan akun telah dibuat",
         data: {
           mitraId,
-          loginId: newMitraLogin._id,
+          userId: newUser._id,
           email: mitra.email,
         },
       };
