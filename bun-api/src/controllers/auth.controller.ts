@@ -1,5 +1,8 @@
 import {
   loginService,
+  mitraLoginService,
+  getMitraLoginProfileService,
+  getAllMitraLoginService,
   adminLoginService,
   adminRegisterService,
   getAllMitraService,
@@ -64,15 +67,20 @@ export const loginMitra = async (req: Request): Promise<Response> => {
   const sanitizedPassword = password.trim();
 
   try {
-    const result = await loginService(sanitizedEmail, sanitizedPassword);
+    // Gunakan mitraLoginService untuk login mitra
+    const result = await mitraLoginService(sanitizedEmail, sanitizedPassword);
 
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (err) {
+  } catch (err: any) {
+    console.error("Login error:", err.message);
     return new Response(
-      JSON.stringify({ error: "Email atau password salah" }),
+      JSON.stringify({
+        success: false,
+        error: err.message || "Email atau password salah",
+      }),
       { status: 401, headers: { "Content-Type": "application/json" } }
     );
   }
@@ -332,5 +340,69 @@ export const updateMitraImages = async (req: Request): Promise<Response> => {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
+  }
+};
+
+// Controller untuk mendapatkan profile mitra login
+export const getMitraProfile = async (req: Request): Promise<Response> => {
+  try {
+    // Validate mitra token
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Token tidak ditemukan" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const token = authHeader.substring(7);
+    const decoded = verifyToken(token);
+
+    if (!decoded.role || decoded.role !== "mitra") {
+      return new Response(
+        JSON.stringify({ error: "Akses ditolak: bukan mitra" }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const result = await getMitraLoginProfileService(decoded.id);
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting mitra profile:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Controller untuk admin mendapatkan semua mitra login
+export const getAllMitraLogin = async (req: Request): Promise<Response> => {
+  try {
+    // Validate admin token
+    await validateAdminToken(req);
+
+    const result = await getAllMitraLoginService();
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting all mitra login:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };
