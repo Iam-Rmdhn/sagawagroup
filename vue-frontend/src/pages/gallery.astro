@@ -77,7 +77,7 @@ const galleryImages = [
   { 
     src: masgaw, 
     alt: "Mas Gaw Food Cart", 
-    title: "Kedai Mas Gaw",
+    title: "Rumah Makan Mas Gaw",
     subtitle: "MasGaw Food Cart"
   },
   { 
@@ -137,78 +137,135 @@ const galleryImages = [
       <!-- Gallery Swiper Section with strong connection to wave -->
       <section class="gallery-section pt-16 pb-16 px-4 sm:px-6 lg:px-8 bg-white relative z-10 mt-[-10px]">
         <div class="max-w-7xl mx-auto">
-          <!-- Gallery Title -->
+          <!-- Gallery Filter Tabs -->
           <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Koleksi Terbaik Sagawa Group</h2>
-            <p class="text-xl text-gray-600">Swipe untuk melihat foto-foto eksklusif dari berbagai outlet kami</p>
+            <!-- Filter Navigation -->
+            <div class="flex justify-center mb-8">
+              <div class="bg-white rounded-2xl p-2 shadow-lg border border-gray-200 inline-flex">
+                <button class="filter-tab active flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300" data-filter="foto">
+                  <span>Foto</span>
+                </button>
+                <button class="filter-tab flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300" data-filter="video">
+                  <span>Video</span>
+                </button>
+                <button class="filter-tab flex items-center space-x-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300" data-filter="instagram">
+                  <span>Instagram</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Dynamic Title and Description -->
+            <div class="filter-description">
+              <h3 class="text-3xl font-bold text-gray-800 mb-3" id="filter-title">Koleksi Foto Terbaik</h3>
+              <p class="text-lg text-gray-600 max-w-2xl mx-auto" id="filter-subtitle">Swipe untuk melihat foto-foto eksklusif dari berbagai outlet kami</p>
+            </div>
           </div>
 
-          <!-- Simple Gallery Carousel (Fallback jika Swiper tidak berhasil) -->
-          <div class="gallery-carousel-container mb-12">
-            <!-- Main Gallery Display -->
-            <div class="gallery-main relative">
-              <div class="gallery-slides" id="gallery-slides">
-                {galleryImages.map((image, index) => (
-                  <div class={`gallery-slide ${index === 0 ? 'active' : ''}`} data-index={index}>
-                    <div class="relative w-full h-[600px] group overflow-hidden rounded-2xl shadow-2xl">
-                      <img 
-                        src={image.src} 
-                        alt={image.alt} 
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                        loading={index === 0 ? "eager" : "lazy"}
-                      />
-                      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                      <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
-                        <h3 class="text-2xl md:text-3xl font-bold mb-2">{image.title}</h3>
-                        <p class="text-lg text-white/90">{image.subtitle}</p>
+          <!-- Filter Content Containers -->
+          <div class="filter-content">
+            <!-- Foto Content -->
+            <div class="filter-section active" id="foto-section">
+              <div class="gallery-carousel-container mb-12">
+                <!-- Main Gallery Display -->
+                <div class="gallery-main relative">
+                  <div class="gallery-slides" id="gallery-slides">
+                    {galleryImages.map((image, index) => (
+                      <div class={`gallery-slide ${index === 0 ? 'active' : ''}`} data-index={index}>
+                        <div class="relative w-full h-[600px] group overflow-hidden rounded-2xl shadow-2xl">
+                          <img 
+                            src={image.src} 
+                            alt={image.alt} 
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                            loading={index === 0 ? "eager" : "lazy"}
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                          <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                            <h3 class="text-2xl md:text-3xl font-bold mb-2">{image.title}</h3>
+                            <p class="text-lg text-white/90">{image.subtitle}</p>
+                          </div>
+                          
+                          <!-- Image Counter -->
+                          <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                            <span class="current-number">{index + 1}</span> / {galleryImages.length}
+                          </div>
+                        </div>
                       </div>
-                      
-                      <!-- Image Counter -->
-                      <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
-                        <span class="current-number">{index + 1}</span> / {galleryImages.length}
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              
-              <!-- Navigation buttons -->
-              <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Previous image">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-              </button>
-              <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Next image">
-                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </button>
-              
-              <!-- Pagination dots -->
-              <div class="gallery-pagination" id="gallery-pagination">
-                {galleryImages.map((_, index) => (
-                  <button 
-                    class={`gallery-dot ${index === 0 ? 'active' : ''}`} 
-                    data-index={index}
-                    aria-label={`Go to image ${index + 1}`}
-                  ></button>
-                ))}
+                  
+                  <!-- Navigation buttons -->
+                  <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Previous image">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                  </button>
+                  <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Next image">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </button>
+                  
+                  <!-- Pagination dots -->
+                  <div class="gallery-pagination" id="gallery-pagination">
+                    {galleryImages.map((_, index) => (
+                      <button 
+                        class={`gallery-dot ${index === 0 ? 'active' : ''}`} 
+                        data-index={index}
+                        aria-label={`Go to image ${index + 1}`}
+                      ></button>
+                    ))}
+                  </div>
+                </div>
+
+                <!-- Thumbnail Gallery -->
+                <div class="gallery-thumbs-container mt-8">
+                  <div class="gallery-thumbs-wrapper" id="gallery-thumbs-wrapper">
+                    {galleryImages.map((image, index) => (
+                      <div class={`gallery-thumb ${index === 0 ? 'active' : ''}`} data-index={index}>
+                        <img 
+                          src={image.src} 
+                          alt={image.alt} 
+                          class="w-full h-full object-cover cursor-pointer" 
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Thumbnail Gallery -->
-            <div class="gallery-thumbs-container mt-8">
-              <div class="gallery-thumbs-wrapper" id="gallery-thumbs-wrapper">
-                {galleryImages.map((image, index) => (
-                  <div class={`gallery-thumb ${index === 0 ? 'active' : ''}`} data-index={index}>
-                    <img 
-                      src={image.src} 
-                      alt={image.alt} 
-                      class="w-full h-full object-cover cursor-pointer" 
-                      loading="lazy"
-                    />
+            <!-- Video Content -->
+            <div class="filter-section" id="video-section">
+              <div class="text-center py-16">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl p-12 max-w-2xl mx-auto border border-blue-200 shadow-xl">
+                  <div class="relative mb-6">
+                    <div class="text-6xl mb-2 animate-bounce">🎥</div>
+                    <div class="absolute inset-0 bg-blue-400 rounded-full opacity-20 animate-ping"></div>
                   </div>
-                ))}
+                  <h3 class="text-3xl font-bold text-gray-800 mb-4">Video Content</h3>
+                  <p class="text-gray-600 mb-6 text-lg">Koleksi video promosi dan dokumentasi kegiatan Sagawa Group</p>
+                  <div class="bg-white rounded-xl p-4 text-sm text-blue-600 font-medium shadow-inner">
+                    📹 Konten video sedang dalam proses penambahan
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram Feed Content -->
+            <div class="filter-section" id="instagram-section">
+              <div class="text-center py-16">
+                <div class="bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 rounded-3xl p-12 max-w-2xl mx-auto border border-pink-200 shadow-xl">
+                  <div class="relative mb-6">
+                    <div class="text-6xl mb-2 animate-pulse">📱</div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full opacity-20 animate-ping"></div>
+                  </div>
+                  <h3 class="text-3xl font-bold text-gray-800 mb-4">Instagram Feed</h3>
+                  <p class="text-gray-600 mb-6 text-lg">Feed terbaru dari akun Instagram resmi @sagawagroup</p>
+                  <div class="bg-white rounded-xl p-4 text-sm text-purple-600 font-medium shadow-inner">
+                    📲 Integrasi Instagram feed akan segera tersedia
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -248,6 +305,59 @@ const galleryImages = [
     let autoplayInterval = null;
     let isTransitioning = false;
 
+    // Filter functionality
+    function initFilters() {
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const filterSections = document.querySelectorAll('.filter-section');
+      const filterTitle = document.getElementById('filter-title');
+      const filterSubtitle = document.getElementById('filter-subtitle');
+
+      const filterData = {
+        foto: {
+          title: 'Koleksi Foto Terbaik',
+          subtitle: 'Swipe untuk melihat foto-foto eksklusif dari berbagai outlet kami'
+        },
+        video: {
+          title: 'Video Promosi',
+          subtitle: 'Tonton video dokumentasi dan promosi Sagawa Group'
+        },
+        instagram: {
+          title: 'Instagram Feed',
+          subtitle: 'Konten terbaru dari media sosial kami'
+        }
+      };
+
+      filterTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Remove active class from all tabs and sections
+          filterTabs.forEach(function(t) { t.classList.remove('active'); });
+          filterSections.forEach(function(s) { s.classList.remove('active'); });
+          
+          // Add active class to clicked tab and corresponding section
+          this.classList.add('active');
+          const targetSection = document.getElementById(filter + '-section');
+          if (targetSection) {
+            targetSection.classList.add('active');
+          }
+          
+          // Update title and subtitle
+          if (filterData[filter]) {
+            filterTitle.textContent = filterData[filter].title;
+            filterSubtitle.textContent = filterData[filter].subtitle;
+          }
+          
+          // Restart slider if foto filter is selected
+          if (filter === 'foto') {
+            setTimeout(function() {
+              initSlider();
+            }, 300);
+          }
+        });
+      });
+    }
+
     // Initialize slider
     function initSlider() {
       const slides = document.querySelectorAll('.gallery-slide');
@@ -255,9 +365,11 @@ const galleryImages = [
       
       if (totalSlides === 0) return;
       
+      // Reset to first slide
+      currentSlide = 0;
+      updateSlide(0);
       bindEvents();
       startAutoplay();
-      updateSlide(0);
       console.log('Gallery slider initialized with', totalSlides, 'slides');
     }
 
@@ -267,25 +379,33 @@ const galleryImages = [
       const prevBtn = document.getElementById('gallery-prev');
       const nextBtn = document.getElementById('gallery-next');
       
-      if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-      if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+      if (prevBtn) {
+        // Remove existing listeners
+        prevBtn.replaceWith(prevBtn.cloneNode(true));
+        document.getElementById('gallery-prev').addEventListener('click', prevSlide);
+      }
+      if (nextBtn) {
+        // Remove existing listeners
+        nextBtn.replaceWith(nextBtn.cloneNode(true));
+        document.getElementById('gallery-next').addEventListener('click', nextSlide);
+      }
 
       // Pagination dots
       const dots = document.querySelectorAll('.gallery-dot');
       dots.forEach(function(dot, index) {
-        dot.addEventListener('click', function() { goToSlide(index); });
+        // Remove existing listeners
+        const newDot = dot.cloneNode(true);
+        dot.parentNode.replaceChild(newDot, dot);
+        newDot.addEventListener('click', function() { goToSlide(index); });
       });
 
       // Thumbnail clicks
       const thumbs = document.querySelectorAll('.gallery-thumb');
       thumbs.forEach(function(thumb, index) {
-        thumb.addEventListener('click', function() { goToSlide(index); });
-      });
-
-      // Keyboard navigation
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') prevSlide();
-        if (e.key === 'ArrowRight') nextSlide();
+        // Remove existing listeners
+        const newThumb = thumb.cloneNode(true);
+        thumb.parentNode.replaceChild(newThumb, thumb);
+        newThumb.addEventListener('click', function() { goToSlide(index); });
       });
 
       // Touch/swipe support
@@ -294,11 +414,16 @@ const galleryImages = [
         let touchStartX = 0;
         let touchEndX = 0;
 
-        slidesContainer.addEventListener('touchstart', function(e) {
+        // Remove existing listeners by replacing element
+        const newSlidesContainer = slidesContainer.cloneNode(true);
+        slidesContainer.parentNode.replaceChild(newSlidesContainer, slidesContainer);
+
+        const slides = newSlidesContainer;
+        slides.addEventListener('touchstart', function(e) {
           touchStartX = e.changedTouches[0].screenX;
         });
 
-        slidesContainer.addEventListener('touchend', function(e) {
+        slides.addEventListener('touchend', function(e) {
           touchEndX = e.changedTouches[0].screenX;
           handleSwipe(touchStartX, touchEndX);
         });
@@ -307,21 +432,21 @@ const galleryImages = [
         let isDragging = false;
         let startX = 0;
 
-        slidesContainer.addEventListener('mousedown', function(e) {
+        slides.addEventListener('mousedown', function(e) {
           isDragging = true;
           startX = e.clientX;
-          slidesContainer.style.cursor = 'grabbing';
+          slides.style.cursor = 'grabbing';
         });
 
-        slidesContainer.addEventListener('mousemove', function(e) {
+        slides.addEventListener('mousemove', function(e) {
           if (!isDragging) return;
           e.preventDefault();
         });
 
-        slidesContainer.addEventListener('mouseup', function(e) {
+        slides.addEventListener('mouseup', function(e) {
           if (!isDragging) return;
           isDragging = false;
-          slidesContainer.style.cursor = 'grab';
+          slides.style.cursor = 'grab';
           
           const endX = e.clientX;
           const diff = startX - endX;
@@ -335,9 +460,9 @@ const galleryImages = [
           }
         });
 
-        slidesContainer.addEventListener('mouseleave', function() {
+        slides.addEventListener('mouseleave', function() {
           isDragging = false;
-          slidesContainer.style.cursor = 'grab';
+          slides.style.cursor = 'grab';
         });
       }
 
@@ -448,7 +573,8 @@ const galleryImages = [
       }
     }
 
-    // Initialize the slider
+    // Initialize everything
+    initFilters();
     initSlider();
 
     // Show instruction tooltip
@@ -570,6 +696,93 @@ const galleryImages = [
   .gallery-carousel-container {
     max-width: 100%;
     margin: 0 auto;
+  }
+
+  /* Filter Tabs Styling */
+  .filter-tab {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    position: relative;
+    margin: 0 2px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .filter-tab:hover {
+    background: rgba(249, 115, 22, 0.08);
+    color: #f97316;
+    transform: translateY(-1px);
+  }
+
+  .filter-tab.active {
+    background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+    color: white;
+    box-shadow: 0 8px 25px -5px rgba(249, 115, 22, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .filter-tab.active:hover {
+    background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+    box-shadow: 0 12px 35px -5px rgba(249, 115, 22, 0.5);
+    transform: translateY(-2px);
+  }
+
+  /* Filter tab icons animation */
+  .filter-tab span:first-child {
+    transition: transform 0.3s ease;
+  }
+
+  .filter-tab:hover span:first-child,
+  .filter-tab.active span:first-child {
+    transform: scale(1.1);
+  }
+
+  /* Filter Content */
+  .filter-content {
+    position: relative;
+    min-height: 600px;
+  }
+
+  .filter-section {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(30px) scale(0.98);
+  }
+
+  .filter-section.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Smooth title/subtitle transitions */
+  .filter-description h3,
+  .filter-description p {
+    transition: all 0.4s ease;
+  }
+
+  /* Enhanced filter container styling */
+  .filter-tab:not(.active)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .filter-tab:not(.active):hover::before {
+    opacity: 0.1;
   }
 
   .gallery-main {
@@ -764,6 +977,46 @@ const galleryImages = [
     .gallery-thumb {
       width: 60px;
       height: 60px;
+    }
+
+    /* Mobile filter tabs */
+    .filter-tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .filter-tab span:first-child {
+      font-size: 1rem;
+    }
+
+    /* Mobile filter content */
+    #video-section .bg-gradient-to-br,
+    #instagram-section .bg-gradient-to-br {
+      padding: 2rem;
+      margin: 0 1rem;
+    }
+
+    #video-section h3,
+    #instagram-section h3 {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .filter-tab {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .filter-tab span:last-child {
+      font-size: 0.75rem;
+    }
+
+    .filter-description h3 {
+      font-size: 1.75rem;
+    }
+
+    .filter-description p {
+      font-size: 1rem;
     }
   }
 </style>
