@@ -1,5 +1,7 @@
 import {
   loginMitra,
+  getMitraProfile,
+  getAllMitraLogin,
   adminLogin,
   adminRegister,
   getAllMitra,
@@ -14,6 +16,16 @@ export const authRoute = async (req: Request): Promise<Response> => {
 
   if (req.method === "POST" && pathname === "/api/auth/login") {
     return await loginMitra(req);
+  }
+
+  // Endpoint untuk mitra mendapatkan profile
+  if (req.method === "GET" && pathname === "/api/mitra/profile") {
+    return await getMitraProfile(req);
+  }
+
+  // Endpoint untuk admin mendapatkan semua mitra login
+  if (req.method === "GET" && pathname === "/api/admin/mitra-login") {
+    return await getAllMitraLogin(req);
   }
 
   if (req.method === "POST" && pathname === "/api/admin/login") {
