@@ -1,3 +1,72 @@
 # environment variables
 .env
 .env.production
+.env.development
+# Node.js dependencies
+node_modules/
+# Build output
+dist/
+build/
+# Logs
+logs/
+*.log
+# Dependency directories
+jspm_packages/
+# Coverage directory used by tools like istanbul
+coverage/
+# IDE specific files
+.idea/
+.vscode/
+# Mac system files
+.DS_Store
+# Windows system files
+Thumbs.db
+# Temporary files
+*.tmp
+# Yarn integrity file
+.yarn-integrity
+# npm debug log
+npm-debug.log*
+# Yarn lock file
+yarn.lock
+# Package lock file
+package-lock.json
+
+# SSL/TLS certificates and keys
+*.pem
+*.key
+*.crt
+*.csr
+*.pfx
+*.p12
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Configuration files that may contain sensitive data
+config/local.json
+config/production.json
+config/development.json
+
+# JWT tokens and secrets
+jwt-secret.txt
+secret.json
+secrets.json
+
+# Cloud provider credentials
+.aws/
+.gcp/
+.azure/
+credentials.json
+
+# SSH keys
+id_rsa
+id_ed25519
+*.priv
+
+# API keys and tokens
+api-keys.txt
+tokens.txt
+.secrets
