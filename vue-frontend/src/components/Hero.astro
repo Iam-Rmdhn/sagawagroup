@@ -1,5 +1,6 @@
 ---
 // Hero.astro
+import heroImage from '../assets/img/heroes_img.png';
 ---
 
 <section class="bg-white min-h-[calc(100vh-4rem)] pb-5 flex items-center relative">
@@ -15,8 +16,7 @@
           <!-- Main Image Container -->
           <div class="relative z-10 bg-white rounded-full p-8 shadow-lg">
             <img 
-              src="/src/assets/img/heroes_img.png" 
-              alt="Business Partnership Illustration" 
+              src={heroImage.src} 
               class="w-full h-auto rounded-full"
             />
           </div>
