@@ -4,12 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // AstraDB configuration
-const ASTRA_DB_APPLICATION_TOKEN =
-  process.env.ASTRA_DB_APPLICATION_TOKEN ||
-  "AstraCS:GcAHBNyZJEGUYJkYkEiJRXbr:c5a57f749b2bd125acb835fa98b1bcf8af879b8dad1876778696b5a2788d4407";
-const ASTRA_DB_API_ENDPOINT =
-  process.env.ASTRA_DB_API_ENDPOINT ||
-  "https://a1971aa5-5930-4854-82ef-747bd405cc0a-us-east-2.apps.astra.datastax.com";
+const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
+const ASTRA_DB_API_ENDPOINT = process.env.ASTRA_DB_API_ENDPOINT;
+
+if (!ASTRA_DB_APPLICATION_TOKEN || !ASTRA_DB_API_ENDPOINT) {
+  throw new Error("Database credentials not found in environment variables");
+}
 
 // Initialize DataStax Astra DB client
 const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
