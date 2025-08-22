@@ -6,6 +6,7 @@ import {
   getMitraById,
   approveMitra,
   updateMitraImages,
+  getMitraProfile,
 } from "../controllers/auth.controller";
 
 export const authRoute = async (req: Request): Promise<Response> => {
@@ -42,6 +43,10 @@ export const authRoute = async (req: Request): Promise<Response> => {
 
   if (req.method === "GET" && pathname === "/api/admin/sample-images") {
     return await updateMitraImages(req);
+  }
+
+  if (req.method === "GET" && pathname === "/api/mitra/profile") {
+    return await getMitraProfile(req);
   }
 
   return new Response("Not Found", { status: 404 });

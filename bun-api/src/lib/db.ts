@@ -50,6 +50,7 @@ export const initializeCollections = async () => {
 export const usersCollection = database.collection("users");
 export const mitraCollection = database.collection("mitra");
 export const adminCollection = database.collection("admin_login");
+export const mitraLoginCollection = database.collection("mitra_login");
 
 // Initialize on startup
 (async () => {

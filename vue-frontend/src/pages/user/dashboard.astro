@@ -1,80 +1,539 @@
 ---
 // User Dashboard
+import Layout from '../../layouts/Layout.astro';
 ---
-<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-  <div class="px-3 py-3 lg:px-5 lg:pl-3">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center justify-start rtl:justify-end">
-        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-            <span class="sr-only">Open sidebar</span>
-            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-               <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-            </svg>
-         </button>
-        <a href="/user/dashboard" class="flex ms-2 md:me-24">
-          <img src="" class="h-8 me-3" alt="FlowBite Logo" />
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">User Dashboard</span>
-        </a>
-      </div>
-      <div class="flex items-center">
-          <div class="flex items-center ms-3">
-            <div>
-              <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="#" alt="user photo">
-              </button>
-            </div>
-            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-              <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
-                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">neil.sims@flowbite.com</p>
+<Layout title="User Dashboard">
+  <!-- Authentication Protection Script -->
+  <script>
+    // Cek apakah user sudah login
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('mitraToken');
+      const user = localStorage.getItem('mitraUser');
+      
+      if (!token || !user) {
+        window.location.href = '/login';
+      }
+    }
+  </script>
+
+  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+              <span class="sr-only">Open sidebar</span>
+              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+              </svg>
+           </button>
+          <a href="/user/dashboard" class="flex ms-2 md:me-24">
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white text-amber-600">Sagawa Mitra</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+            <div class="flex items-center ms-3">
+              <div>
+                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
+                    M
+                  </div>
+                </button>
               </div>
-              <ul class="py-1" role="none">
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a></li>
-              </ul>
+              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                <div class="px-4 py-3" role="none">
+                  <p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name">Mitra User</p>
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">mitra@sagawa.com</p>
+                </div>
+                <ul class="py-1" role="none">
+                  <li><a href="/user/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
+                  <li><button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+      </div>
     </div>
+  </nav>
+
+  <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <ul class="space-y-2 font-medium">
+           <li><a href="#" id="dashboard-btn" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group bg-gray-100">
+             <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+               <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/><path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+             </svg>
+             <span class="ms-3">Dashboard</span>
+           </a></li>
+           <li><a href="#" id="profile-btn" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+             <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+               <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+             </svg>
+             <span class="flex-1 ms-3 whitespace-nowrap">Profile</span>
+           </a></li>
+           <li><a href="#" id="business-btn" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+             <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+               <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+             </svg>
+             <span class="flex-1 ms-3 whitespace-nowrap">Bisnis Saya</span>
+           </a></li>
+           <li><a href="#" id="support-btn" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+             <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+               <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/><path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
+             </svg>
+             <span class="flex-1 ms-3 whitespace-nowrap">Support</span>
+           </a></li>
+        </ul>
+     </div>
+  </aside>
+
+  <div class="p-4 sm:ml-64">
+     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-lg mb-6">
+           <h1 class="text-2xl font-bold mb-2">Selamat Datang, <span id="welcome-name">Loading...</span>!</h1>
+           <p class="text-amber-100">Selamat datang di dashboard mitra PT SAGAWA PANGAN NUSANTARA</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+           <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Status Mitra</h3>
+              <p class="text-2xl text-gray-600 font-bold" id="mitra-status">Loading...</p>
+           </div>
+           <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Kemitraan</h3>
+              <p class="text-2xl text-gray-900 dark:text-white" id="business-package">Loading...</p>
+           </div>
+           <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Sales</h3>
+              <p class="text-2xl text-gray-900 dark:text-white" id="sales-name">Loading...</p>
+           </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+           <div id="dashboard-content">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Dashboard Overview</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Informasi Akun</h3>
+                    <div class="space-y-2 text-sm">
+                       <p><strong>Email:</strong> <span id="account-email">Loading...</span></p>
+                       <p><strong>No. HP:</strong> <span id="account-phone">Loading...</span></p>
+                       <p><strong>Alamat:</strong> <span id="account-address">Loading...</span></p>
+                       <p><strong>Bergabung:</strong> <span id="join-date">Loading...</span></p>
+                    </div>
+                 </div>
+                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Quick Actions</h3>
+                    <div class="space-y-2">
+                       <button class="w-full text-left px-3 py-2 bg-amber-100 text-amber-800 rounded hover:bg-amber-200 transition" onclick="refreshProfile()">
+                          � Refresh Profil
+                       </button>
+                       <button class="w-full text-left px-3 py-2 bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition">
+                          📞 Hubungi Support
+                       </button>
+                       <button class="w-full text-left px-3 py-2 bg-green-100 text-green-800 rounded hover:bg-green-200 transition" onclick="showContent('profile')">
+                          📋 Lihat Profil Lengkap
+                       </button>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+           <div id="profile-content" class="hidden">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Profil Mitra</h2>
+              <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                       <h3 class="font-semibold mb-4">Data Pribadi</h3>
+                       <div class="space-y-3">
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                             <input type="text" id="profile-name" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Email</label>
+                             <input type="email" id="profile-email" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">No. HP</label>
+                             <input type="tel" id="profile-phone" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Alamat</label>
+                             <textarea id="profile-address" class="w-full p-2 border rounded-lg" readonly rows="3"></textarea>
+                          </div>
+                       </div>
+                    </div>
+                    <div>
+                       <h3 class="font-semibold mb-4">Informasi Bisnis</h3>
+                       <div class="space-y-3">
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Paket Usaha</label>
+                             <input type="text" id="profile-package" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Sistem Kemitraan</label>
+                             <input type="text" id="profile-system" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Sales</label>
+                             <input type="text" id="profile-sales" class="w-full p-2 border rounded-lg" readonly>
+                          </div>
+                          <div>
+                             <label class="block text-sm font-medium mb-1">Status</label>
+                             <span id="profile-status" class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Approved</span>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+           <div id="business-content" class="hidden">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Bisnis Saya</h2>
+              <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                 <p class="text-gray-600 dark:text-gray-300">Informasi bisnis dan laporan akan segera tersedia.</p>
+              </div>
+           </div>
+
+           <div id="support-content" class="hidden">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Support</h2>
+              <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                 <div class="space-y-4">
+                    <div class="border-l-4 border-amber-500 pl-4">
+                       <h3 class="font-semibold text-gray-900 dark:text-white">Customer Service</h3>
+                       <p class="text-sm text-gray-600 dark:text-gray-300">📞 Telepon: +62-21-XXXXXXX</p>
+                       <p class="text-sm text-gray-600 dark:text-gray-300">📧 Email: support@sagawapangan.com</p>
+                    </div>
+                    <div class="border-l-4 border-blue-500 pl-4">
+                       <h3 class="font-semibold text-gray-900 dark:text-white">FAQ</h3>
+                       <p class="text-sm text-gray-600 dark:text-gray-300">Lihat pertanyaan yang sering diajukan di portal bantuan kami.</p>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
   </div>
-</nav>
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-      <ul class="space-y-2 font-medium">
-         <li><a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21"><path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/><path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/></svg><span class="ms-3">Dashboard</span></a></li>
-         <li><a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18"><path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Profile</span></a></li>
-         <li><a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Orders</span></a></li>
-      </ul>
-   </div>
-</aside>
+  <script>
+    // API URL configuration
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
 
-<div class="p-4 sm:ml-64">
-   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-         <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Orders</h3>
-            <p class="text-2xl text-gray-900 dark:text-white">12</p>
-         </div>
-         <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Wishlist</h3>
-            <p class="text-2xl text-gray-900 dark:text-white">5</p>
-         </div>
-         <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h3>
-            <p class="text-2xl text-gray-900 dark:text-white">3</p>
-         </div>
-      </div>
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserProfile();
+      initializeNavigation();
+    });
 
-      <div class="mb-4 bg-white rounded-lg shadow dark:bg-gray-800">
-         <h3 class="text-xl font-semibold p-4 text-gray-900 dark:text-white">Recent Activity</h3>
-         <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-            <li class="p-4">Your order #1234 has been shipped.</li>
-            <li class="p-4">A new item was added to your wishlist.</li>
-            <li class="p-4">Welcome to your new dashboard!</li>
-         </ul>
-      </div>
-   </div>
-</div>
+    async function loadUserProfile() {
+      const token = localStorage.getItem('mitraToken');
+      
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      // Show loading state
+      showLoadingState();
+
+      try {
+        const response = await fetch(`${API_URL}/api/mitra/profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Token expired or invalid
+            localStorage.removeItem('mitraToken');
+            localStorage.removeItem('mitraUser');
+            window.location.href = '/login';
+            return;
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          updateUIWithProfileData(result.data);
+          // Update localStorage with fresh data
+          localStorage.setItem('mitraUser', JSON.stringify(result.data));
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        
+        // Show error message to user
+        showErrorState('Gagal memuat data profil. Mencoba menggunakan data tersimpan...');
+        
+        // Fallback to localStorage data if API fails
+        const userString = localStorage.getItem('mitraUser');
+        if (userString) {
+          try {
+            const user = JSON.parse(userString);
+            updateUIWithProfileData(user);
+            // Hide error message if fallback works
+            hideErrorState();
+          } catch (parseError) {
+            console.error('Error parsing stored user data:', parseError);
+            showErrorState('Data profil tidak dapat dimuat. Silakan login kembali.');
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 3000);
+          }
+        } else {
+          showErrorState('Sesi Anda telah berakhir. Dialihkan ke halaman login...');
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 3000);
+        }
+      }
+    }
+
+    function showLoadingState() {
+      // Already set in HTML - Loading... text
+    }
+
+    function showErrorState(message: string) {
+      // Create or update error notification
+      let errorDiv = document.getElementById('error-notification');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'error-notification';
+        errorDiv.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50';
+        document.body.appendChild(errorDiv);
+      }
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function hideErrorState() {
+      const errorDiv = document.getElementById('error-notification');
+      if (errorDiv) {
+        errorDiv.style.display = 'none';
+      }
+    }
+
+    function updateUIWithProfileData(profileData: any) {
+      // Extract data from the nested response structure
+      const mitraDetail = profileData.mitraDetail || {};
+      
+      // Use flattened data with fallback to nested structure
+      const name = profileData.namaMitra || mitraDetail.namaMitra || 'Mitra User';
+      const email = profileData.email || mitraDetail.email || 'mitra@sagawa.com';
+      const phone = profileData.noHp || mitraDetail.noHp || 'N/A';
+      const address = profileData.alamatMitra || mitraDetail.alamatMitra || 'N/A';
+      const businessPackage = profileData.paketUsaha || mitraDetail.paketUsaha || 'N/A';
+      const sales = profileData.sales || mitraDetail.sales || 'N/A';
+      const partnership = profileData.sistemKemitraan || mitraDetail.sistemKemitraan || 'N/A';
+      const isApproved = profileData.isApproved !== undefined ? profileData.isApproved : mitraDetail.isApproved;
+      const status = profileData.status || mitraDetail.status;
+      const joinDate = profileData.joinDate || mitraDetail.createdAt || profileData.createdAt;
+      
+      // Update navbar user info
+      updateNavbarUserInfo(name, email);
+      
+      // Update dashboard stats
+      updateDashboardStats(businessPackage, sales, isApproved, status);
+      
+      // Update account info section
+      updateAccountInfo(email, phone, address, joinDate);
+      
+      // Update profile form
+      updateProfileForm(name, email, phone, address, businessPackage, partnership, sales, isApproved, status);
+    }
+
+    function updateNavbarUserInfo(name: string, email: string) {
+      const userNameEl = document.getElementById('user-name');
+      const userEmailEl = document.getElementById('user-email');
+      const userAvatarEl = document.getElementById('user-avatar');
+      const welcomeNameEl = document.getElementById('welcome-name');
+      
+      if (userNameEl) userNameEl.textContent = name;
+      if (userEmailEl) userEmailEl.textContent = email;
+      if (userAvatarEl) userAvatarEl.textContent = name[0].toUpperCase();
+      if (welcomeNameEl) welcomeNameEl.textContent = name;
+    }
+
+    function updateDashboardStats(businessPackage: string, sales: string, isApproved: boolean, status: string) {
+      // Update business package
+      const businessPackageEl = document.getElementById('business-package');
+      if (businessPackageEl) businessPackageEl.textContent = businessPackage;
+      
+      // Update sales
+      const salesNameEl = document.getElementById('sales-name');
+      if (salesNameEl) salesNameEl.textContent = sales;
+      
+      // Update mitra status
+      const statusEl = document.getElementById('mitra-status');
+      if (statusEl) {
+        if (isApproved && status === 'approved') {
+          statusEl.textContent = 'Aktif';
+          statusEl.className = 'text-2xl text-green-600 font-bold';
+        } else if (status === 'pending') {
+          statusEl.textContent = 'Menunggu Persetujuan';
+          statusEl.className = 'text-2xl text-yellow-600 font-bold';
+        } else {
+          statusEl.textContent = 'Tidak Aktif';
+          statusEl.className = 'text-2xl text-red-600 font-bold';
+        }
+      }
+    }
+
+    function updateAccountInfo(email: string, phone: string, address: string, joinDate: string) {
+      const accountEmailEl = document.getElementById('account-email');
+      const accountPhoneEl = document.getElementById('account-phone');
+      const accountAddressEl = document.getElementById('account-address');
+      const joinDateEl = document.getElementById('join-date');
+      
+      if (accountEmailEl) accountEmailEl.textContent = email;
+      if (accountPhoneEl) accountPhoneEl.textContent = phone;
+      if (accountAddressEl) accountAddressEl.textContent = address;
+      
+      if (joinDateEl) {
+        if (joinDate) {
+          const formattedJoinDate = new Date(joinDate).toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          joinDateEl.textContent = formattedJoinDate;
+        } else {
+          joinDateEl.textContent = 'N/A';
+        }
+      }
+    }
+
+    function updateProfileForm(name: string, email: string, phone: string, address: string, 
+                              businessPackage: string, partnership: string, sales: string, 
+                              isApproved: boolean, status: string) {
+      const profileName = document.getElementById('profile-name') as HTMLInputElement;
+      const profileEmail = document.getElementById('profile-email') as HTMLInputElement;
+      const profilePhone = document.getElementById('profile-phone') as HTMLInputElement;
+      const profileAddress = document.getElementById('profile-address') as HTMLTextAreaElement;
+      const profilePackage = document.getElementById('profile-package') as HTMLInputElement;
+      const profileSystem = document.getElementById('profile-system') as HTMLInputElement;
+      const profileSales = document.getElementById('profile-sales') as HTMLInputElement;
+      const profileStatus = document.getElementById('profile-status');
+      
+      if (profileName) profileName.value = name;
+      if (profileEmail) profileEmail.value = email;
+      if (profilePhone) profilePhone.value = phone;
+      if (profileAddress) profileAddress.value = address;
+      if (profilePackage) profilePackage.value = businessPackage;
+      if (profileSystem) profileSystem.value = partnership;
+      if (profileSales) profileSales.value = sales;
+      
+      // Update profile status display
+      if (profileStatus) {
+        if (isApproved && status === 'approved') {
+          profileStatus.textContent = 'Disetujui';
+          profileStatus.className = 'inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium';
+        } else if (status === 'pending') {
+          profileStatus.textContent = 'Menunggu Persetujuan';
+          profileStatus.className = 'inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium';
+        } else {
+          profileStatus.textContent = 'Ditolak';
+          profileStatus.className = 'inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium';
+        }
+      }
+    }
+
+    // Refresh profile data
+    function refreshProfile() {
+      loadUserProfile();
+    }
+
+    function initializeNavigation() {
+      // Handle dropdown toggle
+      const userMenuButton = document.getElementById('user-menu-button');
+      const dropdownUser = document.getElementById('dropdown-user');
+      
+      if (userMenuButton && dropdownUser) {
+        userMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dropdownUser.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+          dropdownUser.classList.add('hidden');
+        });
+      }
+
+      // Handle logout
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          if (confirm('Apakah Anda yakin ingin logout?')) {
+            localStorage.removeItem('mitraToken');
+            localStorage.removeItem('mitraUser');
+            window.location.href = '/login';
+          }
+        });
+      }
+
+      // Handle sidebar navigation
+      const menuItems = ['dashboard', 'profile', 'business', 'support'];
+      
+      menuItems.forEach(item => {
+        const btn = document.getElementById(`${item}-btn`);
+        if (btn) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showContent(item);
+            setActiveMenu(btn);
+          });
+        }
+      });
+
+      // Handle sidebar toggle
+      const sidebarToggle = document.querySelector('[data-drawer-toggle="logo-sidebar"]');
+      const sidebar = document.getElementById('logo-sidebar');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('-translate-x-full');
+        });
+      }
+    }
+
+    function showContent(contentType: string) {
+      // Hide all content
+      const contents = ['dashboard-content', 'profile-content', 'business-content', 'support-content'];
+      contents.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.classList.add('hidden');
+        }
+      });
+
+      // Show selected content
+      const selectedContent = document.getElementById(`${contentType}-content`);
+      if (selectedContent) {
+        selectedContent.classList.remove('hidden');
+      }
+    }
+
+    function setActiveMenu(activeButton: Element) {
+      // Remove active class from all menu items
+      const allMenuItems = document.querySelectorAll('#logo-sidebar a');
+      allMenuItems.forEach(item => {
+        item.classList.remove('bg-gray-100', 'text-gray-900', 'dark:bg-gray-700', 'dark:text-white');
+      });
+      
+      // Add active class to selected item
+      activeButton.classList.add('bg-gray-100', 'text-gray-900', 'dark:bg-gray-700', 'dark:text-white');
+    }
+  </script>
+</Layout>
