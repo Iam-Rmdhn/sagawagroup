@@ -73,8 +73,37 @@ export async function getMitraLoginProfileService(mitraLoginId: string) {
   return {
     success: true,
     data: {
-      ...safeMitraLogin,
-      mitraDetail: mitraDetail || null,
+      // Login data
+      _id: safeMitraLogin._id,
+      email: safeMitraLogin.email,
+      namaMitra: safeMitraLogin.namaMitra,
+      isActive: safeMitraLogin.isActive,
+      lastLogin: safeMitraLogin.lastLogin,
+      createdAt: safeMitraLogin.createdAt,
+      updatedAt: safeMitraLogin.updatedAt,
+      
+      // Mitra detail data (from mitra collection)
+      mitraDetail: mitraDetail,
+      
+      // Flattened mitra data for easier access
+      ...(mitraDetail ? {
+        // Personal info from mitra collection
+        alamatMitra: mitraDetail.alamatMitra,
+        noHp: mitraDetail.noHp,
+        
+        // Business info from mitra collection  
+        sistemKemitraan: mitraDetail.sistemKemitraan,
+        sales: mitraDetail.sales,
+        paketUsaha: mitraDetail.paketUsaha,
+        
+        // Status from mitra collection
+        status: mitraDetail.status,
+        isApproved: mitraDetail.isApproved,
+        userID: mitraDetail.userID,
+        
+        // Use mitra registration date as join date
+        joinDate: mitraDetail.createdAt,
+      } : {}),
     },
   };
 }

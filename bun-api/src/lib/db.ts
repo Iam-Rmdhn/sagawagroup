@@ -39,12 +39,6 @@ export const initializeCollections = async () => {
       console.log("Created 'admin_login' collection");
     }
 
-    // Create mitra_login collection
-    if (!collections.some((col) => col.name === "mitra_login")) {
-      await database.createCollection("mitra_login");
-      console.log("Created 'mitra_login' collection");
-    }
-
     console.log("Database initialized successfully");
   } catch (error) {
     console.error("Error initializing database:", error);
