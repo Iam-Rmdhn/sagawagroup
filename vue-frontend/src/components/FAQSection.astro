@@ -2,132 +2,70 @@
 
 const faqs = [
     {
-        question: "Bagaimana untuk pajak outlet?",
+        question: "Apa itu sistem operasional pada F&B?",
+        answer: {
+            type: "simple",
+            content: "Serangkaian prosedur, proses, dan standar yang dirancang untuk memastikan kelancaran dan kualitas operasional bisnis makanan dan minuman, meliputi pengelolaan inventaris, persiapan dan penyajian makanan, pelayanan pelanggan, hingga manajemen staff dan kualitas."
+        }
+    },
+    {
+        question: "Apa perbedaan sistem Self Managed, Semi Autopilot dan Full Autopilot?",
         answer: {
             type: "list",
             content: [
-                "Untuk pajak hanya dikenakan <strong>PPh final sebesar 0,5%</strong>",
-                "Untuk PPN <strong>tidak wajib</strong> dikarenakan pendapatan masih di bawah kategori <strong>4,8 miliar per tahun</strong>"
+                "<strong>Self Managed:</strong> Bisnis dikelola secara internal oleh pemilik bisnis (mitra)",
+                "<strong>Semi Autopilot:</strong> Sebagian besar operasional dijalankan secara otomatis menggunakan sistem dan delegasi tugas yang efektif, memungkinkan pemilik mengurangi campur tangan langsung dan fokus pada strategi bisnis",
+                "<strong>Full Autopilot:</strong> Model bisnis di mana operasional dan sebagian besar tugas harian dapat berjalan secara otomatis dan mengurangi intervensi dari pemilik. Tujuannya memungkinkan pemilik fokus ekspansi daripada pengawasan sehari-hari"
             ]
         }
     },
     {
-        question: "Bagaimana untuk sertifikasi Halal?",
+        question: "Bagaimana mengenai bahan baku?",
         answer: {
             type: "mixed",
             content: [
                 {
                     type: "paragraph",
-                    text: "Untuk sertifikasi Halal sedang dalam proses, dan kita bisa jamin untuk bahan baku yang digunakan sudah bersertifikasi halal."
+                    text: "Untuk bahan baku pada produk kemitraan Sagawa Group, semuanya sudah disiapkan dan dikontrol langsung dari pusat. Hal ini kami lakukan agar kualitas rasa, standar kebersihan, dan konsistensi produk tetap sama di setiap outlet."
+                },
+                {
+                    type: "paragraph",
+                    text: "Kami memiliki sistem supply chain yang terjamin, mulai dari pemilihan supplier, proses penyimpanan, hingga distribusi ke mitra. Jadi, mitra tidak perlu khawatir soal kesulitan bahan baku, karena semua kebutuhan utama akan dipasok oleh pusat, sementara kebutuhan tambahan bisa didukung sesuai standar yang sudah kami tetapkan."
+                }
+            ]
+        }
+    },
+    {
+        question: "Bagaimana untuk sertifikasi halal?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Untuk sertifikasi Halal saat ini sedang dalam proses, dan kita bisa jamin untuk bahan baku yang digunakan sudah bersertifikasi halal."
                 },
                 {
                     type: "paragraph",
                     text: "Nantinya jika pusat sudah mendapatkan sertifikasi halal, untuk setiap outlet mitra pun harus urus kembali secara mandiri untuk sertifikasi halal karena kebijakan dari pemerintah setiap outlet harus mengurus sertifikasi halalnya masing-masing walaupun 1 Brand."
-                },
-                {
-                    type: "paragraph",
-                    text: "<strong>Detail Pengurusan:</strong>"
-                },
-                {
-                    type: "list",
-                    items: [
-                        "Waktu pengurusan: sampai <strong>30 hari</strong>",
-                        "Biaya pengurusan: <strong>5 juta - 25 juta rupiah</strong>"
-                    ]
                 }
             ]
         }
     },
     {
-        question: "Kontrak kerja sama berapa lama?",
-        answer: {
-            type: "simple",
-            content: "Kontrak kerjasama selama <strong>5 tahun</strong>. Setelah 5 tahun, mitra bisa perpanjang lisensi dengan membayar paket sebesar <strong>50% dari harga kemitraan awal</strong>."
-        }
-    },
-    {
-        question: "Listrik yang diperlukan outlet berapa watt?",
+        question: "Kontrak kerjasama berapa lama?",
         answer: {
             type: "mixed",
             content: [
                 {
                     type: "paragraph",
-                    text: "Minimal <strong>7700 watt</strong> untuk outlet yang reguler."
-                },
-                {
-                    type: "paragraph",
-                    text: "Peralatan yang memerlukan listrik:"
+                    text: "Kontrak kerjasama <strong>selamanya</strong>, namun untuk sistem operasional tergantung pada sistem yang dipilih:"
                 },
                 {
                     type: "list",
                     items: [
-                        "Freezer showcase",
-                        "Mesin ice cream",
-                        "Mesin kopi dan grinder"
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        question: "Biji kopi yang digunakan?",
-        answer: {
-            type: "mixed",
-            content: [
-                {
-                    type: "paragraph",
-                    text: "Biji kopi yang gunakan:"
-                },
-                {
-                    type: "list",
-                    items: [
-                        "<strong>60% Arabica</strong> dan <strong>40% Robusta</strong> blend",
-                        "Hasil roasting: <strong>Medium to Dark</strong>",
-                        "Masih mengambil dari vendor terpilih"
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        question: "Kenapa harus memilih?",
-        answer: {
-            type: "list",
-            content: [
-                "<strong>Keunikan Brand:</strong> Konsep Japan dengan karakter menu yang menyesuaikan selera orang Indonesia",
-                "<strong>Soft Ice Cream Khas:</strong> Memiliki karakter soft ice cream yang terkonsep seperti soft ice cream yang ada di Jepang",
-                "<strong>Kualitas Product Pilihan:</strong> Bahan baku dipilih dengan standar bersertifikasi halal dan equipment mesin ice cream serta kopi yang sudah melalui test uji performa industri",
-                "<strong>Harga Kompetitif:</strong> Harga jual produk tergolong murah dengan penyajian kopi dan ice cream yang baik serta fresh, menciptakan brand image yang kuat dan dapat bersaing dengan kompetitor"
-            ]
-        }
-    },
-    {
-        question: "Mesin kopi, ice cream dan grinder merk apa?",
-        answer: {
-            type: "mixed",
-            content: [
-                {
-                    type: "paragraph",
-                    text: "<strong>Mesin Kopi & Grinder:</strong>"
-                },
-                {
-                    type: "list",
-                    items: [
-                        "Merk: <strong>Ferrari Ferro</strong> single group",
-                        "Grinder: <strong>Ferrari Ferro</strong>",
-                        "Keunggulan: After sales bagus, teknisi tersedia di beberapa kota di Indonesia",
-                        "Ketahanan mesin: sampai <strong>4 tahun</strong> (dengan SOP penggunaan yang benar)"
-                    ]
-                },
-                {
-                    type: "paragraph",
-                    text: "<strong>Mesin Ice Cream:</strong>"
-                },
-                {
-                    type: "list",
-                    items: [
-                        "Merk: <strong>Tomori</strong>",
-                        "Keunggulan: Performa bagus dan sudah melalui uji test saat menjalankan operasional di outlet"
+                        "<strong>Self Managed:</strong> Lisensi selamanya tanpa biaya lisensi",
+                        "<strong>Semi Autopilot:</strong> Lisensi free selamanya dengan kontrak sistem wajib menggunakan sistem ini min. selama 3 tahun karena ada biaya management fee",
+                        "<strong>Full Autopilot:</strong> Lisensi free selamanya dengan kontrak wajib menggunakan sistem ini min. 2 tahun karena ada biaya fee management dan pembagian hasil"
                     ]
                 }
             ]
@@ -140,59 +78,127 @@ const faqs = [
             content: [
                 {
                     type: "paragraph",
-                    text: "Untuk SDM kita bantu pencarian SDM dan nantinya akan di-training."
+                    text: "Untuk SDM kami bantu mencarikannya hingga training."
                 },
                 {
                     type: "paragraph",
-                    text: "<strong>Struktur Gaji (Acuan Jakarta):</strong>"
+                    text: "<strong>Struktur Gaji Outlet:</strong>"
                 },
                 {
                     type: "list",
                     items: [
-                        "Junior Barista: <strong>2,3 juta - 2,5 juta</strong>",
-                        "Senior Barista: <strong>2,5 juta - 2,8 juta</strong>",
-                        "<em>Sifat negosiasi gaji menyesuaikan dengan UMR daerah outlet</em>"
+                        "Gaji: <strong>1,5 - 4 juta</strong>",
+                        "Bonus: <strong>3-5% dari target omset kotor</strong> untuk satu team pada outlet"
                     ]
                 }
             ]
         }
     },
     {
-        question: "Bagaimana terkait Branding?",
+        question: "Bagaimana terkait branding?",
         answer: {
             type: "mixed",
             content: [
                 {
                     type: "paragraph",
-                    text: "Untuk branding, kita dari pusat sudah set tim branding dan design yang nantinya akan membantu supply konten Instagram per outlet untuk mitra."
+                    text: "Branding outlet di bawah Sagawa Group adalah salah satu kekuatan utama yang akan langsung dirasakan mitra. Kami sudah menyiapkan standar branding yang rapi dan konsisten, sehingga begitu outlet berdiri, langsung terlihat profesional dan menarik perhatian konsumen."
                 },
                 {
                     type: "paragraph",
-                    text: "<strong>Jadwal Konten:</strong>"
-                },
-                {
-                    type: "list",
-                    items: [
-                        "Feeds and Reels: <strong>2-3 hari 1 post</strong>",
-                        "Story: <strong>1 hari 1 post</strong>"
-                    ]
-                },
-                {
-                    type: "paragraph",
-                    text: "Kita juga akan sediakan file Google Drive agar mempermudah mitra untuk memilih konten yang sudah kita sediakan."
+                    text: "Selain desain outlet dan logo yang seragam, Sagawa Group juga aktif melakukan promosi, baik melalui media sosial, campaign digital, hingga materi promosi offline. Artinya, mitra tidak perlu mulai dari nol dalam membangun nama, karena brand Sagawa Group sudah dikenal luas dan terus dipromosikan."
                 }
             ]
         }
     },
     {
-        question: "Bagaimana untuk repeat order bahan baku?",
+        question: "Bagaimana mengenai repeat order?",
         answer: {
-            type: "list",
+            type: "mixed",
             content: [
-                "Jadwal order: <strong>Awal bulan dan pertengahan bulan</strong>",
-                "<strong>Tidak ada minimal order</strong>",
-                "Harga detail tabel akan di-share"
+                {
+                    type: "paragraph",
+                    text: "Untuk repeat order bahan baku, Sagawa Group sudah memiliki sistem yang mudah dan terstruktur. Mitra cukup melakukan pemesanan melalui aplikasi/WhatsApp resmi yang sudah kami sediakan, kemudian pusat akan mengatur distribusi sesuai kebutuhan outlet."
+                },
+                {
+                    type: "paragraph",
+                    text: "Kami pastikan bahan baku selalu tersedia, karena supply chain kami sudah bekerjasama dengan supplier utama yang terjamin kualitas dan kontinuitasnya. Jadi mitra tidak perlu khawatir kehabisan stok, karena pusat akan selalu mendukung kebutuhan operasional outlet secara berkelanjutan."
+                }
             ]
+        }
+    },
+    {
+        question: "Berapa daya listrik yang dibutuhkan outlet?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Pada dasarnya listrik yang dibutuhkan tergantung brand yang dipilih:"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "<strong>Gerobak:</strong> Min. 450 watt (share)",
+                        "<strong>Kios:</strong> Min. 3.200 - 7.700 watt"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        question: "Bagaimana untuk pajak outlet?",
+        answer: {
+            type: "simple",
+            content: "Pajak outlet menjadi kewajiban masing-masing mitra sesuai aturan yang berlaku. Tapi jangan khawatir, Sagawa Group memberikan panduan sistem keuangan sehingga pengelolaan dan pelaporan pajak jadi lebih mudah dan terarah."
+        }
+    },
+    {
+        question: "Berapa luas minimal yang dibutuhkan untuk membuka brand dari Sagawa Group?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Untuk luas minimal sangat fleksibel, karena di Sagawa Group ada beberapa konsep outlet:"
+                },
+                {
+                    type: "list",
+                    items: [
+                        "<strong>Gerobak:</strong> Sekitar 2-3 m²",
+                        "<strong>Kios/Toko:</strong> Idealnya sekitar 4x10 atau 4x15 m²",
+                        "<strong>Kontainer Box:</strong> Sekitar 2x7 m²"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        question: "Kenapa harus memilih brand dari Sagawa Group?",
+        answer: {
+            type: "mixed",
+            content: [
+                {
+                    type: "paragraph",
+                    text: "Kenapa harus memilih brand dari Sagawa Group adalah karena kami menawarkan konsep bisnis yang sudah terbukti, terstandarisasi, dan mudah dijalankan."
+                },
+                {
+                    type: "list",
+                    items: [
+                        "<strong>Brand yang kuat & dikenal luas:</strong> Sagawa Group memiliki positioning jelas dengan identitas brand yang konsisten, sehingga lebih mudah diterima pasar",
+                        "<strong>Produk berkualitas & unik:</strong> Menu yang kami tawarkan disiapkan dengan resep khusus dan bahan baku terkontrol dari pusat, sehingga rasa dan kualitas selalu sama di setiap outlet",
+                        "<strong>Dukungan penuh dari pusat:</strong> Mitra mendapatkan pelatihan, pendampingan operasional, hingga strategi marketing online & offline",
+                        "<strong>Potensi keuntungan lebih cepat:</strong> Karena brand sudah dikenal, mitra tidak perlu memulai dari nol untuk membangun nama, sehingga BEP (Break Even Point) bisa dicapai lebih cepat",
+                        "<strong>Sistem kemitraan yang transparan:</strong> Semua biaya, support, dan alur kerja jelas, sehingga mitra merasa aman dan nyaman dalam menjalankan bisnis"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        question: "Bagaimana jika ingin memutuskan kerjasama, apakah ada penalti berupa denda atau sanksi yang harus ditanggung oleh mitra?",
+        answer: {
+            type: "simple",
+            content: "Tidak ada sanksi atau denda jika mitra ingin memutuskan kerjasama kemitraan terhadap Sagawa Group, namun penggunaan nama brand, sistem operasional dan supply chain sudah tidak bisa digunakan kembali."
         }
     }
 ];
@@ -209,6 +215,11 @@ type FAQAnswer =
         | { type: 'list'; items: string[] }
       )[];
     };
+
+interface FAQ {
+  question: string;
+  answer: FAQAnswer;
+}
 
 function renderContent(answer: FAQAnswer | string) {
     if (typeof answer === 'string') {
@@ -265,7 +276,7 @@ function renderContent(answer: FAQAnswer | string) {
         </div>
         <div class="max-w-5xl mx-auto">
             <div class="space-y-6">
-                {faqs.map((faq, index) => (
+                {faqs.map((faq) => (
                     <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-amber-500">
                         <details class="group">
                             <summary class="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 group-hover:text-amber-600 transition-colors duration-300">
@@ -276,7 +287,7 @@ function renderContent(answer: FAQAnswer | string) {
                                     </svg>
                                 </span>
                             </summary>
-                            <Fragment set:html={renderContent(faq.answer)} />
+                            <Fragment set:html={renderContent(faq.answer as FAQAnswer)} />
                         </details>
                     </div>
                 ))}
