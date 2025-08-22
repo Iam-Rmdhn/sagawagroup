@@ -8,7 +8,21 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
+  server: {
+    port: 4321,
+    host: true,
+    hmr: {
+      port: 4322,
+      overlay: false
+    }
+  },
   vite: {
+    server: {
+      watch: {
+        usePolling: false,
+        ignored: ['**/node_modules/**', '**/.git/**']
+      }
+    },
     build: {
       cssCodeSplit: true,
       minify: 'terser',
