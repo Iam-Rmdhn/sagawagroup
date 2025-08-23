@@ -53,7 +53,7 @@ export const sendMitraApprovalEmail = async (
 
     Silakan login melalui [link login].
 
-    Remainder :
+    Reminder :
     Password tidak bisa di ubah, kecuali oleh admin pusat.
 
     Terima kasih,
