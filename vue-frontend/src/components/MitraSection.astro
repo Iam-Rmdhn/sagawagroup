@@ -347,7 +347,7 @@ const partnerships = [
               </div>
             </div>
             
-            <button class:list={[
+            <a href={`/form?paket=${encodeURIComponent(partner.title)}`} class:list={[
               "group bg-gradient-to-r text-white px-8 py-4 md:px-12 md:py-6 rounded-2xl font-bold text-lg md:text-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center lg:justify-start space-x-3 w-full sm:w-auto mx-auto lg:mx-0 pulse-glow",
               `${partner.color} hover:from-orange-600 hover:to-red-600`
             ]}>
@@ -356,7 +356,7 @@ const partnerships = [
                 <path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
               </svg>
               <span>Daftar Jadi Mitra</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>

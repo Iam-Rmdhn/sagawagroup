@@ -75,7 +75,15 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- Pilih Paket Usaha -->
           <div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Pilih Paket Usaha</h3>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-800">Pilih Paket Usaha</h3>
+              <button id="backToPackageBtn" onclick="window.history.back()" class="hidden px-4 py-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Ubah Pilihan Paket
+              </button>
+            </div>
             <select id="paketUsaha" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
               <option value="">Pilih Paket usaha*</option>
               <option value="Kagawa Coffee Corner" data-original="100000000" data-discounted="89000000">
@@ -87,11 +95,11 @@ import Layout from '../layouts/Layout.astro';
               <option value="Kagawa Coffee & Ricebowl Corner" data-original="175000000" data-discounted="139000000">
                 Kagawa Coffee & Ricebowl Corner - Rp 175.000.000 → Rp 139.000.000
               </option>
-              <option value="RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)" data-original="100000000" data-discounted="89000000">
+              <option value="RM Nusantara" data-original="100000000" data-discounted="89000000">
                 RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda) - Rp 100.000.000 → Rp 89.000.000
               </option>
-              <option value="Independent Brand" data-original="100000000" data-discounted="89000000">
-                Independent Brand - Rp 100.000.000 → Rp 89.000.000
+              <option value="Independent Brand" data-original="70000000" data-discounted="49000000">
+                Independent Brand - Rp 70.000.000 → Rp 49.000.000
               </option>
             </select>
             
@@ -313,7 +321,7 @@ const packagePrices = {
   "Kagawa Coffee Corner": { original: 100000000, discounted: 89000000 },
   "Kagawa Ricebowl": { original: 75000000, discounted: 50000000 },
   "Kagawa Coffee & Ricebowl Corner": { original: 175000000, discounted: 139000000 },
-  "RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda)": { original: 100000000, discounted: 89000000 }
+  "RM Nusantara": { original: 100000000, discounted: 89000000 }
 };
 
 // DP percentage (5% of package price)
@@ -697,8 +705,10 @@ function formatCurrency(amount: number) {
 // Update package selection
 const paketUsahaElement = document.getElementById('paketUsaha') as HTMLSelectElement;
 paketUsahaElement?.addEventListener('change', function() {
+  console.log('Package selection changed to:', this.value);
   selectedPackage = this.value;
   const priceData = packagePrices[selectedPackage as keyof typeof packagePrices];
+  console.log('Price data from event listener:', priceData);
   packagePrice = priceData ? priceData.discounted : 0;
   
   // Update price display
@@ -708,12 +718,21 @@ paketUsahaElement?.addEventListener('change', function() {
 });
 
 function updatePriceDisplay(priceData: { original: number, discounted: number } | undefined) {
+  console.log('updatePriceDisplay called with:', priceData);
   const priceDisplay = document.getElementById('priceDisplay');
   const originalPriceEl = document.getElementById('originalPrice');
   const discountedPriceEl = document.getElementById('discountedPrice');
   const savingsAmountEl = document.getElementById('savingsAmount');
   
+  console.log('Price display elements:', {
+    priceDisplay: !!priceDisplay,
+    originalPriceEl: !!originalPriceEl,
+    discountedPriceEl: !!discountedPriceEl,
+    savingsAmountEl: !!savingsAmountEl
+  });
+  
   if (!priceData || !priceDisplay || !originalPriceEl || !discountedPriceEl || !savingsAmountEl) {
+    console.log('Hiding price display - missing data or elements');
     priceDisplay?.classList.add('hidden');
     return;
   }
@@ -724,6 +743,7 @@ function updatePriceDisplay(priceData: { original: number, discounted: number } 
   discountedPriceEl.textContent = formatCurrency(priceData.discounted);
   savingsAmountEl.textContent = formatCurrency(savings);
   
+  console.log('Showing price display');
   priceDisplay.classList.remove('hidden');
 }
 
@@ -1168,4 +1188,119 @@ function updateProgressBar(step: number) {
     }
   }
 }
+
+// Function to get URL parameters and set form values
+function initializeFromURLParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const paketParam = urlParams.get('paket');
+  
+  console.log('URL param paket:', paketParam);
+  
+  if (paketParam) {
+    const selectElement = document.getElementById('paketUsaha') as HTMLSelectElement;
+    if (selectElement) {
+      // Find the matching option value
+      let matchingValue = '';
+      
+      switch (paketParam) {
+        case 'Kagawa Rice Bowl':
+          matchingValue = 'Kagawa Ricebowl';
+          break;
+        case 'Kagawa Coffee Corner':
+          matchingValue = 'Kagawa Coffee Corner';
+          break;
+        case 'Kagawa Coffee & Rice Bowl Corner':
+          matchingValue = 'Kagawa Coffee & Ricebowl Corner';
+          break;
+        case 'RM Nusantara':
+          matchingValue = 'RM Nusantara';
+          break;
+        case 'Business Development':
+          matchingValue = 'Independent Brand';
+          break;
+        default:
+          matchingValue = paketParam;
+      }
+      
+      console.log('Matching value:', matchingValue);
+      console.log('Available packages:', Object.keys(packagePrices));
+      
+      // Set the select value
+      if (matchingValue) {
+        selectElement.value = matchingValue;
+        console.log('Select value set to:', selectElement.value);
+        
+        // Make select readonly/disabled with better styling
+        selectElement.disabled = true;
+        selectElement.style.backgroundColor = '#f9fafb';
+        selectElement.style.color = '#6b7280';
+        selectElement.style.cursor = 'not-allowed';
+        selectElement.style.borderColor = '#d1d5db';
+        
+        // Add disabled class for better styling
+        selectElement.classList.add('bg-gray-50', 'text-gray-500', 'cursor-not-allowed');
+        
+        // Add hidden input to ensure form data is submitted correctly
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'paketUsaha';
+        hiddenInput.value = matchingValue;
+        selectElement.parentNode?.appendChild(hiddenInput);
+        
+        // Show the back button
+        const backBtn = document.getElementById('backToPackageBtn');
+        if (backBtn) {
+          backBtn.classList.remove('hidden');
+        }
+        
+        // Add a visual indicator that shows this was pre-selected
+        const parentDiv = selectElement.parentNode as HTMLElement;
+        if (parentDiv) {
+          // Create info message
+          const infoDiv = document.createElement('div');
+          infoDiv.className = 'mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center space-x-2';
+          infoDiv.innerHTML = `
+            <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <p class="text-sm font-medium text-blue-800">Paket telah dipilih: ${matchingValue}</p>
+              <p class="text-xs text-blue-600">Klik tombol "Ubah Pilihan Paket" di atas untuk mengubah pilihan</p>
+            </div>
+          `;
+          
+          // Insert after the select element
+          selectElement.parentNode?.insertBefore(infoDiv, selectElement.nextSibling);
+        }
+        
+        // Trigger change event to update price display
+        // Use setTimeout to ensure event listeners are attached
+        setTimeout(() => {
+          console.log('Dispatching change event...');
+          const event = new Event('change', { bubbles: true });
+          selectElement.dispatchEvent(event);
+          
+          // Also manually trigger the update as fallback
+          selectedPackage = matchingValue;
+          const priceData = packagePrices[selectedPackage as keyof typeof packagePrices];
+          console.log('Manual fallback - selectedPackage:', selectedPackage);
+          console.log('Manual fallback - priceData:', priceData);
+          if (priceData) {
+            packagePrice = priceData.discounted;
+            updatePriceDisplay(priceData);
+            updatePaymentCards();
+            console.log('Manual price update completed');
+          } else {
+            console.error('No price data found for package:', selectedPackage);
+          }
+        }, 100);
+      }
+    }
+  }
+}
+
+// Initialize form when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  initializeFromURLParams();
+});
 </script>
