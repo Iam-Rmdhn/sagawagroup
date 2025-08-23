@@ -8,9 +8,9 @@ export interface Props {
 
 const { 
     title, 
-    description = "Sagawa Group - Perusahaan F&B dengan sistem kemitraan yang menguntungkan",
+    description = "🍜 Sagawa Group - Jaringan Franchise Kuliner Jepang Terpercaya | Kagawa Coffee Corner, Kagawa Ricebowl & RM Nusantara. Investasi mulai 40 juta. Bergabung dengan brand kuliner Jepang terbaik di Indonesia!",
     canonical = Astro.url.href,
-    image = "/assets/img/sagawa_logo.svg" 
+    image = "https://sagawagroup.id/_astro/sagawa_logo.BzMswVtf.svg" 
 } = Astro.props;
 
 import '../styles/global.css';
@@ -22,8 +22,93 @@ import '../styles/global.css';
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content={description} />
+        <meta name="keywords" content="franchise kuliner jepang, kagawa coffee corner, kagawa ricebowl, rm nusantara, sagawa group, investasi franchise, bisnis kuliner, makanan jepang, kopi jepang, ricebowl, franchise murah, peluang bisnis" />
+        <meta name="author" content="Sagawa Group" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="id" />
+        <meta name="geo.region" content="ID" />
+        <meta name="geo.country" content="Indonesia" />
         <link rel="canonical" href={canonical} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        
+        <!-- Business Schema Markup -->
+        <script type="application/ld+json" is:inline>
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Sagawa Group",
+          "description": "Jaringan Franchise Kuliner Jepang Terpercaya di Indonesia",
+          "url": "https://sagawagroup.id",
+          "logo": "https://sagawagroup.id/_astro/sagawa_logo.BzMswVtf.svg",
+          "foundingDate": "2023",
+          "founder": {
+            "@type": "Organization",
+            "name": "Sagawa Group Management"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "Indonesia",
+            "addressRegion": "Jakarta"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+62-xxx-xxxx-xxxx",
+            "contactType": "customer service",
+            "email": "info@sagawagroup.id",
+            "availableLanguage": ["Indonesian", "English"]
+          },
+          "sameAs": [
+            "https://instagram.com/sagawagroup",
+            "https://facebook.com/sagawagroup",
+            "https://twitter.com/sagawagroup"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Franchise Opportunities",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Kagawa Coffee Corner Franchise",
+                  "description": "Premium Japanese Coffee Experience Franchise"
+                },
+                "priceSpecification": {
+                  "@type": "PriceSpecification",
+                  "price": "50000000",
+                  "priceCurrency": "IDR"
+                }
+              },
+              {
+                "@type": "Offer", 
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Kagawa Ricebowl Franchise",
+                  "description": "Authentic Japanese Rice Bowls Franchise"
+                },
+                "priceSpecification": {
+                  "@type": "PriceSpecification",
+                  "price": "75000000",
+                  "priceCurrency": "IDR"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service", 
+                  "name": "RM Nusantara Franchise",
+                  "description": "Fusion Japanese-Indonesian Cuisine Franchise"
+                },
+                "priceSpecification": {
+                  "@type": "PriceSpecification",
+                  "price": "40000000", 
+                  "priceCurrency": "IDR"
+                }
+              }
+            ]
+          }
+        }
+        </script>
         
         <!-- Open Graph / Social Media Tags -->
         <meta property="og:type" content="website" />
