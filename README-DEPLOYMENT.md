@@ -3,7 +3,7 @@
 **Sagawa Group** - Premium Japanese Culinary Franchise Network  
 Website: **sagawagroup.id**
 
-Panduan lengkap untuk deploy website Sagawa Group ke production tanpa Docker dengan keamanan SSL/TLS tingkat enterprise.
+Panduan lengkap untuk deploy website Sagawa Group ke production dengan keamanan SSL/TLS tingkat enterprise.
 
 ## 🍜 Tentang Sagawa Group
 
@@ -29,7 +29,7 @@ Bergabunglah dengan jaringan franchise kuliner Jepang terpercaya dan raih kesuks
 - Port 80 dan 443 terbuka
 - Akses root/sudo
 
-## ⚡ Quick Start - Production tanpa Docker
+## ⚡ Quick Start - Production Deployment
 
 ### 1. Setup Environment Variables
 
@@ -49,18 +49,32 @@ CERTBOT_EMAIL=admin@sagawagroup.id
 DOMAIN=sagawagroup.id
 ```
 
-### 2. Run Production Deployment (No Docker)
+### 2. Install Dependencies
 
 ```bash
-# Jalankan deployment production tanpa Docker
-sudo ./scripts/deploy-production.sh
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install Bun
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc
+
+# Install Nginx
+sudo apt install nginx -y
+
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx -y
 ```
 
 ### 3. Setup SSL Certificate
 
 ```bash
 # Setup SSL dengan Let's Encrypt untuk sagawagroup.id
-sudo ./scripts/ssl-setup.sh sagawagroup.id admin@sagawagroup.id
+sudo certbot --nginx -d sagawagroup.id -m admin@sagawagroup.id --agree-tos --non-interactive
 ```
 
 ### 4. Start All Services
@@ -74,38 +88,43 @@ sudo ./scripts/start-services.sh
 
 Jika ingin deploy manual step by step:
 
-### 1. Install Dependencies
+### 1. Build Frontend
 
 ```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
+# Navigate to frontend directory
+cd vue-frontend
 
-# Install Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker $USER
+# Install dependencies
+npm install
 
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Logout and login again to apply docker group
+# Build for production
+npm run build
 ```
 
-### 2. Build and Start Services
+### 2. Setup Backend
 
 ```bash
-# Build containers
-docker-compose -f docker-compose.prod.yml build
+# Navigate to backend directory
+cd ../bun-api
 
-# Start services
-docker-compose -f docker-compose.prod.yml up -d
+# Install dependencies
+bun install
 
-# Check status
-docker-compose -f docker-compose.prod.yml ps
+# Start backend service
+pm2 start bun --name "sagawa-api" -- run start
 ```
 
-### 3. Setup Security (Opsional)
+### 3. Configure Nginx
+
+```bash
+# Copy nginx configuration
+sudo cp nginx.conf /etc/nginx/sites-available/sagawagroup.id
+sudo ln -s /etc/nginx/sites-available/sagawagroup.id /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### 4. Setup Security (Opsional)
 
 ```bash
 # Jalankan security hardening
@@ -134,9 +153,9 @@ sudo ./scripts/security-setup.sh
 - ✅ Auth endpoints (1 req/s)
 - ✅ DDoS protection
 
-### Container Security
+### Application Security
 - ✅ Non-root users
-- ✅ Container isolation
+- ✅ Process isolation
 - ✅ Resource limits
 - ✅ Security scanning
 
@@ -148,32 +167,36 @@ sudo ./scripts/security-setup.sh
 
 ## 🛠️ Management Commands
 
-### Container Management
+### Service Management
 ```bash
 # Start services
-docker-compose -f docker-compose.prod.yml up -d
+sudo systemctl start nginx
+pm2 start sagawa-api
 
 # Stop services
-docker-compose -f docker-compose.prod.yml down
+sudo systemctl stop nginx
+pm2 stop sagawa-api
 
 # Restart services
-docker-compose -f docker-compose.prod.yml restart
+sudo systemctl restart nginx
+pm2 restart sagawa-api
 
 # View logs
-docker-compose -f docker-compose.prod.yml logs -f
+sudo tail -f /var/log/nginx/access.log
+pm2 logs sagawa-api
 
-# Update images
-docker-compose -f docker-compose.prod.yml pull
-docker-compose -f docker-compose.prod.yml up -d
+# Monitor services
+pm2 status
+sudo systemctl status nginx
 ```
 
 ### SSL Management
 ```bash
 # Renew certificates
-./scripts/ssl-renew.sh
+sudo certbot renew
 
 # Check certificate status
-openssl x509 -in ssl/certbot/conf/live/sagawagroup.id/cert.pem -text -noout
+sudo certbot certificates
 ```
 
 ### Backup & Restore
@@ -197,7 +220,8 @@ sudo fail2ban-client status
 sudo ufw status
 
 # Check system resources
-docker stats
+htop
+pm2 monit
 ```
 
 ## 📊 Service Architecture
@@ -209,8 +233,8 @@ Internet → Nginx (Port 443/80) → Frontend (Port 3000)
 ```
 
 ### Services:
-- **Frontend**: Astro/Vue.js served by Nginx
-- **Backend**: Bun API server
+- **Frontend**: Vue.js served by Nginx
+- **Backend**: Bun API server with PM2
 - **Nginx**: Reverse proxy with SSL termination
 - **Certbot**: SSL certificate management
 
@@ -225,19 +249,22 @@ nslookup sagawagroup.id
 curl -I http://sagawagroup.id/.well-known/acme-challenge/test
 
 # Manually request certificate
-docker-compose -f docker-compose.prod.yml run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --email your@email.com --agree-tos -d sagawagroup.id
+sudo certbot certonly --nginx -d sagawagroup.id -m admin@sagawagroup.id --agree-tos --non-interactive
 ```
 
-### Container Issues
+### Service Issues
 ```bash
-# Check container logs
-docker-compose -f docker-compose.prod.yml logs [service_name]
+# Check service logs
+pm2 logs sagawa-api
+sudo journalctl -u nginx
 
-# Rebuild containers
-docker-compose -f docker-compose.prod.yml build --no-cache
+# Restart services
+pm2 restart sagawa-api
+sudo systemctl restart nginx
 
-# Check container health
-docker-compose -f docker-compose.prod.yml ps
+# Check service status
+pm2 status
+sudo systemctl status nginx
 ```
 
 ### Performance Issues
@@ -247,8 +274,8 @@ htop
 df -h
 free -h
 
-# Check Docker stats
-docker stats
+# Check process stats
+pm2 monit
 
 # Check nginx logs
 tail -f /var/log/nginx/access.log
@@ -267,7 +294,7 @@ tail -f /var/log/nginx/error.log
 - Update system packages
 - Backup application data
 - Review security alerts
-- Check container updates
+- Check application updates
 
 ### Monthly Tasks
 - Security audit
@@ -294,8 +321,8 @@ tail -f /var/log/nginx/error.log
 Untuk bantuan deployment atau troubleshooting:
 
 1. **Check Logs**: Selalu cek logs terlebih dahulu
-2. **Documentation**: Baca dokumentasi Docker dan Nginx
-3. **Community**: Stack Overflow atau Docker forums
+2. **Documentation**: Baca dokumentasi Node.js, Bun, dan Nginx
+3. **Community**: Stack Overflow atau relevant forums
 4. **Security**: Pastikan selalu update security patches
 
 ## 🎉 Success!
