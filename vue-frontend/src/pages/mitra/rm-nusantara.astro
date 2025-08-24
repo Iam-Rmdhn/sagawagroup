@@ -5,7 +5,9 @@ import Footer from '../../components/Footer.astro';
 
 // Import assets
 import rmNusantaraLogo from '../../assets/img/logo/logo-rmw.png';
-import krbGerobak from '../../assets/img/gerobak/rmw.png';
+import rmwImage from '../../assets/img/mall/rmmal.png';
+import warnasImage from '../../assets/img/mall/warnas.png';
+import masgawImage from '../../assets/img/mall/masgaw-resto.png';
 
 ---
 
@@ -24,7 +26,7 @@ import krbGerobak from '../../assets/img/gerobak/rmw.png';
         </div>
 
         <div class="grid lg:grid-cols-2 md:grid-cols-1 gap-8 md:gap-16 items-start">
-          <!-- Left Side - Enhanced Food Cart -->
+          <!-- Left Side - Enhanced Food Cart with Slider -->
           <div class="relative group max-w-md mx-auto lg:max-w-full">
             <!-- Glow Effect Behind Cart -->
             <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-all duration-500 animate-pulse"></div>
@@ -32,28 +34,61 @@ import krbGerobak from '../../assets/img/gerobak/rmw.png';
             <!-- Cart Container with 3D Effect -->
             <div class="relative bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl">
               <!-- Floating Icons Around Cart -->
-              <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg">
+              <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg z-10">
                 ⭐
               </div>
               
-              <!-- Enhanced Cart Image with Overlay -->
+              <!-- Swiper Slider Container -->
               <div class="relative overflow-hidden rounded-xl sm:rounded-2xl">
-                <img 
-                  src={krbGerobak.src} 
-                  alt="RM Nusantara Resto" 
-                  class="w-full h-auto rounded-xl sm:rounded-2xl transform hover:scale-110 transition-all duration-700"
-                />
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl sm:rounded-2xl"></div>
-                
-                <!-- Success Badge on Image -->
-                <div class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-green-500 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg animate-pulse">
+                <div class="swiper mySwiper" style="height: 470px;">
+                  <div class="swiper-wrapper">
+                    <!-- Slide 1: RM Mall -->
+                    <div class="swiper-slide">
+                      <img 
+                        src={rmwImage.src} 
+                        alt="RM Nusantara Mall" 
+                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                        style="min-height: 470px;"
+                      />
+                    </div>
+                    
+                    <!-- Slide 2: Warnas Mall -->
+                    <div class="swiper-slide">
+                      <img 
+                        src={warnasImage.src} 
+                        alt="Warnas Mall" 
+                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                        style="min-height: 400px;"
+                      />
+                    </div>
+                    
+                    <!-- Slide 3: Masgaw Mall -->
+                    <div class="swiper-slide">
+                      <img 
+                        src={masgawImage.src} 
+                        alt="Masgaw Mall Restaurant" 
+                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
+                        style="min-height: 400px;"
+                      />
+                    </div>
+                  </div>
+                  
+                  <!-- Add Pagination -->
+                  <div class="swiper-pagination"></div>
+                  
+                  <!-- Add Navigation -->
+                  <div class="swiper-button-next"></div>
+                  <div class="swiper-button-prev"></div>
+                </div>
+
+                <!-- Success Badge on Image (Static) -->
+                <div class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-green-500 text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs font-bold shadow-lg animate-pulse" style="z-index: 15;">
                   ✓ Proven Success
                 </div>
               </div>
 
               <!-- Floating Stats -->
-              <div class="absolute -right-4 sm:-right-8 top-1/3 bg-white rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-xl border-l-4 border-orange-500 transform rotate-3 hover:rotate-0 transition-all duration-300 text-center">
+              <div class="absolute -right-4 sm:-right-8 top-1/3 bg-white rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-xl border-l-4 border-orange-500 transform rotate-3 hover:rotate-0 transition-all duration-300 text-center z-10">
                 <div class="text-xl sm:text-2xl font-bold text-orange-600">500+</div>
                 <div class="text-xxs sm:text-xs text-gray-600">Happy Partners</div>
               </div>
@@ -211,3 +246,138 @@ import krbGerobak from '../../assets/img/gerobak/rmw.png';
 
   <Footer />
 </Layout>
+
+<style>
+  /* Swiper styles */
+  .mySwiper {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Custom navigation button styles */
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    width: 40px !important;
+    height: 40px !important;
+    margin-top: -20px !important;
+    border-radius: 50% !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  .swiper-button-next:hover,
+  .swiper-button-prev:hover {
+    background: rgba(0, 0, 0, 0.8) !important;
+    transform: scale(1.1) !important;
+  }
+  
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 16px !important;
+  }
+  
+  /* Custom pagination styles */
+  .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1 !important;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: white !important;
+    transform: scale(1.3) !important;
+  }
+</style>
+
+<script>
+  // Import Swiper and modules
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+  // Import Swiper styles
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing Swiper...');
+    
+    // Initialize Swiper
+    const swiper = new Swiper('.mySwiper', {
+      // Configure modules
+      modules: [Navigation, Pagination, Autoplay],
+      
+      // Basic settings
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      
+      // Pagination
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      
+      // Navigation arrows
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      
+      // Autoplay
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      
+      // Effects
+      effect: 'slide',
+      speed: 600,
+      
+      // Responsive breakpoints
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 1,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 1,
+          spaceBetween: 30,
+        },
+      },
+      
+      // Events
+      on: {
+        init: function () {
+          console.log('Swiper initialized successfully');
+        },
+        slideChange: function (swiper) {
+          console.log('Slide changed to:', swiper.activeIndex);
+        },
+      },
+    });
+    
+    console.log('Swiper instance created:', swiper);
+  });
+</script>

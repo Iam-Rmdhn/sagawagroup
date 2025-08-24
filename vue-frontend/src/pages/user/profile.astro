@@ -1,0 +1,616 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// User Profile Edit
+---
+
+<Layout title="Edit Profile - Sagawa Mitra">
+<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-start rtl:justify-end">
+          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+              <span class="sr-only">Open sidebar</span>
+              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+              </svg>
+           </button>
+          <a href="/user/dashboard" class="flex ms-2 md:me-24">
+            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white text-amber-600">Sagawa Mitra</span>
+          </a>
+        </div>
+        <div class="flex items-center">
+            <div class="flex items-center ms-3">
+              <div>
+                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+                  <span class="sr-only">Open user menu</span>
+                  <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
+                    M
+                  </div>
+                </button>
+              </div>
+              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                <div class="px-4 py-3" role="none">
+                  <p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name">Loading...</p>
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">Loading...</p>
+                </div>
+                <ul class="py-1" role="none">
+                  <li><a href="/user/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
+                  <li><a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Edit Profile</a></li>
+                  <li><button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </nav>
+
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+      <ul class="space-y-2 font-medium">
+         <li><a href="/user/dashboard" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21"><path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/><path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/></svg><span class="ms-3">Dashboard</span></a></li>
+         <li><a href="/user/profile" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18"><path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Edit Profile</span></a></li>
+         <li><a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Orders</span></a></li>
+      </ul>
+   </div>
+</aside>
+
+<div class="p-4 sm:ml-64">
+   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+      <!-- Breadcrumb -->
+      <nav class="flex mb-6" aria-label="Breadcrumb">
+         <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+               <a href="/user/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-amber-600 dark:text-gray-400 dark:hover:text-white">
+                  <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                     <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                  </svg>
+                  Dashboard
+               </a>
+            </li>
+            <li>
+               <div class="flex items-center">
+                  <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                  </svg>
+                  <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Edit Profile</span>
+               </div>
+            </li>
+         </ol>
+      </nav>
+
+      <!-- Loading State -->
+      <div id="loading-state" class="text-center py-8">
+         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
+         <p class="mt-4 text-gray-600 dark:text-gray-400">Memuat data profil...</p>
+      </div>
+
+      <!-- Main Profile Edit Content -->
+      <div id="profile-content" class="hidden">
+         <!-- Profile Header -->
+         <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg p-6 mb-6 text-white">
+            <div class="flex items-center">
+               <div class="w-20 h-20 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-3xl font-bold mr-6" id="profile-avatar">
+                  M
+               </div>
+               <div>
+                  <h1 class="text-3xl font-bold mb-2">Edit Profile</h1>
+                  <p class="opacity-90" id="profile-email">Loading...</p>
+                  <p class="text-sm opacity-80" id="profile-status">Loading...</p>
+               </div>
+            </div>
+         </div>
+
+         <!-- Success/Error Messages -->
+         <div id="success-message" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+            <div class="flex">
+               <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+               </div>
+               <div class="ml-3">
+                  <p id="success-text">Profile berhasil diperbarui!</p>
+               </div>
+            </div>
+         </div>
+
+         <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <div class="flex">
+               <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                  </svg>
+               </div>
+               <div class="ml-3">
+                  <p id="error-text">Terjadi kesalahan saat memperbarui profile</p>
+               </div>
+            </div>
+         </div>
+
+         <!-- Edit Form -->
+         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div class="p-6">
+               <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Informasi Personal</h2>
+               
+               <form id="profile-form" class="space-y-6">
+                  <!-- Nama Mitra -->
+                  <div>
+                     <label for="namaMitra" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Nama Mitra *
+                     </label>
+                     <input 
+                        type="text" 
+                        id="namaMitra" 
+                        name="namaMitra" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Masukkan nama mitra"
+                        required
+                     />
+                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Nama yang akan ditampilkan pada profil Anda
+                     </p>
+                  </div>
+
+                  <!-- Email (Read Only) -->
+                  <div>
+                     <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Email
+                     </label>
+                     <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                        readonly
+                     />
+                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Email tidak dapat diubah
+                     </p>
+                  </div>
+
+                  <!-- No HP -->
+                  <div>
+                     <label for="noHp" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        No. HP *
+                     </label>
+                     <input 
+                        type="tel" 
+                        id="noHp" 
+                        name="noHp" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="08xxxxxxxxxx"
+                        pattern="[0-9]{10,15}"
+                        required
+                     />
+                  </div>
+
+                  <!-- Alamat -->
+                  <div>
+                     <label for="alamatMitra" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Alamat *
+                     </label>
+                     <textarea 
+                        id="alamatMitra" 
+                        name="alamatMitra" 
+                        rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Masukkan alamat lengkap"
+                        required
+                     ></textarea>
+                  </div>
+
+                  <!-- Business Information (Read Only) -->
+                  <div class="border-t pt-6">
+                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Kemitraan</h3>
+                     
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Sistem Kemitraan
+                           </label>
+                           <input 
+                              type="text" 
+                              id="sistemKemitraan" 
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              readonly
+                           />
+                        </div>
+
+                        <div>
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Paket Usaha
+                           </label>
+                           <input 
+                              type="text" 
+                              id="paketUsaha" 
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              readonly
+                           />
+                        </div>
+
+                        <div>
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Sales
+                           </label>
+                           <input 
+                              type="text" 
+                              id="sales" 
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              readonly
+                           />
+                        </div>
+
+                        <div>
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Status
+                           </label>
+                           <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" id="status-badge">
+                              Loading...
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                     <button 
+                        type="submit" 
+                        id="save-btn"
+                        class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                     >
+                        <span id="save-text">Simpan Perubahan</span>
+                        <span id="save-loading" class="hidden">
+                           <div class="flex items-center">
+                              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Menyimpan Perubahan...
+                           </div>
+                        </span>
+                     </button>
+                     
+                     <button 
+                        type="button" 
+                        onclick="window.history.back()"
+                        class="flex-1 sm:flex-none bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                     >
+                        Batal
+                     </button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="hidden text-center py-8">
+         <div class="text-red-500 mb-4">
+            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+         </div>
+         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Gagal Memuat Data</h3>
+         <p class="text-gray-600 dark:text-gray-400 mb-4" id="load-error-message">Terjadi kesalahan saat memuat data profil.</p>
+         <button onclick="window.location.reload()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition">
+            Muat Ulang
+         </button>
+      </div>
+   </div>
+</div>
+
+<script>
+   // API URL configuration
+   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+
+   let currentData: any = null;
+
+   document.addEventListener('DOMContentLoaded', async function() {
+      // Check authentication
+      const token = localStorage.getItem('mitraToken');
+      if (!token) {
+         window.location.href = '/login';
+         return;
+      }
+
+      // Load mitra profile data
+      await loadMitraProfile();
+
+      // Setup user menu dropdown
+      setupUserMenu();
+
+      // Setup logout functionality
+      setupLogout();
+
+      // Setup form submission
+      setupFormSubmission();
+   });
+
+   async function loadMitraProfile() {
+      const loadingState = document.getElementById('loading-state');
+      const profileContent = document.getElementById('profile-content');
+      const errorState = document.getElementById('error-state');
+      const token = localStorage.getItem('mitraToken');
+
+      try {
+         const response = await fetch(`${API_URL}/api/mitra/profile`, {
+            method: 'GET',
+            headers: {
+               'Authorization': `Bearer ${token}`,
+               'Content-Type': 'application/json'
+            }
+         });
+
+         const result = await response.json();
+
+         if (response.ok && result.success) {
+            currentData = result.data;
+            
+            // Hide loading state and show profile content
+            loadingState?.classList.add('hidden');
+            profileContent?.classList.remove('hidden');
+
+            // Update profile information
+            populateForm(currentData);
+
+         } else {
+            throw new Error(result.error || 'Gagal memuat data profil');
+         }
+
+      } catch (error) {
+         console.error('Error loading mitra profile:', error);
+         
+         // Show error state
+         loadingState?.classList.add('hidden');
+         errorState?.classList.remove('hidden');
+         
+         const errorMessage = document.getElementById('load-error-message');
+         if (errorMessage) {
+            errorMessage.textContent = error instanceof Error ? error.message : 'Terjadi kesalahan yang tidak diketahui';
+         }
+      }
+   }
+
+   function populateForm(data: any) {
+      // Update avatar with first letter of name
+      const profileAvatar = document.getElementById('profile-avatar');
+      const userAvatar = document.getElementById('user-avatar');
+      const firstLetter = (data.namaMitra || 'M').charAt(0).toUpperCase();
+      
+      if (profileAvatar) profileAvatar.textContent = firstLetter;
+      if (userAvatar) userAvatar.textContent = firstLetter;
+
+      // Update header info
+      const profileEmail = document.getElementById('profile-email');
+      const profileStatus = document.getElementById('profile-status');
+      const userName = document.getElementById('user-name');
+      const userEmail = document.getElementById('user-email');
+
+      if (profileEmail) profileEmail.textContent = data.email || 'Email tidak tersedia';
+      if (userName) userName.textContent = data.namaMitra || 'Nama tidak tersedia';
+      if (userEmail) userEmail.textContent = data.email || 'Email tidak tersedia';
+
+      // Status
+      if (profileStatus) {
+         let statusText = 'Status tidak diketahui';
+         if (data.isApproved) {
+            statusText = 'Mitra Disetujui';
+         } else if (data.status === 'pending') {
+            statusText = 'Menunggu Persetujuan';
+         } else if (data.status === 'rejected') {
+            statusText = 'Ditolak';
+         }
+         profileStatus.textContent = statusText;
+      }
+
+      // Fill editable form fields
+      const namaMitraInput = document.getElementById('namaMitra') as HTMLInputElement;
+      const emailInput = document.getElementById('email') as HTMLInputElement;
+      const noHpInput = document.getElementById('noHp') as HTMLInputElement;
+      const alamatMitraInput = document.getElementById('alamatMitra') as HTMLTextAreaElement;
+
+      if (namaMitraInput) namaMitraInput.value = data.namaMitra || '';
+      if (emailInput) emailInput.value = data.email || '';
+      if (noHpInput) noHpInput.value = data.noHp || '';
+      if (alamatMitraInput) alamatMitraInput.value = data.alamatMitra || '';
+
+      // Fill read-only business info
+      const sistemKemitraanInput = document.getElementById('sistemKemitraan') as HTMLInputElement;
+      const paketUsahaInput = document.getElementById('paketUsaha') as HTMLInputElement;
+      const salesInput = document.getElementById('sales') as HTMLInputElement;
+
+      if (sistemKemitraanInput) sistemKemitraanInput.value = data.sistemKemitraan || 'Tidak tersedia';
+      if (paketUsahaInput) paketUsahaInput.value = data.paketUsaha || 'Tidak tersedia';
+      if (salesInput) salesInput.value = data.sales || 'Tidak tersedia';
+
+      // Status badge
+      const statusBadge = document.getElementById('status-badge');
+      if (statusBadge) {
+         let badgeClass = 'bg-yellow-100 text-yellow-800';
+         let badgeText = 'Menunggu';
+         
+         if (data.isApproved) {
+            badgeClass = 'bg-green-100 text-green-800';
+            badgeText = 'Disetujui';
+         } else if (data.status === 'rejected') {
+            badgeClass = 'bg-red-100 text-red-800';
+            badgeText = 'Ditolak';
+         }
+
+         statusBadge.className = `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${badgeClass}`;
+         statusBadge.textContent = badgeText;
+      }
+   }
+
+   function setupFormSubmission() {
+      const form = document.getElementById('profile-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async function(e) {
+         e.preventDefault();
+
+         const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
+         const saveText = document.getElementById('save-text');
+         const saveLoading = document.getElementById('save-loading');
+         const token = localStorage.getItem('mitraToken');
+
+         // Get form data
+         const formData = new FormData(form as HTMLFormElement);
+         const updateData = {
+            namaMitra: formData.get('namaMitra')?.toString().trim(),
+            noHp: formData.get('noHp')?.toString().trim(),
+            alamatMitra: formData.get('alamatMitra')?.toString().trim()
+         };
+
+         // Validation
+         if (!updateData.namaMitra || !updateData.noHp || !updateData.alamatMitra) {
+            showError('Semua field yang wajib harus diisi');
+            return;
+         }
+
+         // Phone number validation
+         const phoneRegex = /^[0-9]{10,15}$/;
+         if (!phoneRegex.test(updateData.noHp)) {
+            showError('Nomor HP harus berisi 10-15 digit angka');
+            return;
+         }
+
+         // Set loading state
+         setLoading(true);
+         hideMessages();
+
+         try {
+            const response = await fetch(`${API_URL}/api/mitra/profile/update`, {
+               method: 'PUT',
+               headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+               },
+               body: JSON.stringify(updateData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+               showSuccess('Profile berhasil diperbarui!');
+               
+               // Update current data
+               currentData = { ...currentData, ...updateData };
+               
+               // Update localStorage if needed
+               const mitraUser = localStorage.getItem('mitraUser');
+               if (mitraUser) {
+                  const userData = JSON.parse(mitraUser);
+                  userData.namaMitra = updateData.namaMitra;
+                  localStorage.setItem('mitraUser', JSON.stringify(userData));
+               }
+
+               // Update header display
+               const userName = document.getElementById('user-name');
+               if (userName) userName.textContent = updateData.namaMitra;
+
+            } else {
+               showError(result.error || 'Gagal memperbarui profile');
+            }
+
+         } catch (error) {
+            console.error('Error updating profile:', error);
+            showError('Terjadi kesalahan saat memperbarui profile');
+         } finally {
+            setLoading(false);
+         }
+      });
+   }
+
+   function setLoading(loading: boolean) {
+      const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
+      const saveText = document.getElementById('save-text');
+      const saveLoading = document.getElementById('save-loading');
+
+      if (saveBtn) saveBtn.disabled = loading;
+      
+      if (loading) {
+         saveText?.classList.add('hidden');
+         saveLoading?.classList.remove('hidden');
+      } else {
+         saveText?.classList.remove('hidden');
+         saveLoading?.classList.add('hidden');
+      }
+   }
+
+   function showSuccess(message: string) {
+      const successMessage = document.getElementById('success-message');
+      const successText = document.getElementById('success-text');
+      
+      if (successMessage && successText) {
+         successText.textContent = message;
+         successMessage.classList.remove('hidden');
+         
+         // Auto hide after 5 seconds
+         setTimeout(() => {
+            successMessage.classList.add('hidden');
+         }, 5000);
+
+         // Scroll to top to show message
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+   }
+
+   function showError(message: string) {
+      const errorMessage = document.getElementById('error-message');
+      const errorText = document.getElementById('error-text');
+      
+      if (errorMessage && errorText) {
+         errorText.textContent = message;
+         errorMessage.classList.remove('hidden');
+
+         // Auto hide after 5 seconds
+         setTimeout(() => {
+            errorMessage.classList.add('hidden');
+         }, 5000);
+
+         // Scroll to top to show message
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+   }
+
+   function hideMessages() {
+      const successMessage = document.getElementById('success-message');
+      const errorMessage = document.getElementById('error-message');
+      
+      successMessage?.classList.add('hidden');
+      errorMessage?.classList.add('hidden');
+   }
+
+   function setupUserMenu() {
+      const userMenuButton = document.getElementById('user-menu-button');
+      const dropdownUser = document.getElementById('dropdown-user');
+
+      if (userMenuButton && dropdownUser) {
+         userMenuButton.addEventListener('click', function() {
+            dropdownUser.classList.toggle('hidden');
+         });
+
+         // Close dropdown when clicking outside
+         document.addEventListener('click', function(event) {
+            const target = event.target as Node;
+            if (target && !userMenuButton.contains(target) && !dropdownUser.contains(target)) {
+               dropdownUser.classList.add('hidden');
+            }
+         });
+      }
+   }
+
+   function setupLogout() {
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+         logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('mitraToken');
+            localStorage.removeItem('mitraUser');
+            window.location.href = '/login';
+         });
+      }
+   }
+</script>
+</Layout>

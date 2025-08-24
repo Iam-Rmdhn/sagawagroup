@@ -9,6 +9,7 @@ import {
   getMitraByIdService,
   approveMitraService,
   updateMitraWithSampleImages,
+  updateMitraProfileService,
 } from "../services/auth.services";
 import { verifyToken } from "../utils/jwt";
 import validator from "validator";
@@ -27,6 +28,12 @@ interface AdminRegisterRequestBody {
 interface ApproveMitraRequestBody {
   mitraId: string;
   action: "approve" | "reject";
+}
+
+interface UpdateProfileRequestBody {
+  namaMitra: string;
+  noHp: string;
+  alamatMitra: string;
 }
 
 // Helper function to validate admin token
@@ -397,6 +404,66 @@ export const getAllMitraLogin = async (req: Request): Promise<Response> => {
     });
   } catch (err: any) {
     console.error("Error getting all mitra login:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Controller untuk update profile mitra
+export const updateMitraProfile = async (req: Request): Promise<Response> => {
+  try {
+    // Validate mitra token
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Token tidak ditemukan" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const token = authHeader.substring(7);
+    const decoded = verifyToken(token);
+
+    if (!decoded.role || decoded.role !== "mitra") {
+      return new Response(
+        JSON.stringify({ error: "Akses ditolak: bukan mitra" }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Parse request body
+    const updateData = (await req.json()) as UpdateProfileRequestBody;
+
+    // Validate required fields
+    if (!updateData.namaMitra || !updateData.noHp || !updateData.alamatMitra) {
+      return new Response(
+        JSON.stringify({ error: "Nama mitra, no HP, dan alamat harus diisi" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!phoneRegex.test(updateData.noHp)) {
+      return new Response(
+        JSON.stringify({ error: "Nomor HP harus berisi 10-15 digit angka" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const result = await updateMitraProfileService(decoded.id, updateData);
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error updating mitra profile:", err);
     return new Response(
       JSON.stringify({ error: err.message || "Internal server error" }),
       {
