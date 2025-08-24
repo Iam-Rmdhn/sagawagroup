@@ -420,3 +420,39 @@ export async function updateMitraWithSampleImages() {
     throw new Error("Gagal menyiapkan data gambar sample");
   }
 }
+
+// Service untuk update profile mitra
+export async function updateMitraProfileService(
+  mitraLoginId: string,
+  updateData: { namaMitra: string; noHp: string; alamatMitra: string }
+) {
+  // First get the mitra login data to get the mitraId
+  const mitraLogin = await MitraLoginModel.findById(mitraLoginId);
+  if (!mitraLogin) {
+    throw new Error("Mitra login tidak ditemukan");
+  }
+
+  // Update both mitra_login and mitra collections
+
+  // 1. Update mitra_login collection
+  await MitraLoginModel.updateById(mitraLoginId, {
+    namaMitra: updateData.namaMitra,
+  });
+
+  // 2. Update mitra collection
+  await MitraModel.updateById(mitraLogin.mitraId, {
+    namaMitra: updateData.namaMitra,
+    noHp: updateData.noHp,
+    alamatMitra: updateData.alamatMitra,
+  });
+
+  return {
+    success: true,
+    message: "Profile berhasil diperbarui",
+    data: {
+      namaMitra: updateData.namaMitra,
+      noHp: updateData.noHp,
+      alamatMitra: updateData.alamatMitra,
+    },
+  };
+}

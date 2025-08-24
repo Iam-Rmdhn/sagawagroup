@@ -107,4 +107,25 @@ export class MitraModel {
     const result = await mitraCollection.deleteOne(filter);
     return result.deletedCount > 0;
   }
+
+  static async updateById(
+    id: string,
+    updates: Partial<Omit<Mitra, "_id" | "createdAt">>
+  ): Promise<Mitra | null> {
+    const now = getCurrentTimestamp();
+    const updatedData = {
+      ...updates,
+      updatedAt: now,
+    };
+
+    const result = await mitraCollection.updateOne(
+      { _id: id },
+      { $set: updatedData }
+    );
+
+    if (result.modifiedCount > 0) {
+      return await this.findById(id);
+    }
+    return null;
+  }
 }
