@@ -10,19 +10,24 @@ import Footer from '../components/Footer.astro';
 		<main class="flex-1">
 			<!-- Hero Section -->
 			<section class="hero-section relative pt-24 pb-32 md:pt-24 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
-                <!-- Background decorative elements -->
+                <!-- Background decorative elements with updated colors matching contact page -->
                 <div class="absolute inset-0 opacity-10">
-                    <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-white rounded-full"></div>
-                    <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-amber-300 rounded-full"></div>
-                    <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-orange-300 rounded-full"></div>
-                    <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-red-300 rounded-full"></div>
+                    <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-gradient-to-br from-white to-amber-100 rounded-full"></div>
+                    <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-gradient-to-br from-amber-200 to-amber-300 rounded-full"></div>
+                    <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-gradient-to-br from-orange-200 to-orange-300 rounded-full"></div>
+                    <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-gradient-to-br from-red-200 to-red-300 rounded-full"></div>
+                    <div class="animate-float delay-200 absolute top-1/2 left-1/3 w-10 h-10 bg-gradient-to-br from-yellow-200 to-amber-200 rounded-full"></div>
                 </div>
                 
                 <div class="container mx-auto max-w-4xl relative z-30">
-                    <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in-up bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">
-                        Tentang Sagawa Group
+                    <h5 class="text-sm sm:text-base text-amber-200 font-semibold uppercase tracking-wider mb-3 animate-fade-in-up">
+                        Tentang Kami
+                    </h5>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight animate-fade-in-up animation-delay-200">
+                        Sagawa Group
                     </h1>
-                    <p class="text-xl md:text-md mb-8 pt-6 animate-fade-in-up delay-200 text-amber-100">
+                    <div class="w-24 h-1 bg-gradient-to-r from-amber-200 to-white mx-auto mt-6 rounded animate-fade-in-up animation-delay-400"></div>
+                    <p class="text-lg md:text-xl mb-8 pt-6 max-w-3xl mx-auto animate-fade-in-up animation-delay-600 text-amber-100">
 						PT Sagawa Pangan Nusantara adalah perusahaan yang bergerak di bidang Food & Beverage (F&B) dengan fokus 
 						pada pengembangan usaha melalui sistem kemitraan yang saling menguntungkan. Sejak resmi berdiri pada tahun 
 						2024, kami berkomitmen menghadirkan produk dan layanan berkualitas tinggi yang mampu bersaing di pasar, 
@@ -43,8 +48,8 @@ import Footer from '../components/Footer.astro';
 			<section class="pt-12 pb-12 sm:py-16 lg:py-20 bg-white relative mt-[-1px]">
 				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-						<div class="animate-fade-in-left">
-							<h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 hover:text-amber-600 transition-colors duration-300">
+						<div class="animate-fade-in-left scroll-animate opacity-0 transform translate-x-[-50px]">
+							<h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 hover:text-amber-600 transition-all duration-500 hover:scale-105 hover:shadow-lg">
 								Pengalaman Lebih dari 10 Tahun
 							</h2>
 							<p class="text-gray-600 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
@@ -70,8 +75,8 @@ import Footer from '../components/Footer.astro';
 							</div>
 						</div>
 						
-						<div class="relative animate-fade-in-right">
-							<div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white transform hover:scale-105 hover:rotate-1 transition-all duration-500 shadow-lg hover:shadow-2xl">
+						<div class="relative animate-fade-in-right scroll-animate opacity-0 transform translate-x-[50px]">
+							<div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white transform hover:scale-105 hover:rotate-1 transition-all duration-500 shadow-lg hover:shadow-2xl bounce-on-hover">
 								<h3 class="text-xl sm:text-2xl font-bold mb-4">Brand Portfolio</h3>
 								<div class="space-y-3">
 									<div class="flex items-center space-x-3 hover:translate-x-2 transition-transform duration-300">
@@ -97,16 +102,21 @@ import Footer from '../components/Footer.astro';
 			</section>
 
 			<!-- Vision & Mission Section -->
-			<section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-amber-100 to-orange-100">
-				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div class="text-center mb-8 sm:mb-12 lg:mb-16">
-						<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 hover:text-amber-600 transition-colors duration-300 animate-fade-in-up">Visi & Misi</h2>
+			<section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-amber-100 to-orange-100 relative overflow-hidden">
+				<!-- Animated background elements -->
+				<div class="absolute inset-0 opacity-5">
+					<div class="animate-float absolute top-20 right-10 w-32 h-32 bg-amber-300 rounded-full"></div>
+					<div class="animate-float delay-1000 absolute bottom-20 left-10 w-24 h-24 bg-orange-300 rounded-full"></div>
+				</div>
+				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+					<div class="text-center mb-8 sm:mb-12 lg:mb-16 scroll-animate opacity-0 transform translate-y-[30px]">
+						<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 hover:text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">Visi & Misi</h2>
 						<p class="text-gray-600 animate-fade-in-up animation-delay-200">Komitmen kami untuk masa depan yang lebih baik</p>
 					</div>
 					
 					<div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
 						<!-- Vision -->
-						<div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-left">
+						<div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-left scroll-animate opacity-0 translate-x-[-50px] pulse-on-hover" style="animation-delay: 0.2s;">
 							<div class="text-center mb-6">
 								<div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-amber-600 hover:scale-110 transition-all duration-300">
 									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +132,7 @@ import Footer from '../components/Footer.astro';
 						</div>
 
 						<!-- Mission -->
-						<div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-right">
+						<div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 animate-fade-in-right scroll-animate opacity-0 translate-x-[50px] pulse-on-hover" style="animation-delay: 0.4s;">
 							<div class="text-center mb-6">
 								<div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-orange-600 hover:scale-110 transition-all duration-300 animate-float-delay">
 									<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,19 +142,19 @@ import Footer from '../components/Footer.astro';
 								<h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 hover:text-orange-600 transition-colors duration-300">MISSION</h3>
 							</div>
 							<div class="space-y-3 sm:space-y-4 text-gray-600">
-								<div class="flex items-start space-x-3 group">
-									<div class="flex-shrink-0 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+								<div class="flex items-start space-x-3 group mission-item scroll-animate opacity-0 translate-y-[20px] stagger-1">
+									<div class="flex-shrink-0 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300 hover:bg-orange-600">
 										<span class="text-white text-xs font-bold">1</span>
 									</div>
-									<p class="text-left leading-relaxed text-sm sm:text-base hover:text-gray-800 transition-colors duration-300">
+									<p class="text-left leading-relaxed text-sm sm:text-base hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
 										Menyajikan menu berkualitas dengan harga terjangkau
 									</p>
 								</div>
-								<div class="flex items-start space-x-3 group">
-									<div class="flex-shrink-0 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+								<div class="flex items-start space-x-3 group mission-item scroll-animate opacity-0 translate-y-[20px] stagger-2">
+									<div class="flex-shrink-0 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300 hover:bg-orange-600">
 										<span class="text-white text-xs font-bold">2</span>
 									</div>
-									<p class="text-left leading-relaxed text-sm sm:text-base hover:text-gray-800 transition-colors duration-300">
+									<p class="text-left leading-relaxed text-sm sm:text-base hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
 										Membuka peluang usaha mikro yang mudah dijalankan
 									</p>
 								</div>
@@ -256,9 +266,9 @@ import Footer from '../components/Footer.astro';
 									
 									<!-- Call to action button that appears on hover -->
 									<div class="mt-4 sm:mt-6 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-										<button class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 sm:px-6 py-2 rounded-full font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base">
+										<a href="/helper/faq" class="inline-block bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 sm:px-6 py-2 rounded-full font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base">
 											Pelajari Lebih Lanjut
-										</button>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -356,6 +366,24 @@ import Footer from '../components/Footer.astro';
 									<span>rm.nusantara_bysagawagroup</span>
 								</a>
 							</div>
+						</div>
+					</div>
+					
+					<!-- Action Buttons -->
+					<div class="mt-12 text-center animate-fade-in-up delay-600">
+						<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+							<a href="/helper/faq" class="inline-flex items-center px-8 py-4 bg-white/20 backdrop-blur-sm text-white border-2 border-white/30 rounded-full font-semibold hover:bg-white/30 hover:border-white/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group">
+								<svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+								</svg>
+								Pelajari Lebih Lanjut
+							</a>
+							<a href="/contact" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group">
+								<svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488z"/>
+								</svg>
+								Hubungi Kami
+							</a>
 						</div>
 					</div>
 				</div>
@@ -498,4 +526,81 @@ import Footer from '../components/Footer.astro';
 	.delay-500 { animation-delay: 0.5s; }
 	.delay-600 { animation-delay: 0.6s; }
 	.delay-700 { animation-delay: 0.7s; }
+	
+	/* Enhanced Animation Classes */
+	.scroll-animate {
+		transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	
+	.scroll-animate.in-view {
+		opacity: 1 !important;
+		transform: translateX(0) translateY(0) !important;
+	}
+	
+	.bounce-on-hover:hover {
+		animation: bounce-gentle 0.6s ease;
+	}
+	
+	.pulse-on-hover:hover {
+		animation: pulse-gentle 1s ease infinite;
+	}
+	
+	@keyframes bounce-gentle {
+		0%, 20%, 60%, 100% {
+			transform: translateY(0) scale(1.05) rotate(1deg);
+		}
+		40% {
+			transform: translateY(-10px) scale(1.05) rotate(1deg);
+		}
+		80% {
+			transform: translateY(-5px) scale(1.05) rotate(1deg);
+		}
+	}
+	
+	@keyframes pulse-gentle {
+		0% {
+			box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+		}
+		70% {
+			box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+		}
+		100% {
+			box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+		}
+	}
+	
+	/* Staggered animation delays */
+	.stagger-1 { animation-delay: 0.1s; }
+	.stagger-2 { animation-delay: 0.2s; }
+	.stagger-3 { animation-delay: 0.3s; }
+	.stagger-4 { animation-delay: 0.4s; }
+	.stagger-5 { animation-delay: 0.5s; }
 </style>
+
+<script>
+	// Intersection Observer for scroll animations
+	document.addEventListener('DOMContentLoaded', function() {
+		const observerOptions = {
+			threshold: 0.1,
+			rootMargin: '0px 0px -50px 0px'
+		};
+		
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('in-view');
+				}
+			});
+		}, observerOptions);
+		
+		// Observe all elements with scroll-animate class
+		document.querySelectorAll('.scroll-animate').forEach(el => {
+			observer.observe(el);
+		});
+		
+		// Add hover effects for mission items
+		document.querySelectorAll('.mission-item').forEach((item, index) => {
+			(item as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+		});
+	});
+</script>
