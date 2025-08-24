@@ -3,68 +3,71 @@
 import heroImage from '../assets/img/heroes_img.png';
 ---
 
-<section class="bg-white min-h-[calc(100vh-4rem)] pb-5 flex items-center relative">
+<section class="bg-white min-h-[calc(100vh-4rem)] pb-5 flex items-center relative overflow-hidden">
+  <!-- Subtle animated background -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-10 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+    <div class="absolute top-0 right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+  </div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
     <div class="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-16">
       
       <!-- Image Content - ALWAYS FIRST ON MOBILE -->
-      <div class="flex-1 max-w-lg lg:max-w-xl xl:max-w-2xl relative lg:order-2 order-1 p-4 sm:p-6 lg:p-8">
+      <div class="flex-1 max-w-lg lg:max-w-xl xl:max-w-2xl relative lg:order-2 order-1 p-4 sm:p-6 lg:p-8 animate-fade-in-right">
         <div class="relative">
           <!-- Background Circle -->
-          <div class="absolute inset-0 bg-blue-100 rounded-full transform scale-110 opacity-50"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full transform scale-110 opacity-50 animate-pulse-slow"></div>
           
           <!-- Main Image Container -->
-          <div class="relative z-10 bg-white rounded-full p-8 shadow-lg">
+          <div class="relative z-10 bg-white rounded-full p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 group-image">
             <img 
               src={heroImage.src}
               alt=""
-              class="w-full h-auto rounded-full"
+              class="w-full h-auto rounded-full transition-all duration-500 hover:scale-110"
             />
-          </div>
-          
-          <!-- Floating Elements -->
-          <div class="absolute top-4 right-4 bg-white rounded-full p-3 shadow-lg animate-float">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          
-          <div class="absolute bottom-8 left-4 bg-white rounded-full p-3 shadow-lg animate-float-delay">
-            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-          </div>
-          
-          <div class="absolute top-1/2 -left-4 bg-white rounded-full p-3 shadow-lg animate-float">
-            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-            </svg>
           </div>
         </div>
       </div>
       
       <!-- Text Content - ALWAYS SECOND ON MOBILE -->
       <div class="flex-1 max-w-xl lg:max-w-2xl lg:order-1 order-2 text-center lg:text-left">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-          "We walk forward with trust."
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight animate-fade-in-up">
+          <span class="inline-block animate-text-shimmer bg-gradient-to-r from-gray-900 via-blue-600 to-gray-900 bg-clip-text text-transparent bg-300% animate-shimmer-slow">
+            "We walk forward with trust."
+          </span>
         </h1>
         
-        <p class="text-gray-600 text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 leading-relaxed max-w-prose mx-auto lg:mx-0">
+        <p class="text-gray-600 text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 leading-relaxed max-w-prose mx-auto lg:mx-0 animate-fade-in-up animation-delay-500">
           We are committed to building trust and creating professional,
           structured business opportunities that support the growth of our
           partners throughout Indonesia.
         </p>
         
-        <!-- WhatsApp Button -->
-        <a 
-          href="https://wa.me/" 
-          class="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-xl"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488z"/>
-          </svg>
-          Hubungi Kami
-        </a>
+        <!-- Buttons Container -->
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
+          <!-- WhatsApp Button -->
+          <a 
+            href="https://wa.me/6281808985548?text=Halo%20Sagawa%20Group%21%0A%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20peluang%20franchise%20kuliner%20Jepang%20yang%20tersedia.%20Bisakah%20Anda%20memberikan%20informasi%20mengenai%3A%0A%0A1.%20Jenis%20franchise%20yang%20tersedia%0A2.%20Modal%20investasi%20yang%20diperlukan%0A3.%20Proses%20pendaftaran%20mitra%0A4.%20Support%20yang%20diberikan%0A%0ATerima%20kasih%21" 
+            class="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 animate-fade-in-up animation-delay-1000 group"
+          >
+            <svg class="w-5 h-5 transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488z"/>
+            </svg>
+            <span class="group-hover:translate-x-1 transition-transform duration-300">Hubungi Kami</span>
+          </a>
+
+          <!-- Detail Button -->
+          <a 
+            href="/about"
+            class="inline-flex items-center gap-3 glass-button border-2 border-amber-400 text-amber-600 hover:text-amber-700 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-amber hover:scale-105 animate-fade-in-up animation-delay-1000 group"
+          >
+            <svg class="w-5 h-5 transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span class="group-hover:translate-x-1 transition-transform duration-300">More Detail</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -77,31 +80,146 @@ import heroImage from '../assets/img/heroes_img.png';
 		top: 0;
 		z-index: 50;
 	}
-  @keyframes float {
+
+  /* Blob animation for background */
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  /* Text shimmer animation */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s ease-in-out infinite;
+    background-size: 200% 100%;
+  }
+
+  .animate-shimmer-slow {
+    animation: shimmer 5s ease-in-out infinite 2s;
+    background-size: 200% 100%;
+  }
+
+  .bg-300\% {
+    background-size: 300%;
+  }
+
+  /* Fade in animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-right {
+    animation: fadeInRight 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-1500 {
+    animation-delay: 1.5s;
+  }
+
+  .animation-delay-3000 {
+    animation-delay: 3s;
+  }
+
+  /* Pulse animation for background */
+  @keyframes pulse-slow {
     0%, 100% {
-      transform: translateY(0px);
+      opacity: 0.5;
+      transform: scale(1.1);
     }
     50% {
-      transform: translateY(-10px);
+      opacity: 0.3;
+      transform: scale(1.15);
     }
   }
-  
-  @keyframes float-delay {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-15px);
-    }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
   }
-  
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-    z-index: 10;
+
+  /* Hover effects enhancement */
+  .group:hover .group-hover\:rotate-12 {
+    transform: rotate(12deg);
   }
-  
-  .animate-float-delay {
-    animation: float-delay 3s ease-in-out infinite 1.5s;
-    z-index: 10;
+
+  .group:hover .group-hover\:translate-x-1 {
+    transform: translateX(0.25rem);
+  }
+
+  /* Glass button effect */
+  .glass-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(251, 191, 36, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(251, 191, 36, 0.1);
+  }
+
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(251, 191, 36, 0.8);
+  }
+
+  /* Amber glow shadow effect */
+  .hover\:shadow-amber:hover {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), 
+                0 0 40px rgba(251, 191, 36, 0.2),
+                0 8px 32px rgba(251, 191, 36, 0.3);
+  }
+
+  /* Enhanced responsiveness */
+  @media (max-width: 640px) {
+    .animate-fade-in-right {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
   }
 </style>
