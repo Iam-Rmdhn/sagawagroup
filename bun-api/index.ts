@@ -33,7 +33,8 @@ Bun.serve({
       // Route handling
       if (
         url.pathname.startsWith("/api/auth") ||
-        url.pathname.startsWith("/api/admin")
+        url.pathname.startsWith("/api/admin") ||
+        url.pathname === "/api/mitra/profile"
       ) {
         const response = await authRoute(req);
         // Add CORS headers to response

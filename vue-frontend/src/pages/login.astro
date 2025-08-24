@@ -141,8 +141,8 @@ import Layout from '../layouts/Layout.astro';
               showSuccess('Login berhasil! Mengalihkan ke dashboard...');
               
               // Simpan data ke localStorage
-              localStorage.setItem('mitraToken', result.token);
-              localStorage.setItem('mitraUser', JSON.stringify(result.data));
+              localStorage.setItem('mitraToken', result.data.token);
+              localStorage.setItem('mitraUser', JSON.stringify(result.data.user));
               
               // Redirect ke dashboard setelah delay singkat
               setTimeout(() => {
