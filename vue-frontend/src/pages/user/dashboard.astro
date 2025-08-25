@@ -802,14 +802,14 @@ import Layout from '../../layouts/Layout.astro';
             hideAgreementModal();
             
             // Show success message
-            showNotification('✅ Terima kasih! Perjanjian telah diterima dan disimpan.', 'success');
+            showNotification('Terima kasih! Perjanjian telah diterima dan disimpan.', 'success');
          } else {
             throw new Error(result.error || 'Failed to save agreement');
          }
 
       } catch (error) {
-         console.error('❌ Error accepting agreement:', error);
-         showNotification('❌ Gagal menyimpan persetujuan. Silakan coba lagi.', 'error');
+         console.error('Error accepting agreement:', error);
+         showNotification('Gagal menyimpan persetujuan. Silakan coba lagi.', 'error');
       } finally {
          // Restore button state
          if (submitButton) {
