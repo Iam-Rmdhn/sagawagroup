@@ -6,12 +6,13 @@ import kcrcImage from '../assets/img/gerobak/kcrc.png';
 import rmwImage from '../assets/img/mall/masgaw-resto.png';
 import warnusImage from '../assets/img/gerobak/warnus.png';
 import masgawImage from '../assets/img/gerobak/rmw.png';
-import kbdImage from '../assets/img/gerobak/indepandant_brand.jpg';
+import kbdImage from '../assets/img/gerobak/indepandent_brand.jpg';
 
 const partnerships = [
   {
     title: "Kagawa Rice Bowl",
     subtitle: "Premium Japanese Rice Bowl Experience",
+    description: "menggabungkan kelezatan autentik Jepang dengan sentuhan unik Nusantara, menciptakan sebuah konsep bisnis kuliner yang kuat dan mudah diterima pasar. Dengan menu andalan yang inovatif, kami tidak hanya membangun basis pelanggan yang loyal, tetapi juga membuka sebuah peluang nyata untuk kesuksesan bersama di industri kuliner yang terus berkembang.",
     image: krbImage,
     alt: "Kagawa Rice Bowl Stand",
     detailUrl: "/mitra/kagawa-ricebowl",
@@ -31,6 +32,7 @@ const partnerships = [
   {
     title: "Kagawa Coffee Corner",
     subtitle: "Artisan Coffee & Specialty Drinks",
+    description: "menawarkan pengalaman coffee premium dengan specialty drinks dan atmosfer yang nyaman. Menghadirkan berbagai metode brewing, biji kopi pilihan, dan menu minuman kreatif yang menjadi tempat favorit untuk hangout, meeting, atau me time di tengah kesibukan sehari-hari.",
     image: kccImage,
     alt: "Kagawa Coffee Corner",
     detailUrl: "/mitra/kagawa-coffee-corner",
@@ -50,6 +52,7 @@ const partnerships = [
   {
     title: "Kagawa Coffee & Rice Bowl Corner",
     subtitle: "Complete F&B Solution",
+    description: "menghadirkan solusi bisnis F&B yang lengkap dengan menggabungkan kekuatan coffee premium dan rice bowl dalam satu konsep terintegrasi. Memaksimalkan revenue stream dengan menyajikan menu lengkap yang memenuhi kebutuhan pelanggan dari pagi hingga malam.",
     image: kcrcImage,
     alt: "Kagawa Coffee & Rice Bowl Corner",
     detailUrl: "/mitra/kagawa-coffee-ricebowl",
@@ -69,6 +72,7 @@ const partnerships = [
   {
     title: "RM Nusantara",
     subtitle: "WarNas/Warteg, Mas Gaw dan RM Sunda",
+    description: "menawarkan kelezatan otentik Indonesia dengan berbagai masakan daerah, menciptakan sebuah konsep bisnis kuliner yang melestarikan kekayaan kuliner nusantara. Dengan menu andalan yang bervariasi, kami tidak hanya memperkenalkan cita rasa lokal, tetapi juga membuka peluang nyata untuk kesuksesan bersama.",
     image: rmwImage,
     detailUrl: "/mitra/rm-nusantara",
     hasCards: true,
@@ -103,6 +107,7 @@ const partnerships = [
   {
     title: "Business Development",
     subtitle: "Custom Business Solutions",
+    description: "membuka peluang bagi Anda untuk mengembangkan brand kuliner unik dengan dukungan SagawaGroup, menciptakan sebuah konsep bisnis kuliner yang sesuai dengan visi dan passion Anda. Dengan pendampingan yang komprehensif, kami memberikan dukungan penuh untuk kesuksesan jangka panjang.",
     image: kbdImage,
     alt: "Business Development",
     detailUrl: "/mitra/indepandant-brand",
@@ -184,7 +189,7 @@ const partnerships = [
           
           <!-- Image Section -->
           <div class="image-container">
-            <div class="relative group w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto lg:mx-0">
+            <div class="relative group w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto lg:mx-0">
               <!-- Badge positioned on top-right of image -->
               <div class={`absolute -top-2 -right-2 sm:-top-3 sm:-right-3 z-20 px-2 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-white text-xs font-bold shadow-lg bg-gradient-to-r ${partner.color}`}>
                 {partner.badge}
@@ -219,11 +224,12 @@ const partnerships = [
                   <img 
                     src={partner.image.src} 
                     alt={partner.alt}
-                    class="w-full h-64 sm:h-80 lg:h-96 object-contain transition-transform duration-300 hover:scale-105 p-3 sm:p-4 lg:p-6"
+                    class="w-full h-64 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] object-contain transition-transform duration-300 hover:scale-105 p-3 sm:p-4 lg:p-6"
                     loading="lazy"
                   />
                 </div>
               )}
+              
             </div>
           </div>
 
@@ -234,9 +240,25 @@ const partnerships = [
               <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-2 leading-tight">
                 {partner.title}
               </h2>
-              <p class="text-lg text-gray-600 font-medium">
+              <p class="text-lg text-gray-600 font-medium mb-4">
                 {partner.subtitle}
               </p>
+              
+              <!-- Mobile Product Description -->
+              <div class="mt-4 px-2">
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 sm:p-4 shadow-md border border-orange-100/50 relative overflow-hidden">
+                  <!-- Subtle Background Pattern -->
+                  <div class="absolute inset-0 opacity-5">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-200 to-red-200"></div>
+                  </div>
+                  
+                  <div class="relative z-10">
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed text-center">
+                      <span class="font-semibold text-orange-600">{partner.title}</span> {partner.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <!-- Desktop Title & Subtitle -->
@@ -244,9 +266,25 @@ const partnerships = [
               <h2 class="hidden lg:block text-3xl sm:text-4xl xl:text-5xl font-black text-gray-900 leading-tight">
                 <span class="text-gradient">{partner.title}</span>
               </h2>
-              <p class="hidden lg:block text-base sm:text-lg text-gray-600 font-medium leading-relaxed">
+              <p class="hidden lg:block text-base sm:text-lg text-gray-600 font-medium leading-relaxed mb-4">
                 {partner.subtitle}
               </p>
+              
+              <!-- Desktop Product Description -->
+              <div class="hidden lg:block mt-4">
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-md border border-orange-100/50 relative overflow-hidden">
+                  <!-- Subtle Background Pattern -->
+                  <div class="absolute inset-0 opacity-5">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-200 to-red-200"></div>
+                  </div>
+                  
+                  <div class="relative z-10">
+                    <p class="text-base text-gray-700 leading-relaxed text-left">
+                      <span class="font-semibold text-orange-600">{partner.title}</span> {partner.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <!-- Benefits Section -->
@@ -470,9 +508,21 @@ const partnerships = [
     }
   }
   
+  @media (min-width: 768px) {
+    .large-carousel {
+      height: 384px;
+    }
+  }
+  
   @media (min-width: 1024px) {
     .large-carousel {
-      height: 320px;
+      height: 448px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .large-carousel {
+      height: 512px;
     }
   }
 
@@ -565,6 +615,7 @@ const partnerships = [
     box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
   }
 
+
   .intersection-observe {
     opacity: 0;
     transform: translateY(30px);
@@ -588,7 +639,7 @@ const partnerships = [
   @media (min-width: 1024px) {
     .alternating-layout {
       grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      gap: 5rem;
     }
     
     /* Left layout: Image on left, Content on right */
@@ -621,6 +672,12 @@ const partnerships = [
     .layout-right .content-container {
       grid-area: content;
       text-align: left;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .alternating-layout {
+      gap: 6rem;
     }
   }
 
