@@ -191,15 +191,39 @@ const menus = [
               <div
                 x-show={`
                   filter === 'all'
-                  || $el.dataset.category === filter
+                  || (
+                    filter === 'Coffe Corner'
+                    && $el.dataset.category === 'Coffe Corner'
+                    && (
+                      subfilter === 'all'
+                      || (subfilter === 'coffee' && ($el.dataset.subcategory === 'coffee' || $el.dataset.subcategory === 'coffe'))
+                      || (subfilter === 'non-coffee' && ($el.dataset.subcategory === 'non-coffee' || $el.dataset.subcategory === 'non-coffe'))
+                      || (subfilter === 'donat' && $el.dataset.subcategory === 'donat')
+                    )
+                  )
                   || (
                     filter === 'Rice Bowl & Coffe Corner'
+                    && $el.dataset.category === 'Rice Bowl & Coffe Corner'
                     && (
                       subfilter === 'all'
                       || (subfilter === 'makanan-berat' && $el.dataset.subcategory === 'makanan-berat')
                       || (subfilter === 'coffee' && ($el.dataset.subcategory === 'coffee' || $el.dataset.subcategory === 'coffe'))
                       || (subfilter === 'non-coffee' && ($el.dataset.subcategory === 'non-coffee' || $el.dataset.subcategory === 'non-coffe'))
                       || (subfilter === 'donat' && $el.dataset.subcategory === 'donat')
+                    )
+                  )
+                  || (
+                    filter === 'Rice Bowl'
+                    && $el.dataset.category === 'Rice Bowl'
+                  )
+                  || (
+                    filter === 'R & M Nusantara'
+                    && $el.dataset.category === 'R & M Nusantara'
+                    && (
+                      subfilter === 'all'
+                      || (subfilter === 'Lauk' && $el.dataset.subcategory === 'Lauk')
+                      || (subfilter === 'Sayur' && $el.dataset.subcategory === 'Sayur')
+                      || (subfilter === 'Gorengan' && $el.dataset.subcategory === 'Gorengan')
                     )
                   )
                 `}
