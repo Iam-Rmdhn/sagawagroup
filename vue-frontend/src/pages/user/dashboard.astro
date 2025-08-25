@@ -19,24 +19,46 @@ import Layout from '../../layouts/Layout.astro';
           </a>
         </div>
         <div class="flex items-center">
-            <div class="flex items-center ms-3">
+            <div class="flex items-center ms-3 relative">
               <div>
-                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                   <span class="sr-only">Open user menu</span>
                   <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
                     M
                   </div>
                 </button>
               </div>
-              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+              <div class="z-50 hidden absolute right-0 top-full mt-2 w-48 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
-                  <p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name">Loading...</p>
+                  <p class="text-sm text-gray-900 dark:text-white font-medium" role="none" id="user-name">Nama Mitra</p>
                   <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">Loading...</p>
                 </div>
                 <ul class="py-1" role="none">
-                  <li><a href="/user/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
-                  <li><a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Edit Profile</a></li>
-                  <li><button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button></li>
+                  <li>
+                    <a href="/user/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"></path>
+                      </svg>
+                      Dashboard
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/user/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <button id="logout-btn" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                      </svg>
+                      Log out
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -243,6 +265,134 @@ import Layout from '../../layouts/Layout.astro';
    </div>
 </div>
 
+<!-- Agreement Modal for New Users -->
+<div id="agreement-modal" class="hidden fixed inset-0 z-[9999] overflow-y-auto bg-black bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <!-- Modal backdrop -->
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-backdrop"></div>
+      
+      <!-- Modal panel -->
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full relative z-10">
+         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="flex items-center mb-4">
+               <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+               </div>
+               <div class="ml-3">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                     Selamat Datang di Sagawa Group!
+                  </h3>
+                  <p class="text-sm text-gray-500">
+                     Sebagai mitra baru, silakan baca dan setujui syarat dan ketentuan kemitraan
+                  </p>
+               </div>
+            </div>
+            
+            <!-- Agreement Content -->
+            <div class="mt-3 sm:mt-0">
+               <div class="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
+                  <div class="space-y-4 text-sm text-gray-700">
+                     <h4 class="font-semibold text-lg text-gray-900">SYARAT DAN KETENTUAN KEMITRAAN</h4>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">1. KETENTUAN UMUM</h5>
+                        <p class="mb-2">Dengan menjadi mitra Sagawa Group, Anda menyetujui untuk mematuhi seluruh peraturan dan kebijakan yang berlaku. Kemitraan ini berlaku untuk jangka waktu yang telah disepakati dalam kontrak.</p>
+                        <p>Mitra bertanggung jawab untuk menjaga kualitas produk dan layanan sesuai dengan standar Sagawa Group.</p>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">2. HAK DAN KEWAJIBAN MITRA</h5>
+                        <p class="mb-2"><strong>Hak Mitra:</strong></p>
+                        <ul class="list-disc pl-5 mb-2 space-y-1">
+                           <li>Mendapatkan dukungan pemasaran dan promosi</li>
+                           <li>Pelatihan pengoperasian bisnis</li>
+                           <li>Sistem manajemen terintegrasi</li>
+                           <li>Supply produk berkualitas</li>
+                        </ul>
+                        <p class="mb-2"><strong>Kewajiban Mitra:</strong></p>
+                        <ul class="list-disc pl-5 space-y-1">
+                           <li>Menjalankan bisnis sesuai standar operasional</li>
+                           <li>Melakukan pembayaran royalty tepat waktu</li>
+                           <li>Menjaga kebersihan dan kualitas outlet</li>
+                           <li>Mengikuti program training yang diadakan</li>
+                        </ul>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">3. SISTEM PEMBAYARAN DAN ROYALTY</h5>
+                        <p class="mb-2">Mitra wajib membayar biaya franchise fee dan royalty sesuai dengan paket kemitraan yang dipilih. Pembayaran dilakukan setiap bulan melalui sistem yang telah ditentukan.</p>
+                        <p>Keterlambatan pembayaran akan dikenakan denda sesuai dengan ketentuan yang berlaku.</p>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">4. PENGGUNAAN MEREK DAN ASET</h5>
+                        <p class="mb-2">Mitra berhak menggunakan merek Sagawa Group selama masa kemitraan berlangsung. Penggunaan logo, desain, dan aset lainnya harus sesuai dengan guidelines yang telah ditetapkan.</p>
+                        <p>Mitra dilarang menggunakan merek untuk kepentingan di luar kemitraan tanpa persetujuan tertulis.</p>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">5. PENGAWASAN DAN EVALUASI</h5>
+                        <p class="mb-2">Sagawa Group berhak melakukan pengawasan dan evaluasi terhadap operasional outlet mitra secara berkala. Hal ini dilakukan untuk memastikan kualitas dan standar yang konsisten.</p>
+                        <p>Mitra wajib memberikan akses dan kerjasama dalam proses evaluasi tersebut.</p>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">6. PEMUTUSAN KONTRAK</h5>
+                        <p class="mb-2">Kontrak kemitraan dapat berakhir karena:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                           <li>Masa kontrak berakhir</li>
+                           <li>Pelanggaran terhadap syarat dan ketentuan</li>
+                           <li>Kesepakatan kedua belah pihak</li>
+                           <li>Force majeure atau keadaan memaksa</li>
+                        </ul>
+                     </div>
+                     
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">7. KEBIJAKAN PRIVASI</h5>
+                        <p>Sagawa Group berkomitmen melindungi privasi dan data pribadi mitra. Data yang dikumpulkan akan digunakan sesuai dengan kebijakan privasi yang berlaku dan tidak akan dibagikan kepada pihak ketiga tanpa persetujuan.</p>
+                     </div>
+                     
+                     <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <p class="text-sm text-amber-800">
+                           <strong>Catatan:</strong> Dengan mencentang kotak persetujuan di bawah ini, Anda menyatakan telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan kemitraan Sagawa Group.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+         <!-- Agreement Checkbox and Submit -->
+         <div class="bg-gray-50 px-4 py-3 sm:px-6">
+            <div class="flex items-start mb-4">
+               <div class="flex items-center h-5">
+                  <input id="agreement-checkbox" type="checkbox" class="focus:ring-amber-500 h-4 w-4 text-amber-600 border-gray-300 rounded">
+               </div>
+               <div class="ml-3 text-sm">
+                  <label for="agreement-checkbox" class="font-medium text-gray-700">
+                     Saya telah membaca dan menyetujui seluruh syarat dan ketentuan kemitraan Sagawa Group
+                  </label>
+                  <p class="text-gray-500 text-xs mt-1">
+                     Dengan mencentang kotak ini, Anda setuju untuk terikat dengan semua ketentuan yang berlaku
+                  </p>
+               </div>
+            </div>
+            
+            <div class="flex justify-end">
+               <button type="button" id="submit-agreement" disabled class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white cursor-not-allowed sm:w-auto sm:text-sm transition-all duration-200">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Setuju dan Lanjutkan
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
 <script>
    // API URL configuration
    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
@@ -254,6 +404,24 @@ import Layout from '../../layouts/Layout.astro';
          window.location.href = '/login';
          return;
       }
+
+      // Add debug functions to global scope for testing
+      (window as any).resetAgreement = function() {
+         localStorage.removeItem('mitraAgreementAccepted');
+         localStorage.removeItem('mitraAgreementAcceptedAt');
+         console.log('🔄 Agreement status reset! Reload page to see modal.');
+      };
+
+      (window as any).showModal = function() {
+         showAgreementModal();
+      };
+
+      console.log('🛠️ Debug functions available:');
+      console.log('- resetAgreement() : Reset agreement status');
+      console.log('- showModal() : Force show modal');
+
+      // Setup agreement modal for new users
+      setupAgreementModal();
 
       // Load mitra profile data
       await loadMitraProfile();
@@ -319,7 +487,210 @@ import Layout from '../../layouts/Layout.astro';
       }
    }
 
+   function setupAgreementModal() {
+      // Check if user has already agreed to terms
+      const hasAgreed = localStorage.getItem('mitraAgreementAccepted');
+      const userToken = localStorage.getItem('mitraToken');
+      const agreementTokenMatch = localStorage.getItem('mitraAgreementToken');
+      
+      console.log('Agreement status check:');
+      console.log('- hasAgreed:', hasAgreed);
+      console.log('- userToken:', userToken ? userToken.substring(0, 10) + '...' : null);
+      console.log('- agreementTokenMatch:', agreementTokenMatch ? agreementTokenMatch.substring(0, 10) + '...' : null);
+      console.log('- localStorage keys:', Object.keys(localStorage));
+      
+      // Check if agreement was made with current token (prevents cross-user agreement reuse)
+      const isCurrentUserAgreement = hasAgreed && agreementTokenMatch === userToken;
+      
+      // Show modal if user hasn't agreed OR if agreement was made by different user
+      if (!hasAgreed || !isCurrentUserAgreement) {
+         console.log('User has NOT agreed yet (or different user) - showing agreement modal');
+         console.log('- Reason: hasAgreed =', hasAgreed, ', isCurrentUserAgreement =', isCurrentUserAgreement);
+         
+         // Clear old agreement data if it was from different user
+         if (hasAgreed && !isCurrentUserAgreement) {
+            localStorage.removeItem('mitraAgreementAccepted');
+            localStorage.removeItem('mitraAgreementAcceptedAt');
+            localStorage.removeItem('mitraAgreementToken');
+            console.log('Cleared old agreement data from different user');
+         }
+         
+         setTimeout(() => {
+            showAgreementModal();
+         }, 500); // Small delay to ensure page is fully loaded
+      } else {
+         console.log('User has already agreed to terms on:', hasAgreed);
+      }
+      
+      // Setup checkbox handler
+      const agreementCheckbox = document.getElementById('agreement-checkbox') as HTMLInputElement;
+      const submitButton = document.getElementById('submit-agreement') as HTMLButtonElement;
+      
+      if (agreementCheckbox && submitButton) {
+         agreementCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+               submitButton.disabled = false;
+               submitButton.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-amber-600 hover:bg-amber-700 text-base font-medium text-white cursor-pointer sm:w-auto sm:text-sm transition-all duration-200';
+            } else {
+               submitButton.disabled = true;
+               submitButton.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white cursor-not-allowed sm:w-auto sm:text-sm transition-all duration-200';
+            }
+         });
+         
+         // Setup submit button handler
+         submitButton.addEventListener('click', function() {
+            if (agreementCheckbox.checked) {
+               acceptAgreement();
+            }
+         });
+      }
+   }
+
+   function showAgreementModal() {
+      console.log('Attempting to show agreement modal...');
+      
+      const modal = document.getElementById('agreement-modal');
+      if (modal) {
+         console.log('Modal element found, showing modal');
+         
+         // Remove hidden class and add animation
+         modal.classList.remove('hidden');
+         modal.style.display = 'block';
+         
+         // Prevent background scrolling
+         document.body.style.overflow = 'hidden';
+         
+         // Focus on the modal for accessibility
+         setTimeout(() => {
+            modal.focus();
+         }, 100);
+         
+         // Add animation effect
+         setTimeout(() => {
+            modal.style.opacity = '1';
+         }, 10);
+         
+         console.log('Agreement modal is now visible');
+      } else {
+         console.error('Modal element not found!');
+      }
+   }
+
+   function hideAgreementModal() {
+      console.log('Hiding agreement modal...');
+
+      const modal = document.getElementById('agreement-modal');
+      if (modal) {
+         // Add fade out animation
+         modal.style.opacity = '0';
+         
+         setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            
+            // Restore background scrolling
+            document.body.style.overflow = '';
+            
+            console.log('✅ Agreement modal hidden successfully');
+         }, 300);
+      }
+   }
+
+   async function acceptAgreement() {
+      const submitButton = document.getElementById('submit-agreement') as HTMLButtonElement;
+      
+      if (submitButton) {
+         // Show loading state
+         submitButton.disabled = true;
+         submitButton.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Menyimpan...
+         `;
+      }
+
+      try {
+         // Simulate API call delay
+         await new Promise(resolve => setTimeout(resolve, 1000));
+         
+         // Get current user token for binding agreement to this user
+         const currentToken = localStorage.getItem('mitraToken');
+         
+         // Store acceptance in localStorage with token binding
+         localStorage.setItem('mitraAgreementAccepted', 'true');
+         localStorage.setItem('mitraAgreementAcceptedAt', new Date().toISOString());
+         localStorage.setItem('mitraAgreementToken', currentToken || '');
+         
+         console.log('✅ Agreement accepted and stored with token binding');
+         
+         // Hide modal
+         hideAgreementModal();
+         
+         // Show success message
+         showNotification('Terima kasih! Perjanjian telah diterima.', 'success');
+
+      } catch (error) {
+         console.error('Error accepting agreement:', error);
+         showNotification('Gagal menyimpan persetujuan. Silakan coba lagi.', 'error');
+      } finally {
+         // Restore button state
+         if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `
+               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+               </svg>
+               Setuju dan Lanjutkan
+            `;
+         }
+      }
+   }
+
+   function showNotification(message: string, type: 'success' | 'error' = 'success') {
+      // Create notification element
+      const notification = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+      
+      notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full opacity-0`;
+      notification.innerHTML = `
+         <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               ${type === 'success' 
+                  ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
+                  : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
+               }
+            </svg>
+            <span>${message}</span>
+         </div>
+      `;
+      
+      // Add to DOM
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+         notification.classList.remove('translate-x-full', 'opacity-0');
+      }, 100);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+         notification.classList.add('translate-x-full', 'opacity-0');
+         setTimeout(() => {
+            if (notification.parentNode) {
+               notification.parentNode.removeChild(notification);
+            }
+         }, 300);
+      }, 3000);
+   }
+
    function updateProfileHeader(data: any) {
+      // Store user email for agreement modal detection
+      if (data.email) {
+         localStorage.setItem('mitraUserEmail', data.email);
+      }
+
       // Update avatar with first letter of name
       const profileAvatar = document.getElementById('profile-avatar');
       const userAvatar = document.getElementById('user-avatar');
@@ -476,15 +847,33 @@ import Layout from '../../layouts/Layout.astro';
       const dropdownUser = document.getElementById('dropdown-user');
 
       if (userMenuButton && dropdownUser) {
-         userMenuButton.addEventListener('click', function() {
+         userMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Toggle dropdown visibility
             dropdownUser.classList.toggle('hidden');
+            
+            // Update aria-expanded attribute
+            const isExpanded = !dropdownUser.classList.contains('hidden');
+            userMenuButton.setAttribute('aria-expanded', isExpanded.toString());
          });
 
          // Close dropdown when clicking outside
          document.addEventListener('click', function(event) {
-            const target = event.target as Node;
+            const target = event.target as HTMLElement;
             if (target && !userMenuButton.contains(target) && !dropdownUser.contains(target)) {
                dropdownUser.classList.add('hidden');
+               userMenuButton.setAttribute('aria-expanded', 'false');
+            }
+         });
+
+         // Close dropdown when pressing Escape key
+         document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !dropdownUser.classList.contains('hidden')) {
+               dropdownUser.classList.add('hidden');
+               userMenuButton.setAttribute('aria-expanded', 'false');
+               userMenuButton.focus();
             }
          });
       }

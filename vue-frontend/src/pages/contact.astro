@@ -107,6 +107,31 @@ import Footer from '../components/Footer.astro';
 								</div>
 
 								<div class="group-input">
+									<label for="domisili" class="block text-sm font-semibold text-gray-700 mb-2 transition-colors duration-200">
+										<span class="flex items-center gap-2">
+											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+											</svg>
+											Domisili
+										</span>
+									</label>
+									<div class="relative">
+										<input
+											type="text"
+											id="domisili"
+											name="domisili"
+											required
+											placeholder="Masukkan domisili/alamat tempat tinggal Anda"
+											class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-400 transition-all duration-300 hover:border-gray-300 bg-gray-50/50 focus:bg-white text-gray-900 placeholder-gray-400"
+										/>
+										<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+											<div class="w-2 h-2 bg-green-400 rounded-full opacity-0 indicator transition-opacity duration-300"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="group-input">
 									<label for="message" class="block text-sm font-semibold text-gray-700 mb-2 transition-colors duration-200">
 										<span class="flex items-center gap-2">
 											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,19 +155,38 @@ import Footer from '../components/Footer.astro';
 									</div>
 								</div>
 
-								<button
-									type="submit"
-									class="group-btn relative w-full bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-5 px-8 rounded-2xl transform hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-3 overflow-hidden"
-								>
-									<div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover-overlay transition-opacity duration-300"></div>
-									<svg class="w-6 h-6 relative z-10 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
-										<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.569-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-									</svg>
-									<span class="text-lg font-semibold relative z-10">Hubungi via WhatsApp</span>
-									<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] shimmer transition-transform duration-700 ease-out"></div>
-								</button>
-          </form>
-        </div>
+								<!-- Two Admin Buttons Side by Side -->
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<!-- Admin 1 Button -->
+									<button
+										type="button"
+										data-admin="1"
+										class="admin-btn admin-1-btn relative bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transform hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 overflow-hidden"
+									>
+										<div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover-overlay transition-opacity duration-300"></div>
+										<svg class="w-5 h-5 relative z-10 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+											<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.569-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+										</svg>
+										<span class="text-sm lg:text-base font-semibold relative z-10">Admin 1</span>
+										<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] shimmer transition-transform duration-700 ease-out"></div>
+									</button>
+
+									<!-- Admin 2 Button -->
+									<button
+										type="button"
+										data-admin="2"
+										class="admin-btn admin-1-btn relative bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transform hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 overflow-hidden"
+									>
+										<div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover-overlay transition-opacity duration-300"></div>
+										<svg class="w-5 h-5 relative z-10 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+											<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.569-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+										</svg>
+										<span class="text-sm lg:text-base font-semibold relative z-10">Admin 2</span>
+										<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] shimmer transition-transform duration-700 ease-out"></div>
+									</button>
+								</div>
+							</form>
+						</div>
         
 						<!-- Contact Info & Map -->
 						<div class="group bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:border-amber-200 animate-slide-in-right backdrop-blur-sm bg-white/90">
@@ -218,40 +262,58 @@ import Footer from '../components/Footer.astro';
 					</div>
 				</div>
 			</section>
+
     </main>
     
     <Footer />
 
   <!-- CLIENT-SIDE SCRIPT -->
   <script>
-    document
-      .getElementById("contactForm")
-      ?.addEventListener("submit", (e: SubmitEvent) => {
+    // Function to handle admin button clicks
+    function handleAdminContact(adminNumber: string, phoneNumber: string) {
+      const nameInput = document.getElementById("name") as HTMLInputElement;
+      const domisiliInput = document.getElementById("domisili") as HTMLInputElement;
+      const messageInput = document.getElementById("message") as HTMLTextAreaElement;
+      
+      const name = nameInput.value.trim();
+      const domisili = domisiliInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!name || !domisili || !message) {
+        alert("Mohon isi nama, domisili, dan pesan Anda");
+        return;
+      }
+
+      const url =
+        `https://api.whatsapp.com/send?phone=${phoneNumber}&text=` +
+        encodeURIComponent(
+          `Halo Admin ${adminNumber} Sagawa Group!\n\nPerkenalkan, saya *${name}*\nDomisili: ${domisili}\n\nSaya ingin menyampaikan:\n${message}\n\nMohon informasi lebih lanjut. Terima kasih! 🙏`
+        );
+
+      window.open(url, "_blank");
+
+      // Reset form
+      nameInput.value = "";
+      domisiliInput.value = "";
+      messageInput.value = "";
+    }
+
+    // Add event listeners to admin buttons
+    document.addEventListener('DOMContentLoaded', () => {
+      // Admin 1 Button
+      const admin1Btn = document.querySelector('.admin-1-btn');
+      admin1Btn?.addEventListener('click', (e: Event) => {
         e.preventDefault();
-
-        const nameInput = document.getElementById("name") as HTMLInputElement;
-        const messageInput = document.getElementById("message") as HTMLTextAreaElement;
-        
-        const name = nameInput.value.trim();
-        const message = messageInput.value.trim();
-
-        if (!name || !message) {
-          alert("Mohon isi nama dan pesan Anda");
-          return;
-        }
-
-        const url =
-          `https://api.whatsapp.com/send?phone=6281808985548&text=` +
-          encodeURIComponent(
-            `Halo Sagawa Group!\n\nPerkenalkan, saya *${name}*\n\nSaya ingin menyampaikan:\n${message}\n\nMohon informasi lebih lanjut. Terima kasih! 🙏`
-          );
-
-        window.open(url, "_blank");
-
-        // Reset form
-        nameInput.value = "";
-        messageInput.value = "";
+        handleAdminContact('1', '6281808985548');
       });
+
+      // Admin 2 Button  
+      const admin2Btn = document.querySelector('.admin-2-btn');
+      admin2Btn?.addEventListener('click', (e: Event) => {
+        e.preventDefault();
+        handleAdminContact('2', '628179243081');
+      });
+    });
   </script>
   </div>
 </Layout>
