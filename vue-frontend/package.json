@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:api": "node test-api.mjs",
+    "setup:env": "cp .env.example .env && echo 'Created .env file. Please configure your API keys.'"
   },
   "dependencies": {
     "@astrojs/tailwind": "^6.0.2",
