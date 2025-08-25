@@ -284,13 +284,14 @@ import Layout from '../../layouts/Layout.astro';
                      <th scope="col" class="px-6 py-3">Email</th>
                      <th scope="col" class="px-6 py-3">No HP</th>
                      <th scope="col" class="px-6 py-3">Paket Usaha</th>
+                     <th scope="col" class="px-6 py-3">Sub Brand</th>
                      <th scope="col" class="px-6 py-3">Status</th>
                      <th scope="col" class="px-6 py-3">Actions</th>
                   </tr>
                </thead>
                <tbody id="mitra-table-body">
                   <tr>
-                     <td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td>
+                     <td colspan="7" class="px-6 py-4 text-center text-gray-500">Loading...</td>
                   </tr>
                </tbody>
             </table>
@@ -678,7 +679,7 @@ import Layout from '../../layouts/Layout.astro';
     if (!tableBody) return;
 
     try {
-      tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
 
       const response = await fetch(`${API_URL}/api/admin/mitra`, {
         method: 'GET',
@@ -728,7 +729,7 @@ import Layout from '../../layouts/Layout.astro';
           } else if (filter === 'pending') {
             emptyMessage = 'Tidak ada mitra yang menunggu persetujuan';
           }
-          tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">${emptyMessage}</td></tr>`;
+          tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">${emptyMessage}</td></tr>`;
           
           // Still update stats even if no data
           const isUserMenu = filter !== 'dashboard';
@@ -768,6 +769,12 @@ import Layout from '../../layouts/Layout.astro';
               <td class="px-6 py-4">${mitra.noHp || 'N/A'}</td>
               <td class="px-6 py-4">${mitra.paketUsaha || 'N/A'}</td>
               <td class="px-6 py-4">
+                ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ? 
+                  `<span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">${mitra.rmNusantaraSubMenu}</span>` : 
+                  '<span class="text-gray-400 text-xs">-</span>'
+                }
+              </td>
+              <td class="px-6 py-4">
                 <span class="px-2 py-1 text-xs font-medium rounded-full ${statusColor}">
                   ${mitra.status || 'pending'}
                 </span>
@@ -785,12 +792,12 @@ import Layout from '../../layouts/Layout.astro';
         const isUserMenu = filter !== 'dashboard';
         updateStats(result.data, isUserMenu);
       } else {
-        tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>';
       }
     } catch (error: unknown) {
       console.error('Error loading mitra data:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Error: ${errorMessage}</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-red-500">Error: ${errorMessage}</td></tr>`;
     }
   }
 
@@ -944,6 +951,7 @@ import Layout from '../../layouts/Layout.astro';
           <div><strong>Sistem Kemitraan:</strong> ${mitra.sistemKemitraan || 'N/A'}</div>
           <div><strong>Sales:</strong> ${mitra.sales || 'N/A'}</div>
           <div><strong>Paket Usaha:</strong> ${mitra.paketUsaha || 'N/A'}</div>
+          ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ? `<div><strong>Sub Brand:</strong> ${mitra.rmNusantaraSubMenu}</div>` : ''}
         </div>
       </div>
 

@@ -48,6 +48,7 @@ export async function registerMitra(mitraData: any) {
       sistemKemitraan: mitraData.sistemKemitraan,
       sales: mitraData.sales || "", // Handle sales field properly, allow empty string
       paketUsaha: mitraData.paketUsaha,
+      rmNusantaraSubMenu: mitraData.rmNusantaraSubMenu || "", // Add RM Nusantara sub menu
       namaMitra: mitraData.namaMitra,
       alamatMitra: mitraData.alamatMitra,
       noHp: mitraData.noHp,
