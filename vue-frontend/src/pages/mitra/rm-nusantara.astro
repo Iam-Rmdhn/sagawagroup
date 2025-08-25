@@ -63,7 +63,7 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
                   </div>
                   
                   <!-- Add Pagination -->
-                  <div class="swiper-pagination forced-colors: fill-amber-500"></div>
+                  <div class="swiper-pagination"></div>
                 </div>
               </div>
 
@@ -165,12 +165,12 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
           <!-- Benefit 1: Bahan Baku & Peralatan -->
           <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
             <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
+              <!-- Box icon -->
               <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12h20"/>
-                <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/>
-                <path d="m4 8 16-4"/>
-                <circle cx="8" cy="8" r="2"/>
-                <circle cx="16" cy="8" r="2"/>
+                <path d="m7.5 4.27 9 5.15"/>
+                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                <path d="m3.3 7 8.7 5 8.7-5"/>
+                <path d="M12 22V12"/>
               </svg>
             </div>
             <p class="text-xs font-medium text-gray-700 leading-tight">Bahan Baku &<br/>Peralatan</p>
@@ -272,15 +272,38 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
     font-size: 16px !important;
   }
   
-  /* Custom pagination styles */
-  .swiper-pagination-bullet {
-    background: rgba(255, 255, 255, 0.6) !important;
+  /* Custom pagination styles - Override Swiper defaults */
+  .swiper-pagination .swiper-pagination-bullet {
+    width: 24px !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    background: rgba(252, 211, 77, 0.6) !important;
     opacity: 1 !important;
+    margin: 0 4px !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
   }
   
-  .swiper-pagination-bullet-active {
-    background: white !important;
-    transform: scale(1.3) !important;
+  .swiper-pagination .swiper-pagination-bullet-active {
+    background: #fbbf24 !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4) !important;
+  }
+
+  /* More specific overrides */
+  .swiper.mySwiper .swiper-pagination-bullet {
+    width: 24px !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    background-color: rgba(252, 211, 77, 0.6) !important;
+    opacity: 1 !important;
+    margin: 0 4px !important;
+  }
+
+  .swiper.mySwiper .swiper-pagination-bullet-active {
+    background-color: #fbbf24 !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4) !important;
   }
 </style>
 
@@ -311,6 +334,11 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
+        bulletClass: 'swiper-pagination-bullet',
+        bulletActiveClass: 'swiper-pagination-bullet-active',
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '" style="width: 24px !important; height: 8px !important; border-radius: 4px !important; background: rgba(252, 211, 77, 0.6) !important; display: inline-block !important; margin: 0 4px !important; transition: all 0.3s ease !important;"></span>';
+        },
       },
       
       // Navigation arrows
@@ -350,9 +378,49 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
       on: {
         init: function () {
           console.log('Swiper initialized successfully');
+          // Force apply custom pagination styles
+          setTimeout(() => {
+            const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+            bullets.forEach(bullet => {
+              const htmlBullet = bullet as HTMLElement;
+              htmlBullet.style.width = '24px';
+              htmlBullet.style.height = '8px';
+              htmlBullet.style.borderRadius = '4px';
+              htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
+              htmlBullet.style.margin = '0 4px';
+              htmlBullet.style.transition = 'all 0.3s ease';
+            });
+            
+            const activeBullet = document.querySelector('.swiper-pagination-bullet-active') as HTMLElement;
+            if (activeBullet) {
+              activeBullet.style.background = '#fbbf24';
+              activeBullet.style.transform = 'scale(1.2)';
+              activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
+            }
+          }, 100);
         },
         slideChange: function (swiper) {
           console.log('Slide changed to:', swiper.activeIndex);
+          // Re-apply styles on slide change
+          setTimeout(() => {
+            const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+            bullets.forEach(bullet => {
+              const htmlBullet = bullet as HTMLElement;
+              htmlBullet.style.width = '24px';
+              htmlBullet.style.height = '8px';
+              htmlBullet.style.borderRadius = '4px';
+              htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
+              htmlBullet.style.margin = '0 4px';
+              htmlBullet.style.transition = 'all 0.3s ease';
+            });
+            
+            const activeBullet = document.querySelector('.swiper-pagination-bullet-active') as HTMLElement;
+            if (activeBullet) {
+              activeBullet.style.background = '#fbbf24';
+              activeBullet.style.transform = 'scale(1.2)';
+              activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
+            }
+          }, 50);
         },
       },
     });

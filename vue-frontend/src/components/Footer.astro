@@ -659,7 +659,7 @@ import sagawaIcon from '../assets/img/logo/logo-sgw.svg?url';
     }
 
     // Format angka dengan K, M suffix
-    function formatNumber(num: number): string {
+    function formatNumber(num: number) {
       if (num >= 1000000) {
         return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
       } else if (num >= 1000) {
@@ -667,7 +667,7 @@ import sagawaIcon from '../assets/img/logo/logo-sgw.svg?url';
       }
       return num.toLocaleString();
     }
-
+``
     // Fallback data jika API gagal
     function setFallbackData() {
       updateSocialCount('ig-followers', 12500);
