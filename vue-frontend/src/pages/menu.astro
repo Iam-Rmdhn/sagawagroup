@@ -33,8 +33,7 @@ import Perkedel from '../assets/img/menu/perkedel.png?url';
 import IkanTeriKacang from '../assets/img/menu/ikanterikacang.png?url';
 import KentangMustofa from '../assets/img/menu/kentangmustofa.png?url';
 import KentangBalado from '../assets/img/menu/kentangbalado.png?url';
-import TelurDadar from '../assets/img/menu/telurdadar.png?url';
-import TelurCeplok from '../assets/img/menu/telurceplok.png?url';
+import TelurDadar from '../assets/img/menu/TelurDadar.png?url';
 import AyamGoreng from '../assets/img/menu/ayamgoreng.png?url';
 import IkanGoreng from '../assets/img/menu/ikangoreng.png?url';
 import Usus from '../assets/img/menu/usus.png?url';
@@ -51,12 +50,14 @@ import JengkolBalado from '../assets/img/menu/jengkolbalado.png?url';
 import SayurLodeh from '../assets/img/menu/sayurlodeh.png?url';
 import SayurNangka from '../assets/img/menu/sayurnangka.png?url';
 import KacangPanjang from '../assets/img/menu/kacangpanjang.png?url';
-import AyamSerundeng from '../assets/img/menu/ayamserundeng.png?url';
+import AyamSerundeng from '../assets/img/menu/AyamSerundeng.png?url';
 import KerangHijau from '../assets/img/menu/keranghijau.png?url';
-import TempeTahu from '../assets/img/menu/tempetahu.png?url';
+import TempeTahu from '../assets/img/menu/TempeTahu.png?url';
 import Gorengan from '../assets/img/menu/gorengan.png?url';
-import TerongUdang from '../assets/img/menu/terongudang.png?url';
+import TerongBalado from '../assets/img/menu/terongbalado.png?url';
 import CumiAsin from '../assets/img/menu/cumiasin.png?url';
+import UdangBalado from '../assets/img/menu/udangbalado.png?url';
+import TelurCeplok from '../assets/img/menu/TelurCeplok.png?url';
 import IkanTongkol from '../assets/img/menu/ikantongkol.png?url';
 
 
@@ -64,46 +65,33 @@ import IkanTongkol from '../assets/img/menu/ikantongkol.png?url';
 
 const menus = [
   // 5 Rice Bowl
-  { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl" },
-  { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl" },
-  { name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl" },
-  { name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl" },
-  { name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl" },
+{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
 
-  // 21 Coffe Corner (diberi subcategory)
-  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: "Coffe Corner", subcategory: "non-coffee" },
-  { name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: almond, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: bluberry, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: CheeseMilk, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: CheeseNuts, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Coklat, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Sprinkle, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: SugarSnow, category: "Coffe Corner", subcategory: "donat" },
-  { name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: MatchaCrumble, category: "Coffee Corner", subcategory: "donat" },
-  { name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Tiramisu, category: "Coffe Corner", subcategory: "donat" },
-  // ...lanjutkan hingga 21 menu Coffe Corner...
-
-  // 20 Rice Bowl & COffe Corner
-    // 5 Rice Bowl
-  { name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl" },
-  { name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl" },
-
-  // 21 Coffe Corner (diberi subcategory)
-  { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: "Coffe Corner", subcategory: "coffee" },
-  { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: "Coffe Corner", subcategory: "coffee" },
-
-
+  // 21 Coffe Corner dan Rice Bowl & COffe Corner (diberi subcategory)
+{ name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "17k / 19k / 21k", img: americano, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "25k / 27k / 31k", img: CappLatte, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "25k / 29k / 33k", img: OsakaCaramel, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "25k / 29k / 33k", img: Mochachino, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "19k", img: affogato, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "17k / 19k / 21k", img: BlackCoffe, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "19k / 23k / 27k", img: Arren, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "17k", img: Lemonade, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "19.2k", img: Strawberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "25k / 29k", img: Sakura, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "29k / 33k", img: Matcha, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: almond, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: bluberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: CheeseMilk, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: CheeseNuts, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Coklat, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Sprinkle, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: SugarSnow, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: MatchaCrumble, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "10k", img: Tiramisu, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 
   // 25 Warung Makan Nusantara
   { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: OrekTempe, category: "R & M Nusantara", subcategory: "Lauk" },
@@ -133,7 +121,8 @@ const menus = [
   { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: KerangHijau, category: "R & M Nusantara", subcategory: "Lauk" },
   { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "R & M Nusantara", subcategory: "Gorengan" },
   { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: Gorengan, category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Terong / Udang Balado", desc: "Terong atau udang dimasak dengan sambal balado.", img: TerongUdang, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: UdangBalado, category: "R & M Nusantara", subcategory: "Lauk" },
   { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: CumiAsin, category: "R & M Nusantara", subcategory: "Lauk" },
   { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: IkanTongkol, category: "R & M Nusantara", subcategory: "Lauk" },
   // ...lanjutkan menu lain...
@@ -194,69 +183,70 @@ const menus = [
       <!-- Menu Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {
-          menus.map(menu => (
-            <div
-              x-show={`
-                filter === 'all'
-                || (
-                  filter === '${menu.category}'
-                  ${menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner'
-                    ? " && (subfilter === 'all' || subfilter === '" + menu.subcategory + "')"
-                    : ''
-                  }
-                )
-                || (
-                  filter === 'Rice Bowl & COffe Corner'
-                  && (
-                    subfilter === 'all'
-                    || (subfilter === 'makanan-berat' && menu.category === 'Rice Bowl')
-                    || (subfilter === 'coffee' && (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') && menu.subcategory === 'coffee')
-                    || (subfilter === 'non-coffee' && (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') && menu.subcategory === 'non-coffee')
-                    || (subfilter === 'donat' && (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') && menu.subcategory === 'donat')
+          menus.map(menu => {
+            // Ambil kategori & subkategori utama untuk atribut
+            const mainCategory = Array.isArray(menu.category) ? menu.category[0] : menu.category;
+            const mainSubcategory = Array.isArray(menu.subcategory) ? menu.subcategory[0] : menu.subcategory;
+            return (
+              <div
+                x-show={`
+                  filter === 'all'
+                  || $el.dataset.category === filter
+                  || (
+                    filter === 'Rice Bowl & Coffe Corner'
+                    && (
+                      subfilter === 'all'
+                      || (subfilter === 'makanan-berat' && $el.dataset.subcategory === 'makanan-berat')
+                      || (subfilter === 'coffee' && ($el.dataset.subcategory === 'coffee' || $el.dataset.subcategory === 'coffe'))
+                      || (subfilter === 'non-coffee' && ($el.dataset.subcategory === 'non-coffee' || $el.dataset.subcategory === 'non-coffe'))
+                      || (subfilter === 'donat' && $el.dataset.subcategory === 'donat')
+                    )
                   )
-                )
-              `}
-              x-transition:enter="transition ease-out duration-300"
-              x-transition:enter-start="opacity-0 scale-95"
-              x-transition:enter-end="opacity-100 scale-100"
-              x-transition:leave="transition ease-in duration-200"
-              x-transition:leave-start="opacity-100 scale-100"
-              x-transition:leave-end="opacity-0 scale-95"
-              class="box bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col"
-            >
-              <div class="relative">
-                <img src={menu.img} alt={menu.name} class="w-full h-48 object-cover" />
-                <span class={`absolute top-3 right-3 text-white text-xs px-3 py-1 rounded-full ${
-                  menu.category === 'Rice Bowl' ? 'bg-indigo-500' :
-                  (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') ? 'bg-green-500' :
-                  menu.category === 'Rice Bowl & COffe Corner' ? 'bg-pink-500' :
-                  'bg-yellow-500'
-                }`}>
-                  {menu.category}
-                  {menu.subcategory ? ` - ${menu.subcategory.charAt(0).toUpperCase() + menu.subcategory.slice(1)}` : ''}
-                </span>
-              </div>
-              <div class="p-5 flex-1 flex flex-col">
-                <h5 class="font-bold text-lg mb-1">{menu.name}</h5>
-                <p class="text-gray-600 text-sm mb-3 flex-1">{menu.desc}</p>
-                <div class="flex justify-between items-center mt-auto">
-                  <span class={`font-bold text-lg ${
-                    menu.category === 'Rice Bowl' ? 'text-indigo-600' :
-                    (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') ? 'text-green-600' :
-                    menu.category === 'Rice Bowl & COffe Corner' ? 'text-pink-500' :
-                    'text-yellow-600'
-                  }`}>{menu.price}</span>
-                  <button class={`rounded-full w-10 h-10 flex items-center justify-center transition text-white ${
-                    menu.category === 'Rice Bowl' ? 'bg-indigo-500 hover:bg-indigo-600' :
-                    (menu.category === 'Coffe Corner' || menu.category === 'Coffee Corner') ? 'bg-green-500 hover:bg-green-600' :
-                    menu.category === 'Rice Bowl & COffe Corner' ? 'bg-pink-500 hover:bg-pink-600' :
-                    'bg-yellow-500 hover:bg-yellow-600'
+                `}
+                data-category={mainCategory}
+                data-subcategory={mainSubcategory}
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="box bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col"
+              >
+                <div class="relative">
+                  <img src={menu.img} alt={menu.name} class="w-full h-48 object-cover" />
+                  <span class={`absolute top-3 right-3 text-white text-xs px-3 py-1 rounded-full ${
+                    mainCategory === 'Rice Bowl' ? 'bg-indigo-500' :
+                    mainCategory === 'Coffe Corner' ? 'bg-green-500' :
+                    mainCategory === 'Rice Bowl & Coffe Corner' ? 'bg-pink-500' :
+                    'bg-yellow-500'
                   }`}>
-                  </button>
+                    {mainCategory}
+                    {mainSubcategory ? ` - ${mainSubcategory.charAt(0).toUpperCase() + mainSubcategory.slice(1)}` : ''}
+                  </span>
+                </div>
+                <div class="p-5 flex-1 flex flex-col">
+                  <h5 class="font-bold text-lg mb-1">{menu.name}</h5>
+                  <p class="text-gray-600 text-sm mb-3 flex-1">{menu.desc}</p>
+                  <div class="flex justify-between items-center mt-auto">
+                    <span class={`font-bold text-lg ${
+                      mainCategory === 'Rice Bowl' ? 'text-indigo-600' :
+                      mainCategory === 'Coffe Corner' ? 'text-green-600' :
+                      mainCategory === 'Rice Bowl & Coffe Corner' ? 'text-pink-500' :
+                      'text-yellow-600'
+                    }`}>{menu.price}</span>
+                    <button class={`rounded-full w-10 h-10 flex items-center justify-center transition text-white ${
+                      mainCategory === 'Rice Bowl' ? 'bg-indigo-500 hover:bg-indigo-600' :
+                      mainCategory === 'Coffe Corner' ? 'bg-green-500 hover:bg-green-600' :
+                      mainCategory === 'Rice Bowl & Coffe Corner' ? 'bg-pink-500 hover:bg-pink-600' :
+                      'bg-yellow-500 hover:bg-yellow-600'
+                    }`}>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            )
+          })
         }
       </div>
 
