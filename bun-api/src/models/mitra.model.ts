@@ -7,6 +7,7 @@ export interface Mitra {
   sistemKemitraan: "Autopilot" | "Semi Autopilot" | "Self Managed";
   sales: string;
   paketUsaha: string;
+  rmNusantaraSubMenu?: string; // Optional field for RM Nusantara sub menu
 
   // Data Diri Mitra
   namaMitra: string;

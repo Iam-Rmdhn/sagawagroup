@@ -9,6 +9,7 @@ interface RegisterMitraBody {
   sistemKemitraan: string;
   sales: string;
   paketUsaha: string;
+  rmNusantaraSubMenu?: string;
   namaMitra: string;
   alamatMitra: string;
   noHp: string;
@@ -38,6 +39,10 @@ export const registerMitraController = async (
         mitraData[key] = value;
       }
     }
+
+    // Debug log to see all received data
+    console.log("Received mitra data:", mitraData);
+    console.log("rmNusantaraSubMenu value:", mitraData.rmNusantaraSubMenu);
 
     // Ensure sales field is properly handled (it comes as 'sales' from frontend but might be mapped)
     if (!mitraData.sales && mitraData.jenisUsaha) {
@@ -114,6 +119,23 @@ export const registerMitraController = async (
           }
         );
       }
+    }
+
+    // Validate RM Nusantara sub menu if RM Nusantara is selected
+    if (
+      mitraData.paketUsaha === "RM Nusantara" &&
+      !mitraData.rmNusantaraSubMenu
+    ) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "Sub menu RM Nusantara wajib dipilih ketika memilih paket RM Nusantara",
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
 
     const result = await registerMitra(mitraData);

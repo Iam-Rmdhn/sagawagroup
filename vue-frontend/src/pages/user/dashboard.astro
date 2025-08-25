@@ -939,11 +939,10 @@ import Layout from '../../layouts/Layout.astro';
       if (financialSection && (sistemKemitraanText.includes('autopilot') || sistemKemitraanText.includes('semi'))) {
          financialSection.classList.remove('hidden');
          initializeFinancialSection();
-         console.log('✅ Financial section displayed for:', data.sistemKemitraan);
+         console.log('Financial section displayed for:', data.sistemKemitraan);
       } else if (financialSection) {
-         // Explicitly hide financial section for Self Managed and other types
          financialSection.classList.add('hidden');
-         console.log('❌ Financial section hidden for:', data.sistemKemitraan);
+         console.log('Financial section hidden for:', data.sistemKemitraan);
       }
    }
 
@@ -1082,7 +1081,7 @@ import Layout from '../../layouts/Layout.astro';
 
    // Financial Section Functions - Google Sheets Integration
    function initializeFinancialSection() {
-      console.log('🔗 Initializing Google Sheets integration...');
+      console.log('Initializing Google Sheets integration...');
       
       // Load Google Sheets URL for this user
       loadUserSheetsUrl();
@@ -1114,7 +1113,7 @@ import Layout from '../../layouts/Layout.astro';
          const result = await response.json();
          
          if (response.ok && result.success) {
-            showNotification('🎉 Link Google Sheets berhasil disimpan!', 'success');
+            showNotification('Link Google Sheets berhasil disimpan!', 'success');
             updateConnectionStatus('connected', 'Link tersimpan');
             
             // Enable open button and load data
@@ -1154,7 +1153,7 @@ import Layout from '../../layouts/Layout.astro';
             updateConnectionStatus('connected', 'Terhubung ke Google Sheets');
             
          } else {
-            console.log('📋 Creating new Google Sheets for user...');
+            console.log('Creating new Google Sheets for user...');
             await createUserGoogleSheets();
          }
 
@@ -1165,7 +1164,7 @@ import Layout from '../../layouts/Layout.astro';
          // Use demo/template URL for development
          const sheetsInput = document.getElementById('sheets-url-input') as HTMLInputElement;
          if (sheetsInput) {
-            sheetsInput.value = 'https://docs.google.com/spreadsheets/d/DEMO_SHEET_ID/edit';
+            sheetsInput.value = '';
          }
       }
    }
@@ -1191,9 +1190,9 @@ import Layout from '../../layouts/Layout.astro';
                sheetsInput.value = result.data.sheetsUrl;
             }
             
-            console.log('✅ New Google Sheets created:', result.data.sheetsUrl);
+            console.log('New Google Sheets created:', result.data.sheetsUrl);
             updateConnectionStatus('connected', 'Sheets baru dibuat');
-            showNotification('🎉 Google Sheets baru telah dibuat untuk Anda!', 'success');
+            showNotification('Google Sheets baru telah dibuat untuk Anda!', 'success');
          } else {
             throw new Error(result.error || 'Gagal membuat Google Sheets');
          }

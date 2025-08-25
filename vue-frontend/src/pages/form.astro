@@ -121,12 +121,31 @@ import contohMitra from '../assets/img/contoh-mitra.png';
                 Kagawa Coffee & Ricebowl Corner - Rp 175.000.000 → Rp 139.000.000
               </option>
               <option value="RM Nusantara" data-original="100000000" data-discounted="89000000">
-                RM Nusantara (WarNas/WarTeg, Mas Gaw & RM Sunda) - Rp 100.000.000 → Rp 89.000.000
+                RM Nusantara (WarNas, Mas Gaw & Masakan Mas Gawa) - Rp 100.000.000 → Rp 89.000.000
               </option>
               <option value="Independent Brand" data-original="70000000" data-discounted="49000000">
                 Independent Brand - Rp 70.000.000 → Rp 49.000.000
               </option>
             </select>
+            
+            <!-- RM Nusantara Sub Options -->
+            <div id="rmNusantaraOptions" class="mt-4 p-4 bg-blue-50 rounded-lg border hidden">
+              <h4 class="text-md font-semibold text-gray-800 mb-3">Pilih Sub Menu RM Nusantara*</h4>
+              <div class="space-y-2">
+                <div class="flex items-center">
+                  <input id="warnas" name="rmNusantaraSubMenu" type="radio" value="WarNas" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                  <label for="warnas" class="ml-2 text-sm font-medium text-gray-700">WarNas</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="mas-gaw" name="rmNusantaraSubMenu" type="radio" value="Mas Gaw" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                  <label for="mas-gaw" class="ml-2 text-sm font-medium text-gray-700">Mas Gaw</label>
+                </div>
+                <div class="flex items-center">
+                  <input id="masakan-mas-gawa" name="rmNusantaraSubMenu" type="radio" value="Masakan Mas Gawa" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                  <label for="masakan-mas-gawa" class="ml-2 text-sm font-medium text-gray-700">Masakan Mas Gawa</label>
+                </div>
+              </div>
+            </div>
             
             <!-- Price Display -->
             <div id="priceDisplay" class="mt-4 p-4 bg-gradient-to-r from-red-50 to-green-50 rounded-lg border hidden">
@@ -477,7 +496,16 @@ function performValidation() {
       allValid = false;
       invalidFields.push(field.name);
     }
+  }
   
+  // Check RM Nusantara sub menu if RM Nusantara is selected
+  const paketUsahaElement = document.getElementById('paketUsaha') as HTMLSelectElement;
+  if (paketUsahaElement?.value === 'RM Nusantara') {
+    const rmSubMenuRadios = document.querySelectorAll('input[name="rmNusantaraSubMenu"]:checked');
+    if (rmSubMenuRadios.length === 0) {
+      allValid = false;
+      invalidFields.push('rmNusantaraSubMenu');
+    }
   }
   
   // Check file uploads
@@ -500,11 +528,11 @@ function performValidation() {
   
   // Update button state
   if (allValid) {
-    nextBtn.disabled = false;
+    (nextBtn as HTMLButtonElement).disabled = false;
     nextBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
     nextBtn.classList.add('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
   } else {
-    nextBtn.disabled = true;
+    (nextBtn as HTMLButtonElement).disabled = true;
     nextBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
     nextBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
   }
@@ -743,6 +771,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
+  // Add event listeners for RM Nusantara sub menu radio buttons
+  document.querySelectorAll('input[name="rmNusantaraSubMenu"]').forEach(radio => {
+    radio.addEventListener('change', function(this: HTMLInputElement) {
+      checkFormValidation();
+    });
+  });
+  
   // Initial validation check
   checkFormValidation();
   
@@ -782,6 +817,17 @@ paketUsahaElement?.addEventListener('change', function() {
   const priceData = packagePrices[selectedPackage as keyof typeof packagePrices];
   console.log('Price data from event listener:', priceData);
   packagePrice = priceData ? priceData.discounted : 0;
+  
+  // Show/hide RM Nusantara sub options
+  const rmNusantaraOptions = document.getElementById('rmNusantaraOptions');
+  if (this.value === 'RM Nusantara') {
+    rmNusantaraOptions?.classList.remove('hidden');
+  } else {
+    rmNusantaraOptions?.classList.add('hidden');
+    // Clear RM Nusantara sub menu selection
+    const rmSubMenuRadios = document.querySelectorAll('input[name="rmNusantaraSubMenu"]') as NodeListOf<HTMLInputElement>;
+    rmSubMenuRadios.forEach(radio => radio.checked = false);
+  }
   
   // Update price display
   updatePriceDisplay(priceData);
@@ -1015,6 +1061,7 @@ function collectFormData() {
   const sistemKemitraanElement = document.querySelector('input[name="sistemKemitraan"]:checked') as HTMLInputElement;
   const salesElement = document.getElementById('sales') as HTMLInputElement;
   const paketUsahaElement = document.getElementById('paketUsaha') as HTMLSelectElement;
+  const rmNusantaraSubMenuElement = document.querySelector('input[name="rmNusantaraSubMenu"]:checked') as HTMLInputElement;
   const namaMitraElement = document.getElementById('namaMitra') as HTMLInputElement;
   const alamatMitraElement = document.getElementById('alamatMitra') as HTMLInputElement;
   const noHpElement = document.getElementById('noHp') as HTMLInputElement;
@@ -1030,6 +1077,7 @@ function collectFormData() {
     sistemKemitraan: sistemKemitraanElement?.value || '',
     sales: salesElement?.value || '',
     paketUsaha: paketUsahaElement?.value || '',
+    rmNusantaraSubMenu: rmNusantaraSubMenuElement?.value || '',
     namaMitra: namaMitraElement?.value || '',
     alamatMitra: alamatMitraElement?.value || '',
     noHp: noHpElement?.value || '',
@@ -1077,6 +1125,7 @@ function generateConfirmationHTML(data: any) {
       <div class="bg-gray-50 p-4 rounded-lg">
         <h3 class="font-semibold text-gray-800 mb-2">Paket Usaha</h3>
         <p class="text-gray-600">${data.paketUsaha}</p>
+        ${data.paketUsaha === 'RM Nusantara' && data.rmNusantaraSubMenu ? `<p class="text-gray-600">Sub Menu: ${data.rmNusantaraSubMenu}</p>` : ''}
         <p class="text-gray-600">
           Harga: <span style="text-decoration: line-through; color: #999;">${formatCurrency(originalPrice)}</span> 
           <strong style="color: #dc2626;">${formatCurrency(packagePrice)}</strong>
@@ -1170,7 +1219,7 @@ async function submitForm() {
     
     // Add all form fields except files
     const formFields = [
-      'sistemKemitraan', 'paketUsaha', 'namaMitra', 
+      'sistemKemitraan', 'paketUsaha', 'rmNusantaraSubMenu', 'namaMitra', 
       'alamatMitra', 'noHp', 'email', 'nilaiPaket', 'namaPengirim', 
       'noRekPengirim', 'bankPengirim', 'sales'
     ];
@@ -1208,6 +1257,7 @@ async function submitForm() {
     
     // Submit to backend
     console.log('Submitting form data to backend...');
+    console.log('Form data collected:', formData); // Debug log to see all form data
     console.log('Submit data entries:', Array.from(submitData.entries()));
     
     const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
