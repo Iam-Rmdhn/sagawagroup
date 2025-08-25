@@ -15,12 +15,38 @@ logs
 _.log
 report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
-# dotenv environment variable files
+# dotenv environment variable files - CRITICAL: Never commit API keys!
 .env
 .env.development.local
 .env.test.local
 .env.production.local
 .env.local
+.env.*.local
+
+# Database credentials and connection strings
+database.json
+db-config.json
+*.db-connection
+connection-string.txt
+
+# JWT secrets and authentication
+jwt-secret.txt
+auth-secrets.json
+*.jwt
+*.token
+
+# API keys and external service credentials  
+api-keys.json
+service-account.json
+*-api-key.txt
+*-credentials.json
+
+# Upload directories and user content
+uploads/
+temp-uploads/
+user-files/
+*/uploads/
+**/uploads/**
 
 # caches
 .eslintcache
@@ -32,5 +58,14 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+
+# Temporary development files
+*.tmp
+*.temp
+.temp/
 
 .index.ts

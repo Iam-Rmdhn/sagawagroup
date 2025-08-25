@@ -6,6 +6,14 @@
       "name": "Development server",
       "request": "launch",
       "type": "node-terminal"
+    },
+    {
+      "name": "Test Social Media APIs",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/test-api.mjs",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

@@ -233,6 +233,22 @@ const partnerships = [
             </div>
           </div>
 
+          <!-- Desktop Product Description (shown after image on desktop) -->
+          <div class="hidden lg:block desktop-description-container">
+            <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-md border border-orange-100/50 relative overflow-hidden">
+              <!-- Subtle Background Pattern -->
+              <div class="absolute inset-0 opacity-5">
+                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-200 to-red-200"></div>
+              </div>
+              
+              <div class="relative z-10">
+                <p class="text-base text-gray-700 leading-relaxed text-left">
+                  <span class="font-semibold text-orange-600">{partner.title}</span> {partner.description}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <!-- Content Section -->
           <div class="content-container">
             <!-- Mobile Title (Only visible on mobile) -->
@@ -269,22 +285,6 @@ const partnerships = [
               <p class="hidden lg:block text-base sm:text-lg text-gray-600 font-medium leading-relaxed mb-4">
                 {partner.subtitle}
               </p>
-              
-              <!-- Desktop Product Description -->
-              <div class="hidden lg:block mt-4">
-                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-md border border-orange-100/50 relative overflow-hidden">
-                  <!-- Subtle Background Pattern -->
-                  <div class="absolute inset-0 opacity-5">
-                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-200 to-red-200"></div>
-                  </div>
-                  
-                  <div class="relative z-10">
-                    <p class="text-base text-gray-700 leading-relaxed text-left">
-                      <span class="font-semibold text-orange-600">{partner.title}</span> {partner.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
             
             <!-- Benefits Section -->
@@ -642,9 +642,11 @@ const partnerships = [
       gap: 5rem;
     }
     
-    /* Left layout: Image on left, Content on right */
+    /* Left layout: Image on left, Description below image, Content on right */
     .layout-left {
-      grid-template-areas: "image content";
+      grid-template-areas: 
+        "image content"
+        "description content";
     }
     
     .layout-left .image-container {
@@ -653,20 +655,32 @@ const partnerships = [
       justify-content: flex-start;
     }
     
+    .layout-left .desktop-description-container {
+      grid-area: description;
+      margin-top: 0.5rem;
+    }
+    
     .layout-left .content-container {
       grid-area: content;
       text-align: left;
     }
     
-    /* Right layout: Content on left, Image on right */
+    /* Right layout: Content on left, Image on right, Description below image */
     .layout-right {
-      grid-template-areas: "content image";
+      grid-template-areas: 
+        "content image"
+        "content description";
     }
     
     .layout-right .image-container {
       grid-area: image;
       display: flex;
       justify-content: flex-end;
+    }
+    
+    .layout-right .desktop-description-container {
+      grid-area: description;
+      margin-top: 0.5rem;
     }
     
     .layout-right .content-container {

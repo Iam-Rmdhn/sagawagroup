@@ -1,0 +1,7 @@
+# Git ignore security check
+# Files that should NEVER be committed:
+*.env (except .env.example)
+uploads/ directories
+node_modules/
+dist/ and build/ directories
+API keys and credentials

@@ -13,12 +13,58 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# environment variables - CRITICAL: Never commit API keys!
 .env
+.env.local
 .env.production
+.env.development
+.env.*.local
+
+# Social Media API credentials - SECURITY CRITICAL
+instagram-*.json
+twitter-*.json
+linkedin-*.json
+youtube-*.json
+social-api-keys.txt
+api-credentials.json
+*-api-key.txt
+*-access-token.txt
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+
+# VS Code specific (keep extensions.json but filter sensitive settings)
+.vscode/settings.json
+.vscode/launch.json
+
+# Cache directories
+.cache/
+.tmp/
+.temp/
+*.cache
+
+# Upload directories
+uploads/
+temp-uploads/
+user-content/
+
+# Testing output
+test-output/
+coverage/
+*.test.local
+
+# Lock files (optional - uncomment if you prefer to exclude)
+# yarn.lock
+# pnpm-lock.yaml
+
+# Development and demo files (uncomment if you don't want to track)
+# demo-*.html
+# test-*.mjs
+# *.demo.*
