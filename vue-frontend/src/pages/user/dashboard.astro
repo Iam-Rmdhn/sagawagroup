@@ -266,12 +266,13 @@ import Layout from '../../layouts/Layout.astro';
 </div>
 
 <!-- Agreement Modal for New Users -->
-<div id="agreement-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+<div id="agreement-modal" class="hidden fixed inset-0 z-[9999] overflow-y-auto bg-black bg-opacity-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+   <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <!-- Modal backdrop -->
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" id="modal-backdrop"></div>
       
       <!-- Modal panel -->
-      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full relative z-10">
          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="flex items-center mb-4">
                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -281,10 +282,10 @@ import Layout from '../../layouts/Layout.astro';
                </div>
                <div class="ml-3">
                   <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                     Perjanjian Kemitraan Sagawa Group
+                     Selamat Datang di Sagawa Group!
                   </h3>
                   <p class="text-sm text-gray-500">
-                     Silakan baca dan setujui syarat dan ketentuan kemitraan
+                     Sebagai mitra baru, silakan baca dan setujui syarat dan ketentuan kemitraan
                   </p>
                </div>
             </div>
@@ -404,6 +405,21 @@ import Layout from '../../layouts/Layout.astro';
          return;
       }
 
+      // Add debug functions to global scope for testing
+      (window as any).resetAgreement = function() {
+         localStorage.removeItem('mitraAgreementAccepted');
+         localStorage.removeItem('mitraAgreementAcceptedAt');
+         console.log('🔄 Agreement status reset! Reload page to see modal.');
+      };
+
+      (window as any).showModal = function() {
+         showAgreementModal();
+      };
+
+      console.log('🛠️ Debug functions available:');
+      console.log('- resetAgreement() : Reset agreement status');
+      console.log('- showModal() : Force show modal');
+
       // Setup agreement modal for new users
       setupAgreementModal();
 
@@ -474,19 +490,36 @@ import Layout from '../../layouts/Layout.astro';
    function setupAgreementModal() {
       // Check if user has already agreed to terms
       const hasAgreed = localStorage.getItem('mitraAgreementAccepted');
-      const userEmail = localStorage.getItem('mitraUserEmail');
+      const userToken = localStorage.getItem('mitraToken');
+      const agreementTokenMatch = localStorage.getItem('mitraAgreementToken');
       
-      console.log('Agreement check:', { hasAgreed, userEmail });
+      console.log('Agreement status check:');
+      console.log('- hasAgreed:', hasAgreed);
+      console.log('- userToken:', userToken ? userToken.substring(0, 10) + '...' : null);
+      console.log('- agreementTokenMatch:', agreementTokenMatch ? agreementTokenMatch.substring(0, 10) + '...' : null);
+      console.log('- localStorage keys:', Object.keys(localStorage));
       
-      // For development/testing - uncomment to reset agreement status
-      // localStorage.removeItem('mitraAgreementAccepted');
+      // Check if agreement was made with current token (prevents cross-user agreement reuse)
+      const isCurrentUserAgreement = hasAgreed && agreementTokenMatch === userToken;
       
-      // Show modal if user hasn't agreed yet
-      if (!hasAgreed) {
-         console.log('Showing agreement modal for user');
-         showAgreementModal();
+      // Show modal if user hasn't agreed OR if agreement was made by different user
+      if (!hasAgreed || !isCurrentUserAgreement) {
+         console.log('User has NOT agreed yet (or different user) - showing agreement modal');
+         console.log('- Reason: hasAgreed =', hasAgreed, ', isCurrentUserAgreement =', isCurrentUserAgreement);
+         
+         // Clear old agreement data if it was from different user
+         if (hasAgreed && !isCurrentUserAgreement) {
+            localStorage.removeItem('mitraAgreementAccepted');
+            localStorage.removeItem('mitraAgreementAcceptedAt');
+            localStorage.removeItem('mitraAgreementToken');
+            console.log('Cleared old agreement data from different user');
+         }
+         
+         setTimeout(() => {
+            showAgreementModal();
+         }, 500); // Small delay to ensure page is fully loaded
       } else {
-         console.log('User has already agreed to terms');
+         console.log('User has already agreed to terms on:', hasAgreed);
       }
       
       // Setup checkbox handler
@@ -514,42 +547,52 @@ import Layout from '../../layouts/Layout.astro';
    }
 
    function showAgreementModal() {
+      console.log('Attempting to show agreement modal...');
+      
       const modal = document.getElementById('agreement-modal');
       if (modal) {
+         console.log('Modal element found, showing modal');
+         
+         // Remove hidden class and add animation
          modal.classList.remove('hidden');
+         modal.style.display = 'block';
+         
          // Prevent background scrolling
          document.body.style.overflow = 'hidden';
          
          // Focus on the modal for accessibility
-         modal.focus();
+         setTimeout(() => {
+            modal.focus();
+         }, 100);
          
-         // Add event listeners for closing modal
-         const modalBackdrop = modal.querySelector('.bg-gray-500');
-         if (modalBackdrop) {
-            modalBackdrop.addEventListener('click', function(e) {
-               // Only close if clicking the backdrop, not the modal content
-               if (e.target === modalBackdrop) {
-                  // Don't allow closing until agreement is accepted
-                  showNotification('Silakan baca dan setujui perjanjian terlebih dahulu', 'error');
-               }
-            });
-         }
+         // Add animation effect
+         setTimeout(() => {
+            modal.style.opacity = '1';
+         }, 10);
          
-         // Handle Escape key (but don't allow closing until agreed)
-         document.addEventListener('keydown', function handleEscape(e) {
-            if (e.key === 'Escape') {
-               showNotification('Silakan baca dan setujui perjanjian terlebih dahulu', 'error');
-            }
-         });
+         console.log('Agreement modal is now visible');
+      } else {
+         console.error('Modal element not found!');
       }
    }
 
    function hideAgreementModal() {
+      console.log('Hiding agreement modal...');
+
       const modal = document.getElementById('agreement-modal');
       if (modal) {
-         modal.classList.add('hidden');
-         // Restore background scrolling
-         document.body.style.overflow = '';
+         // Add fade out animation
+         modal.style.opacity = '0';
+         
+         setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            
+            // Restore background scrolling
+            document.body.style.overflow = '';
+            
+            console.log('✅ Agreement modal hidden successfully');
+         }, 300);
       }
    }
 
@@ -572,9 +615,15 @@ import Layout from '../../layouts/Layout.astro';
          // Simulate API call delay
          await new Promise(resolve => setTimeout(resolve, 1000));
          
-         // Store acceptance in localStorage
+         // Get current user token for binding agreement to this user
+         const currentToken = localStorage.getItem('mitraToken');
+         
+         // Store acceptance in localStorage with token binding
          localStorage.setItem('mitraAgreementAccepted', 'true');
          localStorage.setItem('mitraAgreementAcceptedAt', new Date().toISOString());
+         localStorage.setItem('mitraAgreementToken', currentToken || '');
+         
+         console.log('✅ Agreement accepted and stored with token binding');
          
          // Hide modal
          hideAgreementModal();
