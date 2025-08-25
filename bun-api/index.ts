@@ -1,11 +1,13 @@
 import { authRoute } from "./src/routes/auth.route";
 import { mitraRoute } from "./src/routes/mitra.route";
+import { sheetsRoute } from "./src/routes/sheets.route";
+import { agreementRoute } from "./src/routes/agreement.route";
 import "./src/lib/db"; // Initialize database connection
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 9999;
+const PORT = process.env.PORT || 4000;
 
 Bun.serve({
   port: PORT,
@@ -38,6 +40,33 @@ Bun.serve({
         url.pathname === "/api/mitra/profile/update"
       ) {
         const response = await authRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Google Sheets routes
+      if (
+        url.pathname.startsWith("/api/mitra/sheets") ||
+        url.pathname === "/api/mitra/create-sheets" ||
+        url.pathname === "/api/mitra/validate-sheets"
+      ) {
+        const response = await sheetsRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Agreement routes
+      if (
+        url.pathname === "/api/mitra/agreement-status" ||
+        url.pathname === "/api/mitra/accept-agreement"
+      ) {
+        const response = await agreementRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
           response.headers.set(key, value);
