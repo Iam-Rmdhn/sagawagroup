@@ -3,129 +3,68 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
-import Purukogi from '../assets/img/menu/Purukogi.png?url';
-import Kokonattsuchikin from '../assets/img/menu/Kokonattsuchikin.png?url';
-import Teriyakichickin from '../assets/img/menu/Teriyakichickin.png?url';
-import Kokonattsueuggu from '../assets/img/menu/Kokonattsueuggu.png?url';
-import Lemonade from '../assets/img/menu/Lemonade.png?url';
-import Strawberry from '../assets/img/menu/Strawberry.png?url';
-import Matcha from '../assets/img/menu/Matcha.png?url';
-import Sakura from '../assets/img/menu/Sakura.png?url';
-import Kushiyaki from '../assets/img/menu/Kushiyaki.png?url';
-import americano from '../assets/img/menu/americano.png?url';
-import affogato from '../assets/img/menu/affogato.png?url';
-import CappLatte from '../assets/img/menu/CappLatte.png?url';
-import OsakaCaramel from '../assets/img/menu/OsakaCaramel.png?url';
-import Mochachino from '../assets/img/menu/Mochachino.png?url';
-import Arren from '../assets/img/menu/Arren.png?url';
-import BlackCoffe from '../assets/img/menu/BlackCoffe.png?url';
-import Tiramisu from '../assets/img/menu/Tiramisu.png?url';
-import SugarSnow from '../assets/img/menu/SugarSnow.png?url';
-import CheeseNuts from '../assets/img/menu/CheeseNuts.png?url';
-import Coklat from '../assets/img/menu/Coklat.png?url';
-import MatchaCrumble from '../assets/img/menu/MatchaCrumble.png?url';
-import CheeseMilk from '../assets/img/menu/CheeseMilk.png?url';
-import almond from '../assets/img/menu/almond.png?url';
-import Sprinkle from '../assets/img/menu/Sprinkle.png?url';
-import bluberry from '../assets/img/menu/bluberry.png?url';
-import OrekTempe from '../assets/img/menu/orektempe.png?url';
-import Perkedel from '../assets/img/menu/perkedel.png?url';
-import IkanTeriKacang from '../assets/img/menu/ikanterikacang.png?url';
-import KentangMustofa from '../assets/img/menu/kentangmustofa.png?url';
-import KentangBalado from '../assets/img/menu/kentangbalado.png?url';
-import TelurDadar from '../assets/img/menu/TelurDadar.png?url';
-import AyamGoreng from '../assets/img/menu/ayamgoreng.png?url';
-import IkanGoreng from '../assets/img/menu/ikangoreng.png?url';
-import Usus from '../assets/img/menu/usus.png?url';
-import AcarKuning from '../assets/img/menu/acarkuning.png?url';
-import IkanPesmol from '../assets/img/menu/ikanpesmol.png?url';
-import TumisLabu from '../assets/img/menu/tumislabu.png?url';
-import Kikil from '../assets/img/menu/kikil.png?url';
-import SayurSop from '../assets/img/menu/sayursop.png?url';
-import SayurBayam from '../assets/img/menu/sayurbayam.png?url';
-import SotoAyam from '../assets/img/menu/sotoayam.png?url';
-import MieGoreng from '../assets/img/menu/miegoreng.png?url';
-import JengkolSemur from '../assets/img/menu/jengkolsemur.png?url';
-import JengkolBalado from '../assets/img/menu/jengkolbalado.png?url';
-import SayurLodeh from '../assets/img/menu/sayurlodeh.png?url';
-import SayurNangka from '../assets/img/menu/sayurnangka.png?url';
-import KacangPanjang from '../assets/img/menu/kacangpanjang.png?url';
-import AyamSerundeng from '../assets/img/menu/AyamSerundeng.png?url';
-import KerangHijau from '../assets/img/menu/keranghijau.png?url';
-import TempeTahu from '../assets/img/menu/TempeTahu.png?url';
-import Gorengan from '../assets/img/menu/gorengan.png?url';
-import TerongBalado from '../assets/img/menu/TerongBalado.png?url';
-import CumiAsin from '../assets/img/menu/cumiasin.png?url';
-import UdangBalado from '../assets/img/menu/udangbalado.png?url';
-import TelurCeplok from '../assets/img/menu/TelurCeplok.png?url';
-import IkanTongkol from '../assets/img/menu/ikantongkol.png?url';
-
-
-// Tambahkan import gambar lain jika ada
-
 const menus = [
   // 5 Rice Bowl
-{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: "/src/assets/img/menu/Kushiyaki.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: "/src/assets/img/menu/Teriyakichickin.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: "/src/assets/img/menu/Kokonattsuchikin.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: "/src/assets/img/menu/Purukogi.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: "/src/assets/img/menu/Kokonattsueuggu.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
 
   // 21 Coffe Corner dan Rice Bowl & COffe Corner (diberi subcategory)
-{ name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "Rp 17.000", img: americano, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 25.000", img: CappLatte, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "Rp 25.000", img: OsakaCaramel, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "Rp 25.000", img: Mochachino, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "Rp 19.000", img: affogato, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "Rp 17.000", img: BlackCoffe, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "Rp 19.000", img: Arren, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "Rp 17.000", img: Lemonade, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "Rp 19.000", img: Strawberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "Rp 25.000", img: Sakura, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "Rp 29.000", img: Matcha, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: almond, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: bluberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: CheeseMilk, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: CheeseNuts, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Coklat, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Sprinkle, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: SugarSnow, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: MatchaCrumble, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Tiramisu, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "Rp 17.000", img: "/src/assets/img/menu/americano.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 25.000", img: "/src/assets/img/menu/CappLatte.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "Rp 25.000", img: "/src/assets/img/menu/OsakaCaramel.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "Rp 25.000", img: "/src/assets/img/menu/Mochachino.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "Rp 19.000", img: "/src/assets/img/menu/affogato.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "Rp 17.000", img: "/src/assets/img/menu/BlackCoffe.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "Rp 19.000", img: "/src/assets/img/menu/Arren.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "Rp 17.000", img: "/src/assets/img/menu/Lemonade.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "Rp 19.000", img: "/src/assets/img/menu/Strawberry.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "Rp 25.000", img: "/src/assets/img/menu/Sakura.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "Rp 29.000", img: "/src/assets/img/menu/Matcha.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/almond.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/bluberry.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/CheeseMilk.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/CheeseNuts.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Coklat.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Sprinkle.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/SugarSnow.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/MatchaCrumble.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Tiramisu.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 
   // 25 Warung Makan Nusantara
-  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: OrekTempe, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: Perkedel, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: IkanTeriKacang, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Mustofa", desc: "Irisan kentang tipis goreng kriuk berbumbu pedas manis.", img: KentangMustofa, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: KentangBalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: TelurDadar, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Ceplok / Balado / Semur", desc: "Telur ceplok dengan pilihan sambal balado atau kuah semur.", img: TelurCeplok, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: AyamGoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: IkanGoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Usus", desc: "Usus ayam dimasak dengan bumbu gurih pedas.", img: Usus, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: AcarKuning, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: IkanPesmol, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: TumisLabu, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: Kikil, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: SayurSop, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: SayurBayam, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Soto Ayam", desc: "Sup ayam berkuah kuning gurih dengan rempah.", img: SotoAyam, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Mie Goreng", desc: "Mie kuning goreng dengan bumbu khas.", img: MieGoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Semur", desc: "Jengkol empuk dimasak kuah semur manis gurih.", img: JengkolSemur, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: JengkolBalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: SayurLodeh, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: SayurNangka, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kacang Panjang Tumis", desc: "Kacang panjang ditumis dengan bumbu sederhana.", img: KacangPanjang, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ayam Goreng Serundeng", desc: "Ayam goreng dengan taburan serundeng kelapa gurih.", img: AyamSerundeng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: KerangHijau, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: Gorengan, category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: UdangBalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: CumiAsin, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: IkanTongkol, category: "R & M Nusantara", subcategory: "Lauk" },
-  // ...lanjutkan menu lain...
+  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: "/src/assets/img/menu/orektempe.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: "/src/assets/img/menu/perkedel.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: "/src/assets/img/menu/ikanterikacang.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Mustofa", desc: "Irisan kentang tipis goreng kriuk berbumbu pedas manis.", img: "/src/assets/img/menu/kentangmustofa.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: "/src/assets/img/menu/kentangbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: "/src/assets/img/menu/TelurDadar.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Telur Ceplok / Balado / Semur", desc: "Telur ceplok dengan pilihan sambal balado atau kuah semur.", img: "/src/assets/img/menu/TelurCeplok.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: "/src/assets/img/menu/ayamgoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: "/src/assets/img/menu/ikangoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Usus", desc: "Usus ayam dimasak dengan bumbu gurih pedas.", img: "/src/assets/img/menu/usus.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: "/src/assets/img/menu/acarkuning.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: "/src/assets/img/menu/ikanpesmol.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: "/src/assets/img/menu/tumislabu.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: "/src/assets/img/menu/kikil.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: "/src/assets/img/menu/sayursop.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: "/src/assets/img/menu/sayurbayam.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Soto Ayam", desc: "Sup ayam berkuah kuning gurih dengan rempah.", img: "/src/assets/img/menu/sotoayam.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Mie Goreng", desc: "Mie kuning goreng dengan bumbu khas.", img: "/src/assets/img/menu/miegoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Jengkol Semur", desc: "Jengkol empuk dimasak kuah semur manis gurih.", img: "/src/assets/img/menu/jengkolsemur.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: "/src/assets/img/menu/jengkolbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: "/src/assets/img/menu/sayurlodeh.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: "/src/assets/img/menu/sayurnangka.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Kacang Panjang Tumis", desc: "Kacang panjang ditumis dengan bumbu sederhana.", img: "/src/assets/img/menu/kacangpanjang.png", category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Ayam Goreng Serundeng", desc: "Ayam goreng dengan taburan serundeng kelapa gurih.", img: "/src/assets/img/menu/AyamSerundeng.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: "/src/assets/img/menu/keranghijau.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: "/src/assets/img/menu/TempeTahu.png", category: "R & M Nusantara", subcategory: "Gorengan" },
+  { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: "/src/assets/img/menu/gorengan.png", category: "R & M Nusantara", subcategory: "Gorengan" },
+  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: "/src/assets/img/menu/TerongBalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: "/src/assets/img/menu/udangbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: "/src/assets/img/menu/cumiasin.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: "/src/assets/img/menu/ikantongkol.png", category: "R & M Nusantara", subcategory: "Lauk" },
 ];
 ---
 
@@ -133,123 +72,124 @@ const menus = [
   <Navbar />
   
   <!-- Hero Section -->
-  <section class="hero-section relative pt-24 pb-32 md:pt-24 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
+  <section class="hero-section relative pt-20 pb-24 sm:pt-24 sm:pb-32 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
     <!-- Background decorative elements -->
     <div class="absolute inset-0 opacity-10">
-      <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-gradient-to-br from-white to-amber-100 rounded-full"></div>
-      <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-gradient-to-br from-amber-200 to-amber-300 rounded-full"></div>
-      <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-gradient-to-br from-orange-200 to-orange-300 rounded-full"></div>
-      <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-gradient-to-br from-red-200 to-red-300 rounded-full"></div>
-      <div class="animate-float delay-200 absolute top-1/2 left-1/3 w-10 h-10 bg-gradient-to-br from-yellow-200 to-amber-200 rounded-full"></div>
+      <div class="animate-float absolute top-16 sm:top-20 left-4 sm:left-10 w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br from-white to-amber-100 rounded-full"></div>
+      <div class="animate-float delay-700 absolute top-32 sm:top-40 right-8 sm:right-20 w-8 sm:w-12 h-8 sm:h-12 bg-gradient-to-br from-amber-200 to-amber-300 rounded-full"></div>
+      <div class="animate-float delay-500 absolute bottom-24 sm:bottom-32 left-1/4 w-6 sm:w-8 h-6 sm:h-8 bg-gradient-to-br from-orange-200 to-orange-300 rounded-full"></div>
+      <div class="animate-float delay-300 absolute bottom-16 sm:bottom-20 right-1/3 w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-red-200 to-red-300 rounded-full"></div>
+      <div class="animate-float delay-200 absolute top-1/2 left-1/3 w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-yellow-200 to-amber-200 rounded-full"></div>
     </div>
     
-    <div class="container mx-auto max-w-4xl relative z-30">
-      <h5 class="text-sm sm:text-base text-amber-200 font-semibold uppercase tracking-wider mb-3 animate-fade-in-up">
+    <div class="container mx-auto max-w-4xl relative z-30 px-2">
+      <h5 class="text-xs sm:text-sm md:text-base text-amber-200 font-semibold uppercase tracking-wider mb-2 sm:mb-3 animate-fade-in-up">
         Menu Kuliner
       </h5>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight animate-fade-in-up animation-delay-200">
+      <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight animate-fade-in-up animation-delay-200">
         Menu Pilihan Terbaik
       </h1>
-      <div class="w-24 h-1 bg-gradient-to-r from-amber-200 to-white mx-auto mt-6 rounded animate-fade-in-up animation-delay-400"></div>
-      <p class="text-lg md:text-xl mb-8 pt-6 max-w-3xl mx-auto animate-fade-in-up animation-delay-600 text-amber-100">
+      <div class="w-16 sm:w-24 h-1 bg-gradient-to-r from-amber-200 to-white mx-auto mt-4 sm:mt-6 rounded animate-fade-in-up animation-delay-400"></div>
+      <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 pt-4 sm:pt-6 max-w-3xl mx-auto animate-fade-in-up animation-delay-600 text-amber-100 leading-relaxed px-2">
         Nikmati koleksi menu pilihan terbaik dari brand-brand Sagawa Group. Mulai dari Rice Bowl Jepang, Coffee Corner premium, hingga cita rasa Nusantara yang autentik.
       </p>
     </div>
 
     <!-- White Wave Effect -->
     <div class="absolute bottom-[-1px] left-0 w-full overflow-hidden z-30">
-      <svg class="w-full h-20" viewBox="0 0 1440 70" preserveAspectRatio="none">
+      <svg class="w-full h-12 sm:h-20" viewBox="0 0 1440 70" preserveAspectRatio="none">
         <path d="M0,70 L0,40 C240,15 480,50 720,45 C960,40 1200,15 1440,25 L1440,70 Z" fill="#FFFFFF"></path>
       </svg>
     </div>
   </section>
 
-  <main class="food_section py-12 px-4 bg-white relative mt-[-1px]" x-data="{ filter: 'all', subfilter: 'all' }">
+  <main class="food_section py-8 sm:py-12 px-2 sm:px-4 bg-white relative mt-[-1px]" x-data="{ filter: 'all', subfilter: 'all' }">
     <div class="container mx-auto max-w-6xl">
 
       <!-- Filter Menu -->
-      <div class="text-center mb-12 scroll-animate opacity-0 transform translate-y-[30px]">
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 hover:text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">
+      <div class="text-center mb-8 sm:mb-12 scroll-animate opacity-0 transform translate-y-[30px] px-2">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 hover:text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">
           Pilih Kategori Menu
         </h2>
-        <p class="text-gray-600 animate-fade-in-up animation-delay-200 mb-8">
+        <p class="text-sm sm:text-base text-gray-600 animate-fade-in-up animation-delay-200 mb-6 sm:mb-8 leading-relaxed">
           Temukan menu favorit dari berbagai kategori pilihan kami
         </p>
       </div>
       
-      <ul class="filters_menu flex flex-wrap justify-center gap-3 mb-8">
-        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-6 py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-          <span class="flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 px-2">
+        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
+          <span class="flex items-center space-x-1 sm:space-x-2">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
             </svg>
-            <span>Semua Menu</span>
+            <span class="whitespace-nowrap">Semua Menu</span>
           </span>
         </li>
-        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-6 py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-          <span class="flex items-center space-x-2">
-            <span>Rice Bowl</span>
+        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
+          <span class="flex items-center space-x-1 sm:space-x-2">
+            <span class="whitespace-nowrap">Rice Bowl</span>
           </span>
         </li>
-        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-6 py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-          <span class="flex items-center space-x-2">
-            <span>Coffee Corner</span>
+        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
+          <span class="flex items-center space-x-1 sm:space-x-2">
+            <span class="whitespace-nowrap">Coffee Corner</span>
           </span>
         </li>
-        <li :class="filter === 'Rice Bowl & Coffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-6 py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-          <span class="flex items-center space-x-2">
-            <span>Rice Bowl & Coffee</span>
+        <li :class="filter === 'Rice Bowl & Coffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
+          <span class="flex items-center space-x-1 sm:space-x-2">
+            <span class="whitespace-nowrap hidden sm:inline">Rice Bowl & Coffee</span>
+            <span class="whitespace-nowrap sm:hidden">RB & Coffee</span>
           </span>
         </li>
-        <li :class="filter === 'R & M Nusantara' ? 'active' : ''" @click="filter = 'R & M Nusantara'; subfilter = 'all'" class="cursor-pointer px-6 py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-          <span class="flex items-center space-x-2">
-            <span>RM Nusantara</span>
+        <li :class="filter === 'R & M Nusantara' ? 'active' : ''" @click="filter = 'R & M Nusantara'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
+          <span class="flex items-center space-x-1 sm:space-x-2">
+            <span class="whitespace-nowrap">RM Nusantara</span>
           </span>
         </li>
       </ul>
 
       <!-- Subfilter for Coffee Corner -->
       <template x-if="filter === 'Coffe Corner'">
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 mb-10">
-          <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">Filter Coffee Corner</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Semua</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Donut</li>
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
+          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter Coffee Corner</h3>
+          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
+            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Coffee</li>
+            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Non Coffee</li>
+            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Donut</li>
           </ul>
         </div>
       </template>
 
       <!-- Subfilter for Rice Bowl & Coffee Corner -->
       <template x-if="filter === 'Rice Bowl & Coffe Corner'">
-        <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-6 mb-10">
-          <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">Filter Rice Bowl & Coffee Corner</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Semua</li>
-            <li :class="subfilter === 'makanan-berat' ? 'sub-active' : ''" @click="subfilter = 'makanan-berat'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Makanan Berat</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Donut</li>
+        <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
+          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter Rice Bowl & Coffee Corner</h3>
+          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
+            <li :class="subfilter === 'makanan-berat' ? 'sub-active' : ''" @click="subfilter = 'makanan-berat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Makanan Berat</li>
+            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Coffee</li>
+            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Non Coffee</li>
+            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Donut</li>
           </ul>
         </div>
       </template>
 
       <!-- Subfilter for R & M Nusantara -->
       <template x-if="filter === 'R & M Nusantara'">
-        <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-6 mb-10">
-          <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">Filter RM Nusantara</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Semua</li>
-            <li :class="subfilter === 'Lauk' ? 'sub-active' : ''" @click="subfilter = 'Lauk'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Lauk</li>
-            <li :class="subfilter === 'Sayur' ? 'sub-active' : ''" @click="subfilter = 'Sayur'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Sayur & Sop</li>
-            <li :class="subfilter === 'Gorengan' ? 'sub-active' : ''" @click="subfilter = 'Gorengan'" class="cursor-pointer px-4 py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md">Gorengan</li>
+        <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
+          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter RM Nusantara</h3>
+          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
+            <li :class="subfilter === 'Lauk' ? 'sub-active' : ''" @click="subfilter = 'Lauk'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Lauk</li>
+            <li :class="subfilter === 'Sayur' ? 'sub-active' : ''" @click="subfilter = 'Sayur'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Sayur & Sop</li>
+            <li :class="subfilter === 'Gorengan' ? 'sub-active' : ''" @click="subfilter = 'Gorengan'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Gorengan</li>
           </ul>
         </div>
       </template>
 
       <!-- Menu Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 px-2 sm:px-0">
         {
           menus.map(menu => {
             // Ambil kategori & subkategori utama untuk atribut
@@ -301,15 +241,25 @@ const menus = [
                 x-transition:leave-end="opacity-0 scale-95 rotate-3"
                 class="menu-card bg-white rounded-2xl shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
               >
-                <div class="relative">
-                  <img src={menu.img} alt={menu.name} class="w-full h-48 sm:h-52 object-cover" />
+                <div class="relative bg-gray-100">
+                  <img 
+                    src={menu.img} 
+                    alt={menu.name} 
+                    class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center lazy-img"
+                    loading="lazy"
+                    onload="this.style.opacity=1"
+                    style="opacity: 0; transition: opacity 0.3s ease-in-out;"
+                  />
+                  <div class="absolute inset-0 bg-gray-200 animate-pulse skeleton-img" style="display: block;">
+                    <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-size-200 animate-shimmer"></div>
+                  </div>
                 </div>
-                <div class="p-5 lg:p-6 flex-1 flex flex-col">
-                  <h5 class="font-bold text-lg mb-2">{menu.name}</h5>
-                  <p class="text-gray-600 text-sm mb-4 flex-1 leading-relaxed">{menu.desc}</p>
-                  <div class="flex justify-between items-center mt-auto pt-2 border-t border-gray-100">
+                <div class="p-2 sm:p-4 lg:p-6 flex-1 flex flex-col">
+                  <h5 class="font-bold text-sm sm:text-lg mb-1 sm:mb-2 line-clamp-2">{menu.name}</h5>
+                  <p class="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-4 flex-1 leading-relaxed line-clamp-2 sm:line-clamp-3">{menu.desc}</p>
+                  <div class="flex justify-between items-center mt-auto pt-1 sm:pt-2 border-t border-gray-100">
                     <div class="flex flex-col">
-                      <span class="font-bold text-xl text-green-600">{menu.price}</span>
+                      <span class="font-bold text-sm sm:text-lg lg:text-xl text-green-600">{menu.price}</span>
                     </div>
                   </div>
                 </div>
@@ -320,25 +270,25 @@ const menus = [
       </div>
 
       <!-- Call to Action Section -->
-      <section class="mt-16 text-center">
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-8 lg:p-12">
-          <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 hover:text-amber-600 transition-colors duration-300">
+      <section class="mt-12 sm:mt-16 text-center px-2 sm:px-0">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12">
+          <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 hover:text-amber-600 transition-colors duration-300">
             Tertarik dengan Menu Kami?
           </h3>
-          <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p class="text-gray-600 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
             Bergabunglah dengan keluarga besar Sagawa Group dan rasakan pengalaman kuliner yang tak terlupakan. 
             Hubungi kami untuk informasi franchise atau kunjungi outlet terdekat.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg group">
-              <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <a href="/contact" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-full font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg group text-sm sm:text-base">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
               </svg>
               Hubungi Kami
             </a>
-            <a href="/mitra" class="inline-flex items-center justify-center px-8 py-4 bg-white border-2 border-amber-500 text-amber-600 rounded-full font-semibold hover:bg-amber-500 hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg group">
-              <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <a href="/mitra" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-amber-500 text-amber-600 rounded-full font-semibold hover:bg-amber-500 hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg group text-sm sm:text-base">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd"></path>
               </svg>
               Info Franchise
             </a>
@@ -440,9 +390,60 @@ const menus = [
     .menu-card {
       position: relative;
     }
+
+    /* Text truncation utilities for mobile */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Skeleton loading animation */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    .animate-shimmer {
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    .lazy-img {
+      will-change: opacity;
+    }
+    
+    /* Hide skeleton when image loads */
+    .lazy-img[style*="opacity: 1"] + .skeleton-img {
+      display: none !important;
+    }
+
+    /* Mobile specific styles */
+    @media (max-width: 640px) {
+      .menu-card {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+      
+      .menu-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+      
+      .filters_menu li {
+        min-width: fit-content;
+        flex-shrink: 0;
+      }
+    }
   </style>
 
-  <script>
+  <script is:inline>
     // Intersection Observer for scroll animations
     document.addEventListener('DOMContentLoaded', function() {
       const observerOptions = {
@@ -461,6 +462,26 @@ const menus = [
       // Observe all elements with scroll-animate class
       document.querySelectorAll('.scroll-animate').forEach(el => {
         observer.observe(el);
+      });
+      
+      // Enhanced lazy loading with skeleton removal
+      const images = document.querySelectorAll('.lazy-img');
+      images.forEach(img => {
+        img.addEventListener('load', function() {
+          const skeleton = this.nextElementSibling;
+          if (skeleton && skeleton.classList.contains('skeleton-img')) {
+            skeleton.style.display = 'none';
+          }
+        });
+        
+        // Error handling - hide skeleton if image fails
+        img.addEventListener('error', function() {
+          const skeleton = this.nextElementSibling;
+          if (skeleton && skeleton.classList.contains('skeleton-img')) {
+            skeleton.style.display = 'none';
+          }
+          this.style.opacity = '1';
+        });
       });
     });
   </script>
