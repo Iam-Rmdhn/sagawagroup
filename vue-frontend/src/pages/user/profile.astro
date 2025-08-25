@@ -19,24 +19,46 @@ import Layout from '../../layouts/Layout.astro';
           </a>
         </div>
         <div class="flex items-center">
-            <div class="flex items-center ms-3">
+            <div class="flex items-center ms-3 relative">
               <div>
-                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                   <span class="sr-only">Open user menu</span>
                   <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
-                    M
+                    T
                   </div>
                 </button>
               </div>
-              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+              <div class="z-50 hidden absolute right-0 top-full mt-2 w-48 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
-                  <p class="text-sm text-gray-900 dark:text-white" role="none" id="user-name">Loading...</p>
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">Loading...</p>
+                  <p class="text-sm text-gray-900 dark:text-white font-medium" role="none" id="user-name">Tsumugi Kotobuki</p>
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">utaaakun12@gmail.com</p>
                 </div>
                 <ul class="py-1" role="none">
-                  <li><a href="/user/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a></li>
-                  <li><a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Edit Profile</a></li>
-                  <li><button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button></li>
+                  <li>
+                    <a href="/user/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"></path>
+                      </svg>
+                      Dashboard
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/user/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <button id="logout-btn" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                      <svg class="w-4 h-4 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                      </svg>
+                      Log out
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -588,15 +610,33 @@ import Layout from '../../layouts/Layout.astro';
       const dropdownUser = document.getElementById('dropdown-user');
 
       if (userMenuButton && dropdownUser) {
-         userMenuButton.addEventListener('click', function() {
+         userMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Toggle dropdown visibility
             dropdownUser.classList.toggle('hidden');
+            
+            // Update aria-expanded attribute
+            const isExpanded = !dropdownUser.classList.contains('hidden');
+            userMenuButton.setAttribute('aria-expanded', isExpanded.toString());
          });
 
          // Close dropdown when clicking outside
          document.addEventListener('click', function(event) {
-            const target = event.target as Node;
+            const target = event.target as HTMLElement;
             if (target && !userMenuButton.contains(target) && !dropdownUser.contains(target)) {
                dropdownUser.classList.add('hidden');
+               userMenuButton.setAttribute('aria-expanded', 'false');
+            }
+         });
+
+         // Close dropdown when pressing Escape key
+         document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !dropdownUser.classList.contains('hidden')) {
+               dropdownUser.classList.add('hidden');
+               userMenuButton.setAttribute('aria-expanded', 'false');
+               userMenuButton.focus();
             }
          });
       }
