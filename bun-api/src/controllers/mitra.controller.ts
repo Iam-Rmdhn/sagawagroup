@@ -40,10 +40,6 @@ export const registerMitraController = async (
       }
     }
 
-    // Debug log to see all received data
-    console.log("Received mitra data:", mitraData);
-    console.log("rmNusantaraSubMenu value:", mitraData.rmNusantaraSubMenu);
-
     // Ensure sales field is properly handled (it comes as 'sales' from frontend but might be mapped)
     if (!mitraData.sales && mitraData.jenisUsaha) {
       mitraData.sales = mitraData.jenisUsaha;

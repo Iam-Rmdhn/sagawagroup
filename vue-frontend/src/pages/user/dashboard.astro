@@ -558,8 +558,7 @@ import Layout from '../../layouts/Layout.astro';
 
       // Add debug functions to global scope for testing
       (window as any).resetAgreement = function() {
-         localStorage.removeItem('mitraAgreementAccepted');
-         localStorage.removeItem('mitraAgreementAcceptedAt');
+         localStorage.removeItem('mitraAgreementConfirmed');
          console.log('🔄 Agreement status reset! Reload page to see modal.');
       };
 
@@ -567,9 +566,16 @@ import Layout from '../../layouts/Layout.astro';
          showAgreementModal();
       };
 
+      (window as any).checkAgreementStatus = function() {
+         const status = localStorage.getItem('mitraAgreementConfirmed');
+         console.log('📋 Current agreement status:', status === 'true' ? 'CONFIRMED' : 'NOT CONFIRMED');
+         return status;
+      };
+
       console.log('🛠️ Debug functions available:');
-      console.log('- resetAgreement() : Reset agreement status');
+      console.log('- resetAgreement() : Reset agreement cache');
       console.log('- showModal() : Force show modal');
+      console.log('- checkAgreementStatus() : Check current status');
 
       // Setup agreement modal for new users
       setupAgreementModal();
@@ -671,6 +677,13 @@ import Layout from '../../layouts/Layout.astro';
          const token = localStorage.getItem('mitraToken');
          if (!token) return;
 
+         // Check if we already have cached agreement status for this session
+         const cachedAgreementStatus = localStorage.getItem('mitraAgreementConfirmed');
+         if (cachedAgreementStatus === 'true') {
+            console.log('✅ Agreement status already confirmed in this session');
+            return;
+         }
+
          console.log('🔍 Checking agreement status from backend...');
 
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
@@ -684,25 +697,29 @@ import Layout from '../../layouts/Layout.astro';
          const result = await response.json();
          
          if (response.ok && result.success) {
-            const { hasAgreed, agreedAt } = result.data;
+            const { hasAccepted, agreementDetails } = result.data;
             
-            console.log('📋 Agreement status from backend:', { hasAgreed, agreedAt });
+            console.log('Agreement status from backend:', { hasAccepted, agreementDetails });
 
-            if (!hasAgreed) {
+            if (!hasAccepted) {
                console.log('🔔 User has not agreed to terms - showing agreement modal');
                setTimeout(() => {
                   showAgreementModal();
                }, 500);
             } else {
-               console.log('✅ User has already agreed to terms on:', agreedAt);
+               const agreedAt = agreementDetails?.acceptedAt;
+               console.log('User has already agreed to terms on:', agreedAt);
+               
+               // Cache the agreement status to prevent showing modal again in this session
+               localStorage.setItem('mitraAgreementConfirmed', 'true');
             }
          } else {
-            console.error('❌ Failed to check agreement status:', result.error);
+            console.error('Failed to check agreement status:', result.error);
             // If backend fails, don't show modal to avoid blocking user
          }
 
       } catch (error) {
-         console.error('❌ Error checking agreement status:', error);
+         console.error('Error checking agreement status:', error);
          // If backend fails, don't show modal to avoid blocking user
       }
    }
@@ -752,7 +769,7 @@ import Layout from '../../layouts/Layout.astro';
             // Restore background scrolling
             document.body.style.overflow = '';
             
-            console.log('✅ Agreement modal hidden successfully');
+            console.log('Agreement modal hidden successfully');
          }, 300);
       }
    }
@@ -778,7 +795,7 @@ import Layout from '../../layouts/Layout.astro';
             throw new Error('No authorization token');
          }
 
-         console.log('💾 Saving agreement to backend...');
+         console.log('Saving agreement to backend...');
 
          const response = await fetch(`${API_URL}/api/mitra/accept-agreement`, {
             method: 'POST',
@@ -796,7 +813,10 @@ import Layout from '../../layouts/Layout.astro';
          const result = await response.json();
          
          if (response.ok && result.success) {
-            console.log('✅ Agreement accepted and saved to backend');
+            console.log('Agreement accepted and saved to backend');
+            
+            // Cache agreement status to prevent showing modal again
+            localStorage.setItem('mitraAgreementConfirmed', 'true');
             
             // Hide modal
             hideAgreementModal();
@@ -1072,8 +1092,13 @@ import Layout from '../../layouts/Layout.astro';
       const logoutBtn = document.getElementById('logout-btn');
       if (logoutBtn) {
          logoutBtn.addEventListener('click', function() {
+            // Clear all mitra-related data from localStorage
             localStorage.removeItem('mitraToken');
             localStorage.removeItem('mitraUser');
+            localStorage.removeItem('mitraAgreementConfirmed');
+            localStorage.removeItem('mitraUserEmail');
+            
+            console.log('🔐 User logged out, cleared all session data');
             window.location.href = '/login';
          });
       }
