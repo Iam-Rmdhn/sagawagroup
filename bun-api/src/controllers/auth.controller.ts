@@ -39,6 +39,7 @@ interface UpdateProfileRequestBody {
 // Helper function to validate admin token
 async function validateAdminToken(req: Request): Promise<any> {
   const authHeader = req.headers.get("authorization");
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new Error("Token tidak ditemukan");
   }

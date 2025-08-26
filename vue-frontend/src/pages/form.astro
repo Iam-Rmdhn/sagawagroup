@@ -812,10 +812,8 @@ function formatCurrency(amount: number) {
 // Update package selection
 const paketUsahaElement = document.getElementById('paketUsaha') as HTMLSelectElement;
 paketUsahaElement?.addEventListener('change', function() {
-  console.log('Package selection changed to:', this.value);
   selectedPackage = this.value;
   const priceData = packagePrices[selectedPackage as keyof typeof packagePrices];
-  console.log('Price data from event listener:', priceData);
   packagePrice = priceData ? priceData.discounted : 0;
   
   // Show/hide RM Nusantara sub options
@@ -836,21 +834,12 @@ paketUsahaElement?.addEventListener('change', function() {
 });
 
 function updatePriceDisplay(priceData: { original: number, discounted: number } | undefined) {
-  console.log('updatePriceDisplay called with:', priceData);
   const priceDisplay = document.getElementById('priceDisplay');
   const originalPriceEl = document.getElementById('originalPrice');
   const discountedPriceEl = document.getElementById('discountedPrice');
   const savingsAmountEl = document.getElementById('savingsAmount');
   
-  console.log('Price display elements:', {
-    priceDisplay: !!priceDisplay,
-    originalPriceEl: !!originalPriceEl,
-    discountedPriceEl: !!discountedPriceEl,
-    savingsAmountEl: !!savingsAmountEl
-  });
-  
   if (!priceData || !priceDisplay || !originalPriceEl || !discountedPriceEl || !savingsAmountEl) {
-    console.log('Hiding price display - missing data or elements');
     priceDisplay?.classList.add('hidden');
     return;
   }
@@ -861,7 +850,6 @@ function updatePriceDisplay(priceData: { original: number, discounted: number } 
   discountedPriceEl.textContent = formatCurrency(priceData.discounted);
   savingsAmountEl.textContent = formatCurrency(savings);
   
-  console.log('Showing price display');
   priceDisplay.classList.remove('hidden');
 }
 
@@ -1256,19 +1244,13 @@ async function submitForm() {
     }
     
     // Submit to backend
-    console.log('Submitting form data to backend...');
-    console.log('Form data collected:', formData); // Debug log to see all form data
-    console.log('Submit data entries:', Array.from(submitData.entries()));
-    
-    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
     const response = await fetch(`${API_URL}/api/mitra/register`, {
       method: 'POST',
       body: submitData
     });
     
-    console.log('Response status:', response.status);
     const responseText = await response.text();
-    console.log('Response text:', responseText);
     
     if (!response.ok) {
       const errorData = responseText ? JSON.parse(responseText) : {};
@@ -1276,7 +1258,6 @@ async function submitForm() {
       throw new Error(errorMessage);
     }
 
-    console.log('Form submitted successfully');
     
     // Move to step 3 (success)
     updateProgressBar(3);
@@ -1316,8 +1297,6 @@ function initializeFromURLParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const paketParam = urlParams.get('paket');
   
-  console.log('URL param paket:', paketParam);
-  
   if (paketParam) {
     const selectElement = document.getElementById('paketUsaha') as HTMLSelectElement;
     if (selectElement) {
@@ -1344,13 +1323,9 @@ function initializeFromURLParams() {
           matchingValue = paketParam;
       }
       
-      console.log('Matching value:', matchingValue);
-      console.log('Available packages:', Object.keys(packagePrices));
-      
       // Set the select value
       if (matchingValue) {
         selectElement.value = matchingValue;
-        console.log('Select value set to:', selectElement.value);
         
         // Make select readonly/disabled with better styling
         selectElement.disabled = true;
@@ -1396,22 +1371,16 @@ function initializeFromURLParams() {
         }
         
         setTimeout(() => {
-          console.log('Dispatching change event...');
           const event = new Event('change', { bubbles: true });
           selectElement.dispatchEvent(event);
           
           // Also manually trigger the update as fallback
           selectedPackage = matchingValue;
           const priceData = packagePrices[selectedPackage as keyof typeof packagePrices];
-          console.log('Manual fallback - selectedPackage:', selectedPackage);
-          console.log('Manual fallback - priceData:', priceData);
           if (priceData) {
             packagePrice = priceData.discounted;
             updatePriceDisplay(priceData);
             updatePaymentCards();
-            console.log('Manual price update completed');
-          } else {
-            console.error('No price data found for package:', selectedPackage);
           }
         }, 100);
       }

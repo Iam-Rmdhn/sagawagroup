@@ -11,7 +11,7 @@ export function verifyToken(token: string): Record<string, any> {
     const decoded = jwt.verify(token, JWT_SECRET);
     if (typeof decoded === "string") throw new Error("Invalid token format");
     return decoded as Record<string, any>;
-  } catch (err) {
-    throw new Error("Invalid token");
+  } catch (err: any) {
+    throw new Error(`Invalid token: ${err.message}`);
   }
 }
