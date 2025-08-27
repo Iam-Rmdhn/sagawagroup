@@ -332,7 +332,7 @@ async function saveMitraSheetToDatabase(
   // In a real implementation, this would save to your database
   // For now, just log
 
-  console.log(`📊 Saving sheets URL for mitra ${mitraId}: ${sheetsUrl}`);
+  console.log(`Saving sheets URL for mitra ${mitraId}: ${sheetsUrl}`);
 
   // Example query:
   // UPDATE mitra SET sheets_url = ?, updated_at = NOW() WHERE id = ?
