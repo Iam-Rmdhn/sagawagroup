@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 
 // Konfigurasi transporter dengan setting yang lebih lengkap
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
+  service: "hostinger",
+  host: "smtp.hostinger.com",
   port: 587,
   secure: false,
   auth: {
