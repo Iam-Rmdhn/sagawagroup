@@ -77,7 +77,7 @@ export const getAgreementStatus = async (req: Request): Promise<Response> => {
       }
     );
   } catch (error) {
-    console.error("❌ Error getting agreement status:", error);
+    console.error("Error getting agreement status:", error);
 
     if (error instanceof jwt.JsonWebTokenError) {
       return new Response(

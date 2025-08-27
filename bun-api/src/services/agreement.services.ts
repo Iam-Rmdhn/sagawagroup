@@ -38,20 +38,20 @@ export class AgreementService {
    */
   static async hasAcceptedAgreement(mitraId: string): Promise<boolean> {
     try {
-      console.log(`🔍 Checking agreement status for mitra: ${mitraId}`);
+      console.log(`Checking agreement status for mitra: ${mitraId}`);
 
       const collection = await initializeAgreementCollection();
       const result = await collection.findOne({ mitraId });
 
       const hasAccepted = !!result;
       console.log(
-        `📋 Agreement status for ${mitraId}: ${
+        `Agreement status for ${mitraId}: ${
           hasAccepted ? "ACCEPTED" : "NOT ACCEPTED"
         }`
       );
       return hasAccepted;
     } catch (error) {
-      console.error("❌ Error checking agreement status:", error);
+      console.error("Error checking agreement status:", error);
       return false;
     }
   }
@@ -68,12 +68,12 @@ export class AgreementService {
     }
   ): Promise<{ success: boolean; message: string; agreementId?: string }> {
     try {
-      console.log(`💾 Saving agreement for mitra: ${mitraId}`);
+      console.log(`Saving agreement for mitra: ${mitraId}`);
 
       // Check if already accepted
       const alreadyAccepted = await this.hasAcceptedAgreement(mitraId);
       if (alreadyAccepted) {
-        console.log(`⚠️ Agreement already exists for mitra: ${mitraId}`);
+        console.log(`Agreement already exists for mitra: ${mitraId}`);
         return {
           success: true,
           message: "Agreement already accepted",
@@ -95,7 +95,7 @@ export class AgreementService {
 
       if (result.insertedId) {
         console.log(
-          `✅ Agreement saved successfully for mitra: ${mitraId}, ID: ${result.insertedId}`
+          `Agreement saved successfully for mitra: ${mitraId}, ID: ${result.insertedId}`
         );
         return {
           success: true,
@@ -106,7 +106,7 @@ export class AgreementService {
         throw new Error("Failed to insert agreement record");
       }
     } catch (error) {
-      console.error("❌ Error saving agreement:", error);
+      console.error("Error saving agreement:", error);
       return {
         success: false,
         message:
@@ -122,7 +122,7 @@ export class AgreementService {
     mitraId: string
   ): Promise<AgreementRecord | null> {
     try {
-      console.log(`📋 Getting agreement details for mitra: ${mitraId}`);
+      console.log(`Getting agreement details for mitra: ${mitraId}`);
 
       const collection = await initializeAgreementCollection();
       const result = (await collection.findOne({
@@ -130,14 +130,14 @@ export class AgreementService {
       })) as AgreementRecord | null;
 
       if (result) {
-        console.log(`✅ Agreement found for mitra: ${mitraId}`);
+        console.log(`Agreement found for mitra: ${mitraId}`);
         return result;
       } else {
-        console.log(`❌ No agreement found for mitra: ${mitraId}`);
+        console.log(`No agreement found for mitra: ${mitraId}`);
         return null;
       }
     } catch (error) {
-      console.error("❌ Error getting agreement details:", error);
+      console.error("Error getting agreement details:", error);
       return null;
     }
   }
