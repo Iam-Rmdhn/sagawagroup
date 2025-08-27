@@ -51,7 +51,7 @@ export const sendMitraApprovalEmail = async (
     <li><strong>Password:</strong> ${password}</li>
     </ul>
 
-    Silakan login melalui [link login].
+    Silakan login melalui sagawagroup.id/login.
 
     Reminder :
     Password tidak bisa di ubah, kecuali oleh admin pusat.
