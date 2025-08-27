@@ -86,14 +86,14 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                      </svg>
                   </div>
                   <div class="ml-4">
-                     <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Sales</h3>
-                     <p class="text-lg font-semibold text-gray-900 dark:text-white" id="sales-name">-</p>
+                     <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Nilai Paket</h3>
+                     <p class="text-lg font-semibold text-gray-900 dark:text-white" id="nilai-paket">-</p>
                   </div>
                </div>
             </div>
          </div>
 
-         <!-- Financial Tracking Section (HIDDEN for Self Managed - Only shown for Autopilot & Semi Autopilot) -->
+         Financial Tracking Section (HIDDEN for Self Managed - Only shown for Autopilot & Semi Autopilot)
          <div id="financial-section" class="hidden mb-6">
             <!-- Google Sheets Integration Info -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
@@ -861,10 +861,15 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
          paketUsaha.textContent = data.paketUsaha || 'Tidak tersedia';
       }
 
-      // Sales
-      const salesName = document.getElementById('sales-name');
-      if (salesName) {
-         salesName.textContent = data.sales || 'Tidak tersedia';
+      // Nilai Paket (ambil dari hargaPaket)
+      const nilaiPaket = document.getElementById('nilai-paket');
+      if (nilaiPaket) {
+         let harga = data.hargaPaket;
+         if (typeof harga === 'number') {
+            nilaiPaket.textContent = harga.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+         } else {
+            nilaiPaket.textContent = 'Tidak tersedia';
+         }
       }
 
       // Show financial section only for Autopilot & Semi Autopilot

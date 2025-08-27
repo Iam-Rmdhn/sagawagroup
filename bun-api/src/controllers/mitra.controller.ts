@@ -15,7 +15,7 @@ interface RegisterMitraBody {
   noHp: string;
   email: string;
   nilaiPaket: string;
-  hargaPaket: string;
+  hargaPaket: number;
   nominalDP: string;
   nominalFull: string;
   kekurangan: string;
