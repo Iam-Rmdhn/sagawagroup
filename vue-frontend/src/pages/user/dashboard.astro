@@ -158,37 +158,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                         <p class="text-xs text-gray-500 mt-1">Status koneksi ke Google Sheets Anda</p>
                      </div>
                   </div>
-
-                  <!-- Format Template Info -->
-                  <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
-                     <div class="flex items-start">
-                        <div class="flex-shrink-0">
-                           <svg class="w-5 h-5 text-yellow-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                           </svg>
-                        </div>
-                        <div class="ml-3">
-                           <h4 class="text-sm font-semibold text-yellow-800 mb-2">Format Spreadsheet:</h4>
-                           <div class="text-sm text-yellow-700">
-                              <p class="mb-2">Pastikan spreadsheet memiliki struktur berikut:</p>
-                              <table class="text-xs border-collapse bg-white bg-opacity-60 rounded">
-                                 <tr class="border-b">
-                                    <th class="border-r px-2 py-1 text-left font-semibold">Kolom A</th>
-                                    <th class="border-r px-2 py-1 text-left font-semibold">Kolom B</th>
-                                    <th class="border-r px-2 py-1 text-left font-semibold">Kolom C</th>
-                                    <th class="px-2 py-1 text-left font-semibold">Kolom D</th>
-                                 </tr>
-                                 <tr>
-                                    <td class="border-r px-2 py-1">Tanggal<br><small>(YYYY-MM-DD)</small></td>
-                                    <td class="border-r px-2 py-1">Omset<br><small>(angka)</small></td>
-                                    <td class="border-r px-2 py-1">Belanja<br><small>(angka)</small></td>
-                                    <td class="px-2 py-1">Profit<br><small>(=B2-C2)</small></td>
-                                 </tr>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
                </div>
             </div>
 
@@ -381,66 +350,69 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                      <h4 class="font-semibold text-lg text-gray-900">SYARAT DAN KETENTUAN KEMITRAAN</h4>
                      
                      <div>
-                        <h5 class="font-medium text-gray-900 mb-2">1. KETENTUAN UMUM</h5>
-                        <p class="mb-2">Dengan menjadi mitra Sagawa Group, Anda menyetujui untuk mematuhi seluruh peraturan dan kebijakan yang berlaku. Kemitraan ini berlaku untuk jangka waktu yang telah disepakati dalam kontrak.</p>
-                        <p>Mitra bertanggung jawab untuk menjaga kualitas produk dan layanan sesuai dengan standar Sagawa Group.</p>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 1 KETENTUAN UMUM</h5>
+                        <p class="mb-2">Masing-masing pihak, dalam hal ini Pihak I dan Pihak II bertanggung jawab atas tercapainya tujuan bersama dengan meningkatkan nilai bisnis maupun nilai merek. Harapan dari semua itu tidak lain untuk memperluas jangkauan bisnis ke depannya.</p>
                      </div>
                      
                      <div>
-                        <h5 class="font-medium text-gray-900 mb-2">2. HAK DAN KEWAJIBAN MITRA</h5>
-                        <p class="mb-2"><strong>Hak Mitra:</strong></p>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 2 KEWAJIBAN POKOK PIHAK I</h5>
+                        <p class="mb-2"><strong>Sebagai pemilik merek dan resep (Nama Brand), Pihak I</strong></p>
                         <ul class="list-disc pl-5 mb-2 space-y-1">
-                           <li>Mendapatkan dukungan pemasaran dan promosi</li>
-                           <li>Pelatihan pengoperasian bisnis</li>
-                           <li>Sistem manajemen terintegrasi</li>
-                           <li>Supply produk berkualitas</li>
-                        </ul>
-                        <p class="mb-2"><strong>Kewajiban Mitra:</strong></p>
-                        <ul class="list-disc pl-5 space-y-1">
-                           <li>Menjalankan bisnis sesuai standar operasional</li>
-                           <li>Melakukan pembayaran royalty tepat waktu</li>
-                           <li>Menjaga kebersihan dan kualitas outlet</li>
-                           <li>Mengikuti program training yang diadakan</li>
+                           <li>Membantu mencarikan properti usaha pada unit usaha Pihak II.</li>
+                           <li>Memberikan pelatihan untuk karyawan baru Pihak II.</li>
+                           <li>Memberikan pasokan bahan dasar dan bumbu resep asli dengan estimasi stok untuk beberapa waktu ke depan (suplay chain).</li>
+                           <li>Meningkatkan kualitas karyawan pada unit usaha Pihak II.</li>
+                           <li>Quality control produk atau menu dalam unit usaha Pihak II.</li>
+                           <li>Mengadakan pelatihan untuk meningkatkan kapasitas karyawan, melakukan riset dan pengembangan usaha, menjalankan misi marketing dan perluasan usaha.</li>
+                           <li>Memberikan seragam kepada karyawan sebagai bentuk identitas usaha.</li>
                         </ul>
                      </div>
                      
                      <div>
-                        <h5 class="font-medium text-gray-900 mb-2">3. SISTEM PEMBAYARAN DAN ROYALTY</h5>
-                        <p class="mb-2">Mitra wajib membayar biaya franchise fee dan royalty sesuai dengan paket kemitraan yang dipilih. Pembayaran dilakukan setiap bulan melalui sistem yang telah ditentukan.</p>
-                        <p>Keterlambatan pembayaran akan dikenakan denda sesuai dengan ketentuan yang berlaku.</p>
-                     </div>
-                     
-                     <div>
-                        <h5 class="font-medium text-gray-900 mb-2">4. PENGGUNAAN MEREK DAN ASET</h5>
-                        <p class="mb-2">Mitra berhak menggunakan merek Sagawa Group selama masa kemitraan berlangsung. Penggunaan logo, desain, dan aset lainnya harus sesuai dengan guidelines yang telah ditetapkan.</p>
-                        <p>Mitra dilarang menggunakan merek untuk kepentingan di luar kemitraan tanpa persetujuan tertulis.</p>
-                     </div>
-                     
-                     <div>
-                        <h5 class="font-medium text-gray-900 mb-2">5. PENGAWASAN DAN EVALUASI</h5>
-                        <p class="mb-2">Sagawa Group berhak melakukan pengawasan dan evaluasi terhadap operasional outlet mitra secara berkala. Hal ini dilakukan untuk memastikan kualitas dan standar yang konsisten.</p>
-                        <p>Mitra wajib memberikan akses dan kerjasama dalam proses evaluasi tersebut.</p>
-                     </div>
-                     
-                     <div>
-                        <h5 class="font-medium text-gray-900 mb-2">6. PEMUTUSAN KONTRAK</h5>
-                        <p class="mb-2">Kontrak kemitraan dapat berakhir karena:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                           <li>Masa kontrak berakhir</li>
-                           <li>Pelanggaran terhadap syarat dan ketentuan</li>
-                           <li>Kesepakatan kedua belah pihak</li>
-                           <li>Force majeure atau keadaan memaksa</li>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 3 KEWAJIBAN POKOK PIHAK II</h5>
+                        <p class="mb-2"><strong>Sebagai franchisee dan atau penerima hak waralaba (mitra) serta penanggung jawab Pihak II</strong></p>
+                        <ul class="list-disc pl-5 mb-2 space-y-1">
+                           <li>Berkewajiban membeli bahan dasar inti dan bumbu asli resep kepada pihak I.</li>
+                           <li>Berkewajiban Menjalankan fungsi manajemen usaha menuju tingkat profit usaha yang semakin tinggi.</li>
+                           <li>Berkewajiban menjalankan asas usaha dengan berpedoman pada prinsip efektif dan efisien.</li>
+                           <li>Berkewajiban untuk memberikan insentif kepada trainer (karyawan Pihak I) berupa uang minimal Rp. 250.000,-/hari jika lebih dari tiga hari dari masa training yang diberikan.</li>
+                           <li>Pada sistem kemitraan semi-autopilot, Pihak II wajib membayarkan support fee/management fee kepada Pihak I setiap bulannya sebesar 5%,- (lima persen) dari laba kotor.</li>
+                           <li>Pada sistem full autopilot pihak II bersedia untuk membagi hasil dari profit bersih sebesar 40% kepada pihak pertama (pemililk lisensi).</li>
+                           <li>Jika mitra diluar jabodetabek maka bersedia menanggug biaya diluar paket kemitraan seperti ongkos kirim equipment, survei lokasi, training dan akomodasi lainnya.</li>
                         </ul>
                      </div>
                      
                      <div>
-                        <h5 class="font-medium text-gray-900 mb-2">7. KEBIJAKAN PRIVASI</h5>
-                        <p>Sagawa Group berkomitmen melindungi privasi dan data pribadi mitra. Data yang dikumpulkan akan digunakan sesuai dengan kebijakan privasi yang berlaku dan tidak akan dibagikan kepada pihak ketiga tanpa persetujuan.</p>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 4 SKEMA BISNIS</h5>
+                        <p class="mb-2">Setidaknya terdapat tiga macam sistem kemitraan yang berlaku dalam bisnis ini, yaitu Self-Managed, Semi Autopilot  dan Autopilot.</p>
+                        <ul class="list-disc pl-5 mb-2 space-y-1">
+                          <li>Sistem self-manage mengacu pada bisnis yang 100% dikelola oleh Pihak II dari segi operasional maupun finansial.</li>
+                          <li>Dalam pengoperasiannya, Pihak II diperbolehkan bertanya ataupun meminta saran kepada Pihak I terkait dengan sistematika bisnis atau hal-hal yang menyangkut dengan administrasi maupun operasional bisnis.</li>
+                          <li>Keuntungan (profit) bisnis dalam sistem kemitraan self-managed 100% milik Pihak II yang dalam hal ini adalah sebagai mitra (franchisee).</li>
+                          <li>Segala bentuk kerugian dalam sistem kemitraan self-managed ditanggung oleh Pihak II selaku franchisee dan Pihak I diperbolehkan memberikan masukan, saran, dan segala bentuk support yang sifatnya solutif.</li>
+                          <li>Sistem Semi-Autopilot mengacu pada bisnis yang sistem operasional bisnisnya dikelola 80% oleh Pihak I (Franchisor).</li>
+                          <li>Sistem Autopilot adalah sistem dimana 100% dikelola oleh perusahaan.</li>
+                          <li>Setiap bulannya, Pihak II akan mendapatkan laporan bulanan mengenai perkembangan bisnisnya dalam 30 hari sebelumnya yang sudah disiapkan oleh Pihak I.</li>
+                          <li>Skema bagi hasil keuntungan ataupun kerugian dalam sistem semi-autopilot sebesar 40% untuk Pihak I dan 60% untuk Pihak II. Skema ini berlaku selama bisnis masih berjalan.</li>
+                          <li>Pihak I akan membantu Pihak II dalam hal operasional bisnis dan senantiasa menjaga omzet agar tetap stabil, namun terbatas tanggung jawabnya terhadap pencapaian target profit bisnis dan BEP.</li>
+                          <li>Semua tunduk atas aturan yang sudah dibuat.</li>
+                        </ul>
                      </div>
                      
+                     <div>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 5 LAIN-LAIN</h5>
+                        <ul class="list-disc pl-5 mb-2 space-y-1">
+                          <li>Perjanjian kerja sama ini berlaku sejak ditandatangani oleh kedua belah pihak.</li>
+                          <li>Perjanjian kerja sama ini bersifat lifetime (selamanya), selama bisnis masih berjalan.</li>
+                          <li>Bilamana terdapat kekeliruan, kelemahan, dan kekurangan dalam surat perjanjian kerja sama ini, para pihak sepakat melakukan peninjauan ulang dan perbaikan berdasarkan musyawarah berasaskan kekeluargaan.</li>
+                          <li>Hal-hal yang belum atau tidak diatur dalam surat perjanjian kerja sama ini akan diatur kembali berdasarkan kesepakatan para pihak.</li>
+                          <li>Bilamana terjadi perselisihan, kedua belah pihak sepakat untuk menyelesaikan secara musyawarah/kekeluargaan.</li>
+                          <li>Bilamana perselisihan tidak dapat diselesaikan melalui musyawarah, maka para pihak sepakat menyelesaikan melalui Pengadilan Negeri Indonesia.</li>
+                        </ul>
+                     </div>
                      <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
                         <p class="text-sm text-amber-800">
-                           <strong>Catatan:</strong> Dengan mencentang kotak persetujuan di bawah ini, Anda menyatakan telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan kemitraan Sagawa Group.
+                           <strong>Catatan:</strong> Surat perjanjian kerjasama ini dibuat dan ditandatangani oleh para pihak di atas materai secara silang dan memiliki kekuatan hukum yang sama.
                         </p>
                      </div>
                   </div>
@@ -993,10 +965,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
          accountStatus.textContent = data.isActive ? 'Aktif' : 'Tidak Aktif';
       }
    }
-
-   // User menu functionality is now handled by MitraNavbar component
-
-   // Logout functionality is now handled by MitraNavbar component
 
    // Financial Section Functions - Google Sheets Integration
    function initializeFinancialSection() {
