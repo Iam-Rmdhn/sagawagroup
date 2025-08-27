@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 
 // Konfigurasi transporter dengan setting yang lebih lengkap
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
+  service: "hostinger",
+  host: "smtp.hostinger.com",
   port: 587,
   secure: false,
   auth: {
@@ -51,7 +51,7 @@ export const sendMitraApprovalEmail = async (
     <li><strong>Password:</strong> ${password}</li>
     </ul>
 
-    Silakan login melalui [link login].
+    Silakan login melalui sagawagroup.id/login.
 
     Reminder :
     Password tidak bisa di ubah, kecuali oleh admin pusat.
