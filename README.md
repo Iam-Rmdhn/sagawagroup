@@ -1,154 +1,419 @@
-# 🚀 Sagawa Group - Company Profile Website
+<div align="center">
 
-![Sagawa Grup Logo](vue-frontend/src/assets/img/sagawa_logo.svg)
+# 🏢 Sagawa Group
+### Modern Company Profile Website
 
-[![Astro](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff)](#)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#)
-[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?logo=bun&logoColor=white)](#)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+<img src="vue-frontend/src/assets/img/sagawa_logo.svg" alt="Sagawa Group Logo" width="200" height="120"/>
 
-Aplikasi web full-stack modern menggunakan Astro untuk frontend, Bun untuk backend API, dan AstraDB sebagai database. Project ini dibangun dengan fokus pada performa, developer experience, dan desain yang responsif.
+[![Website](https://img.shields.io/badge/Website-www.sagawagroup.id-blue?style=for-the-badge&logo=safari)](https://www.sagawagroup.id)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Production](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)](README-PRODUCTION.md)
 
-## 🚀 Tech Stack
+---
 
-### Frontend
+**Modern full-stack web application built with cutting-edge technologies**
 
-- **[Astro](https://astro.build/)** - Static Site Generator yang modern dan cepat
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Lucide Icons](https://lucide.dev/)** - Beautiful & consistent icon pack
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+*Featuring Astro frontend, Bun backend, and AstraDB with production-grade deployment*
 
-### Backend
+[![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=fff)](https://astro.build/)
+[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![AstraDB](https://img.shields.io/badge/AstraDB-Serverless-orange?style=flat)](https://astra.datastax.com/)
 
-- **[Bun](https://bun.sh/)** - Fast JavaScript runtime & package manager
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
-- **Express-like API** - RESTful API architecture
+</div>
 
-### Database
+---
 
-- **[AstraDB](https://astra.datastax.com/)** - Serverless Cassandra database
-- **Vector Search** - Built-in vector search capabilities
+## ✨ Features
 
-## 📁 Struktur Project
+<table>
+<tr>
+<td width="50%">
 
-```
-sagawagroup/
-├── 📁 bun-api/                    # Backend API dengan Bun
-│   ├── 📄 bun.lock               # Bun lockfile
-│   ├── 📄 index.ts               # Entry point server
-│   ├── 📄 package.json           # Dependencies backend
-│   ├── 📄 README.md              # Backend documentation
-│   ├── 📄 tsconfig.json          # TypeScript config
-│   └── 📁 src/
-│       ├── 📁 controllers/       # Request handlers
-│       │   ├── 📄 auth.controller.ts
-│       │   └── 📄 mitra.controller.ts
-│       ├── 📁 lib/               # Database & external services
-│       │   └── 📄 db.ts          # AstraDB connection
-│       ├── 📁 models/            # Data models & schemas
-│       │   └── 📄 user.model.ts
-│       ├── 📁 routes/            # API route definitions
-│       │   ├── 📄 auth.route.ts
-│       │   └── 📄 mitra.route.ts
-│       ├── 📁 services/          # Business logic
-│       │   ├── 📄 auth.services.ts
-│       │   └── 📄 mitra.services.ts
-│       └── 📁 utils/             # Helper functions
-│           ├── 📄 bankvalidator.ts
-│           ├── 📄 email.ts
-│           └── 📄 jwt.ts
-│
-├── 📁 vue-frontend/              # Frontend dengan Astro
-│   ├── 📄 astro.config.mjs       # Konfigurasi Astro
-│   ├── 📄 package.json           # Dependencies frontend
-│   ├── 📄 README.md              # Frontend documentation
-│   ├── 📄 tailwind.config.js     # Konfigurasi Tailwind
-│   ├── 📄 tsconfig.json          # TypeScript config
-│   ├── 📁 public/                # Static assets
-│   │   └── 📄 favicon.svg
-│   └── 📁 src/
-│       ├── 📁 assets/            # Images & media
-│       │   ├── 📄 astro.svg
-│       │   ├── 📄 background.svg
-│       │   └── 📁 img/
-│       │       ├── 📄 heroes_img.png
-│       │       ├── 📄 logo_s.svg
-│       │       └── 📄 sagawa_logo.svg
-│       ├── 📁 components/        # Reusable UI components
-│       │   ├── 📄 Footer.astro
-│       │   ├── 📄 Hero.astro
-│       │   └── 📄 Navbar.astro
-│       ├── 📁 layouts/           # Page layouts
-│       │   └── 📄 Layout.astro
-│       └── 📁 pages/             # Route pages
-│           ├── 📄 about.astro
-│           └── 📄 index.astro
-│
-└── 📄 README.md                  # Main project documentation
-```
+### 🚀 **Performance**
+- ⚡ **Lightning Fast** - Astro Static Site Generation
+- 🔄 **Zero Downtime** - PM2 with reload strategy
+- 📦 **Optimized Bundle** - Tree shaking & code splitting
+- 🗂️ **PWA Ready** - Service worker & offline support
 
-## 🛠️ Prerequisites
+</td>
+<td width="50%">
 
-Pastikan Anda memiliki tools berikut terinstall:
+### 🔒 **Security**
+- 🛡️ **SSL/TLS 1.3** - Auto-renewal with Let's Encrypt
+- 🔐 **JWT Auth** - Secure token-based authentication
+- 🚫 **Rate Limiting** - DDoS protection
+- 🔒 **HSTS & CSP** - Security headers enabled
 
-- **[Bun](https://bun.sh/)** v1.0.0 atau lebih baru
-- **[Node.js](https://nodejs.org/)** v18.0.0 atau lebih baru (untuk Astro)
-- **[Git](https://git-scm.com/)**
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🎨 **Modern UI/UX**
+- 📱 **Responsive Design** - Mobile-first approach
+- 🎯 **Component-Based** - Reusable Astro components
+- 🖼️ **Lazy Loading** - Optimized image loading
+- 🎪 **Admin Dashboard** - Full management interface
+
+</td>
+<td width="50%">
+
+### 🔧 **Developer Experience**
+- 🏗️ **TypeScript** - Type-safe development
+- 🎛️ **One-Click Deploy** - Automated production scripts
+- 📊 **Google Sheets** - Data synchronization
+- 🔄 **Hot Reload** - Instant development feedback
+
+</td>
+</tr>
+</table>
+
+---
 
 ## 🚀 Quick Start
 
-### 1. Clone Repository
+### Prerequisites
 
 ```bash
+# Required tools
+- Bun >= 1.0.0
+- Node.js >= 18.0.0
+- Git
+```
+
+### ⚡ Installation
+
+```bash
+# 1. Clone the repository
 git clone https://github.com/tsubametaa/sagawagroup.git
 cd sagawagroup
-```
 
-### 2. Setup Backend (Bun API)
-
-```bash
-# Masuk ke folder backend
+# 2. Backend Setup
 cd bun-api
-
-# Install dependencies dengan Bun
 bun install
-
-# Setup environment variables
 cp .env.example .env
-# Edit .env dan tambahkan:
-# - ASTRA_DB_APPLICATION_TOKEN=your_token
-# - ASTRA_DB_API_ENDPOINT=your_endpoint
-# - JWT_SECRET=your_jwt_secret
-# - EMAIL_SERVICE_API_KEY=your_email_key
-
-# Jalankan development server
+# Configure your environment variables
 bun run dev
+
+# 3. Frontend Setup (new terminal)
+cd vue-frontend
+npm install
+npm run dev
 ```
 
-Backend akan berjalan di `http://localhost:3000`
+<div align="center">
 
-### 3. Setup Frontend (Astro)
+**🎉 Your application is now running!**
+
+Frontend: [`http://localhost:4321`](http://localhost:4321) | Backend: [`http://localhost:3000`](http://localhost:3000)
+
+</div>
+
+---
+
+## 🏗️ Architecture
+
+<div align="center">
+
+```mermaid
+graph TB
+    A[🌐 Nginx] --> B[📱 Astro Frontend]
+    A --> C[⚡ Bun API]
+    C --> D[🗄️ AstraDB]
+    C --> E[📊 Google Sheets]
+    B --> F[🎨 Tailwind CSS]
+    C --> G[🔐 JWT Auth]
+    A --> H[🔒 SSL/TLS]
+```
+
+</div>
+
+### 📁 Project Structure
+
+```
+sagawagroup/
+├── 📁 bun-api/                    # 🔥 Bun Backend API
+│   ├── 📄 index.ts               # Entry point server
+│   ├── 📁 src/
+│   │   ├── 📁 controllers/       # Request handlers
+│   │   ├── 📁 models/            # Data models & schemas
+│   │   ├── 📁 routes/            # API route definitions
+│   │   ├── 📁 services/          # Business logic
+│   │   └── 📁 utils/             # Helper functions
+│   └── 📁 uploads/               # File uploads directory
+│
+├── 📁 vue-frontend/              # ⚡ Astro Frontend
+│   ├── 📄 astro.config.mjs       # Astro configuration
+│   ├── 📄 Manifest.json          # PWA manifest
+│   └── 📁 src/
+│       ├── 📁 components/        # Reusable UI components
+│       ├── 📁 layouts/           # Page layouts
+│       ├── 📁 pages/             # Route pages
+│       └── 📁 assets/            # Images & media
+│
+├── 🚀 deploy-production.sh       # One-click production deployment
+├── 🔒 setup-ssl.sh               # SSL certificate setup
+├── 📦 production-build.sh        # Production build script
+├── 💾 backup.sh                  # Automated backup
+├── ⚙️ ecosystem.config.js        # PM2 configuration
+└── 🌐 nginx-sagawagroup.conf     # Nginx configuration
+```
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+### Frontend Stack
+[![Astro](https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=fff)](https://astro.build/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Lucide](https://img.shields.io/badge/Lucide-Icons-blue?style=for-the-badge)](https://lucide.dev/)
+
+### Backend Stack
+[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
+[![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)](https://jwt.io/)
+
+### Database & Services
+[![AstraDB](https://img.shields.io/badge/AstraDB-Serverless-orange?style=for-the-badge)](https://astra.datastax.com/)
+[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=google-sheets&logoColor=white)](https://sheets.google.com/)
+
+### DevOps & Deployment
+[![Nginx](https://img.shields.io/badge/Nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
+[![PM2](https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=pm2&logoColor=white)](https://pm2.keymetrics.io/)
+[![Let's Encrypt](https://img.shields.io/badge/Let's%20Encrypt-003A70?style=for-the-badge&logo=letsencrypt&logoColor=white)](https://letsencrypt.org/)
+
+</div>
+
+---
+
+## 🌐 Production Deployment
+
+<div align="center">
+
+### 🚀 One-Click Production Deploy
+
+Deploy to **www.sagawagroup.id** with SSL certificate in minutes!
+
+</div>
 
 ```bash
-# Buka terminal baru dan masuk ke folder frontend
-cd vue-frontend
+# 🚀 Full production deployment with SSL
+sudo ./deploy-production.sh
 
-# Install dependencies
-npm install
-# atau
-bun install
+# 🔧 Production build only
+./production-build.sh
 
-# Jalankan development server
-npm run dev
-# atau
-bun run dev
+# 🔒 SSL setup only
+sudo ./setup-ssl.sh
 ```
 
-Frontend akan berjalan di `http://localhost:4321`
+### 🎯 Production Features
 
-## 🔧 Environment Variables
+<table>
+<tr>
+<td align="center" width="25%">
 
-### Backend (.env)
+**🌐 HTTP/2**
+<br>
+Enabled by default
+
+</td>
+<td align="center" width="25%">
+
+**🔒 SSL/TLS 1.3**
+<br>
+Auto-renewal
+
+</td>
+<td align="center" width="25%">
+
+**📦 GZIP**
+<br>
+70% compression
+
+</td>
+<td align="center" width="25%">
+
+**🚫 Rate Limiting**
+<br>
+DDoS protection
+
+</td>
+</tr>
+</table>
+
+> **📖 Complete Guide**: See [README-PRODUCTION.md](README-PRODUCTION.md) for detailed deployment instructions
+
+---
+
+## 📚 API Reference
+
+### 🔐 Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/register` | User registration |
+| `POST` | `/api/auth/login` | User login |
+| `GET` | `/api/auth/profile` | Get user profile |
+| `PUT` | `/api/auth/profile` | Update profile |
+
+### 👥 Mitra Management
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/mitra` | Get all partners |
+| `POST` | `/api/mitra` | Create new partner |
+| `POST` | `/api/mitra/login` | Mitra login |
+| `PUT` | `/api/mitra/:id` | Update partner |
+
+### 📋 Agreements
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/agreements` | Get all agreements |
+| `POST` | `/api/agreements` | Create agreement |
+| `PUT` | `/api/agreements/:id` | Update agreement |
+
+### 📊 Google Sheets Integration
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/sheets/sync` | Sync with sheets |
+| `GET` | `/api/sheets/data` | Get sheet data |
+
+---
+
+## 💻 Development
+
+### 🔧 Available Commands
+
+<table>
+<tr>
+<td width="50%">
+
+**Backend Commands**
+```bash
+# Development
+bun run dev
+
+# Production
+bun run build
+bun run start
+
+# Testing
+bun test
+```
+
+</td>
+<td width="50%">
+
+**Frontend Commands**
+```bash
+# Development
+npm run dev
+
+# Production
+npm run build
+npm run preview
+
+# Utilities
+npm run astro check
+```
+
+</td>
+</tr>
+</table>
+
+### 🔄 Production Commands
+
+```bash
+# 🚀 One-click deployment
+sudo ./deploy-production.sh
+
+# 💾 Backup & Restore
+./backup.sh
+./restore.sh
+
+# 🔧 Process Management
+pm2 status
+pm2 logs sagawagroup-api
+pm2 restart sagawagroup-api
+```
+
+---
+
+## 🗄️ Database Schema
+
+<details>
+<summary><strong>📋 Click to view database tables</strong></summary>
+
+### Users Table
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email TEXT UNIQUE,
+  password TEXT,
+  full_name TEXT,
+  phone TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+### Mitra Table
+```sql
+CREATE TABLE mitra (
+  id UUID PRIMARY KEY,
+  name TEXT,
+  email TEXT,
+  phone TEXT,
+  address TEXT,
+  bank_account TEXT,
+  status TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+### Agreements Table
+```sql
+CREATE TABLE agreements (
+  id UUID PRIMARY KEY,
+  mitra_id UUID,
+  title TEXT,
+  content TEXT,
+  status TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+### Admin Table
+```sql
+CREATE TABLE admin (
+  id UUID PRIMARY KEY,
+  username TEXT UNIQUE,
+  email TEXT,
+  password TEXT,
+  role TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+```
+
+</details>
+
+---
+
+## ⚙️ Environment Configuration
+
+<details>
+<summary><strong>🔧 Backend Environment (.env)</strong></summary>
 
 ```env
 # AstraDB Configuration
@@ -167,12 +432,13 @@ EMAIL_FROM=noreply@sagawagroup.com
 # Server Configuration
 PORT=3000
 NODE_ENV=development
-
-# CORS Configuration
 FRONTEND_URL=http://localhost:4321
 ```
 
-### Frontend (.env)
+</details>
+
+<details>
+<summary><strong>🎨 Frontend Environment (.env)</strong></summary>
 
 ```env
 # API Configuration
@@ -184,262 +450,87 @@ PUBLIC_SITE_URL=http://localhost:4321
 PUBLIC_SITE_NAME=SagawaGroup
 ```
 
-## 📚 API Documentation
+</details>
 
-### Authentication Endpoints
-
-```
-POST   /api/auth/register    # User registration
-POST   /api/auth/login       # User login
-POST   /api/auth/logout      # User logout
-GET    /api/auth/profile     # Get user profile
-PUT    /api/auth/profile     # Update user profile
-```
-
-### Mitra (Partner) Endpoints
-
-```
-GET    /api/mitra           # Get all partners
-GET    /api/mitra/:id       # Get partner by ID
-POST   /api/mitra           # Create new partner
-PUT    /api/mitra/:id       # Update partner
-DELETE /api/mitra/:id       # Delete partner
-```
-
-## 🎨 UI Components
-
-### Available Components
-
-- **Navbar** - Responsive navigation bar dengan mobile menu
-- **Hero** - Hero section dengan background image dan CTA
-- **Footer** - Footer dengan links dan informasi kontak
-
-### Lucide Icons Usage
-
-```astro
----
-import { Menu, X, Mail, Phone } from 'lucide-astro';
 ---
 
-<Menu size={24} />
-<X size={24} />
-<Mail size={16} />
-<Phone size={16} />
-```
+## 📈 Performance Metrics
 
-## 🗄️ Database Schema
+<div align="center">
 
-### Users Table
+| Metric | Development | Production |
+|--------|-------------|------------|
+| **First Load** | < 1s | < 2s |
+| **API Response** | < 50ms | < 200ms |
+| **SSL Handshake** | N/A | < 100ms |
+| **Bundle Size** | N/A | 70% compressed |
 
-```sql
-CREATE TABLE users (
-  id UUID PRIMARY KEY,
-  email TEXT UNIQUE,
-  password TEXT,
-  full_name TEXT,
-  phone TEXT,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
-);
-```
+</div>
 
-### Mitra Table
-
-```sql
-CREATE TABLE mitra (
-  id UUID PRIMARY KEY,
-  name TEXT,
-  email TEXT,
-  phone TEXT,
-  address TEXT,
-  bank_account TEXT,
-  status TEXT,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
-);
-```
-
-## 🛠️ Development Commands
-
-### Backend Commands
-
-```bash
-# Development server
-bun run dev
-
-# Production build
-bun run build
-
-# Start production server
-bun run start
-
-# Run tests
-bun test
-
-# Type checking
-bun run type-check
-
-# Linting
-bun run lint
-```
-
-### Frontend Commands
-
-```bash
-# Development server
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
-
-# Type checking
-npm run astro check
-
-# Format code
-npm run format
-```
-
-## 🚀 Deployment
-
-### Backend Deployment
-
-1. **Build for production:**
-
-```bash
-cd bun-api
-bun run build
-```
-
-2. **Deploy ke cloud provider:**
-
-- Railway
-- Fly.io
-- DigitalOcean App Platform
-- Vercel (dengan Bun runtime)
-
-### Frontend Deployment
-
-1. **Build for production:**
-
-```bash
-cd vue-frontend
-npm run build
-```
-
-2. **Deploy static files:**
-
-- Vercel
-- Netlify
-- GitHub Pages
-- Cloudflare Pages
-
-## 🧪 Testing
-
-### Backend Testing
-
-```bash
-cd bun-api
-
-# Run all tests
-bun test
-
-# Run tests in watch mode
-bun test --watch
-
-# Run specific test file
-bun test auth.test.ts
-```
-
-### Frontend Testing
-
-```bash
-cd vue-frontend
-
-# Component testing dengan Vitest
-npm run test
-
-# E2E testing dengan Playwright
-npm run test:e2e
-```
+---
 
 ## 🤝 Contributing
 
-1. Fork repository ini
-2. Buat feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit perubahan (`git commit -m 'Add some amazing feature'`)
-4. Push ke branch (`git push origin feature/amazing-feature`)
-5. Buka Pull Request
+We welcome contributions! Please follow these steps:
 
-### Development Guidelines
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-- Gunakan TypeScript untuk type safety
-- Follow ESLint dan Prettier configuration
-- Tulis tests untuk fitur baru
-- Update documentation jika diperlukan
-- Gunakan conventional commits
+### 📋 Development Guidelines
 
-## 📈 Performance
-
-### Frontend Optimizations
-
-- ⚡ **Astro Islands** - Partial hydration untuk komponen interaktif
-- 🎯 **Tree Shaking** - Bundle size optimization
-- 🖼️ **Image Optimization** - Automatic image compression dan lazy loading
-- 📦 **Code Splitting** - Automatic route-based code splitting
-
-### Backend Optimizations
-
-- 🚀 **Bun Runtime** - 3x faster than Node.js
-- 💾 **Connection Pooling** - Efficient database connections
-- 🔄 **Response Caching** - Redis-based caching strategy
-- 📊 **Query Optimization** - Efficient AstraDB queries
-
-## 🔒 Security
-
-- 🔐 JWT Authentication dengan secure cookies
-- 🛡️ CORS protection
-- 🔒 Password hashing dengan bcrypt
-- 🚫 Rate limiting untuk API endpoints
-- ✅ Input validation dan sanitization
-
-## 📊 Monitoring & Analytics
-
-### Available Integrations
-
-- **Error Tracking**: Sentry
-- **Analytics**: Google Analytics 4
-- **Performance**: Web Vitals
-- **Uptime Monitoring**: UptimeRobot
-- **Logging**: Winston (Backend)
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Astro Team](https://astro.build/) untuk framework yang amazing
-- [Bun Team](https://bun.sh/) untuk JavaScript runtime yang super cepat
-- [Tailwind CSS](https://tailwindcss.com/) untuk utility-first CSS
-- [Lucide](https://lucide.dev/) untuk beautiful icons
-- [DataStax](https://www.datastax.com/) untuk AstraDB
-
-## 👥 Developer
-
-- **Tsubame/Utaa** - _Backend Developer_ - [@tsubametaa](https://github.com/tsubametaa)
-- **Ilham** - _Frontend Developer_ - [@Iam-Rmdhn](https://github.com/Iam-Rmdhn)
-- **Farhan** - _Frontend Developer_ - [@Rasen22](https://github.com/Rasen22)
-
-## 📞 Support
-
-Jika Anda memiliki pertanyaan atau butuh bantuan:
-
-- 📧 Email: support@sagawagroup.com
-- 💬 Discord: [Join our community](https://discord.gg/sagawagroup)
-- 📖 Documentation: [docs.sagawagroup.com](https://docs.sagawagroup.com)
-- 🐛 Bug Reports: [GitHub Issues](https://github.com/tsubametaa/sagawagroup/issues)
+- ✅ Use TypeScript for type safety
+- ✅ Follow ESLint and Prettier configuration
+- ✅ Write tests for new features
+- ✅ Update documentation when needed
+- ✅ Use conventional commits
 
 ---
+
+## 🔍 Monitoring & Support
+
+### 🆘 Health Checks
+- **Website**: [www.sagawagroup.id](https://www.sagawagroup.id)
+- **API Health**: [www.sagawagroup.id/api/health](https://www.sagawagroup.id/api/health)
+- **SSL Status**: Use SSL Labs test
+
+### 📞 Support Channels
+- 📧 **Email**: support@sagawagroup.com
+- 🐛 **Issues**: [GitHub Issues](https://github.com/tsubametaa/sagawagroup/issues)
+- 📖 **Documentation**: [docs.sagawagroup.com](https://docs.sagawagroup.com)
+
+---
+
+## 👨‍💻 Team
+
+<div align="center">
+
+| Role | Developer | GitHub |
+|------|-----------|--------|
+| **Backend Lead** | Tsubame/Utaa | [@tsubametaa](https://github.com/tsubametaa) |
+| **Frontend Dev** | Ilham | [@Iam-Rmdhn](https://github.com/Iam-Rmdhn) |
+| **Frontend Dev** | Farhan | [@Rasen22](https://github.com/Rasen22) |
+
+</div>
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+### 🌟 Star this project if you find it helpful!
+
+**Made with ❤️ for Sagawa Group**
+
+[![Website](https://img.shields.io/badge/Visit-www.sagawagroup.id-blue?style=for-the-badge&logo=safari)](https://www.sagawagroup.id)
+
+*Last Updated: 2025*
+
+</div>
