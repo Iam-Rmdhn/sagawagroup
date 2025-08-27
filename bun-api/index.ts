@@ -7,12 +7,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
+``
 
     // Add CORS headers
     const corsHeaders = {
