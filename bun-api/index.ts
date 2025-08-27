@@ -52,7 +52,8 @@ Bun.serve({
       if (
         url.pathname.startsWith("/api/mitra/sheets") ||
         url.pathname === "/api/mitra/create-sheets" ||
-        url.pathname === "/api/mitra/validate-sheets"
+        url.pathname === "/api/mitra/validate-sheets" ||
+        url.pathname === "/api/mitra/sheets-data"
       ) {
         const response = await sheetsRoute(req);
         // Add CORS headers to response

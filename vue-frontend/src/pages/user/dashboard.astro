@@ -1007,10 +1007,10 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
          if (response.ok && result.success) {
             showNotification('Link Google Sheets berhasil disimpan!', 'success');
             updateConnectionStatus('connected', 'Link tersimpan');
-            
-            // Enable open button and load data
+            // Enable open button
+            const openBtn = document.getElementById('open-sheets-btn') as HTMLButtonElement;
+            if (openBtn) openBtn.disabled = false;
             loadFinancialDataFromSheets();
-            
          } else {
             throw new Error(result.error || 'Gagal menyimpan link');
          }
@@ -1037,13 +1037,13 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
          
          if (response.ok && result.success) {
             const sheetsInput = document.getElementById('sheets-url-input') as HTMLInputElement;
+            const openBtn = document.getElementById('open-sheets-btn') as HTMLButtonElement;
             if (sheetsInput) {
                sheetsInput.value = result.data.sheetsUrl || '';
             }
-            
+            if (openBtn) openBtn.disabled = !(result.data.sheetsUrl && result.data.sheetsUrl.length > 0);
             console.log('Google Sheets URL loaded:', result.data.sheetsUrl);
             updateConnectionStatus('connected', 'Terhubung ke Google Sheets');
-            
          } else {
             console.log('Creating new Google Sheets for user...');
             await createUserGoogleSheets();
