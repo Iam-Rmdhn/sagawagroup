@@ -16,20 +16,20 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
   
   <main class="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 overflow-hidden">
     <!-- Main Content Section -->
-    <section class="pt-24 pb-16 px-4 relative z-10">
+    <section class="pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16 px-3 sm:px-4 md:px-6 relative z-10">
       <div class="container mx-auto max-w-6xl">
-        <div class="grid lg:grid-cols-2 md:grid-cols-1 gap-8 md:gap-16 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-start">
           <!-- Left Side - Enhanced Food Cart with Slider -->
-          <div class="relative group max-w-md mx-auto lg:max-w-full">
+          <div class="relative group w-full max-w-lg mx-auto lg:max-w-full">
             <!-- Glow Effect Behind Cart -->
-            <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-all duration-500 animate-pulse"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-2xl sm:rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-all duration-500 animate-pulse"></div>
             
             <!-- Cart Container with 3D Effect -->
-            <div class="relative bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl">
+            <div class="relative bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 lg:p-8 shadow-2xl">
               
               <!-- Swiper Slider Container -->
-              <div class="relative overflow-hidden rounded-xl sm:rounded-2xl">
-                <div class="swiper mySwiper" style="height: 470px;">
+              <div class="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl">
+                <div class="swiper mySwiper">
                   <div class="swiper-wrapper">
                     <!-- Slide 1: RM Mall -->
                     <div class="swiper-slide">
@@ -37,7 +37,7 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
                         src={rmwImage.src} 
                         alt="RM Nusantara Mall" 
                         class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
-                        style="min-height: 470px;"
+                        class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
                     
@@ -47,7 +47,7 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
                         src={warnasImage.src} 
                         alt="Warnas Mall" 
                         class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
-                        style="min-height: 400px;"
+                        class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
                     
@@ -57,7 +57,7 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
                         src={masgawImage.src} 
                         alt="Masgaw Mall Restaurant" 
                         class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
-                        style="min-height: 400px;"
+                        class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
                   </div>
@@ -68,63 +68,63 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
               </div>
 
               <!-- Floating Stats -->
-              <div class="absolute -right-8 sm:-right-9 top-1 bg-white rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-xl border-l-4 border-orange-500 transform rotate-3 hover:rotate-0 transition-all duration-300 text-center z-10">
-                <div class="text-xl sm:text-2xl font-bold text-orange-600">Rp. 89.000.000</div>
+              <div class="absolute -right-3 sm:-right-6 md:-right-8 lg:-right-9 top-6 sm:top-8 md:top-10 bg-white rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4 shadow-xl border-l-4 border-green-500 transform rotate-3 hover:rotate-0 transition-all duration-300 text-center z-10">
+                <div class="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-green-600">Rp. 89.000.000</div>
               </div>
             </div>
           </div>
 
           <!-- Right Side - Enhanced Content -->
-          <div class="space-y-6 sm:space-y-8">
+          <div class="space-y-4 sm:space-y-6 md:space-y-8">
             <!-- Enhanced Header with Animated Elements -->
-            <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl border border-orange-100 relative overflow-hidden">
+            <div class="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 shadow-xl border border-orange-100 relative overflow-hidden">
               <!-- Animated Background Pattern -->
               <div class="absolute inset-0 opacity-5">
                 <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-200 to-red-200 animate-pulse"></div>
               </div>
               
               <div class="relative z-10">
-                <div class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 mb-3 sm:mb-4 md:mb-6">
                   <!-- Enhanced Logo with Glow -->
                   <div class="relative mx-auto sm:mx-0">
                     <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-full blur-lg opacity-50 animate-pulse"></div>
                     <img 
                       src={rmNusantaraLogo.src} 
                       alt="RM Nusantara Logo" 
-                      class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain shadow-lg border-2 border-white hover:scale-110 transition-all duration-300"
+                      class="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-contain shadow-lg border-2 border-white hover:scale-110 transition-all duration-300"
                     />
                   </div>
                   
                   <!-- Animated Title -->
                   <div class="flex-1 text-center sm:text-left">
-                    <h1 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent hover:scale-105 transition-all duration-300">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent hover:scale-105 transition-all duration-300">
                       RM NUSANTARA
                     </h1>
-                    <div class="text-sm text-gray-500 font-medium">Authentic Indonesian Restaurant</div>
+                    <div class="text-xs sm:text-sm text-gray-500 font-medium">Authentic Indonesian Restaurant</div>
                   </div>
                 </div>
 
                 <!-- Enhanced Description with Highlights -->
-                <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6 text-sm sm:text-base">
+                <div class="space-y-2 sm:space-y-3 md:space-y-4 mb-3 sm:mb-4 md:mb-6 text-xs sm:text-sm md:text-base">
                   <p class="text-gray-700 leading-relaxed">
                     <span class="font-semibold text-orange-600">RM Nusantara</span> menawarkan kelezatan 
-                    <span class="bg-yellow-100 px-1 rounded">otentik Indonesia</span> dengan berbagai 
-                    <span class="bg-green-100 px-1 rounded">masakan daerah</span>, menciptakan sebuah konsep bisnis kuliner yang 
+                    <span class="bg-yellow-100 px-1 rounded text-xs sm:text-sm md:text-base">otentik Indonesia</span> dengan berbagai 
+                    <span class="bg-green-100 px-1 rounded text-xs sm:text-sm md:text-base">masakan daerah</span>, menciptakan sebuah konsep bisnis kuliner yang 
                     <span class="font-semibold text-red-600">melestarikan kekayaan kuliner nusantara</span>.
                   </p>
                   
                   <p class="text-gray-600">
                     Dengan menu andalan yang <span class="font-semibold text-orange-600">bervariasi</span>, kami tidak hanya 
                     memperkenalkan cita rasa lokal, tetapi juga membuka sebuah 
-                    <span class="bg-orange-100 px-1 rounded font-medium">peluang nyata untuk kesuksesan bersama</span> 
+                    <span class="bg-orange-100 px-1 rounded font-medium text-xs sm:text-sm md:text-base">peluang nyata untuk kesuksesan bersama</span> 
                     di industri kuliner yang terus berkembang.
                   </p>
                 </div>
 
                 <!-- Enhanced CTA Button with Multiple Effects -->
                 <div class="relative group">
-                  <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-all duration-300"></div>
-                  <a href="/form?paket=RM%20Nusantara" class="relative w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 sm:py-5 px-4 sm:px-6 rounded-xl text-base sm:text-lg shadow-xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 overflow-hidden block">
+                  <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg sm:rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-all duration-300"></div>
+                  <a href="/form?paket=RM%20Nusantara" class="relative w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-2 sm:py-3 md:py-4 lg:py-5 px-3 sm:px-4 md:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base md:text-lg shadow-xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 overflow-hidden block">
                     <!-- Button Animation Background -->
                     <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     
@@ -135,17 +135,17 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
                 </div>
 
                 <!-- Trust Indicators -->
-                <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-4 pt-4 sm:mt-6 sm:pt-6 border-t border-gray-200 text-center">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mt-3 pt-3 sm:mt-4 sm:pt-4 md:mt-6 md:pt-6 border-t border-gray-200 text-center">
                   <div>
-                    <div class="text-xl sm:text-2xl font-bold text-orange-600">24/7</div>
+                    <div class="text-lg sm:text-xl md:text-2xl font-bold text-orange-600">24/7</div>
                     <div class="text-xxs sm:text-xs text-gray-500">Support</div>
                   </div>
                   <div>
-                    <div class="text-xl sm:text-2xl font-bold text-green-600">ROI</div>
+                    <div class="text-lg sm:text-xl md:text-2xl font-bold text-green-600">ROI</div>
                     <div class="text-xxs sm:text-xs text-gray-500">6-12 Months</div>
                   </div>
                   <div>
-                    <div class="text-xl sm:text-2xl font-bold text-blue-600">100%</div>
+                    <div class="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">100%</div>
                     <div class="text-xxs sm:text-xs text-gray-500">Halal</div>
                   </div>
                 </div>
@@ -157,76 +157,123 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
     </section>
 
     <!-- Benefits Section -->
-    <section class="py-10 sm:py-16 px-4 bg-white">
-      <div class="container mx-auto max-w-6xl">
-        <h2 class="text-xl sm:text-2xl font-bold text-left text-gray-800 mb-6 sm:mb-8">Mitra Benefit :</h2>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
+    <section class="py-12 sm:py-20 px-4 bg-gradient-to-br from-gray-50 via-orange-25 to-red-25 relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-20 left-10 w-32 h-32 bg-orange-300 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-40 h-40 bg-red-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+      
+      <div class="container mx-auto max-w-7xl relative z-10">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-2xl mb-4 shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+            </svg>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
+            Benefit Mitra Ekslusif
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Dapatkan keuntungan maksimal dengan dukungan lengkap dari kami</p>
+        </div>
+
+        <!-- Benefits Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           <!-- Benefit 1: Bahan Baku & Peralatan -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <!-- Box icon -->
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m7.5 4.27 9 5.15"/>
-                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
-                <path d="m3.3 7 8.7 5 8.7-5"/>
-                <path d="M12 22V12"/>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="m7.5 4.27 9 5.15"/>
+                  <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                  <path d="m3.3 7 8.7 5 8.7-5"/>
+                  <path d="M12 22V12"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-orange-600 transition-colors duration-300">
+                Bahan Baku & Peralatan
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">Bahan Baku &<br/>Peralatan</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Pasokan bahan baku berkualitas dan peralatan lengkap untuk operasional optimal</p>
           </div>
 
           <!-- Benefit 2: Dibantu Untuk Mencari Karyawan -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                Bantuan Rekrutmen
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">Dibantu Untuk<br/>Mencari Karyawan</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Dukungan dalam mencari dan menyeleksi karyawan yang tepat untuk bisnis Anda</p>
           </div>
 
           <!-- Benefit 3: SOP & Training -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center group-hover:from-green-200 group-hover:to-green-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-green-600 transition-colors duration-300">
+                SOP & Training
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">SOP & Training</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Standar operasional lengkap dan pelatihan komprehensif untuk tim Anda</p>
           </div>
 
           <!-- Benefit 4: Dukungan & Akses ke Jaringan Supplier -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="1" y="3" width="15" height="13"></rect>
-                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                <circle cx="18.5" cy="18.5" r="2.5"></circle>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center group-hover:from-purple-200 group-hover:to-purple-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-purple-600 transition-colors duration-300">
+                Jaringan Supplier
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">Dukungan & Akses ke<br/>Jaringan Supplier</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Akses eksklusif ke jaringan supplier terpercaya dengan harga kompetitif</p>
           </div>
 
           <!-- Benefit 5: Media & Promosi -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl flex items-center justify-center group-hover:from-pink-200 group-hover:to-pink-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">
+                Media & Promosi
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">Media & Promosi</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Dukungan marketing dan promosi untuk meningkatkan awareness brand Anda</p>
           </div>
-          
+
           <!-- Benefit 6: Operasional dengan Sistem -->
-          <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-4 flex items-center justify-center">
-              <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
-              </svg>
+          <div class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-orange-100 hover:border-orange-200 hover:scale-105">
+            <div class="flex items-center space-x-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-xl flex items-center justify-center group-hover:from-indigo-200 group-hover:to-indigo-300 transition-all duration-300">
+                <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path  d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors duration-300">
+                Sistem Operasional
+              </h3>
             </div>
-            <p class="text-xs font-medium text-gray-700 leading-tight">Operasional dengan Sistem</p>
+            <p class="text-gray-600 text-sm leading-relaxed">Teknologi dan sistem terintegrasi untuk efisiensi operasional maksimal</p>
           </div>
         </div>
       </div>
@@ -237,10 +284,34 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
 </Layout>
 
 <style>
-  /* Swiper styles */
+  /* Swiper styles - Responsive with proper desktop height */
   .mySwiper {
     width: 100%;
-    height: 400px;
+    height: 250px;
+  }
+  
+  @media (min-width: 640px) {
+    .mySwiper {
+      height: 320px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .mySwiper {
+      height: 400px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .mySwiper {
+      height: 550px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .mySwiper {
+      height: 600px;
+    }
   }
   
   .swiper-slide {
@@ -259,16 +330,34 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
     object-fit: cover;
   }
   
-  /* Custom navigation button styles */
+  /* Custom navigation button styles - Responsive */
   .swiper-button-next,
   .swiper-button-prev {
     color: white !important;
     background: rgba(0, 0, 0, 0.5) !important;
-    width: 40px !important;
-    height: 40px !important;
-    margin-top: -20px !important;
+    width: 30px !important;
+    height: 30px !important;
+    margin-top: -15px !important;
     border-radius: 50% !important;
     backdrop-filter: blur(10px) !important;
+  }
+  
+  @media (min-width: 640px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 35px !important;
+      height: 35px !important;
+      margin-top: -17px !important;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 40px !important;
+      height: 40px !important;
+      margin-top: -20px !important;
+    }
   }
   
   .swiper-button-next:hover,
@@ -279,19 +368,51 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
   
   .swiper-button-next:after,
   .swiper-button-prev:after {
-    font-size: 16px !important;
+    font-size: 12px !important;
   }
   
-  /* Custom pagination styles - Override Swiper defaults */
+  @media (min-width: 640px) {
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+      font-size: 14px !important;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+      font-size: 16px !important;
+    }
+  }
+  
+  /* Custom pagination styles - Responsive */
   .swiper-pagination .swiper-pagination-bullet {
-    width: 24px !important;
-    height: 8px !important;
-    border-radius: 4px !important;
+    width: 16px !important;
+    height: 6px !important;
+    border-radius: 3px !important;
     background: rgba(252, 211, 77, 0.6) !important;
     opacity: 1 !important;
-    margin: 0 4px !important;
+    margin: 0 2px !important;
     transition: all 0.3s ease !important;
     display: inline-block !important;
+  }
+  
+  @media (min-width: 640px) {
+    .swiper-pagination .swiper-pagination-bullet {
+      width: 20px !important;
+      height: 7px !important;
+      border-radius: 3.5px !important;
+      margin: 0 3px !important;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .swiper-pagination .swiper-pagination-bullet {
+      width: 24px !important;
+      height: 8px !important;
+      border-radius: 4px !important;
+      margin: 0 4px !important;
+    }
   }
   
   .swiper-pagination .swiper-pagination-bullet-active {
@@ -300,14 +421,32 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
     box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4) !important;
   }
 
-  /* More specific overrides */
+  /* More specific overrides - Responsive */
   .swiper.mySwiper .swiper-pagination-bullet {
-    width: 24px !important;
-    height: 8px !important;
-    border-radius: 4px !important;
+    width: 16px !important;
+    height: 6px !important;
+    border-radius: 3px !important;
     background-color: rgba(252, 211, 77, 0.6) !important;
     opacity: 1 !important;
-    margin: 0 4px !important;
+    margin: 0 2px !important;
+  }
+  
+  @media (min-width: 640px) {
+    .swiper.mySwiper .swiper-pagination-bullet {
+      width: 20px !important;
+      height: 7px !important;
+      border-radius: 3.5px !important;
+      margin: 0 3px !important;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .swiper.mySwiper .swiper-pagination-bullet {
+      width: 24px !important;
+      height: 8px !important;
+      border-radius: 4px !important;
+      margin: 0 4px !important;
+    }
   }
 
   .swiper.mySwiper .swiper-pagination-bullet-active {
@@ -347,7 +486,7 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
         bulletClass: 'swiper-pagination-bullet',
         bulletActiveClass: 'swiper-pagination-bullet-active',
         renderBullet: function (index, className) {
-          return '<span class="' + className + '" style="width: 24px !important; height: 8px !important; border-radius: 4px !important; background: rgba(252, 211, 77, 0.6) !important; display: inline-block !important; margin: 0 4px !important; transition: all 0.3s ease !important;"></span>';
+          return '<span class="' + className + '" style="width: 16px !important; height: 6px !important; border-radius: 3px !important; background: rgba(252, 211, 77, 0.6) !important; display: inline-block !important; margin: 0 2px !important; transition: all 0.3s ease !important;"></span>';
         },
       },
       
@@ -357,22 +496,41 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
         prevEl: '.swiper-button-prev',
       },
       
-      // Autoplay
+      // Autoplay with touch-friendly settings
       autoplay: {
-        delay: 3000,
+        delay: 4000,
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
       },
+      
+      // Touch settings for better mobile experience
+      touchEventsTarget: 'container',
+      touchRatio: 1,
+      touchAngle: 45,
+      grabCursor: true,
+      
+      // Better performance on mobile
+      watchSlidesProgress: true,
       
       // Effects
       effect: 'slide',
       speed: 600,
       
-      // Responsive breakpoints
+      // Enhanced responsive breakpoints
       breakpoints: {
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+          navigation: {
+            enabled: false
+          }
+        },
         640: {
           slidesPerView: 1,
           spaceBetween: 20,
+          navigation: {
+            enabled: true
+          }
         },
         768: {
           slidesPerView: 1,
@@ -391,13 +549,28 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
           // Force apply custom pagination styles
           setTimeout(() => {
             const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+            const isMobile = window.innerWidth < 640;
+            const isTablet = window.innerWidth < 768;
+            
             bullets.forEach(bullet => {
               const htmlBullet = bullet as HTMLElement;
-              htmlBullet.style.width = '24px';
-              htmlBullet.style.height = '8px';
-              htmlBullet.style.borderRadius = '4px';
+              if (isMobile) {
+                htmlBullet.style.width = '16px';
+                htmlBullet.style.height = '6px';
+                htmlBullet.style.borderRadius = '3px';
+                htmlBullet.style.margin = '0 2px';
+              } else if (isTablet) {
+                htmlBullet.style.width = '20px';
+                htmlBullet.style.height = '7px';
+                htmlBullet.style.borderRadius = '3.5px';
+                htmlBullet.style.margin = '0 3px';
+              } else {
+                htmlBullet.style.width = '24px';
+                htmlBullet.style.height = '8px';
+                htmlBullet.style.borderRadius = '4px';
+                htmlBullet.style.margin = '0 4px';
+              }
               htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
-              htmlBullet.style.margin = '0 4px';
               htmlBullet.style.transition = 'all 0.3s ease';
             });
             
@@ -414,13 +587,28 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
           // Re-apply styles on slide change
           setTimeout(() => {
             const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+            const isMobile = window.innerWidth < 640;
+            const isTablet = window.innerWidth < 768;
+            
             bullets.forEach(bullet => {
               const htmlBullet = bullet as HTMLElement;
-              htmlBullet.style.width = '24px';
-              htmlBullet.style.height = '8px';
-              htmlBullet.style.borderRadius = '4px';
+              if (isMobile) {
+                htmlBullet.style.width = '16px';
+                htmlBullet.style.height = '6px';
+                htmlBullet.style.borderRadius = '3px';
+                htmlBullet.style.margin = '0 2px';
+              } else if (isTablet) {
+                htmlBullet.style.width = '20px';
+                htmlBullet.style.height = '7px';
+                htmlBullet.style.borderRadius = '3.5px';
+                htmlBullet.style.margin = '0 3px';
+              } else {
+                htmlBullet.style.width = '24px';
+                htmlBullet.style.height = '8px';
+                htmlBullet.style.borderRadius = '4px';
+                htmlBullet.style.margin = '0 4px';
+              }
               htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
-              htmlBullet.style.margin = '0 4px';
               htmlBullet.style.transition = 'all 0.3s ease';
             });
             
