@@ -117,73 +117,57 @@ const menus = [
       </div>
       
       <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 px-2">
-        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
-          <span class="flex items-center space-x-1 sm:space-x-2">
-            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-            </svg>
-            <span class="whitespace-nowrap">Semua Menu</span>
-          </span>
+        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm">
+          Semua Menu
         </li>
-        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
-          <span class="flex items-center space-x-1 sm:space-x-2">
-            <span class="whitespace-nowrap">Rice Bowl</span>
-          </span>
+        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
+          Rice Bowl
         </li>
-        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
-          <span class="flex items-center space-x-1 sm:space-x-2">
-            <span class="whitespace-nowrap">Coffee Corner</span>
-          </span>
+        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
+          Coffee Corner
         </li>
-        <li :class="filter === 'Rice Bowl & Coffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
-          <span class="flex items-center space-x-1 sm:space-x-2">
-            <span class="whitespace-nowrap hidden sm:inline">Rice Bowl & Coffee</span>
-            <span class="whitespace-nowrap sm:hidden">RB & Coffee</span>
-          </span>
+        <li :class="filter === 'Rice Bowl & Coffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
+          <span class="hidden sm:inline">Rice Bowl & Coffee</span>
+          <span class="sm:hidden">RB & Coffee</span>
         </li>
-        <li :class="filter === 'R & M Nusantara' ? 'active' : ''" @click="filter = 'R & M Nusantara'; subfilter = 'all'" class="cursor-pointer px-3 sm:px-6 py-2 sm:py-3 rounded-full bg-white border-2 border-amber-200 shadow-md font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform text-sm sm:text-base">
-          <span class="flex items-center space-x-1 sm:space-x-2">
-            <span class="whitespace-nowrap">RM Nusantara</span>
-          </span>
+        <li :class="filter === 'R & M Nusantara' ? 'active' : ''" @click="filter = 'R & M Nusantara'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
+          RM Nusantara
         </li>
       </ul>
 
       <!-- Subfilter for Coffee Corner -->
       <template x-if="filter === 'Coffe Corner'">
-        <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
-          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter Coffee Corner</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-amber-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Donut</li>
+        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
+          <ul class="filters_menu flex flex-wrap justify-center gap-2">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
+            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Coffee</li>
+            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Non Coffee</li>
+            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Donut</li>
           </ul>
         </div>
       </template>
 
       <!-- Subfilter for Rice Bowl & Coffee Corner -->
       <template x-if="filter === 'Rice Bowl & Coffe Corner'">
-        <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
-          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter Rice Bowl & Coffee Corner</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
-            <li :class="subfilter === 'makanan-berat' ? 'sub-active' : ''" @click="subfilter = 'makanan-berat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Makanan Berat</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-pink-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Donut</li>
+        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
+          <ul class="filters_menu flex flex-wrap justify-center gap-2">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
+            <li :class="subfilter === 'makanan-berat' ? 'sub-active' : ''" @click="subfilter = 'makanan-berat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Makanan Berat</li>
+            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Coffee</li>
+            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Non Coffee</li>
+            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Donut</li>
           </ul>
         </div>
       </template>
 
       <!-- Subfilter for R & M Nusantara -->
       <template x-if="filter === 'R & M Nusantara'">
-        <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-2 sm:mx-0">
-          <h3 class="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-gray-800">Filter RM Nusantara</h3>
-          <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Semua</li>
-            <li :class="subfilter === 'Lauk' ? 'sub-active' : ''" @click="subfilter = 'Lauk'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Lauk</li>
-            <li :class="subfilter === 'Sayur' ? 'sub-active' : ''" @click="subfilter = 'Sayur'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base whitespace-nowrap">Sayur & Sop</li>
-            <li :class="subfilter === 'Gorengan' ? 'sub-active' : ''" @click="subfilter = 'Gorengan'" class="cursor-pointer px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white border border-yellow-300 shadow font-medium transition-all duration-300 hover:scale-105 hover:shadow-md text-sm sm:text-base">Gorengan</li>
+        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
+          <ul class="filters_menu flex flex-wrap justify-center gap-2">
+            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
+            <li :class="subfilter === 'Lauk' ? 'sub-active' : ''" @click="subfilter = 'Lauk'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Lauk</li>
+            <li :class="subfilter === 'Sayur' ? 'sub-active' : ''" @click="subfilter = 'Sayur'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Sayur & Sop</li>
+            <li :class="subfilter === 'Gorengan' ? 'sub-active' : ''" @click="subfilter = 'Gorengan'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Gorengan</li>
           </ul>
         </div>
       </template>
@@ -373,17 +357,13 @@ const menus = [
     .filters_menu li.active {
       background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
       color: #fff !important;
-      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-      transform: translateY(-2px) scale(1.05);
-      border-color: transparent !important;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
     }
 
     .filters_menu li.sub-active {
       background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
       color: #fff !important;
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
-      transform: translateY(-1px) scale(1.02);
-      border-color: transparent !important;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
     }
 
     /* Menu Card Simple Styles */
