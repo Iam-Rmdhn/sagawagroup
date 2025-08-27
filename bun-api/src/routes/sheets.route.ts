@@ -3,15 +3,22 @@ import {
   createSheets,
   getSheetsData,
   validateSheetsUrl,
+  saveSheetsUrl,
 } from "../controllers/sheets.controller";
 
 export const sheetsRoute = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
+
   // Get or create Google Sheets URL for mitra
   if (req.method === "GET" && pathname === "/api/mitra/sheets-url") {
     return await getSheetsUrl(req);
+  }
+
+  // Save Google Sheets URL for mitra
+  if (req.method === "POST" && pathname === "/api/mitra/sheets-url") {
+    return await saveSheetsUrl(req);
   }
 
   // Create new Google Sheets for mitra

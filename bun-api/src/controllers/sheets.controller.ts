@@ -1,3 +1,51 @@
+/**
+ * Save Google Sheets URL for the authenticated mitra
+ */
+export const saveSheetsUrl = async (req: Request): Promise<Response> => {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    const token = authHeader?.replace("Bearer ", "");
+    if (!token) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "No authorization token provided",
+        }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const mitraId = decoded.id;
+    if (!mitraId) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Invalid token" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    const body = (await req.json()) as { sheetsUrl?: string };
+    const sheetsUrl = body.sheetsUrl;
+    if (!sheetsUrl) {
+      return new Response(
+        JSON.stringify({ success: false, error: "sheetsUrl is required" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    await saveMitraSheetToDatabase(mitraId, sheetsUrl);
+    return new Response(
+      JSON.stringify({ success: true, data: { sheetsUrl } }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Error in saveSheetsUrl:", error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: "Failed to save Google Sheets URL",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
 import { SheetsService } from "../services/sheets.services";
 import jwt from "jsonwebtoken";
 
@@ -316,24 +364,31 @@ export const validateSheetsUrl = async (req: Request): Promise<Response> => {
 async function getMitraSheetFromDatabase(
   mitraId: string
 ): Promise<string | null> {
-  // In a real implementation, this would query your database
-  // For now, return null to simulate no existing sheet
-
-  // Example query:
-  // SELECT sheets_url FROM mitra WHERE id = ? AND sheets_url IS NOT NULL
-
-  return null; // This will trigger creation of new sheet
+  // Simpan di file JSON lokal (mitra-sheets.json)
+  const fs = await import("fs/promises");
+  const path = require("path");
+  const filePath = path.join(__dirname, "../../mitra-sheets.json");
+  try {
+    const data = JSON.parse(await fs.readFile(filePath, "utf8"));
+    return data[mitraId] || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 async function saveMitraSheetToDatabase(
   mitraId: string,
   sheetsUrl: string
 ): Promise<void> {
-  // In a real implementation, this would save to your database
-  // For now, just log
-
+  // Simpan di file JSON lokal (mitra-sheets.json)
+  const fs = await import("fs/promises");
+  const path = require("path");
+  const filePath = path.join(__dirname, "../../mitra-sheets.json");
+  let data: Record<string, string> = {};
+  try {
+    data = JSON.parse(await fs.readFile(filePath, "utf8"));
+  } catch (e) {}
+  data[mitraId] = sheetsUrl;
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf8");
   console.log(`Saving sheets URL for mitra ${mitraId}: ${sheetsUrl}`);
-
-  // Example query:
-  // UPDATE mitra SET sheets_url = ?, updated_at = NOW() WHERE id = ?
 }
