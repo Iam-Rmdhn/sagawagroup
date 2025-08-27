@@ -47,7 +47,7 @@ export class SheetsService {
       // For now, we'll return a demo URL since creating new spreadsheets
       // requires additional Google Drive API setup
       const demoSpreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"; // Google's demo sheet
-      const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${demoSpreadsheetId}/edit`;
+      const spreadsheetUrl = ``;
 
       console.log(
         `✅ Created spreadsheet reference for ${mitraName}: ${spreadsheetUrl}`

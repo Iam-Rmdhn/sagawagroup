@@ -41,7 +41,7 @@ export interface Mitra {
   isApproved: boolean;
 
   // Timestamps
-  createdAt: string; // Use ISO string format for AstraDB compatibility
+  createdAt: string;
   updatedAt: string;
 }
 

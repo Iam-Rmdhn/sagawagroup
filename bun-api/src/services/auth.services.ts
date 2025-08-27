@@ -102,6 +102,9 @@ export async function getMitraLoginProfileService(mitraLoginId: string) {
             isApproved: mitraDetail.isApproved,
             userID: mitraDetail.userID,
 
+            // Nilai Paket
+            hargaPaket: mitraDetail.hargaPaket,
+
             // Use mitra registration date as join date
             joinDate: mitraDetail.createdAt,
           }
