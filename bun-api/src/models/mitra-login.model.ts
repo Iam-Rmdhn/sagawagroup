@@ -20,8 +20,17 @@ export class MitraLoginModel {
     loginData: Omit<MitraLogin, "_id" | "createdAt" | "updatedAt">
   ): Promise<MitraLogin> {
     const now = getCurrentTimestamp();
+    // Pastikan email dinormalisasi sebelum simpan
+    let normalizedEmail = loginData.email.trim().toLowerCase();
+    try {
+      // Gunakan validator jika tersedia
+      const validator = await import("validator");
+      normalizedEmail =
+        validator.default.normalizeEmail(normalizedEmail) || normalizedEmail;
+    } catch {}
     const newLogin: Omit<MitraLogin, "_id"> = {
       ...loginData,
+      email: normalizedEmail,
       createdAt: now,
       updatedAt: now,
     };
@@ -31,8 +40,30 @@ export class MitraLoginModel {
   }
 
   static async findByEmail(email: string): Promise<MitraLogin | null> {
-    const result = await mitraLoginCollection.findOne({ email });
-    return result as MitraLogin | null;
+    // Validasi dan normalisasi email (termasuk titik) dengan regex standar dan validator
+    const emailRegex = /^[\w.!#$%&'*+/=?^_`{|}~-]+@[\w-]+(\.[\w-]+)+$/;
+    let cleanEmail = email.trim().toLowerCase();
+    try {
+      const validator = await import("validator");
+      cleanEmail = validator.default.normalizeEmail(cleanEmail) || cleanEmail;
+    } catch {}
+    if (!emailRegex.test(cleanEmail)) {
+      throw new Error("Format email tidak valid");
+    }
+    // Ambil user dengan email sama persis (case-insensitive, tanpa $regex)
+    const result = await mitraLoginCollection.findOne({ email: cleanEmail });
+    if (result) return result as MitraLogin;
+    // Jika tidak ketemu, fallback: cari semua dan bandingkan manual (untuk data lama)
+    const all = await mitraLoginCollection.find({}).toArray();
+    const found = all.find((u: any) => {
+      let uEmail = (u.email || "").trim().toLowerCase();
+      try {
+        const validator = require("validator");
+        uEmail = validator.normalizeEmail(uEmail) || uEmail;
+      } catch {}
+      return uEmail === cleanEmail;
+    });
+    return found ? (found as MitraLogin) : null;
   }
 
   static async findById(id: string): Promise<MitraLogin | null> {
@@ -68,8 +99,13 @@ export class MitraLoginModel {
 
   static async updateLastLogin(email: string): Promise<void> {
     const now = getCurrentTimestamp();
+    let cleanEmail = email.trim().toLowerCase();
+    try {
+      const validator = await import("validator");
+      cleanEmail = validator.default.normalizeEmail(cleanEmail) || cleanEmail;
+    } catch {}
     await mitraLoginCollection.updateOne(
-      { email },
+      { email: cleanEmail },
       { $set: { lastLogin: now, updatedAt: now } }
     );
   }

@@ -618,6 +618,27 @@ try {
             return;
          }
 
+         // Ambil data profil user untuk cek status pelunasan
+         const profileRes = await fetch(`${API_URL}/api/mitra/profile`, {
+            method: 'GET',
+            headers: {
+               'Authorization': `Bearer ${token}`,
+               'Content-Type': 'application/json'
+            }
+         });
+         const profileResult = await profileRes.json();
+         if (!profileRes.ok || !profileResult.success) {
+            console.error('Gagal memuat profil user untuk cek pelunasan');
+            return;
+         }
+         const userProfile = profileResult.data;
+         // Ganti nama properti sesuai backend, misal: isPaidOff, isFullPayment, atau statusPelunasan
+         const isFullPayment = userProfile.isPaidOff || userProfile.isFullPayment || false;
+         if (!isFullPayment) {
+            console.log('User belum full payment, agreement modal tidak akan ditampilkan');
+            return;
+         }
+
          console.log('Checking agreement status from backend...');
 
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
@@ -643,7 +664,6 @@ try {
             } else {
                const agreedAt = agreementDetails?.acceptedAt;
                console.log('User has already agreed to terms on:', agreedAt);
-               
                // Cache the agreement status to prevent showing modal again in this session
                localStorage.setItem('mitraAgreementConfirmed', 'true');
             }
