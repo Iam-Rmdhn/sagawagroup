@@ -1312,8 +1312,9 @@ try {
          omsetBulananElement.textContent = formatRupiah(data.totalOmset || 0);
       }
 
+      // Tampilkan hanya 'Dari Google Sheets' untuk periode
       if (periodeElement) {
-         periodeElement.textContent = `${data.totalDays || 0} hari dari Sheets`;
+         periodeElement.textContent = 'Dari Google Sheets';
       }
    }
 
