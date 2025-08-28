@@ -1,6 +1,101 @@
-/**
- * Save Google Sheets URL for the authenticated mitra
- */
+const SHEET_ID = "1Rid6jTNeTNKLemue_lUoiwxSGtyxxdOCxUBuLqL5tDQ";
+const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
+
+// Handler untuk Bun native (req: Request)
+export async function getOmsetData(req: Request): Promise<Response> {
+  if (!API_KEY) {
+    return new Response(
+      JSON.stringify({
+        error:
+          "API Key Google Sheets belum diset di environment variable GOOGLE_SHEETS_API_KEY",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+  try {
+    // Omset hari ini (DR!H8:H38)
+    const omsetHariIniRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!H8:H38?key=${API_KEY}`
+    );
+    const omsetHariIniJson = await omsetHariIniRes.json();
+    const omsetHariIniArr =
+      omsetHariIniJson &&
+      typeof omsetHariIniJson === "object" &&
+      "values" in omsetHariIniJson
+        ? omsetHariIniJson.values
+        : [];
+    const omsetHariIni =
+      Array.isArray(omsetHariIniArr) && omsetHariIniArr.length > 0
+        ? parseFloat(
+            (omsetHariIniArr[omsetHariIniArr.length - 1][0] || "0")
+              .replace(/Rp|\.|\s/g, "")
+              .replace(",", ".")
+          )
+        : 0;
+
+    // Omset bulan ini (DR!H40)
+    const omsetBulanIniRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!H40?key=${API_KEY}`
+    );
+    const omsetBulanIniJson = await omsetBulanIniRes.json();
+    const omsetBulanIni =
+      omsetBulanIniJson &&
+      typeof omsetBulanIniJson === "object" &&
+      "values" in omsetBulanIniJson &&
+      Array.isArray(omsetBulanIniJson.values) &&
+      omsetBulanIniJson.values[0]
+        ? parseFloat(
+            (omsetBulanIniJson.values[0][0] || "0")
+              .replace(/Rp|\.|\s/g, "")
+              .replace(",", ".")
+          )
+        : 0;
+
+    // Belanja hari ini (DR!I8:I38)
+    const belanjaHariIniRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!I8:I38?key=${API_KEY}`
+    );
+    const belanjaHariIniJson = await belanjaHariIniRes.json();
+    const belanjaHariIniArr =
+      belanjaHariIniJson &&
+      typeof belanjaHariIniJson === "object" &&
+      "values" in belanjaHariIniJson
+        ? belanjaHariIniJson.values
+        : [];
+    const belanjaHariIni =
+      Array.isArray(belanjaHariIniArr) && belanjaHariIniArr.length > 0
+        ? parseFloat(
+            (belanjaHariIniArr[belanjaHariIniArr.length - 1][0] || "0")
+              .replace(/Rp|\.|\s/g, "")
+              .replace(",", ".")
+          )
+        : 0;
+
+    return new Response(
+      JSON.stringify({
+        omsetHariIni,
+        omsetBulanIni,
+        belanjaHariIni,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: "Gagal mengambil data spreadsheet" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+}
+// Save Google Sheets URL for the authenticated mitra
 export const saveSheetsUrl = async (req: Request): Promise<Response> => {
   try {
     const authHeader = req.headers.get("Authorization");
@@ -108,7 +203,6 @@ export const getSheetsUrl = async (req: Request): Promise<Response> => {
         success: true,
         data: {
           sheetsUrl,
-          mitraId,
         },
       }),
       {
