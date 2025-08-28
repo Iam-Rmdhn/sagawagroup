@@ -29,25 +29,8 @@ export class SheetsService {
    */
   async readFinancialData(spreadsheetId: string): Promise<SheetData> {
     try {
-      // Ambil data omset hari ini (H8:H38), omset bulan ini (H40), belanja hari ini (I8:I38)
       const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
       if (!API_KEY) throw new Error("API Key Google Sheets belum diset");
-
-      // Omset hari ini (H8:H38) dari sheet DR
-      const omsetHariIniRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!H8:H38?key=${API_KEY}`
-      );
-      const omsetHariIniJson = await omsetHariIniRes.json();
-      const omsetHariIniArr =
-        omsetHariIniJson &&
-        typeof omsetHariIniJson === "object" &&
-        "values" in omsetHariIniJson
-          ? omsetHariIniJson.values
-          : [];
-      const omsetHariIni =
-        Array.isArray(omsetHariIniArr) && omsetHariIniArr.length > 0
-          ? parseFloat(omsetHariIniArr[omsetHariIniArr.length - 1][0] || "0")
-          : 0;
 
       // Omset bulan ini (H40) dari sheet DR
       const omsetBulanIniRes = await fetch(
@@ -60,28 +43,41 @@ export class SheetsService {
         "values" in omsetBulanIniJson &&
         Array.isArray(omsetBulanIniJson.values) &&
         omsetBulanIniJson.values[0]
-          ? parseFloat(omsetBulanIniJson.values[0][0] || "0")
-          : 0;
-
-      // Belanja hari ini (I8:I38) dari sheet DR
-      const belanjaHariIniRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!I8:I38?key=${API_KEY}`
-      );
-      const belanjaHariIniJson = await belanjaHariIniRes.json();
-      const belanjaHariIniArr =
-        belanjaHariIniJson &&
-        typeof belanjaHariIniJson === "object" &&
-        "values" in belanjaHariIniJson
-          ? belanjaHariIniJson.values
-          : [];
-      const belanjaHariIni =
-        Array.isArray(belanjaHariIniArr) && belanjaHariIniArr.length > 0
           ? parseFloat(
-              belanjaHariIniArr[belanjaHariIniArr.length - 1][0] || "0"
+              (omsetBulanIniJson.values[0][0] || "0")
+                .toString()
+                .replace(/Rp|\.|,|\s/g, "")
             )
           : 0;
 
-      // Return format mirip SheetData lama
+      // Ambil data tanggal, omset, belanja hari ini dari DR!A8:I38
+      const rangeRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!A8:I38?key=${API_KEY}`
+      );
+      const rangeJson = await rangeRes.json();
+      const rows =
+        rangeJson && typeof rangeJson === "object" && "values" in rangeJson
+          ? rangeJson.values
+          : [];
+      const todayDate = new Date();
+      const todayDay = todayDate.getDate().toString();
+      let omsetHariIni = 0;
+      let belanjaHariIni = 0;
+      if (Array.isArray(rows)) {
+        for (const row of rows) {
+          // Cek jika kolom A adalah nomor hari dan sama dengan hari ini
+          if (row[0] && row[0].toString().trim() === todayDay) {
+            omsetHariIni = parseFloat(
+              (row[7] || "0").toString().replace(/Rp|\.|,|\s/g, "")
+            );
+            belanjaHariIni = parseFloat(
+              (row[8] || "0").toString().replace(/Rp|\.|,|\s/g, "")
+            );
+            break;
+          }
+        }
+      }
+
       return {
         today: {
           date: new Date().toISOString().split("T")[0] || "",
