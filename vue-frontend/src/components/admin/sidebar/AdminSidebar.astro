@@ -1,5 +1,5 @@
 ---
-// Admin Sidebar Component
+// Admin Sidebar Component - Modern Redesign
 interface Props {
   currentPage?: string;
 }
@@ -7,110 +7,298 @@ interface Props {
 const { currentPage = "dashboard" } = Astro.props;
 ---
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-      <ul class="space-y-2 font-medium">
+<style>
+  /* Fix scroll stability for sidebar */
+  #logo-sidebar {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+  
+  #logo-sidebar * {
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Backdrop overlay styling with stability */
+  #sidebar-backdrop {
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Ensure Tailwind transform classes work */
+  #logo-sidebar.transition-transform {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+  
+  /* Force Tailwind translate classes to override any conflicting styles */
+  #logo-sidebar.-translate-x-full {
+    transform: translateX(-100%) !important;
+  }
+  
+  #logo-sidebar:not(.-translate-x-full) {
+    transform: translateX(0) !important;
+  }
+</style>
+
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-72 h-screen pt-20 transition-transform -translate-x-full bg-gradient-to-br from-white to-amber-50/30 shadow-2xl border-r border-amber-200/50 backdrop-blur-sm" aria-label="Sidebar">
+   <!-- Gradient Background Overlay -->
+   <div class="absolute inset-0 bg-gradient-to-b from-transparent via-orange-50/20 to-red-50/20 pointer-events-none"></div>
+   
+   <!-- Button group styling -->
+   <div class="relative h-full px-3 pb-4 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent">
+      <ul class="space-y-2 font-medium mt-2">
+         <!-- Dashboard -->
          <li>
-            <button id="dashboard-menu-btn" type="button" class={`flex items-center w-full p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-colors duration-200 ${currentPage === 'dashboard' ? 'active-menu' : ''}`}>
-               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-               </svg>
-               <span class="ms-3 font-medium">Dashboard</span>
+            <button id="dashboard-menu-btn" type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'dashboard' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md active-menu' : 'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300'}`}>
+               <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'dashboard' ? 'bg-white/20' : 'bg-amber-100 group-hover:bg-amber-200'}`}>
+                  <svg class={`w-5 h-5 transition-colors ${currentPage === 'dashboard' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                     <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                     <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                  </svg>
+               </div>
+               <span class="ml-3 font-medium">Dashboard</span>
             </button>
          </li>
          
          <!-- Users Management with dropdown -->
          <li>
-            <button type="button" id="users-dropdown-button" class="flex items-center w-full p-3 text-gray-900 transition duration-200 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="users-dropdown" data-collapse-toggle="users-dropdown">
-               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                  <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
-               </svg>
-               <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap font-medium">User Management</span>
-               <svg class="w-3 h-3 transition-transform duration-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" id="dropdown-arrow">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-               </svg>
-            </button>
-            <ul id="users-dropdown" class="hidden py-2 space-y-1 ml-4 border-l-2 border-gray-200 dark:border-gray-600">
-               <li>
-                  <button id="show-all-users" class="flex items-center w-full p-2 pl-6 text-sm text-gray-700 transition duration-200 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                     </svg>
-                     <span class="font-medium">Semua User</span>
+            <div class="flex w-full relative overflow-hidden group/buttongroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+               <!-- Main button with light orange background similar to image -->
+               <button type="button" id="users-main-button" class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-r-0 border-orange-200/50 hover:border-orange-300 z-10">
+                  <svg class="w-6 h-6 text-orange-500 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                     <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                  </svg>
+                  <span class="ml-3 font-medium text-orange-900">Kelola Pengguna</span>
+               </button>
+               
+               <!-- Dropdown toggle button with improved hover effect and matching background -->
+               <button type="button" id="users-dropdown-button" class="group flex items-center justify-center w-10 rounded-r-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-l-0 border-orange-200/50 hover:border-orange-300 z-10" aria-controls="users-dropdown" data-collapse-toggle="users-dropdown">
+                  <svg class="w-5 h-5 text-orange-500 transition-all duration-300 ease-in-out transform group-hover:scale-110" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" id="dropdown-arrow">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                  </svg>
+               </button>
+               
+               <!-- Hover effect overlay for the entire button group -->
+               <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-amber-50/0 via-orange-50/0 to-red-50/0 group-hover/buttongroup:from-amber-100/50 group-hover/buttongroup:via-orange-100/30 group-hover/buttongroup:to-red-100/50 transition-all duration-300 opacity-0 group-hover/buttongroup:opacity-100 pointer-events-none"></div>
+            </div>
+            
+            <!-- Submenu with refined styling positioned to the right -->
+            <ul id="users-dropdown" class="hidden py-2 mt-1 ml-6 space-y-1 bg-gradient-to-br from-white to-orange-50/30 border border-orange-200/70 rounded-lg shadow-lg relative">
+              <!-- Orange vertical bar on the left side -->
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-l"></div>
+              
+              <li class="px-3">
+                <button id="show-all-users" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-amber-100/70 hover:to-orange-100/70 text-gray-600 hover:text-amber-800 hover:shadow-sm">
+                  <div class="w-6 h-6 rounded-md bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center mr-3 transition-colors">
+                    <svg class="w-3 h-3 text-amber-600 group-hover:text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                  </div>
+                  <span class="font-medium">Semua Pengguna</span>
+                </button>
+              </li>
+              <li class="px-3">
+                  <button id="show-approved-mitra" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-green-100/70 hover:to-emerald-100/70 text-gray-600 hover:text-green-800 hover:shadow-sm">
+                    <div class="w-6 h-6 rounded-md bg-green-50 group-hover:bg-green-100 flex items-center justify-center mr-3 transition-colors">
+                        <svg class="w-3 h-3 text-green-600 group-hover:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                     </div>
+                     <span class="font-medium">Disetujui</span>
                   </button>
                </li>
-               <li>
-                  <button id="show-approved-mitra" class="flex items-center w-full p-2 pl-6 text-sm text-gray-700 transition duration-200 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                     <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                     </svg>
-                     <span class="font-medium">Mitra Disetujui</span>
-                  </button>
-               </li>
-               <li>
-                  <button id="show-pending-mitra" class="flex items-center w-full p-2 pl-6 text-sm text-gray-700 transition duration-200 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                     <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                     </svg>
-                     <span class="font-medium">Menunggu Persetujuan</span>
+               <li class="px-3">
+                  <button id="show-pending-mitra" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100/70 hover:to-orange-100/70 text-gray-600 hover:text-yellow-800 hover:shadow-sm">
+                     <div class="w-6 h-6 rounded-md bg-yellow-50 group-hover:bg-yellow-100 flex items-center justify-center mr-3 transition-colors">
+                        <svg class="w-3 h-3 text-yellow-600 group-hover:text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                     </div>
+                     <span class="font-medium">Menunggu</span>
                   </button>
                </li>
             </ul>
          </li>
-         <!-- Products Management -->
+         <!-- Pelnasan Mitra -->
          <li>
-            <a href="/admin/products" class={`flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-colors duration-200 ${currentPage === 'products' ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                  <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
-               </svg>
-               <span class="flex-1 ms-3 whitespace-nowrap font-medium">Products</span>
+            <a href="/admin/products" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'products' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300'}`}>
+               <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'products' ? 'bg-white/20' : 'bg-amber-100 group-hover:bg-amber-200'}`}>
+                  <svg class={`w-5 h-5 transition-colors ${currentPage === 'products' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                    <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
+                    <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+                  </svg>
+               </div>
+               <span class="ml-3 font-medium">Pelunasan Mitra</span>
             </a>
          </li>
 
-         <!-- Reports -->
+         <!-- Menu -->
          <li>
-            <a href="/admin/reports" class={`flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-colors duration-200 ${currentPage === 'reports' ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
-                  <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
-                  <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
-               </svg>
-               <span class="flex-1 ms-3 whitespace-nowrap font-medium">Reports</span>
+            <a href="/admin/reports" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'reports' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 text-gray-700 hover:text-orange-800 border border-gray-200 hover:border-orange-300'}`}>
+               <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'reports' ? 'bg-white/20' : 'bg-orange-100 group-hover:bg-orange-200'}`}>
+                  <svg class={`w-5 h-5 transition-colors ${currentPage === 'reports' ? 'text-white' : 'text-orange-600 group-hover:text-orange-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                     <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
+                     <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
+                     <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
+                  </svg>
+               </div>
+               <span class="ml-3 font-medium">Kelola Menu</span>
             </a>
          </li>
 
          <!-- Settings -->
          <li>
-            <a href="/admin/settings" class={`flex items-center p-3 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-colors duration-200 ${currentPage === 'settings' ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
-               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-               </svg>
-               <span class="flex-1 ms-3 whitespace-nowrap font-medium">Update</span>
+            <a href="/admin/settings" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'settings' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-gray-700 hover:text-red-800 border border-gray-200 hover:border-red-300'}`}>
+               <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'settings' ? 'bg-white/20' : 'bg-red-100 group-hover:bg-red-200'}`}>
+                  <svg class={`w-5 h-5 transition-colors ${currentPage === 'settings' ? 'text-white' : 'text-red-600 group-hover:text-red-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                     <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                     <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+               </div>
+               <span class="ml-3 font-medium">Settings</span>
             </a>
          </li>
       </ul>
    </div>
 </aside>
 
+<!-- Mobile overlay backdrop -->
+<div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300 md:hidden"></div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Handle Users dropdown toggle
+    const sidebar = document.getElementById('logo-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    
+    // Handle backdrop clicks on mobile
+    if (backdrop && sidebar) {
+      backdrop.addEventListener('click', function() {
+        console.log('Backdrop clicked, closing sidebar'); // Debug log
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+        localStorage.setItem('sidebarVisible', 'false');
+        
+        // Dispatch event to update main content margin if needed
+        window.dispatchEvent(new CustomEvent('sidebarToggle', { 
+          detail: { visible: false } 
+        }));
+      });
+    }
+    
+    // Listen for sidebar state changes to show/hide backdrop
+    if (sidebar && backdrop) {
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.attributeName === 'class') {
+            const sidebarVisible = !sidebar.classList.contains('-translate-x-full');
+            
+            console.log('Sidebar visibility changed:', sidebarVisible); // Debug log
+            
+            // Show/hide backdrop only on mobile
+            if (window.innerWidth < 768) {
+              if (sidebarVisible) {
+                backdrop.classList.remove('hidden');
+                console.log('Backdrop shown (mobile)'); // Debug log
+              } else {
+                backdrop.classList.add('hidden');
+                console.log('Backdrop hidden (mobile)'); // Debug log
+              }
+            } else {
+              backdrop.classList.add('hidden');
+              console.log('Backdrop hidden (desktop)'); // Debug log
+            }
+          }
+        });
+      });
+      
+      observer.observe(sidebar, { attributes: true });
+    }
+
+    // Handle Users dropdown toggle with modern animations
     const usersDropdownButton = document.getElementById('users-dropdown-button');
+    const usersMainButton = document.getElementById('users-main-button');
     const usersDropdown = document.getElementById('users-dropdown');
     const dropdownArrow = document.getElementById('dropdown-arrow');
+    
+    // Make main button also toggle dropdown
+    if (usersMainButton) {
+      usersMainButton.addEventListener('click', function() {
+        // Trigger dropdown button click
+        if (usersDropdownButton) {
+          usersDropdownButton.click();
+        }
+      });
+    }
     
     if (usersDropdownButton && usersDropdown) {
       usersDropdownButton.addEventListener('click', function(e) {
         e.preventDefault();
-        usersDropdown.classList.toggle('hidden');
         
-        // Rotate arrow animation
+        // Toggle dropdown with smooth animation
+        if (usersDropdown.classList.contains('hidden')) {
+          usersDropdown.classList.remove('hidden');
+          usersDropdown.style.opacity = '0';
+          usersDropdown.style.transform = 'translateY(-5px)';
+          
+          requestAnimationFrame(() => {
+            usersDropdown.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            usersDropdown.style.opacity = '1';
+            usersDropdown.style.transform = 'translateY(0)';
+          });
+          
+          // Update button appearance with refined styling
+          usersDropdownButton.classList.add('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+          usersDropdownButton.setAttribute('aria-expanded', 'true');
+          
+          // Also update main button for consistency
+          if (usersMainButton) {
+            usersMainButton.classList.add('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+          }
+        } else {
+          usersDropdown.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+          usersDropdown.style.opacity = '0';
+          usersDropdown.style.transform = 'translateY(-5px)';
+          
+          setTimeout(() => {
+            usersDropdown.classList.add('hidden');
+          }, 200);
+          
+          // Reset button appearance with proper attribute change
+          usersDropdownButton.classList.remove('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+          usersDropdownButton.setAttribute('aria-expanded', 'false');
+          
+          // Reset main button appearance
+          if (usersMainButton) {
+            usersMainButton.classList.remove('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+          }
+        }
+        
+        // Rotate arrow animation with enhanced effects
         if (dropdownArrow) {
           if (usersDropdown.classList.contains('hidden')) {
-            dropdownArrow.style.transform = 'rotate(0deg)';
+            // Arrow pointing down when closed (default state)
+            dropdownArrow.classList.remove('rotated', 'bounce');
+            dropdownArrow.style.transform = 'rotate(0deg) scale(1)';
+            dropdownArrow.classList.remove('text-orange-600');
+            dropdownArrow.classList.add('text-orange-500');
           } else {
-            dropdownArrow.style.transform = 'rotate(180deg)';
+            // Arrow pointing up when open
+            dropdownArrow.classList.add('rotated', 'bounce', 'text-orange-600');
+            dropdownArrow.classList.remove('text-orange-500');
+            
+            // Add active classes to button group
+            usersMainButton?.classList.add('active');
+            usersDropdownButton?.classList.add('active');
+            
+            // Remove bounce class after animation completes
+            setTimeout(() => {
+              dropdownArrow.classList.remove('bounce');
+            }, 600);
           }
         }
         
@@ -118,11 +306,23 @@ const { currentPage = "dashboard" } = Astro.props;
         const dashboardBtn = document.getElementById('dashboard-menu-btn');
         if (dashboardBtn && !usersDropdown.classList.contains('hidden')) {
           dashboardBtn.classList.remove('active-menu');
+          dashboardBtn.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
+          dashboardBtn.classList.add('bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
+          
+          // Restore icon colors when dashboard becomes inactive
+          const dashboardIcon = dashboardBtn.querySelector('svg');
+          const dashboardIconContainer = dashboardBtn.querySelector('div');
+          if (dashboardIcon) {
+            dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700');
+          }
+          if (dashboardIconContainer) {
+            dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200');
+          }
         }
       });
     }
 
-    // Handle Users submenu clicks
+    // Handle Users submenu clicks with enhanced styling
     const showAllUsersBtn = document.getElementById('show-all-users');
     const showApprovedMitraBtn = document.getElementById('show-approved-mitra');
     const showPendingMitraBtn = document.getElementById('show-pending-mitra');
@@ -134,7 +334,7 @@ const { currentPage = "dashboard" } = Astro.props;
         document.dispatchEvent(new CustomEvent('adminSidebarAction', {
           detail: { action: 'showAllUsers' }
         }));
-        updateActiveMenuItem(showAllUsersBtn);
+        updateActiveMenuItem(showAllUsersBtn, 'amber');
       });
     }
 
@@ -144,7 +344,7 @@ const { currentPage = "dashboard" } = Astro.props;
         document.dispatchEvent(new CustomEvent('adminSidebarAction', {
           detail: { action: 'showApprovedMitra' }
         }));
-        updateActiveMenuItem(showApprovedMitraBtn);
+        updateActiveMenuItem(showApprovedMitraBtn, 'green');
       });
     }
 
@@ -154,7 +354,7 @@ const { currentPage = "dashboard" } = Astro.props;
         document.dispatchEvent(new CustomEvent('adminSidebarAction', {
           detail: { action: 'showPendingMitra' }
         }));
-        updateActiveMenuItem(showPendingMitraBtn);
+        updateActiveMenuItem(showPendingMitraBtn, 'yellow');
       });
     }
 
@@ -170,75 +370,399 @@ const { currentPage = "dashboard" } = Astro.props;
       });
     }
 
-    // Function to update active menu item
-    function updateActiveMenuItem(activeButton: Element) {
+    // Enhanced function to update active menu item with color themes
+    function updateActiveMenuItem(activeButton: Element, colorTheme: string = 'amber') {
       // Remove active class from all submenu items
       const allSubMenus = document.querySelectorAll('#users-dropdown button');
       allSubMenus.forEach(btn => {
-        btn.classList.remove('bg-gray-100', 'text-gray-900', 'dark:bg-gray-700', 'dark:text-white');
-        btn.classList.add('text-gray-900', 'dark:text-white');
+        btn.classList.remove('active');
+        btn.classList.remove(
+          'bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900',
+          'from-green-200', 'to-emerald-200', 'text-green-900',
+          'from-yellow-200', 'to-orange-200', 'text-yellow-900',
+          'border-amber-300', 'border-green-300', 'border-yellow-300',
+          'shadow-lg', 'scale-105'
+        );
       });
       
-      // Remove active class from dashboard
+      // Remove active class from dashboard with proper styling restoration
       const dashboardBtn = document.getElementById('dashboard-menu-btn');
       if (dashboardBtn) {
-        dashboardBtn.classList.remove('active-menu');
+        dashboardBtn.classList.remove('active-menu', 'bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
+        dashboardBtn.classList.add('bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
+        
+        // Restore icon colors
+        const dashboardIcon = dashboardBtn.querySelector('svg');
+        const dashboardIconContainer = dashboardBtn.querySelector('div');
+        if (dashboardIcon) {
+          dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700');
+        }
+        if (dashboardIconContainer) {
+          dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200');
+        }
       }
       
-      // Add active class to selected item
-      activeButton.classList.add('bg-gray-100', 'text-gray-900', 'dark:bg-gray-700', 'dark:text-white');
+      // Add active class to selected item with appropriate color
+      const colorClasses = {
+        amber: ['bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900', 'border-amber-300'],
+        green: ['bg-gradient-to-r', 'from-green-200', 'to-emerald-200', 'text-green-900', 'border-green-300'],
+        yellow: ['bg-gradient-to-r', 'from-yellow-200', 'to-orange-200', 'text-yellow-900', 'border-yellow-300']
+      };
+      
+      activeButton.classList.add('active');
+      activeButton.classList.add(...(colorClasses[colorTheme as keyof typeof colorClasses] || colorClasses.amber));
+      activeButton.classList.add('shadow-lg', 'transform', 'scale-105');
+      
+      // Ensure the dropdown stays open when a submenu item is clicked
+      const usersDropdown = document.getElementById('users-dropdown');
+      if (usersDropdown) {
+        usersDropdown.classList.remove('hidden');
+        usersDropdown.style.opacity = '1';
+        usersDropdown.style.transform = 'translateX(0)';
+      }
+      
+      // Keep dropdown buttons in active state
+      const usersDropdownButton = document.getElementById('users-dropdown-button');
+      const usersMainButton = document.getElementById('users-main-button');
+      
+      if (usersDropdownButton) {
+        usersDropdownButton.classList.add('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+        usersDropdownButton.setAttribute('aria-expanded', 'true');
+      }
+      
+      if (usersMainButton) {
+        usersMainButton.classList.add('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+      }
+      
+      // Keep arrow rotated
+      const dropdownArrow = document.getElementById('dropdown-arrow');
+      if (dropdownArrow) {
+        dropdownArrow.classList.add('rotated', 'text-orange-600');
+        dropdownArrow.classList.remove('text-orange-500');
+      }
     }
 
-    // Function to update active main menu item (like Dashboard)
+    // Enhanced function to update active main menu item
     function updateActiveMainMenuItem(activeButton: Element) {
-      // Remove active class from all main menu items
+      // Remove active class from all main menu items and restore proper styling
       const dashboardBtn = document.getElementById('dashboard-menu-btn');
       if (dashboardBtn) {
-        dashboardBtn.classList.remove('active-menu');
+        dashboardBtn.classList.remove('active-menu', 'bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
+        dashboardBtn.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg', 'active-menu');
+        
+        // Restore active icon colors
+        const dashboardIcon = dashboardBtn.querySelector('svg');
+        const dashboardIconContainer = dashboardBtn.querySelector('div');
+        if (dashboardIcon) {
+          dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-white');
+        }
+        if (dashboardIconContainer) {
+          dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-white/20');
+        }
       }
       
       // Remove active class from all submenu items
       const allSubMenus = document.querySelectorAll('#users-dropdown button');
       allSubMenus.forEach(btn => {
-        btn.classList.remove('bg-gray-100', 'text-gray-900', 'dark:bg-gray-700', 'dark:text-white');
+        btn.classList.remove(
+          'bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900',
+          'from-green-200', 'to-emerald-200', 'text-green-900',
+          'from-yellow-200', 'to-orange-200', 'text-yellow-900',
+          'border-amber-300', 'border-green-300', 'border-yellow-300',
+          'shadow-lg', 'scale-105'
+        );
       });
       
-      // Add active class to selected main menu item
-      activeButton.classList.add('active-menu');
+      // Close users dropdown
+      const usersDropdown = document.getElementById('users-dropdown');
+      const usersDropdownButton = document.getElementById('users-dropdown-button');
+      const usersMainButton = document.getElementById('users-main-button');
+      const dropdownArrow = document.getElementById('dropdown-arrow');
+      
+      if (usersDropdown && !usersDropdown.classList.contains('hidden')) {
+        usersDropdown.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        usersDropdown.style.opacity = '0';
+        usersDropdown.style.transform = 'translateX(-10px)';
+        
+        setTimeout(() => {
+          usersDropdown.classList.add('hidden');
+        }, 200);
+        
+        if (usersDropdownButton) {
+          usersDropdownButton.classList.remove('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-md');
+        }
+        
+        if (usersMainButton) {
+          usersMainButton.classList.remove('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-md');
+        }
+        
+        if (dropdownArrow) {
+          dropdownArrow.classList.remove('rotated', 'bounce');
+          dropdownArrow.style.transform = 'rotate(0deg) scale(1)';
+        }
+      }
     }
+
+    // Add hover effects for better UX
+    const menuItems = document.querySelectorAll('.group');
+    menuItems.forEach(item => {
+      item.addEventListener('mouseenter', function(this: HTMLElement) {
+        if (!this.classList.contains('active-menu')) {
+          this.style.transform = 'scale(1.02)';
+        }
+      });
+      
+      item.addEventListener('mouseleave', function(this: HTMLElement) {
+        if (!this.classList.contains('active-menu')) {
+          this.style.transform = 'scale(1)';
+        }
+      });
+    });
 
     // Expose functions globally for external access
     (window as any).adminSidebar = {
       updateActiveMenuItem,
-      updateActiveMainMenuItem
+      updateActiveMainMenuItem,
+      showNotification: function(message: string, type: string = 'success') {
+        // Create mini notification in sidebar
+        const notification = document.createElement('div');
+        notification.className = `fixed top-24 left-6 z-50 p-3 rounded-xl shadow-lg transition-all duration-300 transform -translate-x-full ${
+          type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+          type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+          'bg-amber-100 text-amber-800 border border-amber-200'
+        }`;
+        
+        notification.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 rounded-full ${
+              type === 'success' ? 'bg-green-500' :
+              type === 'error' ? 'bg-red-500' :
+              'bg-amber-500'
+            }"></div>
+            <p class="text-sm font-medium">${message}</p>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Show notification
+        requestAnimationFrame(() => {
+          notification.style.transform = 'translateX(0)';
+        });
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+          notification.style.transform = 'translateX(-100%)';
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300);
+        }, 3000);
+      }
     };
   });
 </script>
 
 <style>
-  /* Active menu styling */
+  /* Modern Active menu styling with gradients */
   .active-menu {
-    background-color: #f3f4f6;
-    color: #1f2937;
-  }
-  .dark .active-menu {
-    background-color: #374151;
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
     color: white;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+    transform: scale(1.02);
   }
   
-  /* Dropdown styling */
+  /* Custom Scrollbar for modern look */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
+  }
+  
+  /* Dropdown enhanced animations */
   #users-dropdown.hidden {
     display: none;
   }
+  
   #users-dropdown {
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 9;
+    margin-top: 0.25rem;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    border-radius: 0.5rem;
+    width: calc(100% - 2rem);
+    background-color: rgba(255, 255, 255, 0.9);
   }
-  .dropdown-active {
-    background-color: #f3f4f6;
-    color: #1f2937;
+  
+  /* Submenu item hover effects */
+  #users-dropdown button {
+    position: relative;
+    overflow: hidden;
   }
-  .dark .dropdown-active {
-    background-color: #374151;
-    color: white;
+  
+  #users-dropdown button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent 0%, transparent 50%, rgba(251, 146, 60, 0.1) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  
+  #users-dropdown button:hover::after {
+    transform: translateX(0);
+  }
+  
+  /* Hover glow effects for main buttons */
+  .group:hover {
+    filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.15));
+  }
+  
+  /* Add subtle pulsing glow to active submenu items */
+  #users-dropdown button.active {
+    box-shadow: 0 0 15px rgba(251, 146, 60, 0.2);
+    animation: subtlePulse 2s infinite;
+  }
+  
+  @keyframes subtlePulse {
+    0% {
+      box-shadow: 0 0 15px rgba(251, 146, 60, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(251, 146, 60, 0.3);
+    }
+    100% {
+      box-shadow: 0 0 15px rgba(251, 146, 60, 0.2);
+    }
+  }
+  
+  /* Ensure active submenu items have proper styling */
+  #show-all-users.active {
+    background: linear-gradient(to right, rgba(251, 146, 60, 0.2), rgba(251, 113, 25, 0.3));
+    color: rgb(194, 65, 12);
+  }
+  
+  #show-approved-mitra.active {
+    background: linear-gradient(to right, rgba(74, 222, 128, 0.2), rgba(5, 150, 105, 0.3));
+    color: rgb(6, 95, 70);
+  }
+  
+  #show-pending-mitra.active {
+    background: linear-gradient(to right, rgba(250, 204, 21, 0.2), rgba(234, 179, 8, 0.3));
+    color: rgb(161, 98, 7);
+  }
+  
+  /* Gradient border for submenu */
+  #users-dropdown::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(135deg, rgb(249 115 22), rgb(239 68 68));
+    border-radius: 2px;
+  }
+  
+  /* Button group styling with enhanced effects */
+  .group\/buttongroup {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+    transition: filter 0.3s ease;
+  }
+  
+  .group\/buttongroup:hover {
+    filter: drop-shadow(0 4px 6px rgba(245, 158, 11, 0.1));
+  }
+  
+  /* Ensure proper z-index and transitions */
+  #users-main-button, #users-dropdown-button {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
+  
+  #users-main-button.active, #users-dropdown-button.active {
+    background: linear-gradient(to right, rgba(251, 146, 60, 0.2), rgba(254, 205, 211, 0.3));
+  }
+  
+  /* Button group border effect */
+  #users-dropdown-button::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    bottom: 25%;
+    width: 1px;
+    background: rgba(249, 115, 22, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  #users-dropdown-button:hover::before {
+    background: rgba(249, 115, 22, 0.3);
+    top: 15%;
+    bottom: 15%;
+  }
+  
+  /* Icon rotation animation with enhanced effects */
+  #dropdown-arrow {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-origin: center;
+    transform: rotate(0deg); /* Default state: arrow pointing down */
+  }
+  
+  #dropdown-arrow.rotated {
+    transform: rotate(180deg) scale(1.1); /* Rotated state: arrow pointing up */
+  }
+  
+  /* Enhanced hover effects for dropdown button */
+  #users-dropdown-button:hover #dropdown-arrow {
+    transform: scale(1.15);
+    color: rgb(249 115 22);
+  }
+  
+  /* Arrow bounce animation */
+  @keyframes arrowBounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0) rotate(180deg) scale(1.1);
+    }
+    40% {
+      transform: translateY(-3px) rotate(180deg) scale(1.1);
+    }
+    60% {
+      transform: translateY(-1px) rotate(180deg) scale(1.1);
+    }
+  }
+  
+  #dropdown-arrow.bounce {
+    animation: arrowBounce 0.6s ease-out;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    #logo-sidebar {
+      width: 16rem;
+    }
+  }
+  
+  /* Focus states for accessibility */
+  button:focus-visible, a:focus-visible {
+    outline: 3px solid rgb(245 158 11);
+    outline-offset: 2px;
+    border-radius: 1rem;
   }
 </style>

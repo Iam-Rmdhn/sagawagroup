@@ -24,3 +24,31 @@ body {
   background-color: var(--background-color);
 }
 
+/* Custom Amber Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgb(251 191 36), rgb(252 211 77));
+  transform: scale(1.1);
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
+}
+
