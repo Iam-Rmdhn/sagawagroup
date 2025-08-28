@@ -24,21 +24,25 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
 <script type="module">
   document.addEventListener('DOMContentLoaded', async () => {
-    const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL)
-      ? import.meta.env.PUBLIC_API_URL
-      : 'http://localhost:4000';
+    let API_URL = 'http://localhost:4000';
+    try {
+      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
+        if (import.meta.env.PUBLIC_API_URL && import.meta.env.PUBLIC_API_URL.startsWith('http')) {
+          API_URL = import.meta.env.PUBLIC_API_URL;
+        }
+      }
+    } catch (e) { /* fallback to localhost */ }
     const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
     const container = document.getElementById('kewajiban-content');
   let mitra = null;
-    console.log('[DEBUG] email:', email);
+
 
     if (email) {
       try {
         const res = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`);
         const data = await res.json();
-        console.log('[DEBUG] /api/mitra/by-email response:', data);
         if (res.ok && !data.error) mitra = data;
-      } catch (e) { console.error('[DEBUG] Error fetch /api/mitra/by-email', e); }
+      } catch (e) { }
     }
   // Sidebar selalu muncul di halaman kewajiban
     if (!mitra) {
@@ -82,10 +86,14 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01" /></svg>
                 Untuk melunasi kewajiban Anda klik bayar.
               </p>
-              <button class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow font-semibold transition flex items-center gap-2">
+              <a id="btnBayarPelunasan" href="/user/form-pelunasan" class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow font-semibold transition flex items-center gap-2" tabindex="0" aria-disabled="false">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2z" /></svg>
                 Bayar
-              </button>
+              </a>
+              <div id="notifPelunasan" class="hidden text-blue-700 bg-blue-100 rounded-lg px-4 py-2 mt-2 text-sm font-semibold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01" /></svg>
+                Form pelunasan sedang diperiksa
+              </div>
             </div>
           </div>
         `;
@@ -99,6 +107,33 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       }
     } catch (err) {
       container.innerHTML = '<div class="text-red-600">Gagal mengambil data mitra.</div>';
+    }
+    // Cek status pelunasan
+    const btnBayar = document.getElementById('btnBayarPelunasan');
+    const notifPelunasan = document.getElementById('notifPelunasan');
+    // Cek juga flag localStorage jika sudah pernah submit pelunasan
+    let sudahPelunasan = false;
+    if (localStorage.getItem('sudahPelunasan') === '1') {
+      sudahPelunasan = true;
+    }
+    if (email && btnBayar && notifPelunasan) {
+      try {
+        const resPelunasan = await fetch(`${API_URL}/api/mitra/pelunasan-exists?email=${encodeURIComponent(email)}`);
+        const dataPelunasan = await resPelunasan.json();
+        if (dataPelunasan.exists || sudahPelunasan) {
+          const btnParent = btnBayar.parentNode;
+          const btnDisabled = document.createElement('button');
+          btnDisabled.type = 'button';
+          btnDisabled.disabled = true;
+          btnDisabled.className = 'px-8 py-2 bg-gray-400 text-white rounded-lg shadow font-semibold transition flex items-center gap-2 cursor-not-allowed';
+          btnDisabled.innerHTML = btnBayar.innerHTML;
+          btnParent.replaceChild(btnDisabled, btnBayar);
+          notifPelunasan.classList.remove('hidden');
+        }
+      } catch (e) {
+        notifPelunasan.classList.remove('hidden');
+        notifPelunasan.textContent = 'Gagal cek status pelunasan. Silakan refresh atau hubungi admin.';
+      }
     }
   });
 </script>
