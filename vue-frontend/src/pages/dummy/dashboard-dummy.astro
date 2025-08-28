@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MitraSidebar from '../../components/mitra/sidebar/MitraSidebar.astro';
+import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
+---
+
+<Layout title="Dashboard Dummy Mitra">
+  <MitraNavbar />
+  <MitraSidebar currentPage="dashboard" />
+  <div class="p-4 sm:ml-64">
+    <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+      <!-- Profile Summary -->
+      <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg p-6 mb-6 text-white">
+        <div class="flex items-center">
+          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-3xl font-bold mr-4">T</div>
+          <div>
+            <div class="text-lg font-bold">Tsumugi Kotobuki</div>
+            <div class="text-sm opacity-90">utaakun12@gmail.com</div>
+            <div class="text-xs mt-1 font-medium">Mitra Disetujui</div>
+          </div>
+        </div>
+      </div>
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Status Kemitraan</div>
+          <div class="text-lg font-bold text-gray-900 dark:text-white">Aktif</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Sistem Kemitraan</div>
+          <div class="text-lg font-bold text-gray-900 dark:text-white">Autopilot</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Paket Usaha</div>
+          <div class="text-lg font-bold text-gray-900 dark:text-white">Kagawa Ricebowl</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Nilai Paket</div>
+          <div class="text-lg font-bold text-gray-900 dark:text-white">Rp 50.000.000,00</div>
+        </div>
+      </div>
+      <!-- Financial Section -->
+      <div id="financial-section" class="mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6 p-6">
+          <div class="font-semibold mb-2">Laporan Keuangan dari Google Sheets</div>
+          <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">(Dummy: Tidak terhubung ke Google Sheets)</div>
+          <div class="bg-gray-100 dark:bg-gray-900 rounded p-4 text-xs text-gray-700 dark:text-gray-300">
+            <ul class="list-disc pl-5">
+              <li>Buat Google Spreadsheet dengan format yang benar</li>
+              <li>Masukkan link spreadsheet Anda di bawah</li>
+              <li>Klik "Simpan & Sync" untuk menghubungkan</li>
+              <li>Data akan otomatis tersinkron dari spreadsheet</li>
+            </ul>
+          </div>
+          <div class="mt-4">
+            <input type="text" class="w-full p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white" placeholder="https://docs.google.com/spreadsheets/d/" disabled />
+            <div class="flex gap-2 mt-2">
+              <button class="px-4 py-2 bg-amber-500 text-white rounded-lg" disabled>Simpan & Sync</button>
+              <button class="px-4 py-2 bg-green-500 text-white rounded-lg" disabled>Buka</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Omset Hari Ini</div>
+            <div class="text-lg font-bold text-gray-900 dark:text-white">Rp 0</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Belanja Hari Ini</div>
+            <div class="text-lg font-bold text-gray-900 dark:text-white">Rp 0</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Rata-rata Profit 7 Hari</div>
+            <div class="text-lg font-bold text-gray-900 dark:text-white">Rp 0</div>
+          </div>
+        </div>
+      </div>
+      <!-- Detailed Information -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div class="font-semibold mb-2">Informasi Pribadi</div>
+          <div class="mb-1">Nama: <span class="font-bold">Tsumugi Kotobuki</span></div>
+          <div class="mb-1">Email: <span class="font-bold">utaakun12@gmail.com</span></div>
+          <div class="mb-1">No HP: <span class="font-bold">08123456789</span></div>
+          <div class="mb-1">Alamat: <span class="font-bold">Jl. Sakura No. 1, Tokyo</span></div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div class="font-semibold mb-2">Informasi Kemitraan</div>
+          <div class="mb-1">Sistem: <span class="font-bold">Autopilot</span></div>
+          <div class="mb-1">Paket: <span class="font-bold">Kagawa Ricebowl</span></div>
+          <div class="mb-1">Sales: <span class="font-bold">Yui Hirasawa</span></div>
+          <div class="mb-1">Tanggal Join: <span class="font-bold">01/01/2025</span></div>
+          <div class="mb-1">Status: <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disetujui</span></div>
+        </div>
+      </div>
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+        <div class="font-semibold mb-2">Aktivitas Terakhir</div>
+        <div class="mb-1">Login terakhir: <span class="font-bold">28/08/2025</span></div>
+        <div class="mb-1">Akun dibuat: <span class="font-bold">01/01/2025</span></div>
+        <div class="mb-1">Status Akun: <span class="font-bold">Aktif</span></div>
+      </div>
+    </div>
+  </div>
+</Layout>
