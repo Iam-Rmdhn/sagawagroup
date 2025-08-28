@@ -3,6 +3,20 @@ import Layout from '../../layouts/Layout.astro';
 import MitraSidebar from '../../components/mitra/sidebar/MitraSidebar.astro';
 import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 // User Dashboard
+
+// Fetch data omset/belanja dari backend (SSR)
+let omsetHariIni = [];
+let omsetBulanIni = 0;
+let belanjaHariIni = [];
+try {
+   const res = await fetch("http://localhost:4000/api/sheets/omset");
+   if (res.ok) {
+      const data = await res.json();
+      omsetHariIni = data.omsetHariIni || [];
+      omsetBulanIni = data.omsetBulanIni || 0;
+      belanjaHariIni = data.belanjaHariIni || [];
+   }
+} catch (e) {}
 ---
 
 <Layout title="Dashboard Mitra">
@@ -93,7 +107,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
             </div>
          </div>
 
-         Financial Tracking Section (HIDDEN for Self Managed - Only shown for Autopilot & Semi Autopilot)
          <div id="financial-section" class="hidden mb-6">
             <!-- Google Sheets Integration Info -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
@@ -168,7 +181,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                   <div class="flex items-center justify-between">
                      <div>
                         <h3 class="text-lg font-semibold mb-2">Omset Hari Ini</h3>
-                        <p class="text-3xl font-bold" id="omset-hari-ini"></p>
+                        <p class="text-3xl font-bold" id="omset-hari-ini">{omsetHariIni.length > 0 ? `Rp ${omsetHariIni[omsetHariIni.length-1][0]}` : '-'}</p>
                         <p class="text-sm opacity-80" id="omset-update-time">Dari Google Sheets</p>
                      </div>
                      <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -184,7 +197,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                   <div class="flex items-center justify-between">
                      <div>
                         <h3 class="text-lg font-semibold mb-2">Omset Bulan Ini</h3>
-                        <p class="text-3xl font-bold" id="omset-bulanan">Rp 0</p>
+                        <p class="text-3xl font-bold" id="omset-bulanan">{omsetBulanIni ? `Rp ${omsetBulanIni}` : '-'}</p>
                         <p class="text-sm opacity-80" id="omset-bulanan-periode">0 hari dari Sheets</p>
                      </div>
                      <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -200,7 +213,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                   <div class="flex items-center justify-between">
                      <div>
                         <h3 class="text-lg font-semibold mb-2">Belanja Hari Ini</h3>
-                        <p class="text-3xl font-bold" id="belanja-hari-ini">Rp 0</p>
+                        <p class="text-3xl font-bold" id="belanja-hari-ini">{belanjaHariIni.length > 0 ? `Rp ${belanjaHariIni[belanjaHariIni.length-1][0]}` : '-'}</p>
                         <p class="text-sm opacity-80" id="belanja-update-time">Dari Google Sheets</p>
                      </div>
                      <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -451,7 +464,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
 <script>
    // API URL configuration
-   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:9999';
+   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
 
    document.addEventListener('DOMContentLoaded', async function() {
       // Check authentication
@@ -464,7 +477,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       // Add debug functions to global scope for testing
       (window as any).resetAgreement = function() {
          localStorage.removeItem('mitraAgreementConfirmed');
-         console.log('🔄 Agreement status reset! Reload page to see modal.');
+         console.log('Agreement status reset! Reload page to see modal.');
       };
 
       (window as any).showModal = function() {
@@ -473,11 +486,11 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
       (window as any).checkAgreementStatus = function() {
          const status = localStorage.getItem('mitraAgreementConfirmed');
-         console.log('📋 Current agreement status:', status === 'true' ? 'CONFIRMED' : 'NOT CONFIRMED');
+         console.log('Current agreement status:', status === 'true' ? 'CONFIRMED' : 'NOT CONFIRMED');
          return status;
       };
 
-      console.log('🛠️ Debug functions available:');
+      console.log('Debug functions available:');
       console.log('- resetAgreement() : Reset agreement cache');
       console.log('- showModal() : Force show modal');
       console.log('- checkAgreementStatus() : Check current status');
@@ -497,7 +510,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
           localStorage.removeItem('mitraAgreementConfirmed');
           localStorage.removeItem('mitraUserEmail');
           
-          console.log('🔐 User logged out, cleared all session data');
+          console.log('User logged out, cleared all session data');
           window.location.href = '/login';
         }
       });
@@ -601,11 +614,11 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
          // Check if we already have cached agreement status for this session
          const cachedAgreementStatus = localStorage.getItem('mitraAgreementConfirmed');
          if (cachedAgreementStatus === 'true') {
-            console.log('✅ Agreement status already confirmed in this session');
+            console.log('Agreement status already confirmed in this session');
             return;
          }
 
-         console.log('🔍 Checking agreement status from backend...');
+         console.log('Checking agreement status from backend...');
 
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
             method: 'GET',

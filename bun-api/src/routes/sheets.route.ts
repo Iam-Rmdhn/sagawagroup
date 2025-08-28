@@ -3,14 +3,17 @@ import {
   createSheets,
   getSheetsData,
   validateSheetsUrl,
+  getOmsetData,
   saveSheetsUrl,
 } from "../controllers/sheets.controller";
-
 export const sheetsRoute = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
-
+  // Endpoint omset/keuangan publik
+  if (req.method === "GET" && pathname === "/api/sheets/omset") {
+    return await getOmsetData(req);
+  }
   // Get or create Google Sheets URL for mitra
   if (req.method === "GET" && pathname === "/api/mitra/sheets-url") {
     return await getSheetsUrl(req);

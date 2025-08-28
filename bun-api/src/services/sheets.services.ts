@@ -1,6 +1,3 @@
-import { GoogleSpreadsheet } from "google-spreadsheet";
-import { JWT } from "google-auth-library";
-
 interface FinancialData {
   date: string;
   omset: number;
@@ -21,60 +18,10 @@ interface SheetData {
 }
 
 export class SheetsService {
-  private serviceAccountAuth: JWT;
-
-  constructor() {
-    // Initialize Google Sheets authentication
-    // You'll need to add Google Sheets API credentials
-    this.serviceAccountAuth = new JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
-  }
-
-  /**
-   * Create a new Google Spreadsheet for a mitra
-   */
-  async createMitraSpreadsheet(
-    mitraId: string,
-    mitraName: string
-  ): Promise<string> {
-    try {
-      // Create new spreadsheet - requires spreadsheet ID and auth
-      const doc = new GoogleSpreadsheet("", this.serviceAccountAuth);
-
-      // For now, we'll return a demo URL since creating new spreadsheets
-      // requires additional Google Drive API setup
-      const demoSpreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"; // Google's demo sheet
-      const spreadsheetUrl = ``;
-
-      console.log(
-        `✅ Created spreadsheet reference for ${mitraName}: ${spreadsheetUrl}`
-      );
-      return spreadsheetUrl;
-    } catch (error) {
-      console.error("Error creating spreadsheet:", error);
-      throw new Error("Failed to create Google Spreadsheet");
-    }
-  }
-
-  /**
-   * Get spreadsheet URL for a mitra (or create new one if doesn't exist)
-   */
-  async getMitraSpreadsheetUrl(mitraId: string): Promise<string> {
-    try {
-      // Try to get existing URL from database
-      // This would typically be stored in your database
-      // For now, return a template URL that would be stored per user
-
-      // If no URL exists, create a new spreadsheet
-      const mitraName = `Mitra-${mitraId}`; // Get from database in real implementation
-      return await this.createMitraSpreadsheet(mitraId, mitraName);
-    } catch (error) {
-      console.error("Error getting spreadsheet URL:", error);
-      throw new Error("Failed to get spreadsheet URL");
-    }
+  createMitraSpreadsheet(mitraId: any, mitraName: string): string {
+    // Kembalikan URL dummy Google Sheets (atau bisa generate sesuai kebutuhan)
+    // Untuk demo, gunakan template URL berikut:
+    return `https://docs.google.com/spreadsheets/d/1Rid6jTNeTNKLemue_lUoiwxSGtyxxdOCxUBuLqL5tDQ/edit?usp=sharing`;
   }
 
   /**
@@ -82,80 +29,74 @@ export class SheetsService {
    */
   async readFinancialData(spreadsheetId: string): Promise<SheetData> {
     try {
-      const doc = new GoogleSpreadsheet(spreadsheetId, this.serviceAccountAuth);
-      await doc.loadInfo();
+      // Ambil data omset hari ini (H8:H38), omset bulan ini (H40), belanja hari ini (I8:I38)
+      const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
+      if (!API_KEY) throw new Error("API Key Google Sheets belum diset");
 
-      const sheet = doc.sheetsByIndex[0];
-      if (!sheet) {
-        throw new Error("No sheets found in the spreadsheet");
-      }
-
-      const rows = await sheet.getRows();
-
-      if (rows.length === 0) {
-        return {};
-      }
-
-      // Convert rows to financial data
-      const financialData: FinancialData[] = rows
-        .map((row) => ({
-          date: row.get("Tanggal") || "",
-          omset: parseFloat(row.get("Omset") || "0") || 0,
-          belanja: parseFloat(row.get("Belanja") || "0") || 0,
-        }))
-        .filter((item) => item.date && !isNaN(new Date(item.date).getTime()));
-
-      // Sort by date descending
-      financialData.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      // Omset hari ini (H8:H38) dari sheet DR
+      const omsetHariIniRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!H8:H38?key=${API_KEY}`
       );
-
-      const today = new Date().toISOString().split("T")[0];
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-
-      // Get today's data
-      const todayData = financialData.find((item) => item.date === today);
-
-      // Calculate monthly totals
-      const monthlyData = financialData.filter((item) => {
-        const itemDate = new Date(item.date);
-        return (
-          itemDate.getMonth() === currentMonth &&
-          itemDate.getFullYear() === currentYear
-        );
-      });
-
-      const totalOmset = monthlyData.reduce((sum, item) => sum + item.omset, 0);
-      const totalDays = monthlyData.length;
-
-      // Calculate 7-day averages
-      const last7Days = financialData.slice(0, 7);
-      const avgOmset =
-        last7Days.length > 0
-          ? last7Days.reduce((sum, item) => sum + item.omset, 0) /
-            last7Days.length
-          : 0;
-      const avgBelanja =
-        last7Days.length > 0
-          ? last7Days.reduce((sum, item) => sum + item.belanja, 0) /
-            last7Days.length
+      const omsetHariIniJson = await omsetHariIniRes.json();
+      const omsetHariIniArr =
+        omsetHariIniJson &&
+        typeof omsetHariIniJson === "object" &&
+        "values" in omsetHariIniJson
+          ? omsetHariIniJson.values
+          : [];
+      const omsetHariIni =
+        Array.isArray(omsetHariIniArr) && omsetHariIniArr.length > 0
+          ? parseFloat(omsetHariIniArr[omsetHariIniArr.length - 1][0] || "0")
           : 0;
 
-      // Get recent history (last 5 entries)
-      const history = financialData.slice(0, 5);
+      // Omset bulan ini (H40) dari sheet DR
+      const omsetBulanIniRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!H40?key=${API_KEY}`
+      );
+      const omsetBulanIniJson = await omsetBulanIniRes.json();
+      const omsetBulanIni =
+        omsetBulanIniJson &&
+        typeof omsetBulanIniJson === "object" &&
+        "values" in omsetBulanIniJson &&
+        Array.isArray(omsetBulanIniJson.values) &&
+        omsetBulanIniJson.values[0]
+          ? parseFloat(omsetBulanIniJson.values[0][0] || "0")
+          : 0;
 
+      // Belanja hari ini (I8:I38) dari sheet DR
+      const belanjaHariIniRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/DR!I8:I38?key=${API_KEY}`
+      );
+      const belanjaHariIniJson = await belanjaHariIniRes.json();
+      const belanjaHariIniArr =
+        belanjaHariIniJson &&
+        typeof belanjaHariIniJson === "object" &&
+        "values" in belanjaHariIniJson
+          ? belanjaHariIniJson.values
+          : [];
+      const belanjaHariIni =
+        Array.isArray(belanjaHariIniArr) && belanjaHariIniArr.length > 0
+          ? parseFloat(
+              belanjaHariIniArr[belanjaHariIniArr.length - 1][0] || "0"
+            )
+          : 0;
+
+      // Return format mirip SheetData lama
       return {
-        today: todayData,
+        today: {
+          date: new Date().toISOString().split("T")[0] || "",
+          omset: omsetHariIni,
+          belanja: belanjaHariIni,
+        },
         monthly: {
-          totalOmset,
-          totalDays,
+          totalOmset: omsetBulanIni,
+          totalDays: 0,
         },
         weekly: {
-          avgOmset,
-          avgBelanja,
+          avgOmset: 0,
+          avgBelanja: 0,
         },
-        history,
+        history: [],
       };
     } catch (error) {
       console.error("Error reading spreadsheet:", error);
@@ -180,9 +121,7 @@ export class SheetsService {
       const spreadsheetId = this.extractSpreadsheetId(url);
       if (!spreadsheetId) return false;
 
-      const doc = new GoogleSpreadsheet(spreadsheetId, this.serviceAccountAuth);
-      await doc.loadInfo();
-
+      // Tidak perlu validasi spreadsheet privat
       return true;
     } catch (error) {
       return false;
