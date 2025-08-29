@@ -1,4 +1,5 @@
 import { MitraPelunasanModel } from "../models/mitra-pelunasan.model";
+import { validateBankInput } from "../utils/bankvalidator";
 
 export const pelunasanMitraController = async (
   req: Request
@@ -8,6 +9,19 @@ export const pelunasanMitraController = async (
     const pelunasanData: any = {};
     for (const [key, value] of formData.entries()) {
       if (key !== "buktiTransfer") pelunasanData[key] = value;
+    }
+    // Validasi dan normalisasi nama bank pengirim
+    if (pelunasanData.bankPengirim) {
+      const validBank = validateBankInput(pelunasanData.bankPengirim);
+      if (!validBank) {
+        return new Response(
+          JSON.stringify({
+            error: "Nama bank pengirim tidak valid atau tidak dikenali.",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      pelunasanData.bankPengirim = validBank;
     }
     // Handle file upload
     const buktiTransfer = formData.get("buktiTransfer") as unknown as File;
