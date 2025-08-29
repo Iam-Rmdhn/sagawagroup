@@ -1116,6 +1116,33 @@ try {
       await loadMitraProfile();
    });
 
+   // Helper to fetch profile robustly: try `/api/mitra/profile` then fallback to `/api/mitra/by-email`
+   async function fetchProfileWithFallback(token: string | null) {
+      if (!token) return null;
+      // Try profile endpoint
+      try {
+         const res = await fetch(`${API_URL}/api/mitra/profile`, {
+            method: 'GET',
+            headers: {
+               'Authorization': `Bearer ${token}`,
+               'Content-Type': 'application/json'
+            }
+         });
+         const json = await res.json();
+         if (res.ok && json && json.success && json.data) return json.data;
+      } catch (e) { /* ignore and fallback */ }
+
+      // Fallback to by-email
+      try {
+         const email = localStorage.getItem('mitraUserEmail');
+         if (!email) return null;
+         const byEmailRes = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`);
+         if (!byEmailRes.ok) return null;
+         const byEmailJson = await byEmailRes.json();
+         return byEmailJson; // by-email returns the mitra object directly
+      } catch (e) { return null; }
+   }
+
    async function loadMitraProfile() {
       const loadingState = document.getElementById('loading-state');
       const dashboardContent = document.getElementById('dashboard-content');
@@ -1123,20 +1150,54 @@ try {
       const token = localStorage.getItem('mitraToken');
 
       try {
-         const response = await fetch(`${API_URL}/api/mitra/profile`, {
-            method: 'GET',
-            headers: {
-               'Authorization': `Bearer ${token}`,
-               'Content-Type': 'application/json'
+         // Try canonical profile endpoint first. If backend doesn't expose
+         // `/api/mitra/profile` (some deployments return different shapes),
+         // fall back to `/api/mitra/by-email?email=...` using stored email.
+         let data = null;
+         try {
+            const response = await fetch(`${API_URL}/api/mitra/profile`, {
+               method: 'GET',
+               headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+               }
+            });
+            const result = await response.json();
+
+            if (response.ok && result && result.success && result.data) {
+               data = result.data;
+            } else {
+               console.warn('[WARN] /api/mitra/profile did not return expected shape, falling back to /api/mitra/by-email');
             }
-         });
+         } catch (e) {
+            console.warn('[WARN] Error fetching /api/mitra/profile, falling back to by-email', e);
+         }
 
-         const result = await response.json();
+         // Fallback: use email from localStorage and call by-email endpoint which
+         // the backend definitely provides and which includes isPaidOff/statusPelunasan
+         if (!data) {
+            const email = localStorage.getItem('mitraUserEmail');
+            if (email) {
+               try {
+                  const byEmailRes = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`);
+                  if (byEmailRes.ok) {
+                     const byEmailResult = await byEmailRes.json();
+                     // the by-email route returns the mitra object directly
+                     data = byEmailResult;
+                  } else {
+                     console.error('[ERROR] /api/mitra/by-email failed', await byEmailRes.text());
+                  }
+               } catch (e) {
+                  console.error('[ERROR] Failed to fetch mitra by-email fallback', e);
+               }
+            } else {
+               console.warn('[WARN] No mitraUserEmail in localStorage to call by-email fallback');
+            }
+         }
 
-         if (response.ok && result.success) {
-            const data = result.data;
-               // DEV DEBUG: log profile object to help diagnose agreement/modal behavior
-               console.debug('[DEBUG] loadMitraProfile - profile data:', data);
+         if (data) {
+            // DEV DEBUG: log profile object to help diagnose agreement/modal behavior
+            console.debug('[DEBUG] loadMitraProfile - profile data:', data);
             
             // Hide loading state and show dashboard
             loadingState?.classList.add('hidden');
@@ -1167,7 +1228,7 @@ try {
             await checkAgreementStatusFromBackend(data);
 
          } else {
-            throw new Error(result.error || 'Gagal memuat data profil');
+            throw new Error('Gagal memuat data profil');
          }
 
       } catch (error) {
@@ -1272,17 +1333,21 @@ try {
          if (user?.paymentStatus) pelunasanStatuses.push(String(user.paymentStatus).toLowerCase());
       } catch (e) { /* ignore */ }
 
+      // Only treat payment-specific approval signals as 'pelunasan approved'.
+      // Do NOT treat account-level `approved`/`isApproved` or `status === 'approved'`
+      // (which often mean application/account approval) as payment completion.
       const isPelunasanApproved = (
          user?.pelunasanApproved === true ||
-         user?.approved === true ||
-         user?.isApproved === true ||
-         String(user?.status || '').toLowerCase() === 'approved' ||
-         pelunasanStatuses.includes('approved')
+         pelunasanStatuses.includes('approved') ||
+         pelunasanStatuses.includes('lunas') ||
+         // Some backends may use explicit status fields for payment
+         (typeof user?.statusPelunasan === 'string' && ['approved', 'lunas'].includes(user.statusPelunasan.toLowerCase()))
       );
 
       const isPaidOff = (
          user?.nilaiPaketUsaha === 'Full Payment' ||
          user?.isFullPayment === true ||
+         user?.isPaidOff === true ||
          isPelunasanApproved ||
          isKekuranganZero
       );
@@ -1322,19 +1387,12 @@ try {
          // Use provided profile when available to determine payment status
          let user = userProfile;
          if (!user) {
-            const profileRes = await fetch(`${API_URL}/api/mitra/profile`, {
-               method: 'GET',
-               headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-               }
-            });
-            const profileResult = await profileRes.json();
-            if (!profileRes.ok || !profileResult.success) {
+            // try the same fallback we use in loadMitraProfile
+            user = await fetchProfileWithFallback(token);
+            if (!user) {
                console.error('Gagal memuat profil user untuk cek pelunasan');
                return;
             }
-            user = profileResult.data;
          }
 
          // DEV DEBUG: inspect the profile used to decide payment status
@@ -1375,12 +1433,25 @@ try {
             } catch (e) { /* ignore */ }
 
             if (!acceptedForThisUser) {
-               console.log('🔔 User has not agreed to terms - showing agreement modal');
-               setTimeout(() => { showAgreementModal(); }, 500);
+               console.log('User has not agreed to terms - showing agreement UI');
+               // If we're on the dashboard page show inline section, otherwise show modal
+               try {
+                  const path = window.location && window.location.pathname ? window.location.pathname : '';
+                  if (path.includes('/user/dashboard')) {
+                     // show inline section so the mitra can check the agreement here
+                     setTimeout(() => { showAgreementSection(); }, 300);
+                  } else {
+                     setTimeout(() => { showAgreementModal(); }, 300);
+                  }
+               } catch (e) {
+                  setTimeout(() => { showAgreementModal(); }, 300);
+               }
             } else {
                const agreedAt = agreementDetails?.acceptedAt;
                console.log('User has already agreed to terms on:', agreedAt);
+               // Persist per-user cache and update UI to accepted state
                localStorage.setItem(agreementStorageKey(), 'true');
+               try { setAgreementUIAccepted(agreedAt); } catch (e) { /* ignore */ }
             }
          } else {
             console.error('Failed to check agreement status:', result.error);
@@ -1564,26 +1635,17 @@ try {
          const token = localStorage.getItem('mitraToken');
          if (!token) return;
 
-         // If mitraData isn't explicitly full-payment, check for submitted pelunasan
+         // Only show agreement section when user is detected paid-off by isUserPaidOff.
          let considerPaidSection = isUserPaidOff(mitraData);
-         if (!considerPaidSection) {
-            try {
-               const email = mitraData?.email || localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
-               if (email) {
-                  const pelRes = await fetch(`${API_URL}/api/mitra/pelunasan-exists?email=${encodeURIComponent(email)}`);
-                  const pelJson = await pelRes.json();
-                  if (pelRes.ok && pelJson && pelJson.exists) {
-                     console.log('Pelunasan exists — showing agreement section');
-                     considerPaidSection = true;
-                  }
-               }
-            } catch (e) { /* ignore */ }
-         }
 
          if (!considerPaidSection) {
             console.log('Mitra belum lunas, tidak menampilkan agreement section');
             return;
          }
+
+         // Immediately show agreement section for paid-off mitra (optimistic UI)
+         // so the user can read & check the agreement without waiting for the backend check.
+         try { showAgreementSection(); } catch (e) { /* ignore */ }
 
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
             method: 'GET',
@@ -1599,11 +1661,13 @@ try {
             const { hasAccepted } = result.data;
 
             if (!hasAccepted) {
-               console.log('Mitra sudah lunas tapi belum setuju agreement - menampilkan agreement section');
-               showAgreementSection();
+               console.log('Mitra sudah lunas tapi belum setuju agreement - keeping agreement section visible');
+               // already visible from optimistic UI
             } else {
-               console.log('Mitra sudah lunas dan sudah setuju agreement');
-               hideAgreementSection();
+               console.log('Mitra sudah lunas dan sudah setuju agreement - hiding agreement section');
+                  // update UI to accepted state instead of hiding immediately
+                  try { setAgreementUIAccepted(result.data.agreementDetails?.acceptedAt || null); } catch (e) { /* ignore */ }
+                  hideAgreementSection();
             }
          } else {
             console.error('Failed to check agreement status for dashboard:', result.error);
@@ -1618,7 +1682,7 @@ try {
       const agreementSection = document.getElementById('agreement-section');
       if (agreementSection) {
          agreementSection.classList.remove('hidden');
-         setupDashboardAgreementHandlers();
+            setupDashboardAgreementHandlers();
       }
    }
 
@@ -1630,31 +1694,65 @@ try {
    }
 
    function setupDashboardAgreementHandlers() {
-      const checkbox = document.getElementById('dashboard-agreement-checkbox');
-      const submitBtn = document.getElementById('dashboard-accept-agreement');
+         const checkbox = document.getElementById('dashboard-agreement-checkbox');
+         const submitBtn = document.getElementById('dashboard-accept-agreement');
 
-      if (checkbox && submitBtn && submitBtn instanceof HTMLButtonElement) {
-         // Handle checkbox change
-         if (checkbox instanceof HTMLInputElement) {
-            checkbox.addEventListener('change', function() {
-               if (checkbox.checked) {
-                  submitBtn.disabled = false;
-                  submitBtn.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-amber-600 hover:bg-amber-700 text-base font-medium text-white cursor-pointer sm:w-auto sm:text-sm transition-all duration-200';
-               } else {
-                  submitBtn.disabled = true;
-                  submitBtn.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white cursor-not-allowed sm:w-auto sm:text-sm transition-all duration-200';
+         // Avoid attaching handlers multiple times
+         if (checkbox && submitBtn && submitBtn instanceof HTMLButtonElement && !(submitBtn as any).__handlersAttached) {
+            // Mark as attached
+            (submitBtn as any).__handlersAttached = true;
+
+            // Handle checkbox change
+            if (checkbox instanceof HTMLInputElement) {
+               checkbox.addEventListener('change', function() {
+                  if (checkbox.checked) {
+                     submitBtn.disabled = false;
+                     submitBtn.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-amber-600 hover:bg-amber-700 text-base font-medium text-white cursor-pointer sm:w-auto sm:text-sm transition-all duration-200';
+                  } else {
+                     submitBtn.disabled = true;
+                     submitBtn.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white cursor-not-allowed sm:w-auto sm:text-sm transition-all duration-200';
+                  }
+               });
+            }
+
+            // Handle submit button click
+            submitBtn.addEventListener('click', async function() {
+               if (checkbox instanceof HTMLInputElement && checkbox.checked) {
+                  await acceptDashboardAgreement();
                }
             });
          }
-
-         // Handle submit button click
-         submitBtn.addEventListener('click', async function() {
-            if (checkbox instanceof HTMLInputElement && checkbox.checked) {
-               await acceptDashboardAgreement();
-            }
-         });
-      }
    }
+
+      // Mark the UI as accepted: check checkbox, disable button, and set local cache
+      function setAgreementUIAccepted(agreedAt: string | null = null) {
+         try {
+            const checkbox = document.getElementById('dashboard-agreement-checkbox');
+            const submitBtn = document.getElementById('dashboard-accept-agreement');
+
+            if (checkbox && checkbox instanceof HTMLInputElement) {
+               checkbox.checked = true;
+               checkbox.disabled = true;
+            }
+
+            if (submitBtn && submitBtn instanceof HTMLButtonElement) {
+               submitBtn.disabled = true;
+               submitBtn.className = 'inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white sm:w-auto sm:text-sm';
+               submitBtn.innerHTML = `
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Telah Disetujui`;
+            }
+
+            // Cache accepted state per-user
+            localStorage.setItem(agreementStorageKey(), 'true');
+
+            if (agreedAt) {
+               console.log('Agreement accepted at', agreedAt);
+            }
+         } catch (e) { /* ignore */ }
+      }
 
    async function acceptDashboardAgreement() {
       const submitBtn = document.getElementById('dashboard-accept-agreement');
@@ -1785,11 +1883,11 @@ try {
       const pelunasanStatusLabel = pelunasanStatus?.previousElementSibling;
       if (pelunasanStatus) {
          if (data.isPaidOff || data.isFullPayment || data.statusPelunasan === 'lunas') {
+            // Show explicitly as "Lunas" and keep element visible so user sees the status
             pelunasanStatus.textContent = 'Lunas';
             pelunasanStatus.className = 'text-green-600 font-bold';
-            // Sembunyikan label dan value jika sudah lunas/full payment
-            pelunasanStatus.style.display = 'none';
-            if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = 'none';
+            pelunasanStatus.style.display = '';
+            if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
          } else {
             pelunasanStatus.textContent = 'Belum Lunas';
             pelunasanStatus.className = 'text-red-600 font-bold';

@@ -246,20 +246,35 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         if (mitra?.paymentStatus) pelunasanStatuses.push(String(mitra.paymentStatus).toLowerCase());
       } catch (e) { /* ignore shape issues */ }
 
+      // Only treat payment-specific approval signals as pelunasan approved.
       const isPelunasanApproved = (
         mitra?.pelunasanApproved === true ||
-        mitra?.approved === true ||
-        mitra?.isApproved === true ||
-        String(mitra?.status || '').toLowerCase() === 'approved' ||
-        pelunasanStatuses.includes('approved')
+        pelunasanStatuses.includes('approved') ||
+        pelunasanStatuses.includes('lunas') ||
+        (typeof mitra?.statusPelunasan === 'string' && ['approved', 'lunas'].includes(mitra.statusPelunasan.toLowerCase()))
       );
 
       const isPaidOff = (
         mitra?.nilaiPaketUsaha === 'Full Payment' ||
         mitra?.isFullPayment === true ||
+        mitra?.isPaidOff === true ||
         isPelunasanApproved ||
         isKekuranganZero
       );
+
+      // Debug: help identify why view shows DP vs Lunas
+      try {
+        console.debug('[DEBUG] kewajiban.isPaidOff check', {
+          email: mitra?.email,
+          nilaiPaketUsaha: mitra?.nilaiPaketUsaha,
+          isFullPayment: mitra?.isFullPayment,
+          pelunasanApproved: mitra?.pelunasanApproved,
+          statusPelunasan: mitra?.statusPelunasan,
+          pelunasanStatuses,
+          kekurangan: mitra?.kekurangan,
+          isPaidOff
+        });
+      } catch (e) { /* ignore */ }
 
       if (isPaidOff) {
         // Show paid-off status
