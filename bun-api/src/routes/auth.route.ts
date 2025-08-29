@@ -1,4 +1,6 @@
 import { MitraPelunasanModel } from "../models/mitra-pelunasan.model";
+import { approvePelunasanController } from "../controllers/approve-pelunasan.controller";
+
 import {
   loginMitra,
   adminLogin,
@@ -15,12 +17,32 @@ export const authRoute = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
+  // Approve pelunasan endpoint
+  if (
+    req.method === "POST" &&
+    pathname.startsWith("/api/admin/mitra_pelunasan/approve/")
+  ) {
+    return await approvePelunasanController(req);
+  }
+
   if (req.method === "GET" && pathname === "/api/admin/mitra_pelunasan") {
     try {
       // Optional: validasi admin token jika ingin
       // await validateAdminToken(req);
-      const data = await MitraPelunasanModel.findAll();
-      return new Response(JSON.stringify({ success: true, data }), {
+      const { MitraModel } = await import("../models/mitra.model");
+      const pelunasanList = await MitraPelunasanModel.findAll();
+      const result = await Promise.all(
+        pelunasanList.map(async (p) => {
+          const mitra = await MitraModel.findOne({ email: p.email });
+          return {
+            ...p,
+            namaMitra: mitra?.namaMitra || p.namaMitra || "",
+            paketUsaha: mitra?.paketUsaha || p.paketUsaha || "",
+            kekurangan: mitra?.kekurangan ?? null,
+          };
+        })
+      );
+      return new Response(JSON.stringify({ success: true, data: result }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });

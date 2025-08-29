@@ -13,6 +13,7 @@ export interface MitraPelunasan {
   noRekPengirim: string;
   bankPengirim: string;
   buktiTransfer: string; // URL/filepath
+  statusPelunasan?: string; // 'lunas' | 'belum' | undefined
   createdAt: string;
   updatedAt: string;
 }
