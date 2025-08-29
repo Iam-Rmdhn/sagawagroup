@@ -60,6 +60,8 @@ try {
                   <div class="ml-4">
                      <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Status Kemitraan</h3>
                      <p class="text-lg font-semibold text-gray-900 dark:text-white" id="kemitraan-status">-</p>
+                     <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400 mt-2">Status Pelunasan</h3>
+                     <p class="text-lg font-semibold" id="pelunasan-status">-</p>
                   </div>
                </div>
             </div>
@@ -880,6 +882,18 @@ try {
             status = 'Ditolak';
          }
          kemitraanStatus.textContent = status;
+      }
+
+      // Status Pelunasan
+      const pelunasanStatus = document.getElementById('pelunasan-status');
+      if (pelunasanStatus) {
+         if (data.isPaidOff || data.isFullPayment || data.statusPelunasan === 'lunas') {
+            pelunasanStatus.textContent = 'Lunas';
+            pelunasanStatus.className = 'text-green-600 font-bold';
+         } else {
+            pelunasanStatus.textContent = 'Belum Lunas';
+            pelunasanStatus.className = 'text-red-600 font-bold';
+         }
       }
 
       // Sistem Kemitraan

@@ -8,6 +8,8 @@ export interface User {
   sales: string;
   userID?: string;
   isApproved: boolean;
+  isPaidOff?: boolean;
+  statusPelunasan?: string; // 'lunas' | 'belum' | undefined
   createdAt: Date;
   updatedAt: Date;
 }
