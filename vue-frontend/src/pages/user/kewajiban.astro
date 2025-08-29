@@ -10,16 +10,170 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 ---
 
 <Layout title="Kewajiban Mitra">
+
+<!-- Modern Kewajiban Styles -->
+<style>
+  /* Global fixes for scroll stability */
+  * {
+    transform: translateZ(0);
+    will-change: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  body, html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    background-color: #fefefe;
+  }
+  
+  /* Modern card styling */
+  .modern-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(251, 191, 36, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: relative;
+  }
+  
+  .modern-card:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 20px 25px -5px rgba(251, 191, 36, 0.1), 0 10px 10px -5px rgba(251, 191, 36, 0.04);
+    border-color: rgba(251, 191, 36, 0.2);
+  }
+
+  /* Status badge styling */
+  .status-badge {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+    animation: pulse 2s infinite;
+  }
+  
+  .status-badge-success {
+    background: linear-gradient(135deg, rgb(34 197 94), rgb(22 163 74));
+  }
+  
+  .status-badge-warning {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+  }
+  
+  .status-badge-danger {
+    background: linear-gradient(135deg, rgb(239 68 68), rgb(220 38 38));
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Button styling */
+  .btn-primary {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(245, 158, 11, 0.3);
+  }
+  
+  .btn-success {
+    background: linear-gradient(135deg, rgb(34 197 94), rgb(22 163 74));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-success:hover {
+    background: linear-gradient(135deg, rgb(21 128 61), rgb(22 101 52));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(34, 197, 94, 0.3);
+  }
+
+  /* Loading animation */
+  .loading-shimmer {
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.3) 50%, rgba(251, 191, 36, 0.1) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Payment info styling */
+  .payment-info-card {
+    background: linear-gradient(135deg, rgb(31 41 55), rgb(55 65 81));
+    border: 1px solid rgba(251, 191, 36, 0.2);
+  }
+</style>
   <MitraNavbar />
   <MitraSidebar currentPage="kewajiban" showKewajiban={true} />
-  <main class="p-6 ml-64 mt-16">
-    <div class="max-w-5xl mx-auto border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl bg-white/80 dark:bg-gray-900/80 shadow-lg p-8">
-      <h1 class="text-2xl font-bold mb-8 text-gray-900 dark:text-white">Kewajiban Mitra</h1>
-      <div id="kewajiban-content">
-        <div class="text-gray-500">Memuat status kewajiban...</div>
+  
+  <div class="p-2 sm:p-4 sm:ml-72 transition-all duration-300">
+    <div class="p-2 sm:p-6 mt-16">
+      <!-- Breadcrumb -->
+      <nav class="flex mt-2 mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+            <a href="/user/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-amber-600 dark:text-gray-400 dark:hover:text-orange-500">
+              <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+              </svg>
+              <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Kewajiban Mitra</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 mb-6 text-white shadow-xl">
+        <div class="flex items-center">
+          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl font-bold mr-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-3xl font-bold mb-2">Kewajiban Mitra</h1>
+            <p class="opacity-90 text-lg">Pantau status pembayaran dan kewajiban Anda</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-state" class="text-center py-12">
+        <div class="modern-card rounded-xl p-8 max-w-md mx-auto">
+          <div class="loading-shimmer rounded-full h-16 w-16 mx-auto mb-4"></div>
+          <div class="loading-shimmer h-4 rounded mb-2"></div>
+          <div class="loading-shimmer h-3 rounded w-3/4 mx-auto"></div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div id="kewajiban-content" class="hidden">
+        <!-- Content will be populated by JavaScript -->
       </div>
     </div>
-  </main>
+  </div>
 </Layout>
 
 <script type="module">
@@ -32,10 +186,11 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         }
       }
     } catch (e) { /* fallback to localhost */ }
+    
     const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
+    const loadingState = document.getElementById('loading-state');
     const container = document.getElementById('kewajiban-content');
-  let mitra = null;
-
+    let mitra = null;
 
     if (email) {
       try {
@@ -44,27 +199,39 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         if (res.ok && !data.error) mitra = data;
       } catch (e) { }
     }
-  // Sidebar selalu muncul di halaman kewajiban
+
+    // Hide loading state
+    if (loadingState) loadingState.classList.add('hidden');
+    if (container) container.classList.remove('hidden');
+
     if (!mitra) {
-      container.innerHTML = '<div class="text-red-600">Data mitra tidak ditemukan. Silakan login ulang.</div>';
+      container.innerHTML = `
+        <div class="modern-card rounded-xl p-8 text-center max-w-md mx-auto">
+          <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Data Tidak Ditemukan</h3>
+          <p class="text-red-600 mb-4">Data mitra tidak ditemukan. Silakan login ulang.</p>
+          <a href="/login" class="btn-primary inline-flex items-center px-6 py-3 text-white font-semibold rounded-xl shadow-lg">
+            Login Ulang
+          </a>
+        </div>
+      `;
       return;
     }
+
     try {
       // Update navbar profile info
       if (typeof window !== 'undefined' && window.mitraNavbar && typeof window.mitraNavbar.updateUserInfo === 'function') {
         window.mitraNavbar.updateUserInfo(mitra);
       }
-  // Rely on approved/full-payment flags in profile (pelunasanApproved / statusPelunasan === 'approved')
-  // to determine whether mitra is considered lunas. Do not redirect based on mere submission.
 
-      // Stricter full-payment check: treat as paid-off when explicitly Full Payment,
-      // isFullPayment===true, admin-approved pelunasan flags, or kekurangan <= 0.
+      // Check payment status logic
       const hasKekurangan = mitra && typeof mitra.kekurangan !== 'undefined' && mitra.kekurangan !== null;
       const isKekuranganZero = hasKekurangan && !isNaN(Number(mitra.kekurangan)) && Number(mitra.kekurangan) <= 0;
 
-      // Aggregate possible approval flags/fields coming from different backend shapes.
-      // Some responses use mitra.pelunasan (array), mitra.pelunasan.status, mitra.statusPelunasan,
-      // mitra.pelunasanApproved, mitra.approved or mitra.isApproved.
       const pelunasanStatuses = [];
       try {
         if (Array.isArray(mitra?.pelunasan)) {
@@ -94,101 +261,193 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         isKekuranganZero
       );
 
-      // Debug: help identify why view shows DP vs Lunas
-      try {
-        console.debug('[DEBUG] kewajiban.isPaidOff check', {
-          email: mitra?.email,
-          nilaiPaketUsaha: mitra?.nilaiPaketUsaha,
-          isFullPayment: mitra?.isFullPayment,
-          pelunasanApproved: mitra?.pelunasanApproved,
-          statusPelunasan: mitra?.statusPelunasan,
-          kekurangan: mitra?.kekurangan,
-          isPaidOff
-        });
-      } catch (e) { /* ignore */ }
-
       if (isPaidOff) {
-          // Don't automatically redirect to dashboard; show the kewajiban page.
-          // We still check agreement-status to offer a CTA if the agreement hasn't been signed yet.
-          let agreementAccepted = true;
-          try {
-            const token = localStorage.getItem('mitraToken');
-            if (token) {
-              const agreementRes = await fetch(`${API_URL}/api/mitra/agreement-status`, {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-                }
-              });
-              const agreementData = await agreementRes.json();
-              if (agreementRes.ok && agreementData.success) {
-                agreementAccepted = !!agreementData.data.hasAccepted;
+        // Show paid-off status
+        let agreementAccepted = true;
+        try {
+          const token = localStorage.getItem('mitraToken');
+          if (token) {
+            const agreementRes = await fetch(`${API_URL}/api/mitra/agreement-status`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
               }
+            });
+            const agreementData = await agreementRes.json();
+            if (agreementRes.ok && agreementData.success) {
+              agreementAccepted = !!agreementData.data.hasAccepted;
             }
-          } catch (e) {
-            console.error('Error checking agreement status:', e);
           }
+        } catch (e) {
+          console.error('Error checking agreement status:', e);
+        }
 
-          const extraAction = agreementAccepted ? '' : `
-            <p class="mt-4 text-yellow-800 dark:text-yellow-200">Anda belum menandatangani agreement. <a href="/user/dashboard" class="inline-block ml-2 px-3 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded">Buka Dashboard untuk menandatangani</a></p>
-          `;
-
-          container.innerHTML = `
-            <div class="bg-green-100 dark:bg-green-900 p-8 rounded-lg shadow max-w-xl mx-auto">
-              <h2 class="text-xl font-semibold mb-4 text-green-700 dark:text-green-300">Kewajiban Lunas</h2>
-              <p class="text-green-800 dark:text-green-200"><strong>Anda telah melunasi kewajiban.</strong> Selamat! Anda sekarang resmi menjadi mitra Sagawa Group.</p>
-              ${extraAction}
+        const extraAction = agreementAccepted ? '' : `
+          <div class="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border-l-4 border-yellow-400 rounded-xl">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+              </svg>
+              <div>
+                <p class="text-yellow-800 font-medium">Agreement Belum Ditandatangani</p>
+                <p class="text-yellow-700 text-sm mt-1">Silakan buka dashboard untuk menandatangani agreement</p>
+              </div>
             </div>
-          `;
-        } else {
+            <div class="mt-4">
+              <a href="/user/dashboard" class="btn-primary inline-flex items-center px-6 py-3 text-white font-semibold rounded-xl shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Tandatangani Agreement
+              </a>
+            </div>
+          </div>
+        `;
+
+        container.innerHTML = `
+          <div class="max-w-4xl mx-auto">
+            <!-- Success Card -->
+            <div class="modern-card rounded-xl p-8 text-center mb-6">
+              <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-green-500 mx-auto mb-6">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">
+                Kewajiban Lunas
+              </h2>
+              <p class="text-gray-600 text-lg mb-6">
+                <strong>Selamat!</strong> Anda telah melunasi kewajiban dan resmi menjadi mitra Sagawa Group.
+              </p>
+              <div class="status-badge-success inline-flex items-center px-6 py-3 rounded-full text-success font-semibold shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Status: Lunas
+              </div>
+            </div>
+            ${extraAction}
+          </div>
+        `;
+      } else {
+        // Show payment due status
         function formatCurrency(amount) {
           return typeof amount === 'number'
             ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount)
             : 'N/A';
         }
+
         container.innerHTML = `
-          <div class="max-w-3xl mx-auto">
-            <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 mb-8 text-white shadow flex items-center gap-4">
-              <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-3xl font-bold">
-                ${mitra.namaMitra ? mitra.namaMitra.charAt(0).toUpperCase() : 'M'}
-              </div>
-              <div>
-                <div class="text-lg font-bold text-white">${mitra.namaMitra || '-'}</div>
-                <div class="text-sm opacity-90 text-white">${mitra.email || '-'}</div>
-                <div class="text-xs mt-1 font-medium text-white">${isPaidOff ? 'Lunas' : 'Belum Lunas / DP'}</div>
+          <div class="max-w-4xl mx-auto">
+            <!-- Mitra Profile Card -->
+            <div class="modern-card rounded-xl p-8 mb-6">
+              <div class="flex items-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-3xl font-bold text-white mr-6">
+                  ${mitra.namaMitra ? mitra.namaMitra.charAt(0).toUpperCase() : 'M'}
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                    ${mitra.namaMitra || 'Nama Mitra'}
+                  </h2>
+                  <p class="text-gray-600 text-lg">${mitra.email || 'Email tidak tersedia'}</p>
+                  <span class="status-badge-warning inline-flex items-center px-4 py-2 rounded-full text-white font-medium text-sm mt-2">
+                    ${isPaidOff ? 'Lunas' : 'Belum Lunas / DP'}
+                  </span>
+                </div>
               </div>
             </div>
-            <div class="bg-gray-800 rounded-xl shadow-lg p-8 border border-gray-700 mb-8">
-              <div class="mb-4 text-white text-xs font-semibold uppercase tracking-wider">Status Pembayaran</div>
-              <div class="flex items-center gap-2 mb-6">
-                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold ${isPaidOff ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${isPaidOff ? 'Lunas' : (mitra.nilaiPaketUsaha || 'DP')}</span>
+
+            <!-- Payment Status Card -->
+            <div class="modern-card payment-info-card rounded-xl shadow-xl p-8 mb-8">
+              <div class="mb-6">
+                <h3 class="text-xl font-bold text-white mb-2 flex items-center">
+                  <svg class="w-6 h-6 mr-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  Detail Pembayaran
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                    <p class="text-amber-200 text-sm font-medium mb-1">Harga Paket</p>
+                    <p class="text-white text-xl font-bold">${mitra.hargaPaket ? formatCurrency(mitra.hargaPaket) : 'N/A'}</p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                    <p class="text-amber-200 text-sm font-medium mb-1">Nominal DP</p>
+                    <p class="text-white text-xl font-bold">${mitra.nominalDP ? formatCurrency(mitra.nominalDP) : 'N/A'}</p>
+                  </div>
+                  <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                    <p class="text-amber-200 text-sm font-medium mb-1">Kekurangan</p>
+                    <p class="text-red-300 text-xl font-bold">${mitra.kekurangan ? formatCurrency(mitra.kekurangan) : 'N/A'}</p>
+                  </div>
+                </div>
               </div>
-              <div class="mb-2"><span class="font-semibold text-white">Harga Paket:</span> <span class="text-white">${mitra.hargaPaket ? formatCurrency(mitra.hargaPaket) : 'N/A'}</span></div>
-              <div class="mb-2"><span class="font-semibold text-white">Nominal DP:</span> <span class="text-white">${mitra.nominalDP ? formatCurrency(mitra.nominalDP) : 'N/A'}</span></div>
-              <div><span class="font-semibold text-white">Kekurangan:</span> <span class="text-red-400 font-bold">${mitra.kekurangan ? formatCurrency(mitra.kekurangan) : 'N/A'}</span></div>
             </div>
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
-              <p class="text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01" /></svg>
-                Untuk melunasi kewajiban Anda klik bayar.
-              </p>
-              <a id="btnBayarPelunasan" href="/user/form-pelunasan" class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow font-semibold transition flex items-center gap-2" tabindex="0" aria-disabled="false">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2z" /></svg>
-                Bayar
-              </a>
-              <div id="notifPelunasan" class="hidden text-blue-700 bg-blue-100 rounded-lg px-4 py-2 mt-2 text-sm font-semibold flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01" /></svg>
-                Form pelunasan sedang diperiksa
+
+            <!-- Action Card -->
+            <div class="modern-card rounded-xl p-8">
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div class="flex items-start">
+                  <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 mr-4 flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Tindakan Diperlukan</h3>
+                    <p class="text-gray-600">Untuk melunasi kewajiban Anda, silakan klik tombol bayar di bawah ini.</p>
+                  </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <a 
+                    id="btnBayarPelunasan" 
+                    href="/user/form-pelunasan" 
+                    class="btn-primary inline-flex items-center px-8 py-4 text-white font-semibold rounded-xl shadow-lg transition-all duration-200"
+                  >
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2z"></path>
+                    </svg>
+                    Bayar Sekarang
+                  </a>
+                  
+                  <div id="notifPelunasan" class="hidden">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
+                      <div class="flex items-center text-blue-700">
+                        <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01"></path>
+                        </svg>
+                        <div>
+                          <p class="font-semibold">Sedang Diproses</p>
+                          <p class="text-sm">Form pelunasan Anda sedang diperiksa</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         `;
-  }
+      }
     } catch (err) {
-      container.innerHTML = '<div class="text-red-600">Gagal mengambil data mitra.</div>';
+      container.innerHTML = `
+        <div class="modern-card rounded-xl p-8 text-center max-w-md mx-auto">
+          <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Terjadi Kesalahan</h3>
+          <p class="text-red-600 mb-4">Gagal mengambil data mitra.</p>
+          <button onclick="window.location.reload()" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl shadow-lg">
+            Muat Ulang
+          </button>
+        </div>
+      `;
     }
-    // Cek status pelunasan
+
+    // Check pelunasan status
     const btnBayar = document.getElementById('btnBayarPelunasan');
     const notifPelunasan = document.getElementById('notifPelunasan');
     if (email && btnBayar && notifPelunasan) {
@@ -198,41 +457,41 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         const dataPelunasan = await resPelunasan.json();
         pelunasanExists = !!dataPelunasan.exists;
       } catch (e) {
-        // Jika API error, fallback ke localStorage
         pelunasanExists = localStorage.getItem('sudahPelunasan') === '1';
       }
+      
       if (pelunasanExists) {
-        const btnParent = btnBayar.parentNode;
-        const btnDisabled = document.createElement('button');
-        btnDisabled.type = 'button';
-        btnDisabled.disabled = true;
-        btnDisabled.className = 'px-8 py-2 bg-gray-400 text-white rounded-lg shadow font-semibold transition flex items-center gap-2 cursor-not-allowed';
-        btnDisabled.innerHTML = btnBayar.innerHTML;
-        btnParent.replaceChild(btnDisabled, btnBayar);
+        // Replace pay button with disabled state
+        btnBayar.classList.remove('btn-primary');
+        btnBayar.classList.add('bg-gray-400', 'cursor-not-allowed');
+        btnBayar.removeAttribute('href');
+        btnBayar.setAttribute('disabled', 'true');
+        btnBayar.innerHTML = `
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Menunggu Verifikasi
+        `;
         notifPelunasan.classList.remove('hidden');
       }
     }
   });
 
-  // Agreement acceptance removed from this page; handled from dashboard
-
   // Helper function to show notifications
-  function showKewajibanNotification(message, type) {
-    if (typeof type === 'undefined') type = 'success';
-
+  function showKewajibanNotification(message, type = 'success') {
     const notification = document.createElement('div');
-    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    const bgColor = type === 'success' ? 'from-green-500 to-emerald-500' : 'from-red-500 to-rose-500';
 
-    notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full opacity-0`;
+    notification.className = `fixed top-4 right-4 bg-gradient-to-r ${bgColor} text-white px-6 py-4 rounded-xl shadow-xl z-50 transform transition-all duration-300 translate-x-full opacity-0`;
     notification.innerHTML = `
       <div class="flex items-center">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           ${type === 'success'
             ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
             : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
           }
         </svg>
-        <span>${message}</span>
+        <span class="font-medium">${message}</span>
       </div>
     `;
 
@@ -249,6 +508,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
           notification.parentNode.removeChild(notification);
         }
       }, 300);
-    }, 3000);
+    }, 4000);
   }
 </script>
