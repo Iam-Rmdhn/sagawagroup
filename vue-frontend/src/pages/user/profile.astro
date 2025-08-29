@@ -1,89 +1,95 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MitraSidebar from '../../components/mitra/sidebar/MitraSidebar.astro';
+import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 // User Profile Edit
 ---
 
 <Layout title="Edit Profile - Sagawa Mitra">
-<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-start rtl:justify-end">
-          <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-              <span class="sr-only">Open sidebar</span>
-              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-              </svg>
-           </button>
-          <a href="/user/dashboard" class="flex ms-2 md:me-24">
-            <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white text-amber-600">Sagawa Mitra</span>
-          </a>
-        </div>
-        <div class="flex items-center">
-            <div class="flex items-center ms-3 relative">
-              <div>
-                <button type="button" id="user-menu-button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                  <span class="sr-only">Open user menu</span>
-                  <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white font-semibold" id="user-avatar">
-                    T
-                  </div>
-                </button>
-              </div>
-              <div class="z-50 hidden absolute right-0 top-full mt-2 w-48 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-                <div class="px-4 py-3" role="none">
-                  <p class="text-sm text-gray-900 dark:text-white font-medium" role="none" id="user-name">Tsumugi Kotobuki</p>
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none" id="user-email">utaaakun12@gmail.com</p>
-                </div>
-                <ul class="py-1" role="none">
-                  <li>
-                    <a href="/user/dashboard" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"></path>
-                      </svg>
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/user/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                      <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                      </svg>
-                      Profile
-                    </a>
-                  </li>
-                  <li>
-                    <button id="logout-btn" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-red-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                      <svg class="w-4 h-4 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                      </svg>
-                      Log out
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-      </div>
-    </div>
-  </nav>
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-      <ul class="space-y-2 font-medium">
-         <li><a href="/user/dashboard" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21"><path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/><path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/></svg><span class="ms-3">Dashboard</span></a></li>
-         <li><a href="/user/profile" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18"><path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Edit Profile</span></a></li>
-         <li><a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"><svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20"><path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/></svg><span class="flex-1 ms-3 whitespace-nowrap">Orders</span></a></li>
-      </ul>
-   </div>
-</aside>
+<!-- Modern Profile Edit Styles -->
+<style>
+  /* Global fixes for scroll stability */
+  * {
+    transform: translateZ(0);
+    will-change: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  
+  body, html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    background-color: #fefefe;
+  }
+  
+  /* Modern card styling */
+  .modern-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(251, 191, 36, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: relative;
+  }
+  
+  .modern-card:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 20px 25px -5px rgba(251, 191, 36, 0.1), 0 10px 10px -5px rgba(251, 191, 36, 0.04);
+    border-color: rgba(251, 191, 36, 0.2);
+  }
 
-<div class="p-4 sm:ml-64">
-   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+  /* Form input styling */
+  .form-input:focus {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    border-color: rgb(245 158 11);
+    transform: scale(1.01);
+  }
+  
+  /* Button hover effects */
+  .btn-primary {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(245, 158, 11, 0.3);
+  }
+  
+  /* Status badge styling */
+  .status-badge {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+</style>
+
+<MitraNavbar />
+<MitraSidebar currentPage="profile" />
+
+<div class="p-2 sm:p-4 sm:ml-72 transition-all duration-300">
+   <div class="p-2 sm:p-6 mt-16">
       <!-- Breadcrumb -->
       <nav class="flex mb-6" aria-label="Breadcrumb">
          <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-               <a href="/user/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-amber-600 dark:text-gray-400 dark:hover:text-white">
+               <a href="/user/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-amber-600 dark:text-gray-400 dark:hover:text-orange-500">
                   <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                      <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
                   </svg>
@@ -124,36 +130,35 @@ import Layout from '../../layouts/Layout.astro';
          </div>
 
          <!-- Success/Error Messages -->
-         <div id="success-message" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-            <div class="flex">
-               <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                  </svg>
-               </div>
-               <div class="ml-3">
-                  <p id="success-text">Profile berhasil diperbarui!</p>
+                  <!-- Success/Error Messages -->
+         <div id="success-message" class="hidden modern-card bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-700 px-6 py-4 rounded-xl mb-6 shadow-lg">
+            <div class="flex items-center">
+               <svg class="w-5 h-5 mr-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+               </svg>
+               <div>
+                  <p class="font-semibold">Berhasil!</p>
+                  <p id="success-text" class="text-sm">Profile berhasil diperbarui</p>
                </div>
             </div>
          </div>
 
-         <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            <div class="flex">
-               <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                  </svg>
-               </div>
-               <div class="ml-3">
-                  <p id="error-text">Terjadi kesalahan saat memperbarui profile</p>
+         <div id="error-message" class="hidden modern-card bg-gradient-to-r from-red-50 to-rose-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-xl mb-6 shadow-lg">
+            <div class="flex items-center">
+               <svg class="w-5 h-5 mr-3 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+               </svg>
+               <div>
+                  <p class="font-semibold">Terjadi Kesalahan!</p>
+                  <p id="error-text" class="text-sm">Terjadi kesalahan saat memperbarui profile</p>
                </div>
             </div>
          </div>
 
          <!-- Edit Form -->
-         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-            <div class="p-6">
-               <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Informasi Personal</h2>
+         <div class="modern-card rounded-xl shadow-xl">
+            <div class="p-8">
+               <h2 class="text-2xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-8">Informasi Personal</h2>
                
                <form id="profile-form" class="space-y-6">
                   <!-- Nama Mitra -->
@@ -165,7 +170,7 @@ import Layout from '../../layouts/Layout.astro';
                         type="text" 
                         id="namaMitra" 
                         name="namaMitra" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
                         placeholder="Masukkan nama mitra"
                         required
                      />
@@ -183,7 +188,7 @@ import Layout from '../../layouts/Layout.astro';
                         type="email" 
                         id="email" 
                         name="email" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                         readonly
                      />
                      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -200,7 +205,7 @@ import Layout from '../../layouts/Layout.astro';
                         type="tel" 
                         id="noHp" 
                         name="noHp" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
                         placeholder="08xxxxxxxxxx"
                         pattern="[0-9]{10,15}"
                         required
@@ -215,16 +220,16 @@ import Layout from '../../layouts/Layout.astro';
                      <textarea 
                         id="alamatMitra" 
                         name="alamatMitra" 
-                        rows="3"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        rows="4"
+                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200"
                         placeholder="Masukkan alamat lengkap"
                         required
                      ></textarea>
                   </div>
 
                   <!-- Business Information (Read Only) -->
-                  <div class="border-t pt-6">
-                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Kemitraan</h3>
+                  <div class="border-t border-amber-100 pt-8">
+                     <h3 class="text-xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">Informasi Kemitraan</h3>
                      
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -234,7 +239,7 @@ import Layout from '../../layouts/Layout.astro';
                            <input 
                               type="text" 
                               id="sistemKemitraan" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                               readonly
                            />
                         </div>
@@ -246,7 +251,7 @@ import Layout from '../../layouts/Layout.astro';
                            <input 
                               type="text" 
                               id="paketUsaha" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                               readonly
                            />
                         </div>
@@ -258,7 +263,7 @@ import Layout from '../../layouts/Layout.astro';
                            <input 
                               type="text" 
                               id="sales" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-600 dark:border-gray-600 dark:text-gray-400 cursor-not-allowed"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                               readonly
                            />
                         </div>
@@ -267,7 +272,7 @@ import Layout from '../../layouts/Layout.astro';
                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                               Status
                            </label>
-                           <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" id="status-badge">
+                           <span class="status-badge inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold text-white shadow-lg" id="status-badge">
                               Loading...
                            </span>
                         </div>
@@ -279,7 +284,7 @@ import Layout from '../../layouts/Layout.astro';
                      <button 
                         type="submit" 
                         id="save-btn"
-                        class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                        class="btn-primary flex-1 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center shadow-lg"
                      >
                         <span id="save-text">Simpan Perubahan</span>
                         <span id="save-loading" class="hidden">
@@ -296,7 +301,7 @@ import Layout from '../../layouts/Layout.astro';
                      <button 
                         type="button" 
                         onclick="window.history.back()"
-                        class="flex-1 sm:flex-none bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                        class="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-200 border border-gray-300"
                      >
                         Batal
                      </button>
@@ -315,7 +320,7 @@ import Layout from '../../layouts/Layout.astro';
          </div>
          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Gagal Memuat Data</h3>
          <p class="text-gray-600 dark:text-gray-400 mb-4" id="load-error-message">Terjadi kesalahan saat memuat data profil.</p>
-         <button onclick="window.location.reload()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition">
+         <button onclick="window.location.reload()" class="btn-primary px-6 py-3 text-white rounded-xl transition-all duration-200 shadow-lg">
             Muat Ulang
          </button>
       </div>
@@ -339,14 +344,15 @@ import Layout from '../../layouts/Layout.astro';
       // Load mitra profile data
       await loadMitraProfile();
 
-      // Setup user menu dropdown
-      setupUserMenu();
-
-      // Setup logout functionality
-      setupLogout();
-
       // Setup form submission
       setupFormSubmission();
+
+      // Listen for logout event from navbar
+      document.addEventListener('mitraLogout', function() {
+         localStorage.removeItem('mitraToken');
+         localStorage.removeItem('mitraUser');
+         window.location.href = '/login';
+      });
    });
 
    async function loadMitraProfile() {
@@ -397,21 +403,20 @@ import Layout from '../../layouts/Layout.astro';
    function populateForm(data: any) {
       // Update avatar with first letter of name
       const profileAvatar = document.getElementById('profile-avatar');
-      const userAvatar = document.getElementById('user-avatar');
       const firstLetter = (data.namaMitra || 'M').charAt(0).toUpperCase();
       
       if (profileAvatar) profileAvatar.textContent = firstLetter;
-      if (userAvatar) userAvatar.textContent = firstLetter;
+
+      // Update navbar user info through MitraNavbar component
+      if (typeof (window as any).mitraNavbar !== 'undefined') {
+         (window as any).mitraNavbar.updateUserInfo(data);
+      }
 
       // Update header info
       const profileEmail = document.getElementById('profile-email');
       const profileStatus = document.getElementById('profile-status');
-      const userName = document.getElementById('user-name');
-      const userEmail = document.getElementById('user-email');
 
       if (profileEmail) profileEmail.textContent = data.email || 'Email tidak tersedia';
-      if (userName) userName.textContent = data.namaMitra || 'Nama tidak tersedia';
-      if (userEmail) userEmail.textContent = data.email || 'Email tidak tersedia';
 
       // Status
       if (profileStatus) {
@@ -449,18 +454,19 @@ import Layout from '../../layouts/Layout.astro';
       // Status badge
       const statusBadge = document.getElementById('status-badge');
       if (statusBadge) {
-         let badgeClass = 'bg-yellow-100 text-yellow-800';
-         let badgeText = 'Menunggu';
+         let badgeStyle = 'background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));';
+         let badgeText = 'Menunggu Persetujuan';
          
          if (data.isApproved) {
-            badgeClass = 'bg-green-100 text-green-800';
-            badgeText = 'Disetujui';
+            badgeStyle = 'background: linear-gradient(135deg, rgb(34 197 94), rgb(22 163 74));';
+            badgeText = 'Mitra Disetujui';
          } else if (data.status === 'rejected') {
-            badgeClass = 'bg-red-100 text-red-800';
+            badgeStyle = 'background: linear-gradient(135deg, rgb(239 68 68), rgb(220 38 38));';
             badgeText = 'Ditolak';
          }
 
-         statusBadge.className = `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${badgeClass}`;
+         statusBadge.className = 'status-badge inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold text-white shadow-lg';
+         statusBadge.setAttribute('style', badgeStyle);
          statusBadge.textContent = badgeText;
       }
    }
@@ -603,54 +609,6 @@ import Layout from '../../layouts/Layout.astro';
       
       successMessage?.classList.add('hidden');
       errorMessage?.classList.add('hidden');
-   }
-
-   function setupUserMenu() {
-      const userMenuButton = document.getElementById('user-menu-button');
-      const dropdownUser = document.getElementById('dropdown-user');
-
-      if (userMenuButton && dropdownUser) {
-         userMenuButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Toggle dropdown visibility
-            dropdownUser.classList.toggle('hidden');
-            
-            // Update aria-expanded attribute
-            const isExpanded = !dropdownUser.classList.contains('hidden');
-            userMenuButton.setAttribute('aria-expanded', isExpanded.toString());
-         });
-
-         // Close dropdown when clicking outside
-         document.addEventListener('click', function(event) {
-            const target = event.target as HTMLElement;
-            if (target && !userMenuButton.contains(target) && !dropdownUser.contains(target)) {
-               dropdownUser.classList.add('hidden');
-               userMenuButton.setAttribute('aria-expanded', 'false');
-            }
-         });
-
-         // Close dropdown when pressing Escape key
-         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && !dropdownUser.classList.contains('hidden')) {
-               dropdownUser.classList.add('hidden');
-               userMenuButton.setAttribute('aria-expanded', 'false');
-               userMenuButton.focus();
-            }
-         });
-      }
-   }
-
-   function setupLogout() {
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) {
-         logoutBtn.addEventListener('click', function() {
-            localStorage.removeItem('mitraToken');
-            localStorage.removeItem('mitraUser');
-            window.location.href = '/login';
-         });
-      }
    }
 </script>
 </Layout>
