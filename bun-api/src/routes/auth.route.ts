@@ -20,7 +20,7 @@ export const authRoute = async (req: Request): Promise<Response> => {
   // Approve pelunasan endpoint
   if (
     req.method === "POST" &&
-    pathname.startsWith("/api/admin/mitra_pelunasan/approve/")
+    pathname === "/api/admin/mitra_pelunasan/approve"
   ) {
     return await approvePelunasanController(req);
   }
