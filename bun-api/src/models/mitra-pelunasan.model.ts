@@ -40,7 +40,7 @@ export class MitraPelunasanModel {
   }
 
   static async findById(id: string): Promise<MitraPelunasan | null> {
-    const result = await mitraPelunasanCollection.findOne({ _id: id });
+    const result = await mitraPelunasanCollection.findOne({ _id: String(id) });
     return result as MitraPelunasan | null;
   }
 
@@ -88,7 +88,7 @@ export class MitraPelunasanModel {
       updatedAt: now,
     };
     const result = await mitraPelunasanCollection.updateOne(
-      { _id: id },
+      { _id: String(id) },
       { $set: updatedData }
     );
     if (result.modifiedCount > 0) {

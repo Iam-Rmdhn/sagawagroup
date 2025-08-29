@@ -39,6 +39,9 @@ export interface Mitra {
   status: "pending" | "approved" | "rejected";
   userID?: string;
   isApproved: boolean;
+  // Tambahan agar bisa merge status user
+  isPaidOff?: boolean;
+  statusPelunasan?: string;
 
   // Timestamps
   createdAt: string;
