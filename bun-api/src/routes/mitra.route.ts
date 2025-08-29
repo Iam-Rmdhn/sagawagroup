@@ -3,9 +3,18 @@ import {
   registerMitraController,
 } from "../controllers/mitra.controller";
 import { pelunasanMitraController } from "../controllers/pelunasan.controller";
+import { approvePelunasanController } from "../controllers/approve-pelunasan.controller";
 
 export const mitraRoute = (req: Request): Promise<Response> => {
   const url = new URL(req.url);
+
+  // POST /api/admin/mitra_pelunasan/approve
+  if (
+    req.method === "POST" &&
+    url.pathname === "/api/admin/mitra_pelunasan/approve"
+  ) {
+    return approvePelunasanController(req);
+  }
 
   // GET /api/mitra/pelunasan-exists?email=xxx
   if (req.method === "GET" && url.pathname === "/api/mitra/pelunasan-exists") {
