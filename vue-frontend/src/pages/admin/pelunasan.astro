@@ -1,0 +1,245 @@
+
+---
+// Admin Pelunasan
+import Layout from '../../layouts/Layout.astro';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebar.astro';
+import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
+---
+<Layout title="Admin Pelunasan">
+	<style>
+		* {
+			transform: translateZ(0);
+			will-change: auto;
+		}
+		*, *::before, *::after {
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			-webkit-perspective: 1000px;
+			perspective: 1000px;
+		}
+		body, html {
+			overflow-x: hidden;
+			scroll-behavior: smooth;
+			-webkit-overflow-scrolling: touch;
+		}
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+		::-webkit-scrollbar-track {
+			background: rgba(251, 191, 36, 0.1);
+			border-radius: 4px;
+		}
+		::-webkit-scrollbar-thumb {
+			background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+			border-radius: 4px;
+			transition: all 0.3s ease;
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: linear-gradient(135deg, rgb(251 191 36), rgb(252 211 77));
+			transform: scale(1.1);
+		}
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
+		}
+		img, video, iframe {
+			height: auto;
+			max-width: 100%;
+		}
+		.fixed, .sticky {
+			transform: translate3d(0, 0, 0);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+		}
+		.pelunasan-bg {
+			background-image: 
+				radial-gradient(circle at 75px 75px, rgba(249, 115, 22, 0.03) 2px, transparent 0);
+			background-size: 100px 100px;
+			background-position: 0 0, 50px 50px;
+			background-attachment: fixed;
+			transform: translate3d(0, 0, 0);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+		}
+		.modern-table {
+			background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 191, 36, 0.02) 100%);
+			backdrop-filter: blur(12px);
+			border: 1px solid rgba(251, 191, 36, 0.1);
+			transform: translate3d(0, 0, 0);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			position: relative;
+		}
+		@keyframes pulse {
+			0%, 100% { opacity: 1; }
+			50% { opacity: 0.5; }
+		}
+		.loading-pulse {
+			animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+		}
+	</style>
+
+	<!-- Authentication Protection Script -->
+	<script>
+		if (typeof window !== 'undefined') {
+			const token = localStorage.getItem('adminToken');
+			const user = localStorage.getItem('adminUser');
+			if (!token || !user) {
+				window.location.href = '/admin/login';
+			}
+		}
+	</script>
+
+	<AdminNavbar />
+	<AdminSidebar currentPage="pelunasan" />
+
+	<div class="pelunasan-bg min-h-screen p-4 sm:ml-72 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+		<div class="p-6 mt-16" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+			<!-- Header -->
+			<div class="mb-8">
+				<div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl">
+					<h1 class="text-2xl font-bold">Pelunasan Mitra</h1>
+					<p class="mt-2 text-amber-100">Kelola data pelunasan mitra di halaman ini.</p>
+				</div>
+			</div>
+
+			<!-- Modern Data Table for Pelunasan -->
+			<div class="modern-table rounded-2xl shadow-2xl overflow-hidden">
+				<div class="bg-gradient-to-r from-white to-orange-50/30 px-6 py-5 border-b border-orange-200/50">
+					<h2 class="text-lg font-semibold text-orange-700">Daftar Pelunasan</h2>
+				</div>
+				<div class="overflow-x-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+					<table class="min-w-full divide-y divide-orange-200">
+						<thead class="bg-orange-50">
+							<tr>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">No</th>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">Nama Mitra</th>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">No. Rekening Pengirim</th>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">Bank Pengirim</th>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">Tanggal</th>
+								<th class="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">Aksi</th>
+							</tr>
+						</thead>
+						<tbody id="pelunasan-table-body" class="bg-white divide-y divide-orange-100">
+							<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	// Extend Window interface for showPelunasanDetail
+	declare global {
+		interface Window {
+			showPelunasanDetail: (item: any) => void;
+		}
+	}
+
+	const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+
+	document.addEventListener('DOMContentLoaded', function() {
+		loadPelunasanData();
+	});
+
+	async function loadPelunasanData() {
+		const tableBody = document.getElementById('pelunasan-table-body');
+		const token = localStorage.getItem('adminToken');
+		if (!token || !tableBody) return;
+		try {
+			tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
+			// Ganti endpoint ke mitra_pelunasan
+			const response = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, {
+				headers: { 'Authorization': `Bearer ${token}` }
+			});
+			if (!response.ok) throw new Error('Gagal memuat data pelunasan');
+			const result = await response.json();
+			if (result.success && result.data) {
+				renderPelunasanTable(result.data);
+			} else {
+				tableBody.innerHTML = `<tr><td colspan='7' class='px-6 py-4 text-center text-gray-500'>Tidak ada data pelunasan.</td></tr>`;
+			}
+		} catch (error: unknown) {
+			const err = error as Error;
+			tableBody.innerHTML = `<tr><td colspan='7' class='px-6 py-4 text-center text-red-500'>${err.message || 'Error'}</td></tr>`;
+		}
+	}
+
+	function renderPelunasanTable(data: any[]) {
+		const tableBody = document.getElementById('pelunasan-table-body');
+		if (!tableBody) return;
+		if (!data.length) {
+			tableBody.innerHTML = `<tr><td colspan='7' class='px-6 py-4 text-center text-gray-500'>Tidak ada data pelunasan.</td></tr>`;
+			return;
+		}
+		tableBody.innerHTML = data.map((item: any, idx: number) => {
+			const namaMitra = item.namaMitra || item.namaPengirim || '-';
+			const noRekPengirim = (item.noRekPengirim && item.noRekPengirim !== '') ? item.noRekPengirim : '-';
+			const bankPengirim = (item.bankPengirim && item.bankPengirim !== '') ? item.bankPengirim : '-';
+			let tanggal = '-';
+			if (item.tanggalPelunasan) tanggal = formatDate(item.tanggalPelunasan);
+			else if (item.createdAt) tanggal = formatDate(item.createdAt);
+			return `<tr>
+				<td class='px-6 py-4'>${idx + 1}</td>
+				<td class='px-6 py-4'>${namaMitra}</td>
+				<td class='px-6 py-4'>${noRekPengirim}</td>
+				<td class='px-6 py-4'>${bankPengirim}</td>
+				<td class='px-6 py-4'>${tanggal}</td>
+				<td class='px-6 py-4 flex gap-2'>
+					<button class='text-orange-600 hover:underline' onclick='window.showPelunasanDetail(${JSON.stringify(item)})'>Detail</button>
+					<button class='text-green-600 hover:underline' onclick='window.approvePelunasan("${item._id}")'>Approve</button>
+				</td>
+			</tr>`;
+		}).join('');
+	}
+
+declare global {
+	interface Window {
+		approvePelunasan: (id: string) => void;
+		showPelunasanDetail: (item: any) => void;
+	}
+}
+window.approvePelunasan = async function(id: string) {
+	if (!confirm('Yakin ingin menyetujui pelunasan ini?')) return;
+	const token = localStorage.getItem('adminToken');
+	try {
+		const response = await fetch(`${API_URL}/api/admin/approve_pelunasan`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+			body: JSON.stringify({ id })
+		});
+		const result = await response.json();
+		if (result.success) {
+			alert('Pelunasan berhasil di-approve!');
+			loadPelunasanData();
+		} else {
+			alert(result.error || 'Gagal approve pelunasan');
+		}
+	} catch (err) {
+		alert('Gagal approve pelunasan');
+	}
+}
+window.showPelunasanDetail = function(item: any) {
+	alert('Detail pelunasan:\n' + JSON.stringify(item, null, 2));
+}
+
+	function formatCurrency(amount: number) {
+		if (!amount) return '-';
+		return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
+	}
+	function formatDate(dateString: string) {
+		if (!dateString) return '-';
+		const d = new Date(dateString);
+		return d.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+	}
+
+	window.showPelunasanDetail = function(item: any) {
+		alert('Detail pelunasan:\n' + JSON.stringify(item, null, 2));
+	}
+	</script>
+</Layout>
