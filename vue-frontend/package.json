@@ -21,6 +21,7 @@
     "astro": "^5.12.9",
     "autoprefixer": "^10.4.21",
     "cssnano": "^7.1.0",
+    "prettier": "3.6.2",
     "terser": "^5.43.1"
   }
 }
