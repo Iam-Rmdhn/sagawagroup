@@ -67,7 +67,7 @@ export const registerMitraController = async (
 
       // Return URL - use environment variable or fallback to localhost
       const baseUrl =
-        process.env.BASE_URL || `http://localhost:${process.env.PORT || 9999}`;
+        process.env.BASE_URL || `http://localhost:${process.env.PORT || 4000}`;
       const url = `${baseUrl}/uploads/${fileName}`;
       console.log(`File saved successfully: ${url}`);
       return url;
