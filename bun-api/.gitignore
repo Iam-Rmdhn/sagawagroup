@@ -17,11 +17,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # dotenv environment variable files - CRITICAL: Never commit API keys!
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-.env.*.local
 
 # Database credentials and connection strings
 database.json
@@ -71,4 +66,3 @@ ehthumbs.db
 *.temp
 .temp/
 
-.index.ts
