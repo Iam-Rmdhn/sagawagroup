@@ -31,16 +31,16 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     background-color: #fefefe;
   }
   
-  /* Modern card styling */
-  .modern-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.02) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(251, 191, 36, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translate3d(0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    position: relative;
+  /* Ensure logout button is always clickable */
+  #logout-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+  
+  #logout-btn:disabled {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
   }
   
   .modern-card:hover {
@@ -346,11 +346,25 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       // Setup form submission
       setupFormSubmission();
 
-      // Listen for logout event from navbar
-      document.addEventListener('mitraLogout', function() {
-         localStorage.removeItem('mitraToken');
-         localStorage.removeItem('mitraUser');
-         window.location.href = '/login';
+      // Listen for navbar actions
+      document.addEventListener('mitraNavbarAction', function(event: Event) {
+         const customEvent = event as CustomEvent;
+         const action = customEvent.detail.action;
+         
+         if (action === 'logout') {
+            // Clear session data but keep remembered credentials
+            localStorage.removeItem('mitraToken');
+            localStorage.removeItem('mitraUser');
+            localStorage.removeItem('mitraUserEmail');
+            
+            // Keep remembered credentials for next login
+            // localStorage.removeItem('rememberedEmail');
+            // localStorage.removeItem('rememberedPassword');
+            // localStorage.removeItem('rememberMe');
+            
+            console.log('User logged out, cleared session data but kept remembered credentials');
+            window.location.href = '/login';
+         }
       });
    });
 

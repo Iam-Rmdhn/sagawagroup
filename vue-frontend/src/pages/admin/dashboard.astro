@@ -260,17 +260,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       .chart-content {
         padding: 1.25rem !important;
       }
-    }    /* Background pattern */
-    .dashboard-bg {
-      background-image: 
-        radial-gradient(circle at 25px 25px, rgba(251, 191, 36, 0.03) 2px, transparent 0),
-        radial-gradient(circle at 75px 75px, rgba(249, 115, 22, 0.03) 2px, transparent 0);
-      background-size: 100px 100px;
-      background-position: 0 0, 50px 50px;
-      background-attachment: fixed;
-      transform: translate3d(0, 0, 0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
+    }    /* Ensure logout button is always clickable */
+    #logout-btn {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    
+    #logout-btn:disabled {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      opacity: 1 !important;
     }
     
     /* Stats visibility and layout */
@@ -640,15 +639,15 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const action = customEvent.detail.action;
     
     if (action === 'logout') {
-      // Konfirmasi logout
-      if (confirm('Apakah Anda yakin ingin logout?')) {
-        // Hapus data dari localStorage
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        
-        // Redirect ke login page
-        window.location.href = '/admin/login';
-      }
+      // Hapus data dari localStorage
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      
+      // Jangan hapus remembered credentials saat logout
+      // Biarkan credentials tersimpan untuk login berikutnya
+      
+      // Redirect ke login page
+      window.location.href = '/admin/login';
     }
   });
 

@@ -225,6 +225,41 @@ import Layout from '../../layouts/Layout.astro';
     const togglePasswordBtn = document.getElementById('togglePassword');
     const eyeOpen = document.getElementById('eyeOpen');
     const eyeClosed = document.getElementById('eyeClosed');
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+
+    // Load remembered credentials on page load
+    function loadRememberedCredentials() {
+      const rememberedEmail = localStorage.getItem('rememberedAdminEmail');
+      const rememberedPassword = localStorage.getItem('rememberedAdminPassword');
+      const rememberMeChecked = localStorage.getItem('rememberAdminMe') === 'true';
+
+      if (rememberedEmail && emailInput) {
+        emailInput.value = rememberedEmail;
+      }
+
+      if (rememberedPassword && passwordInput) {
+        passwordInput.value = rememberedPassword;
+      }
+
+      if (rememberMeCheckbox && rememberMeChecked) {
+        rememberMeCheckbox.checked = true;
+      }
+    }
+
+    // Save credentials to localStorage
+    function saveCredentials(email: string, password: string, remember: boolean) {
+      if (remember) {
+        localStorage.setItem('rememberAdminMe', 'true');
+        localStorage.setItem('rememberedAdminEmail', email);
+        localStorage.setItem('rememberedAdminPassword', password);
+      } else {
+        // Jika tidak dicentang, hapus remembered credentials
+        localStorage.removeItem('rememberedAdminEmail');
+        localStorage.removeItem('rememberedAdminPassword');
+        localStorage.removeItem('rememberAdminMe');
+      }
+    }
 
     function showAlert(message: string, type: 'success' | 'error') {
       alertDiv.className = `p-4 rounded-lg text-sm ${
@@ -271,6 +306,10 @@ import Layout from '../../layouts/Layout.astro';
       });
     }
 
+    // Load remembered credentials on page load
+    loadRememberedCredentials();
+
+    // Check if already logged in
     if (localStorage.getItem('adminToken')) {
       window.location.href = '/admin/dashboard';
     }
@@ -313,6 +352,10 @@ import Layout from '../../layouts/Layout.astro';
           // Simpan token ke localStorage
           localStorage.setItem('adminToken', result.token);
           localStorage.setItem('adminUser', JSON.stringify(result.user));
+          
+          // Simpan credentials jika remember me dicentang
+          const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
+          saveCredentials(data.email, data.password, rememberMe);
           
           showAlert('Login berhasil! Mengalihkan ke dashboard...', 'success');
           

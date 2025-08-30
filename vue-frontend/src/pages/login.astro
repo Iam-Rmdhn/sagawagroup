@@ -122,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
       
       <form id="login-form" class="flex flex-col gap-4 sm:gap-5">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Email atau No. Telp</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Email</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -133,7 +133,7 @@ import Layout from '../layouts/Layout.astro';
             <input 
               id="email" 
               type="text" 
-              placeholder="Masukkan email atau no. telp" 
+              placeholder="Masukkan email" 
               class="w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition" 
               required 
             />
@@ -182,11 +182,7 @@ import Layout from '../layouts/Layout.astro';
               Ingat saya
             </label>
           </div>
-          <div class="text-sm">
-            <a href="#" class="font-medium text-amber-600 hover:text-amber-500 transition-colors">
-              Lupa password?
-            </a>
-          </div>
+          
         </div>
         
         <button 
@@ -211,15 +207,6 @@ import Layout from '../layouts/Layout.astro';
           </span>
         </button>
       </form>
-      
-      <div class="mt-3 sm:mt-4 text-center">
-        <p class="text-sm text-gray-600">
-          Belum punya akun? 
-          <a href="/register" class="font-medium text-amber-600 hover:text-amber-500 transition-colors">
-            Daftar sekarang
-          </a>
-        </p>
-      </div>
     </div>
   </main>
 
@@ -250,6 +237,40 @@ import Layout from '../layouts/Layout.astro';
         if (token && user) {
           window.location.href = '/user/dashboard';
           return;
+        }
+      }
+
+      // Load remembered credentials
+      loadRememberedCredentials();
+
+      function loadRememberedCredentials() {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+        const rememberMeChecked = localStorage.getItem('rememberMe') === 'true';
+
+        if (rememberedEmail && emailInput) {
+          emailInput.value = rememberedEmail;
+        }
+
+        if (rememberedPassword && passwordInput) {
+          passwordInput.value = rememberedPassword;
+        }
+
+        const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+        if (rememberMeCheckbox && rememberMeChecked) {
+          rememberMeCheckbox.checked = true;
+        }
+      }
+
+      function saveCredentials(email: string, password: string, remember: boolean) {
+        if (remember) {
+          localStorage.setItem('rememberedEmail', email);
+          localStorage.setItem('rememberedPassword', password);
+          localStorage.setItem('rememberMe', 'true');
+        } else {
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
+          localStorage.removeItem('rememberMe');
         }
       }
 
@@ -328,6 +349,11 @@ import Layout from '../layouts/Layout.astro';
               localStorage.setItem('mitraToken', result.data.token);
               localStorage.setItem('mitraUser', JSON.stringify(result.data.user));
               
+              // Simpan credentials jika remember me dicentang
+              const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+              const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
+              saveCredentials(email, password, rememberMe);
+              
               // Redirect ke dashboard setelah delay singkat
               setTimeout(() => {
                 window.location.href = '/user/dashboard';
@@ -363,12 +389,21 @@ import Layout from '../layouts/Layout.astro';
         });
       }
 
-      // Clear messages when user starts typing
-      [emailInput, passwordInput].forEach(input => {
-        if (input) {
-          input.addEventListener('input', hideMessages);
-        }
-      });
+      // Handle remember me checkbox change
+      const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+      if (rememberMeCheckbox) {
+        rememberMeCheckbox.addEventListener('change', function() {
+          if (!this.checked) {
+            // Clear remembered credentials if user unchecks remember me
+            localStorage.removeItem('rememberedEmail');
+            localStorage.removeItem('rememberedPassword');
+            localStorage.removeItem('rememberMe');
+            console.log('Remember me credentials cleared');
+          } else {
+            console.log('Remember me enabled');
+          }
+        });
+      }
     });
   </script>
 </Layout>
