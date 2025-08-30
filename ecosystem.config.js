@@ -9,11 +9,11 @@ module.exports = {
       // Environment variables
       env: {
         NODE_ENV: 'development',
-        PORT: 4000
+        PORT: 8765
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 4000
+        PORT: 8765
       },
       
       // Process management
@@ -25,7 +25,7 @@ module.exports = {
       watch: false,
       max_restarts: 10,
       min_uptime: '10s',
-      restart_delay: 4000,
+      restart_delay: 8765,
       
       // Memory management
       max_memory_restart: '1G',
