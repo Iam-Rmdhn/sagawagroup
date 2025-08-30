@@ -1,6 +1,7 @@
 import {
   getAgreementStatus,
   acceptAgreement,
+  getAllAgreements,
 } from "../controllers/agreement.controller";
 
 export const agreementRoute = async (req: Request): Promise<Response> => {
@@ -13,6 +14,12 @@ export const agreementRoute = async (req: Request): Promise<Response> => {
   if (req.method === "GET" && pathname === "/api/mitra/agreement-status") {
     console.log("GET /api/mitra/agreement-status - Getting agreement status");
     return await getAgreementStatus(req);
+  }
+
+  // GET /api/mitra/agreements
+  if (req.method === "GET" && pathname === "/api/mitra/agreements") {
+    console.log("GET /api/mitra/agreements - Getting all agreements");
+    return await getAllAgreements(req);
   }
 
   // POST /api/mitra/accept-agreement
