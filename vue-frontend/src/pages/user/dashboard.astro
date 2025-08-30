@@ -807,10 +807,54 @@ try {
                </div>
                <div class="ml-3">
                   <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                     Selamat Datang di Sagawa Group!
+                     Selamat Datang di Sagawa Group
                   </h3>
                   <p class="text-sm text-gray-500">
                      Sebagai mitra baru, silakan baca dan setujui syarat dan ketentuan kemitraan
+                  </p>
+               </div>
+            </div>
+
+            <!-- Mitra Information Section -->
+            <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+               <h4 class="font-semibold text-blue-900 mb-3">Informasi Mitra</h4>
+               
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Nama Lengkap</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-nama">-</p>
+                  </div>
+                  
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Nomor HP</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-no-hp">-</p>
+                  </div>
+                  
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Email</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-email">-</p>
+                  </div>
+                  
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Sistem Kemitraan</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-kemitraan">-</p>
+                  </div>
+                  
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Alamat</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-alamat">-</p>
+                  </div>
+                  
+                  <div class="bg-white rounded-lg p-3 border border-blue-200">
+                     <label class="block text-xs font-medium text-gray-500 mb-1">Nilai Paket Usaha</label>
+                     <p class="text-sm font-semibold text-gray-900" id="agreement-nilai-paket">-</p>
+                  </div>
+               </div>
+               
+               <!-- Signature Declaration -->
+               <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p class="text-sm font-medium text-amber-800 text-center italic">
+                     Saya sebagai Mitra Sagawa Group yang bertanda tangan di bawah ini:
                   </p>
                </div>
             </div>
@@ -1089,6 +1133,11 @@ try {
          if (data) {
             // DEV DEBUG: log profile object to help diagnose agreement/modal behavior
             console.debug('[DEBUG] loadMitraProfile - profile data:', data);
+            
+            // Store mitra data for agreement modal
+            localStorage.setItem('mitraUser', JSON.stringify(data));
+            (window as any).currentMitraData = data;
+            console.log('[DEBUG] Stored mitra data for agreement modal use');
             
             // Hide loading state and show dashboard
             loadingState?.classList.add('hidden');
@@ -1452,6 +1501,9 @@ try {
             modal.style.opacity = '1';
          }, 10);
          
+         // Update mitra information in the modal
+         updateAgreementModalWithCurrentData();
+         
          console.log('Agreement modal is now visible');
       } else {
          console.error('Modal element not found!');
@@ -1475,6 +1527,117 @@ try {
             
             console.log('Agreement modal hidden successfully');
          }, 300);
+      }
+   }
+
+   // Function to update agreement modal with current mitra data
+   function updateAgreementModalWithCurrentData() {
+      try {
+         // Try to get mitra data from localStorage first
+         const mitraDataString = localStorage.getItem('mitraUser');
+         let mitraData = null;
+
+         if (mitraDataString) {
+            mitraData = JSON.parse(mitraDataString);
+            console.log('[DEBUG] Using mitra data from localStorage:', mitraData);
+         }
+
+         // If no data in localStorage, try to get from current session data
+         if (!mitraData) {
+            // Try to get from window object if available (from previous loads)
+            const windowData = (window as any).currentMitraData;
+            if (windowData) {
+               mitraData = windowData;
+               console.log('[DEBUG] Using mitra data from window object:', mitraData);
+            }
+         }
+
+         // If we have mitra data, update the modal
+         if (mitraData) {
+            updateAgreementModalInfo(mitraData);
+         } else {
+            console.warn('[DEBUG] No mitra data available for agreement modal');
+            // Set default values
+            updateAgreementModalInfo({
+               namaMitra: 'Data tidak tersedia',
+               noHp: 'Data tidak tersedia',
+               email: localStorage.getItem('mitraUserEmail') || 'Data tidak tersedia',
+               sistemKemitraan: 'Data tidak tersedia',
+               paketUsaha: '',
+               alamatMitra: 'Data tidak tersedia',
+               hargaPaket: 'Data tidak tersedia'
+            });
+         }
+      } catch (error) {
+         console.error('[DEBUG] Error updating agreement modal with current data:', error);
+         // Set default values on error
+         updateAgreementModalInfo({
+            namaMitra: 'Error memuat data',
+            noHp: 'Error memuat data',
+            email: 'Error memuat data',
+            sistemKemitraan: 'Error memuat data',
+            paketUsaha: '',
+            alamatMitra: 'Error memuat data',
+            hargaPaket: 'Error memuat data'
+         });
+      }
+   }
+
+   // Function to update mitra information in agreement modal
+   function updateAgreementModalInfo(mitraData: any) {
+      console.log('[DEBUG] Updating agreement modal with mitra data:', mitraData);
+
+      // Update Nama
+      const namaElement = document.getElementById('agreement-nama');
+      if (namaElement) {
+         namaElement.textContent = mitraData?.namaMitra || mitraData?.nama || 'Tidak tersedia';
+         console.log('[DEBUG] Updated agreement nama:', namaElement.textContent);
+      }
+
+      // Update No HP
+      const noHpElement = document.getElementById('agreement-no-hp');
+      if (noHpElement) {
+         noHpElement.textContent = mitraData?.noHp || mitraData?.nomorHp || mitraData?.phone || 'Tidak tersedia';
+         console.log('[DEBUG] Updated agreement no HP:', noHpElement.textContent);
+      }
+
+      // Update Email
+      const emailElement = document.getElementById('agreement-email');
+      if (emailElement) {
+         emailElement.textContent = mitraData?.email || 'Tidak tersedia';
+         console.log('[DEBUG] Updated agreement email:', emailElement.textContent);
+      }
+
+      // Update Sistem Kemitraan
+      const kemitraanElement = document.getElementById('agreement-kemitraan');
+      if (kemitraanElement) {
+         const sistemKemitraan = mitraData?.sistemKemitraan || 'Tidak tersedia';
+         const paketUsaha = mitraData?.paketUsaha ? ` - ${mitraData.paketUsaha}` : '';
+         kemitraanElement.textContent = sistemKemitraan + paketUsaha;
+         console.log('[DEBUG] Updated agreement kemitraan:', kemitraanElement.textContent);
+      }
+
+      // Update Alamat
+      const alamatElement = document.getElementById('agreement-alamat');
+      if (alamatElement) {
+         alamatElement.textContent = mitraData?.alamatMitra || mitraData?.alamat || mitraData?.address || 'Tidak tersedia';
+         console.log('[DEBUG] Updated agreement alamat:', alamatElement.textContent);
+      }
+
+      // Update Nilai Paket Usaha
+      const nilaiPaketElement = document.getElementById('agreement-nilai-paket');
+      if (nilaiPaketElement) {
+         let nilaiPaket = mitraData?.hargaPaket || mitraData?.nilaiPaketUsaha || mitraData?.totalPrice || mitraData?.harga || 'Tidak tersedia';
+         
+         // Format as currency if it's a number
+         if (typeof nilaiPaket === 'number') {
+            nilaiPaket = nilaiPaket.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+         } else if (typeof nilaiPaket === 'string' && !isNaN(Number(nilaiPaket))) {
+            nilaiPaket = Number(nilaiPaket).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+         }
+         
+         nilaiPaketElement.textContent = nilaiPaket;
+         console.log('[DEBUG] Updated agreement nilai paket:', nilaiPaketElement.textContent);
       }
    }
 
