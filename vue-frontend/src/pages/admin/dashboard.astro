@@ -1201,10 +1201,21 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }
 
     const actionText = action === 'approve' ? 'menyetujui' : 'menolak';
-    const warningText = action === 'reject' ? 
-      '\n\n⚠️ PERHATIAN: Data mitra yang ditolak akan DIHAPUS PERMANEN dari database!' : '';
     
-    if (!confirm(`Apakah Anda yakin ingin ${actionText} mitra ini?${warningText}`)) {
+    const result = await import('sweetalert2').then(Swal => {
+      return Swal.default.fire({
+        title: `Apakah anda ${actionText} Mitra?`,
+        text: `Apakah anda yakin untuk ${actionText} mitra ini?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak"
+      });
+    });
+
+    if (!result.isConfirmed) {
       return;
     }
 
@@ -1221,20 +1232,38 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         }),
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
-      if (response.ok && result.success) {
-        alert(result.message);
+      if (response.ok && data.success) {
+        await import('sweetalert2').then(Swal => {
+          Swal.default.fire({
+            title: action === 'approve' ? "Approved!" : "Rejected!",
+            text: action === 'approve' ? "Mitra disetujui" : "Mitra ditolak",
+            icon: "success"
+          });
+        });
         // Reload mitra data with current filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
       } else {
-        alert(result.error || 'Gagal memproses permintaan');
+        await import('sweetalert2').then(Swal => {
+          Swal.default.fire({
+            title: "Error",
+            text: data.error || 'Gagal memproses permintaan',
+            icon: "error"
+          });
+        });
       }
     } catch (error: unknown) {
       console.error('Error approving mitra:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      alert(`Terjadi kesalahan saat memproses permintaan: ${errorMessage}`);
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: "Error",
+          text: `Terjadi kesalahan saat memproses permintaan: ${errorMessage}`,
+          icon: "error"
+        });
+      });
     }
   }
 
