@@ -1251,29 +1251,46 @@ try {
                      throw new Error('No authorization token');
                   }
 
+                  // Collect all mitra information from the agreement modal
+                  const mitraData = {
+                     namaMitra: document.getElementById('agreement-nama')?.textContent || '',
+                     noHp: document.getElementById('agreement-no-hp')?.textContent || '',
+                     email: document.getElementById('agreement-email')?.textContent || '',
+                     sistemKemitraan: document.getElementById('agreement-kemitraan')?.textContent || '',
+                     alamat: document.getElementById('agreement-alamat')?.textContent || '',
+                     nilaiPaketUsaha: document.getElementById('agreement-nilai-paket')?.textContent || '',
+                     acceptedAt: new Date().toISOString(),
+                     userAgent: navigator.userAgent,
+                     ipAddress: 'client-side',
+                     agreementVersion: '1.0',
+                     agreementContent: {
+                        title: 'SYARAT DAN KETENTUAN KEMITRAAN',
+                        signatureDeclaration: 'Saya yang sebagai Mitra Sagawa Group yang bertanda tangan di bawah ini:',
+                        acceptedTerms: true
+                     }
+                  };
+
+                  console.log('Submitting agreement with mitra data:', mitraData);
+
                   const response = await fetch(`${API_URL}/api/mitra/accept-agreement`, {
                      method: 'POST',
                      headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                      },
-                     body: JSON.stringify({
-                        acceptedAt: new Date().toISOString(),
-                        userAgent: navigator.userAgent,
-                        ipAddress: 'client-side'
-                     })
+                     body: JSON.stringify(mitraData)
                   });
 
                   const result = await response.json();
                   
                   if (response.ok && result.success) {
-                     console.log('Agreement accepted from modal');
+                     console.log('Agreement accepted and saved to database');
                      
                      // Cache agreement status (per-user)
                      localStorage.setItem(agreementStorageKey(), 'true');
                      
                      // Show success message
-                     showNotification('Terima kasih! Perjanjian telah diterima. Anda sekarang resmi menjadi mitra Sagawa Group.', 'success');
+                     showNotification('Terima kasih! Perjanjian telah diterima dan disimpan. Anda sekarang resmi menjadi mitra Sagawa Group.', 'success');
                      
                      // Hide modal
                      hideAgreementModal();

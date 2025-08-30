@@ -24,28 +24,31 @@ const initializeAgreementCollection = async () => {
 
 export interface AgreementRecord {
   _id?: string;
-  mitraId: string;
+  namaMitra: string;
+  noHp: string;
+  email: string;
+  sistemKemitraan: string;
+  alamat: string;
+  nilaiPaketUsaha: string;
   acceptedAt: string;
-  userAgent?: string;
-  ipAddress?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export class AgreementService {
   /**
-   * Check if mitra has already accepted the agreement
+   * Check if mitra has already accepted the agreement by email
    */
-  static async hasAcceptedAgreement(mitraId: string): Promise<boolean> {
+  static async hasAcceptedAgreement(email: string): Promise<boolean> {
     try {
-      console.log(`Checking agreement status for mitra: ${mitraId}`);
+      console.log(`Checking agreement status for email: ${email}`);
 
       const collection = await initializeAgreementCollection();
-      const result = await collection.findOne({ mitraId });
+      const result = await collection.findOne({ email });
 
       const hasAccepted = !!result;
       console.log(
-        `Agreement status for ${mitraId}: ${
+        `Agreement status for ${email}: ${
           hasAccepted ? "ACCEPTED" : "NOT ACCEPTED"
         }`
       );
@@ -65,28 +68,79 @@ export class AgreementService {
       acceptedAt: string;
       userAgent?: string;
       ipAddress?: string;
+      namaMitra?: string;
+      noHp?: string;
+      email?: string;
+      sistemKemitraan?: string;
+      alamat?: string;
+      nilaiPaketUsaha?: string;
+      agreementVersion?: string;
+      agreementContent?: {
+        title: string;
+        signatureDeclaration: string;
+        acceptedTerms: boolean;
+      };
     }
   ): Promise<{ success: boolean; message: string; agreementId?: string }> {
     try {
       console.log(`Saving agreement for mitra: ${mitraId}`);
 
+      const collection = await initializeAgreementCollection();
+
       // Check if already accepted
-      const alreadyAccepted = await this.hasAcceptedAgreement(mitraId);
-      if (alreadyAccepted) {
-        console.log(`Agreement already exists for mitra: ${mitraId}`);
-        return {
-          success: true,
-          message: "Agreement already accepted",
+      const existingAgreement = (await collection.findOne({
+        mitraId,
+      })) as AgreementRecord | null;
+
+      if (existingAgreement) {
+        console.log(
+          `Agreement already exists for mitra: ${mitraId}, updating mitra information`
+        );
+
+        // Update existing agreement with new mitra information
+        const updateData = {
+          updatedAt: new Date().toISOString(),
+          namaMitra: data.namaMitra || existingAgreement.namaMitra || "",
+          noHp: data.noHp || existingAgreement.noHp || "",
+          email: data.email || existingAgreement.email || "",
+          sistemKemitraan:
+            data.sistemKemitraan || existingAgreement.sistemKemitraan || "",
+          alamat: data.alamat || existingAgreement.alamat || "",
+          nilaiPaketUsaha:
+            data.nilaiPaketUsaha || existingAgreement.nilaiPaketUsaha || "",
         };
+
+        const updateResult = await collection.updateOne(
+          { mitraId },
+          { $set: updateData }
+        );
+
+        if (updateResult.modifiedCount > 0) {
+          console.log(`Agreement updated successfully for mitra: ${mitraId}`);
+          return {
+            success: true,
+            message: "Agreement updated with new mitra information",
+            agreementId: String(existingAgreement._id),
+          };
+        } else {
+          console.log(`No changes made to agreement for mitra: ${mitraId}`);
+          return {
+            success: true,
+            message: "Agreement already up to date",
+            agreementId: String(existingAgreement._id),
+          };
+        }
       }
 
-      // Insert new agreement record
-      const collection = await initializeAgreementCollection();
+      // Insert new agreement record with complete mitra information
       const agreementRecord: AgreementRecord = {
-        mitraId,
+        namaMitra: data.namaMitra || "",
+        noHp: data.noHp || "",
+        email: data.email || "",
+        sistemKemitraan: data.sistemKemitraan || "",
+        alamat: data.alamat || "",
+        nilaiPaketUsaha: data.nilaiPaketUsaha || "",
         acceptedAt: data.acceptedAt,
-        userAgent: data.userAgent,
-        ipAddress: data.ipAddress,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -116,29 +170,48 @@ export class AgreementService {
   }
 
   /**
-   * Get agreement details for a mitra
+   * Get agreement details for a mitra by email
    */
   static async getAgreementDetails(
-    mitraId: string
+    email: string
   ): Promise<AgreementRecord | null> {
     try {
-      console.log(`Getting agreement details for mitra: ${mitraId}`);
+      console.log(`Getting agreement details for email: ${email}`);
 
       const collection = await initializeAgreementCollection();
       const result = (await collection.findOne({
-        mitraId,
+        email,
       })) as AgreementRecord | null;
 
       if (result) {
-        console.log(`Agreement found for mitra: ${mitraId}`);
+        console.log(`Agreement found for email: ${email}`);
         return result;
       } else {
-        console.log(`No agreement found for mitra: ${mitraId}`);
+        console.log(`No agreement found for email: ${email}`);
         return null;
       }
     } catch (error) {
       console.error("Error getting agreement details:", error);
       return null;
+    }
+  }
+
+  /**
+   * Get all agreements (admin function)
+   */
+  static async getAllAgreements(): Promise<AgreementRecord[]> {
+    try {
+      console.log(`Getting all agreements`);
+
+      const collection = await initializeAgreementCollection();
+      const cursor = await collection.find({});
+      const agreements = await cursor.toArray();
+
+      console.log(`Found ${agreements.length} agreements`);
+      return agreements as AgreementRecord[];
+    } catch (error) {
+      console.error("Error getting all agreements:", error);
+      return [];
     }
   }
 }

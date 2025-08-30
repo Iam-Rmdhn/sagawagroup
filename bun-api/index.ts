@@ -13,7 +13,6 @@ Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
-    ``;
 
     // Add CORS headers
     const corsHeaders = {
@@ -67,7 +66,8 @@ Bun.serve({
       // Agreement routes
       if (
         url.pathname === "/api/mitra/agreement-status" ||
-        url.pathname === "/api/mitra/accept-agreement"
+        url.pathname === "/api/mitra/accept-agreement" ||
+        url.pathname === "/api/mitra/agreements"
       ) {
         const response = await agreementRoute(req);
         // Add CORS headers to response
