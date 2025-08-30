@@ -22,7 +22,7 @@
         "fuse.js": "7.1.0",
         "google-auth-library": "^10.2.1",
         "google-spreadsheet": "^5.0.2",
-        "googleapis": "^158.0.0",
+        "googleapis": "^159.0.0",
         "jsonwebtoken": "9.0.2",
         "jwa": "1.4.2",
         "jws": "3.2.2",
@@ -196,7 +196,7 @@
 
     "google-spreadsheet": ["google-spreadsheet@5.0.2", "", { "dependencies": { "es-toolkit": "^1.39.8", "ky": "^1.8.2" }, "peerDependencies": { "google-auth-library": ">=8.8.0" }, "optionalPeers": ["google-auth-library"] }, "sha512-8ugGYGsy6BLl6d4z2zwllEv8hFB2IVcCNAUYT/seo4DU7Pk6m79qv+qRxE2cE8bxbf4S13T5fzrjcPhbk2ogsw=="],
 
-    "googleapis": ["googleapis@158.0.0", "", { "dependencies": { "google-auth-library": "^10.2.0", "googleapis-common": "^8.0.0" } }, "sha512-GT2U6LV+YlM6bQa3USnyGJx2Xer5yHDTLAClvueU6lCbn5oAuqOg6g5MxGVxcxBxZcfGdKTqcREET20lHlY7tw=="],
+    "googleapis": ["googleapis@159.0.0", "", { "dependencies": { "google-auth-library": "^10.2.0", "googleapis-common": "^8.0.0" } }, "sha512-halby2+lQwHNxUDk70aQNXP1BlBwdwr7svTJZvDi7vKwrWbVMKhVrZ86h8p3zRcWbO4qAgLQ4ODAf8TgD3DhGQ=="],
 
     "googleapis-common": ["googleapis-common@8.0.0", "", { "dependencies": { "extend": "^3.0.2", "gaxios": "^7.0.0-rc.4", "google-auth-library": "^10.1.0", "qs": "^6.7.0", "url-template": "^2.0.8" } }, "sha512-66if47It7y+Sab3HMkwEXx1kCq9qUC9px8ZXoj1CMrmLmUw81GpbnsNlXnlyZyGbGPGcj+tDD9XsZ23m7GLaJQ=="],
 
