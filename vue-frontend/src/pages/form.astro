@@ -722,7 +722,13 @@ function displayDocumentsPreview(files: FileList | null) {
   
   // Check file size (max 2MB)
   if (file.size > 2 * 1024 * 1024) {
-    alert('Ukuran file terlalu besar. Maksimal 2MB per file.');
+    import('sweetalert2').then(Swal => {
+      Swal.default.fire({
+        title: "Ukuran file terlalu besar. Maksimal 2MB per file",
+        icon: "warning",
+        draggable: true
+      });
+    });
     const fileInput = document.getElementById('documentsUpload') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
     previewContainer?.classList.add('hidden');
