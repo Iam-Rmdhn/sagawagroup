@@ -17,7 +17,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		* { scrollbar-width: thin; scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1); }
 		img, video, iframe { height: auto; max-width: 100%; }
 		.fixed, .sticky { transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-		.dashboard-bg { background-image: radial-gradient(circle at 25px 25px, rgba(251, 191, 36, 0.03) 2px, transparent 0), radial-gradient(circle at 75px 75px, rgba(249, 115, 22, 0.03) 2px, transparent 0); background-size: 100px 100px; background-position: 0 0, 50px 50px; background-attachment: fixed; transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+				/* Ensure logout button is always clickable */
+		#logout-btn {
+			pointer-events: auto !important;
+			cursor: pointer !important;
+		}
+		
+		#logout-btn:disabled {
+			pointer-events: auto !important;
+			cursor: pointer !important;
+			opacity: 1 !important;
+		}
 		.modern-table { background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 191, 36, 0.02) 100%); backdrop-filter: blur(12px); border: 1px solid rgba(251, 191, 36, 0.1); transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden; position: relative; }
 		.loading-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 		@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -111,6 +121,24 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 	</div>
 	<script>
 		const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+		
+		// Listen for navbar actions
+		document.addEventListener('adminNavbarAction', function(event: Event) {
+			const customEvent = event as CustomEvent;
+			const action = customEvent.detail.action;
+			
+			if (action === 'logout') {
+				// Hapus data dari localStorage
+				localStorage.removeItem('adminToken');
+				localStorage.removeItem('adminUser');
+				
+				// Jangan hapus remembered credentials saat logout
+				// Biarkan credentials tersimpan untuk login berikutnya
+				
+				// Redirect ke login page
+				window.location.href = '/admin/login';
+			}
+		});
 		async function loadPelunasanData(): Promise<void> {
 			const tableBody = document.getElementById('pelunasan-table-body');
 			const token = localStorage.getItem('adminToken');

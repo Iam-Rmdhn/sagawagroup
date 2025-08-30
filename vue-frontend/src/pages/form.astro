@@ -691,10 +691,10 @@ function performValidation() {
   if (allValid) {
     (nextBtn as HTMLButtonElement).disabled = false;
     nextBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-    nextBtn.classList.add('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
+    nextBtn.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'hover:from-amber-600', 'hover:to-orange-700', 'cursor-pointer', 'shadow-lg');
   } else {
     (nextBtn as HTMLButtonElement).disabled = true;
-    nextBtn.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'cursor-pointer');
+    nextBtn.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'hover:from-amber-600', 'hover:to-orange-700', 'cursor-pointer', 'shadow-lg');
     nextBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
   }
 }
@@ -1436,18 +1436,20 @@ function updateProgressBar(step: number) {
   for (let i = 1; i <= 3; i++) {
     const stepElement = document.getElementById(`step-${i}`);
     const labelElement = stepElement?.nextElementSibling as HTMLElement;
-    
+
     if (stepElement && labelElement) {
       if (i <= step) {
-        stepElement.classList.remove('bg-gray-300', 'text-gray-600');
-        stepElement.classList.add('bg-blue-600', 'text-white');
-        labelElement.classList.remove('text-gray-600');
-        labelElement.classList.add('text-blue-600');
+        // Active step styling (amber/orange theme)
+        stepElement.classList.remove('bg-gray-200', 'text-gray-500', 'border-2', 'border-gray-300');
+        stepElement.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
+        labelElement.classList.remove('text-gray-500');
+        labelElement.classList.add('text-amber-700');
       } else {
-        stepElement.classList.remove('bg-blue-600', 'text-white');
-        stepElement.classList.add('bg-gray-300', 'text-gray-600');
-        labelElement.classList.remove('text-blue-600');
-        labelElement.classList.add('text-gray-600');
+        // Inactive step styling
+        stepElement.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
+        stepElement.classList.add('bg-gray-200', 'text-gray-500', 'border-2', 'border-gray-300');
+        labelElement.classList.remove('text-amber-700');
+        labelElement.classList.add('text-gray-500');
       }
     }
   }
@@ -1552,6 +1554,7 @@ function initializeFromURLParams() {
 // Initialize form when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   initializeFromURLParams();
+  updateProgressBar(1); // Initialize progress bar to step 1
 });
 
 // Setup info tooltips

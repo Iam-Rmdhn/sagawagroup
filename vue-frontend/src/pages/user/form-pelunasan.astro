@@ -144,6 +144,14 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
                 Form Pelunasan Kewajiban
               </h2>
               <p class="text-gray-600 text-sm sm:text-base">Lengkapi data pelunasan dan upload bukti transfer</p>
+              <div class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg">
+                <p class="text-xs text-amber-700 flex items-center">
+                  <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <span class="font-medium">Semua field dengan tanda <span class="text-red-500">*</span> wajib diisi</span>
+                </p>
+              </div>
             </div>
           </div>
           <!-- Info pembayaran -->
@@ -203,14 +211,16 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
               </div>
             </div>
             <div class="mb-8">
-              <label class="block text-gray-800 font-semibold mb-3 text-sm sm:text-base">Upload Bukti Transfer</label>
+              <label class="block text-gray-800 font-semibold mb-3 text-sm sm:text-base">
+                Upload Bukti Transfer <span class="text-red-500">*</span>
+              </label>
               <div id="buktiTransferUploadArea" class="border-2 border-dashed border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 sm:p-8 text-center transition-all duration-200 hover:border-amber-400 hover:from-amber-100 hover:to-orange-100">
                 <svg class="w-10 h-10 sm:w-12 sm:h-12 text-amber-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                 </svg>
-                <div class="font-bold text-base sm:text-lg text-gray-800 mb-2">Upload Bukti Transfer</div>
-                <div class="text-gray-600 text-sm mb-1">JPG, PNG, atau PDF</div>
-                <div class="text-gray-500 text-xs mb-4">Maksimal 2MB</div>
+                <div class="font-bold text-base sm:text-lg text-gray-800 mb-2">Upload Bukti Transfer <span class="text-red-500">*</span></div>
+                <div class="text-gray-600 text-sm mb-1">JPG, PNG, atau PDF (Maksimal 2MB)</div>
+                <div class="text-amber-600 text-xs mb-4 font-medium">Wajib diisi untuk memproses pelunasan</div>
                 <input id="buktiTransfer" name="buktiTransfer" type="file" accept="image/*,application/pdf" class="hidden" required />
                 <button type="button" id="buktiTransferUploadBtn" class="btn-primary mt-2 px-4 sm:px-6 py-2 sm:py-3 text-white rounded-xl font-semibold flex items-center justify-center mx-auto text-sm sm:text-base shadow-lg">
                   <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -229,12 +239,27 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
                 </span>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="namaPengirim" name="namaPengirim" placeholder="Nama Pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" required />
-                <input type="text" id="noRekPengirim" name="noRekPengirim" placeholder="No Rek pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" required />
-                <input type="text" id="bankPengirim" name="bankPengirim" placeholder="Bank Pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all md:col-span-2" required />
+                <div>
+                  <label for="namaPengirim" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">
+                    Nama Pengirim <span class="text-red-500">*</span>
+                  </label>
+                  <input type="text" id="namaPengirim" name="namaPengirim" placeholder="Nama Pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" required />
+                </div>
+                <div>
+                  <label for="noRekPengirim" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">
+                    No Rek Pengirim <span class="text-red-500">*</span>
+                  </label>
+                  <input type="text" id="noRekPengirim" name="noRekPengirim" placeholder="No Rek pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" required />
+                </div>
+                <div class="md:col-span-2">
+                  <label for="bankPengirim" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">
+                    Bank Pengirim <span class="text-red-500">*</span>
+                  </label>
+                  <input type="text" id="bankPengirim" name="bankPengirim" placeholder="Bank Pengirim*" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" required />
+                </div>
               </div>
             </div>
-            <button id="btnKirimPelunasan" type="submit" class="btn-success w-full py-3 sm:py-4 px-6 text-white rounded-xl font-bold disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:text-base shadow-lg transition-all duration-200" disabled>
+            <button id="btnKirimPelunasan" type="submit" class="w-full py-3 sm:py-4 px-6 text-white rounded-xl font-bold disabled:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none text-sm sm:text-base shadow-lg transition-all duration-200 bg-gray-400 cursor-not-allowed" disabled>
               <span class="flex items-center justify-center">
                 Kirim Pelunasan
                 <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,10 +324,21 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
     const btnKirim = document.getElementById('btnKirimPelunasan');
     function updateBtnKirimState() {
       const file = buktiInput.files[0];
-      if (file && file.size <= 2 * 1024 * 1024) {
+      const namaPengirim = document.getElementById('namaPengirim').value.trim();
+      const noRekPengirim = document.getElementById('noRekPengirim').value.trim();
+      const bankPengirim = document.getElementById('bankPengirim').value.trim();
+      
+      const isFileValid = file && file.size <= 2 * 1024 * 1024;
+      const areFieldsValid = namaPengirim && noRekPengirim && bankPengirim;
+      
+      if (isFileValid && areFieldsValid) {
         btnKirim.disabled = false;
+        btnKirim.classList.remove('bg-gray-400', 'cursor-not-allowed', 'bg-gray-600', 'opacity-50', 'shadow-none');
+        btnKirim.classList.add('btn-success');
       } else {
         btnKirim.disabled = true;
+        btnKirim.classList.remove('btn-success');
+        btnKirim.classList.add('bg-gray-600', 'cursor-not-allowed', 'opacity-50', 'shadow-none');
       }
     }
     buktiInput.addEventListener('change', function() {
@@ -349,21 +385,104 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         updateBtnKirimState();
       }
     });
-    // Inisialisasi tombol disabled saat load
-    updateBtnKirimState();
+    // Fungsi untuk validasi real-time field sumber dana
+    function validateField(fieldId, isValid) {
+      const field = document.getElementById(fieldId);
+      if (isValid) {
+        field.classList.remove('border-red-300', 'border-amber-200');
+        field.classList.add('border-green-400');
+      } else {
+        field.classList.remove('border-green-400', 'border-amber-200');
+        field.classList.add('border-red-300');
+      }
+    }
+
+    // Reset pesan error dan update tombol kirim saat user mulai mengetik
+    ['namaPengirim', 'noRekPengirim', 'bankPengirim'].forEach(fieldId => {
+      document.getElementById(fieldId).addEventListener('input', function() {
+        if (msg.textContent && msg.classList.contains('text-red-600')) {
+          msg.textContent = '';
+          msg.className = 'mt-4 text-center text-sm';
+        }
+        const isValid = this.value.trim().length > 0;
+        validateField(fieldId, isValid);
+        updateBtnKirimState();
+      });
+    });
+
+    // Validasi real-time untuk file bukti transfer
+    buktiInput.addEventListener('change', function() {
+      if (msg.textContent && msg.classList.contains('text-red-600')) {
+        msg.textContent = '';
+        msg.className = 'mt-4 text-center text-sm';
+      }
+      
+      const file = this.files[0];
+      const isValid = file && file.size <= 2 * 1024 * 1024;
+      const uploadArea = document.getElementById('buktiTransferUploadArea');
+      
+      if (isValid) {
+        uploadArea.classList.remove('border-red-300', 'border-amber-300');
+        uploadArea.classList.add('border-green-400');
+      } else {
+        uploadArea.classList.remove('border-green-400', 'border-amber-300');
+        uploadArea.classList.add('border-red-300');
+      }
+      
+      updateBtnKirimState();
+    });
 
     document.getElementById('formPelunasan').addEventListener('submit', async (e) => {
       e.preventDefault();
       msg.textContent = '';
-      const form = e.target;
-      const formData = new FormData(form);
-      // Validasi file sekali lagi sebelum submit
-      const file = buktiInput.files[0];
-      if (!file || file.size > 2 * 1024 * 1024) {
-        msg.textContent = 'Ukuran file bukti transfer maksimal 2MB!';
-        msg.className = 'text-red-600 mt-4 text-center';
+
+      // Validasi manual untuk memastikan semua field required terisi
+      const namaPengirim = document.getElementById('namaPengirim').value.trim();
+      const noRekPengirim = document.getElementById('noRekPengirim').value.trim();
+      const bankPengirim = document.getElementById('bankPengirim').value.trim();
+      const buktiTransfer = document.getElementById('buktiTransfer').files[0];
+
+      if (!namaPengirim) {
+        msg.textContent = 'Nama pengirim harus diisi!';
+        msg.className = 'text-red-600 mt-4 text-center font-semibold';
+        validateField('namaPengirim', false);
+        document.getElementById('namaPengirim').focus();
         return;
       }
+
+      if (!noRekPengirim) {
+        msg.textContent = 'Nomor rekening pengirim harus diisi!';
+        msg.className = 'text-red-600 mt-4 text-center font-semibold';
+        validateField('noRekPengirim', false);
+        document.getElementById('noRekPengirim').focus();
+        return;
+      }
+
+      if (!bankPengirim) {
+        msg.textContent = 'Bank pengirim harus diisi!';
+        msg.className = 'text-red-600 mt-4 text-center font-semibold';
+        validateField('bankPengirim', false);
+        document.getElementById('bankPengirim').focus();
+        return;
+      }
+
+      if (!buktiTransfer) {
+        msg.textContent = 'Bukti transfer harus diupload!';
+        msg.className = 'text-red-600 mt-4 text-center font-semibold';
+        const uploadArea = document.getElementById('buktiTransferUploadArea');
+        uploadArea.classList.remove('border-green-400', 'border-amber-300');
+        uploadArea.classList.add('border-red-300');
+        return;
+      }
+
+      if (buktiTransfer.size > 2 * 1024 * 1024) {
+        msg.textContent = 'Ukuran file bukti transfer maksimal 2MB!';
+        msg.className = 'text-red-600 mt-4 text-center font-semibold';
+        return;
+      }
+
+      const form = e.target;
+      const formData = new FormData(form);
       try {
         const res = await fetch(`${API_URL}/api/mitra/pelunasan`, {
           method: 'POST',
@@ -371,6 +490,13 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         });
         const result = await res.json();
         if (res.ok && result.success) {
+          // Set validasi visual ke success untuk semua field
+          ['namaPengirim', 'noRekPengirim', 'bankPengirim'].forEach(fieldId => {
+            validateField(fieldId, true);
+          });
+          const uploadArea = document.getElementById('buktiTransferUploadArea');
+          uploadArea.classList.remove('border-red-300', 'border-amber-300');
+          uploadArea.classList.add('border-green-400');
           // Set flag di localStorage bahwa sudah pernah submit pelunasan
           localStorage.setItem('sudahPelunasan', '1');
           document.getElementById('formPelunasanContainer').innerHTML = `

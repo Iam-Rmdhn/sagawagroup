@@ -169,6 +169,18 @@ try {
       background-color: #fefefe;
     }
 
+    /* Ensure logout button is always clickable */
+    #logout-btn {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    
+    #logout-btn:disabled {
+      pointer-events: auto !important;
+      cursor: pointer !important;
+      opacity: 1 !important;
+    }
+
     /* Responsive grid */
     .stats-grid {
       display: grid;
@@ -305,14 +317,40 @@ try {
       }
     }
 
-    /* Number animation */
-    .stats-number {
-      font-feature-settings: "tnum";
-      transition: all 0.3s ease;
+    /* Disable text selection and copying for agreement content */
+    .agreement-content {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+      cursor: default;
     }
-
-    .modern-card:hover .stats-number {
-      transform: scale(1.05);
+    
+    .agreement-content * {
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+      pointer-events: none;
+    }
+    
+    /* Allow interaction with form elements inside agreement */
+    .agreement-content input,
+    .agreement-content button,
+    .agreement-content textarea,
+    .agreement-content select {
+      pointer-events: auto;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
     }
   </style>
 
@@ -475,7 +513,7 @@ try {
          </div>
 
             <!-- Financial Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div id="financial-summary-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                <!-- Omset Harian -->
                <div class="modern-card rounded-2xl p-6 shadow-lg overflow-hidden relative">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
@@ -816,7 +854,7 @@ try {
             </div>
 
             <!-- Mitra Information Section -->
-            <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 agreement-content">  
                <h4 class="font-semibold text-blue-900 mb-3">Informasi Mitra</h4>
                
                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -854,31 +892,33 @@ try {
                <!-- Signature Declaration -->
                <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <p class="text-sm font-medium text-amber-800 text-center italic">
-                     Saya sebagai Mitra Sagawa Group yang bertanda tangan di bawah ini:
+                     Saya sebagai Mitra <span id="agreement-brand-name">(Nama Brand)</span> yang bertanda tangan di bawah ini:
                   </p>
                </div>
             </div>
 
             <!-- Agreement Content -->
             <div class="mt-3 sm:mt-0">
-               <div class="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
+               <div class="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto agreement-content">
+                  
                   <div class="space-y-4 text-sm text-gray-700">
                      <h4 class="font-semibold text-lg text-gray-900">SYARAT DAN KETENTUAN KEMITRAAN</h4>
                      
                      <div>
                         <h5 class="font-medium text-gray-900 mb-2">PASAL 1 KETENTUAN UMUM</h5>
-                        <p class="mb-2">Masing-masing pihak, dalam hal ini Pihak I dan Pihak II bertanggung jawab atas tercapainya tujuan bersama dengan meningkatkan nilai bisnis maupun nilai merek. Harapan dari semua itu tidak lain untuk memperluas jangkauan bisnis ke depannya.</p>
+                        <p class="mb-2">Masing-masing pihak, dalam hal ini Pihak I dan Pihak II bertanggung jawab atas tercapainya tujuan bersama dengan meningkatkan nilai bisnis maupun nilai merek. Harapan dari semua itu tidak lain untuk memperluas jangkauan bisnis dan konsistensi bisnis ke depannya.</p>
                      </div>
                      
                      <div>
                         <h5 class="font-medium text-gray-900 mb-2">PASAL 2 KEWAJIBAN POKOK PIHAK I</h5>
-                        <p class="mb-2"><strong>Sebagai pemilik merek dan resep (Nama Brand), Pihak I</strong></p>
+                        <p class="mb-2"><strong>Sebagai pemilik merek dan resep <span id="agreement-brand-name">(Nama Brand)</span>, Pihak I</strong></p>
                         <ul class="list-disc pl-5 mb-2 space-y-1">
                            <li>Membantu mencarikan properti usaha pada unit usaha Pihak II.</li>
                            <li>Memberikan pelatihan untuk karyawan baru Pihak II.</li>
                            <li>Memberikan pasokan bahan dasar dan bumbu resep asli dengan estimasi stok untuk beberapa waktu ke depan (suplay chain).</li>
                            <li>Meningkatkan kualitas karyawan pada unit usaha Pihak II.</li>
                            <li>Quality control produk atau menu dalam unit usaha Pihak II.</li>
+                           <li>Quality control atas bahan baku menu yang dijual pada unit usaha Pihak II sesuai dengan standar operasional dan prosedur perusahaan.</li>
                            <li>Mengadakan pelatihan untuk meningkatkan kapasitas karyawan, melakukan riset dan pengembangan usaha, menjalankan misi marketing dan perluasan usaha.</li>
                            <li>Memberikan seragam kepada karyawan sebagai bentuk identitas usaha.</li>
                         </ul>
@@ -888,13 +928,15 @@ try {
                         <h5 class="font-medium text-gray-900 mb-2">PASAL 3 KEWAJIBAN POKOK PIHAK II</h5>
                         <p class="mb-2"><strong>Sebagai franchisee dan atau penerima hak waralaba (mitra) serta penanggung jawab Pihak II</strong></p>
                         <ul class="list-disc pl-5 mb-2 space-y-1">
+                           <li>Berkewajiban membeli paket kemitraan dan memilih sistem operasional kemitraan, berlaku satu lokasi untuk satu brand.</li>
                            <li>Berkewajiban membeli bahan dasar inti dan bumbu asli resep kepada pihak I.</li>
                            <li>Berkewajiban Menjalankan fungsi manajemen usaha menuju tingkat profit usaha yang semakin tinggi.</li>
                            <li>Berkewajiban menjalankan asas usaha dengan berpedoman pada prinsip efektif dan efisien.</li>
                            <li>Berkewajiban untuk memberikan insentif kepada trainer (karyawan Pihak I) berupa uang minimal Rp. 250.000,-/hari jika lebih dari tiga hari dari masa training yang diberikan.</li>
-                           <li>Pada sistem kemitraan semi-autopilot, Pihak II wajib membayarkan support fee/management fee kepada Pihak I setiap bulannya sebesar 5%,- (lima persen) dari laba kotor.</li>
-                           <li>Pada sistem full autopilot pihak II bersedia untuk membagi hasil dari profit bersih sebesar 40% kepada pihak pertama (pemililk lisensi).</li>
-                           <li>Jika mitra diluar jabodetabek maka bersedia menanggug biaya diluar paket kemitraan seperti ongkos kirim equipment, survei lokasi, training dan akomodasi lainnya.</li>
+                           <li>Pada sistem kemitraan semi-autopilot, Pihak II wajib membayarkan support fee/management fee kepada Pihak I setiap bulannya sebesar 5% (lima persen) dari laba kotor.</li>
+                           <li>Pada sistem autopilot pihak II bersedia untuk membagi hasil dari profit bersih sebesar 40% kepada pihak pertama (pemililk lisensi) dan management fee sebesar 5% dari omset setiap bulannya.</li>
+                           <li>Jika mitra diluar jabodetabek maka bersedia menanggug biaya diluar paket kemitraan seperti ongkos kirim equipment, survei lokasi, training, akomodasi dan lainnya (dirincikan dengan detail).</li>
+                           <li>Pihak II sadar jika karyawan yang di berikan oleh pihak I adalah salah satu aset yang sewaktu-waktu bisa di pindah/bebas tugaskan oleh pihak I.</li>
                         </ul>
                      </div>
                      
@@ -905,22 +947,24 @@ try {
                           <li>Sistem self-manage mengacu pada bisnis yang 100% dikelola oleh Pihak II dari segi operasional maupun finansial.</li>
                           <li>Dalam pengoperasiannya, Pihak II diperbolehkan bertanya ataupun meminta saran kepada Pihak I terkait dengan sistematika bisnis atau hal-hal yang menyangkut dengan administrasi maupun operasional bisnis.</li>
                           <li>Keuntungan (profit) bisnis dalam sistem kemitraan self-managed 100% milik Pihak II yang dalam hal ini adalah sebagai mitra (franchisee).</li>
-                          <li>Segala bentuk kerugian dalam sistem kemitraan self-managed ditanggung oleh Pihak II selaku franchisee dan Pihak I diperbolehkan memberikan masukan, saran, dan segala bentuk support yang sifatnya solutif.</li>
-                          <li>Sistem Semi-Autopilot mengacu pada bisnis yang sistem operasional bisnisnya dikelola 80% oleh Pihak I (Franchisor).</li>
-                          <li>Sistem Autopilot adalah sistem dimana 100% dikelola oleh perusahaan.</li>
-                          <li>Setiap bulannya, Pihak II akan mendapatkan laporan bulanan mengenai perkembangan bisnisnya dalam 30 hari sebelumnya yang sudah disiapkan oleh Pihak I.</li>
-                          <li>Skema bagi hasil keuntungan ataupun kerugian dalam sistem semi-autopilot sebesar 40% untuk Pihak I dan 60% untuk Pihak II. Skema ini berlaku selama bisnis masih berjalan.</li>
+                          <li>Segala bentuk kerugian dalam sistem kemitraan self-managed ditanggung oleh Pihak II selaku franchisee dan Pihak I diperbolehkan memberikan, masukan, saran dan segala bentuk support yang sifatnya solutif.</li>
+                          <li>Sistem Semi-Autopilot mengacu pada bisnis yang sistem operasional bisnisnya dikelola 70-80% oleh Pihak I (Franchisor).</li>
+                          <li>Sistem Autopilot adalah sistem dimana 100% dikelola oleh perusahaan/pihak I.</li>
+                          <li>Sistem Semi Autopilot dan Autopilot Setiap bulannya, Pihak II akan mendapatkan laporan bulanan mengenai perkembangan bisnisnya dalam 30 hari sebelumnya yang sudah disiapkan oleh Pihak I, Selambat-lambatnya di lima hari setelah akhir bulan.</li>
+                          <li>Management fee dalam sistem semi-autopilot sebesar 5% dari omset kotor disetiap bulannya, Skema ini berlaku selama bisnis masih berjalan.</li>
+                          <li>Skema Autopilot keuntungan di bagi 40:60 (pihak I sebesar 40% dan pihak II sebesar 60% dari nett profit) dan management fee sebesar 5% pada sales kotor bulanan.</li>
                           <li>Pihak I akan membantu Pihak II dalam hal operasional bisnis dan senantiasa menjaga omzet agar tetap stabil, namun terbatas tanggung jawabnya terhadap pencapaian target profit bisnis dan BEP.</li>
+                          <li>Jika pada unit bisnis dengan sistem autopilot mengalami kerugian maka pihak I dapat membantu mensuplay bahan baku (bumbu dasar) terlebih dahulu walapun belum dibayar (menghutangkan).</li>
                           <li>Semua tunduk atas aturan yang sudah dibuat.</li>
                         </ul>
                      </div>
                      
                      <div>
-                        <h5 class="font-medium text-gray-900 mb-2">PASAL 5 LAIN-LAIN</h5>
+                        <h5 class="font-medium text-gray-900 mb-2">PASAL 7 LAIN-LAIN</h5>
                         <ul class="list-disc pl-5 mb-2 space-y-1">
                           <li>Perjanjian kerja sama ini berlaku sejak ditandatangani oleh kedua belah pihak.</li>
                           <li>Perjanjian kerja sama ini bersifat lifetime (selamanya), selama bisnis masih berjalan.</li>
-                          <li>Bilamana terdapat kekeliruan, kelemahan, dan kekurangan dalam surat perjanjian kerja sama ini, para pihak sepakat melakukan peninjauan ulang dan perbaikan berdasarkan musyawarah berasaskan kekeluargaan.</li>
+                          <li>Bilamana terdapat kekeliruan, kelemahan dan kekurangan dalam surat perjanjian kerjasama ini, para pihak sepakat melakukan peninjauan ulang dan perbaikan berdasarkan musyawarah berasaskan kekeluargaan.</li>
                           <li>Hal-hal yang belum atau tidak diatur dalam surat perjanjian kerja sama ini akan diatur kembali berdasarkan kesepakatan para pihak.</li>
                           <li>Bilamana terjadi perselisihan, kedua belah pihak sepakat untuk menyelesaikan secara musyawarah/kekeluargaan.</li>
                           <li>Bilamana perselisihan tidak dapat diselesaikan melalui musyawarah, maka para pihak sepakat menyelesaikan melalui Pengadilan Negeri Indonesia.</li>
@@ -976,6 +1020,37 @@ try {
    }
 
    document.addEventListener('DOMContentLoaded', async function() {
+      // Prevent copying and text selection for all agreement content sections
+      const agreementContents = document.querySelectorAll('.agreement-content');
+      agreementContents.forEach(function(agreementContent) {
+         // Prevent right-click context menu
+         agreementContent.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+         });
+
+         // Prevent keyboard shortcuts for copy/paste
+         agreementContent.addEventListener('keydown', function(e) {
+            const keyboardEvent = e as KeyboardEvent;
+            // Prevent Ctrl+C, Ctrl+X, Ctrl+V, Ctrl+A
+            if (keyboardEvent.ctrlKey && (keyboardEvent.key === 'c' || keyboardEvent.key === 'x' || keyboardEvent.key === 'v' || keyboardEvent.key === 'a')) {
+               e.preventDefault();
+               return false;
+            }
+            // Prevent F12 (developer tools)
+            if (keyboardEvent.key === 'F12') {
+               e.preventDefault();
+               return false;
+            }
+         });
+
+         // Prevent drag and drop
+         agreementContent.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+         });
+      });
+
       // Check authentication
       const token = localStorage.getItem('mitraToken');
       if (!token) {
@@ -1037,13 +1112,18 @@ try {
         const action = customEvent.detail.action;
         
         if (action === 'logout') {
-          // Clear all mitra-related data from localStorage
+          // Clear session data but keep remembered credentials
           localStorage.removeItem('mitraToken');
           localStorage.removeItem('mitraUser');
           localStorage.removeItem(agreementStorageKey());
           localStorage.removeItem('mitraUserEmail');
           
-          console.log('User logged out, cleared all session data');
+          // Keep remembered credentials for next login
+          // localStorage.removeItem('rememberedEmail');
+          // localStorage.removeItem('rememberedPassword');
+          // localStorage.removeItem('rememberMe');
+          
+          console.log('User logged out, cleared session data but kept remembered credentials');
           window.location.href = '/login';
         }
       });
@@ -1656,6 +1736,15 @@ try {
          nilaiPaketElement.textContent = nilaiPaket;
          console.log('[DEBUG] Updated agreement nilai paket:', nilaiPaketElement.textContent);
       }
+
+      // Update Brand Name in agreement text
+      const brandNameElement = document.getElementById('agreement-brand-name');
+      if (brandNameElement) {
+         // Use business package as brand name, fallback to partnership system if not available
+         const brandName = mitraData?.paketUsaha || mitraData?.namaPaket || mitraData?.brandName || mitraData?.sistemKemitraan || 'Sagawa Group';
+         brandNameElement.textContent = brandName;
+         console.log('[DEBUG] Updated agreement brand name:', brandNameElement.textContent);
+      }
    }
 
    // Agreement will now only appear as modal - dashboard agreement functions removed
@@ -1900,7 +1989,11 @@ try {
 
       // Show financial section only for Autopilot & Semi Autopilot
       const financialSection = document.getElementById('financial-section');
+      const financialSummaryCards = document.getElementById('financial-summary-cards');
       const sistemKemitraanText = data.sistemKemitraan?.toLowerCase() || '';
+      
+      // Check if user is self-managed (hide financial reports)
+      const isSelfManaged = sistemKemitraanText.includes('self') || sistemKemitraanText.includes('managed');
       
       if (financialSection && (sistemKemitraanText.includes('autopilot') || sistemKemitraanText.includes('semi'))) {
          financialSection.classList.remove('hidden');
@@ -1910,6 +2003,17 @@ try {
       } else if (financialSection) {
          financialSection.classList.add('hidden');
          console.log('Financial section hidden for:', data.sistemKemitraan);
+      }
+      
+      // Hide financial summary cards for self-managed mitra
+      if (financialSummaryCards) {
+         if (isSelfManaged) {
+            financialSummaryCards.classList.add('hidden');
+            console.log('Financial summary cards hidden for self-managed mitra:', data.sistemKemitraan);
+         } else {
+            financialSummaryCards.classList.remove('hidden');
+            console.log('Financial summary cards displayed for:', data.sistemKemitraan);
+         }
       }
    }
 
