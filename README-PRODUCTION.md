@@ -53,7 +53,7 @@ sudo ./deploy-production.sh
 - **Email SSL**: `admin@sagawagroup.id`
 
 ### Server Configuration
-- **API Port**: `8765` (internal, tidak diekspos)
+- **API Port**: `5000` (internal, tidak diekspos)
 - **Web Server**: Nginx (port 80, 443)
 - **Process Manager**: PM2
 - **Deployment Path**: `/var/www/sagawagroup/`
@@ -123,7 +123,7 @@ sudo certbot certificates
 ```bash
 # Production Environment
 NODE_ENV=production
-PORT=8765
+PORT=5000
 BASE_URL=https://www.sagawagroup.id
 
 # Database Configuration
@@ -243,8 +243,8 @@ sudo systemctl reload nginx
 
 #### 4. Port Already in Use
 ```bash
-# Check what's using port 8765
-sudo lsof -i :8765
+# Check what's using port 5000
+sudo lsof -i :5000
 
 # Kill process if needed
 sudo kill -9 PID
