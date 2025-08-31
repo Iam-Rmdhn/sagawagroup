@@ -85,6 +85,42 @@ export const authRoute = async (req: Request): Promise<Response> => {
     return await approveMitra(req);
   }
 
+  // Delete
+  if (
+    req.method === "DELETE" &&
+    pathname.startsWith("/api/admin/mitra/") &&
+    pathname !== "/api/admin/mitra/approve"
+  ) {
+    return (async () => {
+      const id = pathname.split("/api/admin/mitra/")[1];
+      if (!id) {
+        return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { deleteMitraService } = await import(
+          "../services/auth.services"
+        );
+        const result = await deleteMitraService(id);
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        console.error("Error deleting mitra:", err);
+        return new Response(
+          JSON.stringify({
+            error: "Gagal menghapus data mitra",
+            success: false,
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
   if (req.method === "GET" && pathname === "/api/admin/sample-images") {
     return await updateMitraImages(req);
   }

@@ -631,7 +631,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
 <script>
   // API URL configuration
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8765';
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
   
   // Listen for navbar actions
   document.addEventListener('adminNavbarAction', function(event: Event) {
@@ -1134,6 +1134,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                    ${mitra.status === 'approved' ? 'Disetujui' : 'Ditolak'}
                  </span>`
               }
+              <button onclick="deleteMitra('${mitra._id}', '${mitra.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Hapus
+              </button>
             </div>
           `;
 
@@ -1267,10 +1273,81 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }
   }
 
+  // Function to delete mitra
+  async function deleteMitra(mitraId: string, namaMitra: string) {
+    const token = localStorage.getItem('adminToken');
+
+    if (!token) {
+      window.location.href = '/admin/login';
+      return;
+    }
+
+    const result = await import('sweetalert2').then(Swal => {
+      return Swal.default.fire({
+        title: "Hapus Mitra?",
+        text: `Apakah anda yakin ingin menghapus mitra ${namaMitra}? Data yang dihapus tidak dapat dikembalikan.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, Hapus",
+        cancelButtonText: "Batal"
+      });
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        await import('sweetalert2').then(Swal => {
+          Swal.default.fire({
+            title: "Terhapus!",
+            text: "Data mitra telah dihapus dari database",
+            icon: "success"
+          });
+        });
+        // Reload mitra data with current filter
+        const activeFilter = getCurrentActiveFilter();
+        loadMitraData(activeFilter);
+      } else {
+        await import('sweetalert2').then(Swal => {
+          Swal.default.fire({
+            title: "Error",
+            text: data.message || 'Gagal menghapus data mitra',
+            icon: "error"
+          });
+        });
+      }
+    } catch (error: unknown) {
+      console.error('Error deleting mitra:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: "Error",
+          text: `Terjadi kesalahan saat menghapus data mitra: ${errorMessage}`,
+          icon: "error"
+        });
+      });
+    }
+  }
+
   // Make functions globally available by extending Window interface
   declare global {
     interface Window {
       approveMitra: (mitraId: string, action: 'approve' | 'reject') => Promise<void>;
+      deleteMitra: (mitraId: string, namaMitra: string) => Promise<void>;
       showMitraDetail: (mitraId: string) => Promise<void>;
       closeMitraDetailModal: () => void;
       openImageModal: (imageData: string, title: string) => void;
@@ -1279,6 +1356,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   }
 
   (window as any).approveMitra = approveMitra;
+  (window as any).deleteMitra = deleteMitra;
 
   // Function to show mitra detail modal
   async function showMitraDetail(mitraId: string) {

@@ -232,7 +232,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
   });
 
   document.addEventListener('DOMContentLoaded', async () => {
-    let API_URL = 'http://localhost:8765';
+    let API_URL = 'http://localhost:4000';
     try {
       if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
         if (import.meta.env.PUBLIC_API_URL && import.meta.env.PUBLIC_API_URL.startsWith('http')) {

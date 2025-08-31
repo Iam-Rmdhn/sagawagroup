@@ -459,3 +459,85 @@ export async function updateMitraProfileService(
     },
   };
 }
+
+// Delete mitra from both collections (mitra and mitra_login)
+export async function deleteMitraService(mitraId: string) {
+  try {
+    // Find mitra by ID first to get file information
+    const mitra = await MitraModel.findById(mitraId);
+    if (!mitra) {
+      throw new Error("Mitra tidak ditemukan");
+    }
+
+    // Delete associated files if they exist
+    try {
+      if (
+        mitra.fotoKTP &&
+        mitra.fotoKTP.startsWith("http://localhost:4000/uploads/")
+      ) {
+        const fileName = mitra.fotoKTP.split("/uploads/")[1];
+        const filePath = `./uploads/${fileName}`;
+        try {
+          const file = Bun.file(filePath);
+          if (await file.exists()) {
+            await Bun.write(filePath, new Uint8Array(0)); // Clear file content
+            console.log(`Deleted KTP file: ${filePath}`);
+          }
+        } catch (fileError) {
+          console.warn(`Could not delete KTP file: ${filePath}`, fileError);
+        }
+      }
+
+      if (
+        mitra.buktiTransfer &&
+        mitra.buktiTransfer.startsWith("http://localhost:4000/uploads/")
+      ) {
+        const fileName = mitra.buktiTransfer.split("/uploads/")[1];
+        const filePath = `./uploads/${fileName}`;
+        try {
+          const file = Bun.file(filePath);
+          if (await file.exists()) {
+            await Bun.write(filePath, new Uint8Array(0)); // Clear file content
+            console.log(`Deleted transfer file: ${filePath}`);
+          }
+        } catch (fileError) {
+          console.warn(
+            `Could not delete transfer file: ${filePath}`,
+            fileError
+          );
+        }
+      }
+    } catch (cleanupError) {
+      console.warn("File cleanup error (non-critical):", cleanupError);
+      // Don't throw error, continue with database deletion
+    }
+
+    // Delete from mitra_login collection first (if exists)
+    try {
+      await MitraLoginModel.deleteByMitraId(mitraId);
+      console.log(`Deleted mitra login record for mitraId: ${mitraId}`);
+    } catch (loginDeleteError) {
+      console.warn("Error deleting mitra login record:", loginDeleteError);
+      // Continue with main mitra deletion even if login deletion fails
+    }
+
+    // Delete from mitra collection
+    const deleteResult = await MitraModel.deleteOne({ _id: mitraId });
+
+    if (!deleteResult) {
+      throw new Error("Gagal menghapus data mitra dari database");
+    }
+
+    return {
+      success: true,
+      message: "Mitra berhasil dihapus dari database",
+      data: {
+        mitraId,
+        deleted: true,
+      },
+    };
+  } catch (error) {
+    console.error("Error deleting mitra:", error);
+    throw error;
+  }
+}
