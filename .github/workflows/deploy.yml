@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: production-build
+        path: ./build/
+
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /root/sagawagroup
+          git pull origin main
+          chmod +x ./deploy-production.sh
+          ./deploy-production.sh --skip-ssl
+          
+          # Check deployment health
+          sleep 10
+          curl -f http://localhost:5000/api/health || exit 1
+          
+          # Restart services if needed
+          pm2 reload ecosystem.config.cjs --env production

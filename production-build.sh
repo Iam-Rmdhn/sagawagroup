@@ -149,11 +149,12 @@ PORT=5000
 BASE_URL=https://www.sagawagroup.id
 
 # Database Configuration
-ASTRA_DB_APPLICATION_TOKEN=your_production_token
-ASTRA_DB_API_ENDPOINT=your_production_endpoint
+ASTRA_DB_APPLICATION_TOKEN=AstraCS:GcAHBNyZJEGUYJkYkEiJRXbr:c5a57f749b2bd125acb835fa98b1bcf8af879b8dad1876778696b5a2788d4407
+ASTRA_DB_API_ENDPOINT=https://a1971aa5-5930-4854-82ef-747bd405cc0a-us-east-2.apps.astra.datastax.com
+
 
 # Security Configuration
-JWT_SECRET=your_strong_jwt_secret_for_production
+JWT_SECRET=$JWT_SECRET
 
 # Email Configuration
 EMAIL_USER=admin@sagawagroup.id
