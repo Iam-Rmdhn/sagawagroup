@@ -375,7 +375,7 @@ try {
          <!-- Welcome Header -->
          <div class="mb-6 sm:mb-8">
             <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white shadow-xl">
-               <div class="flex items-center">
+               <div class="flex items-center justify-between">
                   <div>
                      <h1 class="text-3xl font-bold mb-2" id="profile-name">Selamat Datang</h1>
                      <p class="opacity-90 text-lg" id="profile-email">Memuat data...</p>
@@ -384,6 +384,12 @@ try {
                            Status: Memuat...
                         </span>
                      </div>
+                  </div>
+                  <!-- Test Button for Agreement Modal -->
+                  <div class="hidden md:block">
+                     <button id="test-agreement-btn" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
+                        Test Agreement
+                     </button>
                   </div>
                </div>
             </div>
@@ -889,7 +895,7 @@ try {
                <!-- Signature Declaration -->
                <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <p class="text-sm font-medium text-amber-800 text-center italic">
-                     Saya sebagai Mitra <span id="agreement-brand-name">(Nama Brand)</span> yang bertanda tangan di bawah ini:
+                     Saya sebagai Mitra Sagawa Group yang bertanda tangan di bawah ini:
                   </p>
                </div>
             </div>
@@ -1059,13 +1065,11 @@ try {
       const detailJoinDate = document.getElementById('detail-join-date');
       if (detailJoinDate) {
          detailJoinDate.textContent = 'Memuat...';
-         console.log('[DEBUG] detail-join-date element found and initialized');
       } else {
          console.warn('[DEBUG] detail-join-date element not found during initialization');
       }
       (window as any).resetAgreement = function() {
          localStorage.removeItem(agreementStorageKey());
-         console.log('Agreement status reset for current user! Reload page to see modal.');
       };
 
       (window as any).showModal = function() {
@@ -1074,14 +1078,8 @@ try {
 
       (window as any).checkAgreementStatus = function() {
          const status = localStorage.getItem(agreementStorageKey());
-         console.log('Current agreement status for this user:', status === 'true' ? 'CONFIRMED' : 'NOT CONFIRMED');
          return status;
       };
-
-      console.log('Debug functions available:');
-      console.log('- resetAgreement() : Reset agreement cache');
-      console.log('- showModal() : Force show modal');
-      console.log('- checkAgreementStatus() : Check current status');
 
       // Setup agreement modal for new users
       setupAgreementModal();
@@ -1120,7 +1118,6 @@ try {
           // localStorage.removeItem('rememberedPassword');
           // localStorage.removeItem('rememberMe');
           
-          console.log('User logged out, cleared session data but kept remembered credentials');
           window.location.href = '/login';
         }
       });
@@ -1175,7 +1172,6 @@ try {
                   const byEmailResult = await byEmailRes.json();
                   // the by-email route returns the mitra object directly
                   data = byEmailResult;
-                  console.log('[DEBUG] Using data from /api/mitra/by-email for payment status');
                } else {
                   console.warn('[WARN] /api/mitra/by-email failed, trying /api/mitra/profile');
                }
@@ -1198,7 +1194,6 @@ try {
 
                if (response.ok && result && result.success && result.data) {
                   data = result.data;
-                  console.log('[DEBUG] Using data from /api/mitra/profile');
                } else {
                   console.warn('[WARN] /api/mitra/profile did not return expected shape');
                }
@@ -1208,13 +1203,9 @@ try {
          }
 
          if (data) {
-            // DEV DEBUG: log profile object to help diagnose agreement/modal behavior
-            console.debug('[DEBUG] loadMitraProfile - profile data:', data);
-            
             // Store mitra data for agreement modal
             localStorage.setItem('mitraUser', JSON.stringify(data));
             (window as any).currentMitraData = data;
-            console.log('[DEBUG] Stored mitra data for agreement modal use');
             
             // Hide loading state and show dashboard
             loadingState?.classList.add('hidden');
@@ -1229,7 +1220,7 @@ try {
             }
 
             // Update statistics cards
-            updateStatisticsCards(data);
+            await updateStatisticsCards(data);
 
             // Update detailed information
             updateDetailedInfo(data);
@@ -1237,11 +1228,8 @@ try {
             // Update activity information
             updateActivityInfo(data);
 
-            // Agreement section removed from dashboard - will appear as modal only
-
-            // Also check agreement modal using the loaded profile to avoid premature checks
-            // (will show modal if user is paid-off and hasn't accepted agreement)
-            await checkAgreementStatusFromBackend(data);
+            // Agreement check is now handled in updateStatisticsCards when user is paid off
+            // No need for separate call here to avoid duplication
 
          } else {
             throw new Error('Gagal memuat data profil');
@@ -1271,7 +1259,6 @@ try {
          isVisible = window.innerWidth >= 768;
       }
       
-      console.log('Initializing dashboard margin, sidebar visible:', isVisible);
       updateDashboardMargin(isVisible);
    }
 
@@ -1280,7 +1267,6 @@ try {
       const mainDashboard = document.getElementById('main-dashboard');
       
       if (mainDashboard) {
-         console.log('Updating dashboard margin, sidebar visible:', sidebarVisible);
          
          // Remove existing margin classes
          mainDashboard.classList.remove('sm:ml-0', 'sm:ml-72');
@@ -1288,11 +1274,9 @@ try {
          if (sidebarVisible && window.innerWidth >= 768) {
             // Desktop/tablet with sidebar visible - add left margin
             mainDashboard.classList.add('sm:ml-72');
-            console.log('Applied sm:ml-72 to dashboard');
          } else {
             // Mobile or sidebar hidden - no left margin
             mainDashboard.classList.add('sm:ml-0');
-            console.log('Applied sm:ml-0 to dashboard');
          }
          
          // Force reflow to ensure smooth transition
@@ -1347,8 +1331,6 @@ try {
                      }
                   };
 
-                  console.log('Submitting agreement with mitra data:', mitraData);
-
                   const response = await fetch(`${API_URL}/api/mitra/accept-agreement`, {
                      method: 'POST',
                      headers: {
@@ -1361,7 +1343,6 @@ try {
                   const result = await response.json();
                   
                   if (response.ok && result.success) {
-                     console.log('Agreement accepted and saved to database');
                      
                      // Cache agreement status (per-user)
                      localStorage.setItem(agreementStorageKey(), 'true');
@@ -1483,7 +1464,6 @@ try {
             });
          } catch (e) { /* ignore */ }
 
-         console.log('[DEBUG] isUserPaidOff final result:', Boolean(isPaidOff));
          return Boolean(isPaidOff);
    }
 
@@ -1498,7 +1478,6 @@ try {
          // Check if we already have cached agreement status for this session (per-user)
          const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
          if (cachedAgreementStatus === 'true') {
-            console.log('Agreement status already confirmed in this session (per-user)');
             return;
          }
 
@@ -1517,12 +1496,72 @@ try {
          console.debug('[DEBUG] checkAgreementStatusFromBackend - userProfile:', user);
 
          // Only run agreement checks for users who have completed payment
-         if (!isUserPaidOff(user)) {
-            console.log('User belum full payment, agreement modal tidak akan ditampilkan');
+         // Use the same logic as in updateStatisticsCards to ensure consistency
+         const parseNumber = (v: any) => {
+            if (v === null || typeof v === 'undefined') return null;
+            if (typeof v === 'number') return v;
+            if (typeof v === 'string') {
+               const cleaned = v.replace(/[^0-9.,-]/g, '');
+               if (cleaned === '') return null;
+               const commaCount = (cleaned.match(/,/g) || []).length;
+               const dotCount = (cleaned.match(/\./g) || []).length;
+               let normalized = cleaned;
+               if (commaCount > 0 && dotCount > 0 && cleaned.indexOf(',') > cleaned.indexOf('.')) {
+                  normalized = cleaned.replace(/\./g, '').replace(/,/g, '.');
+               } else if (commaCount > 0 && dotCount === 0) {
+                  normalized = cleaned.replace(/,/g, '.');
+               } else {
+                  normalized = cleaned.replace(/,/g, '');
+               }
+               const n = parseFloat(normalized);
+               return isNaN(n) ? null : n;
+            }
+            return null;
+         };
+
+         const rawKekurangan = user.kekurangan ?? user.sisa ?? user.sisaPembayaran ?? user.sisa_pelunasan ?? null;
+         const kekuranganNum = parseNumber(rawKekurangan);
+         const isKekuranganZero = kekuranganNum !== null && kekuranganNum <= 0;
+
+         const totalPaid = parseNumber(user.totalPaid ?? user.paidAmount ?? user.total_pembayaran ?? user.jumlahPembayaran ?? user.pembayaranTotal ?? null);
+         const packagePrice = parseNumber(user.hargaPaket ?? user.nilaiPaketUsaha ?? user.totalPrice ?? user.totalHarga ?? user.harga ?? null);
+         const paidByComparison = (totalPaid !== null && packagePrice !== null && totalPaid >= packagePrice);
+
+         const pelunasanStatuses = [];
+         try {
+            if (Array.isArray(user?.pelunasan)) {
+               user.pelunasan.forEach((p: any) => {
+                  if (p && typeof p.isPaid !== 'undefined' && p.isPaid === true) pelunasanStatuses.push('paid');
+               });
+            } else if (user?.pelunasan && typeof user.pelunasan === 'object' && user.pelunasan.status) {
+               pelunasanStatuses.push(String(user.pelunasan.status).toLowerCase());
+            }
+            if (user?.statusPelunasan) pelunasanStatuses.push(String(user.statusPelunasan).toLowerCase());
+            if (user?.pelunasanStatus) pelunasanStatuses.push(String(user.pelunasanStatus).toLowerCase());
+            if (user?.paymentStatus) pelunasanStatuses.push(String(user.paymentStatus).toLowerCase());
+            if (user?.keteranganPelunasan) pelunasanStatuses.push(String(user.keteranganPelunasan).toLowerCase());
+         } catch (e) { /* ignore */ }
+
+         const isPelunasanApproved = (
+            user?.pelunasanApproved === true ||
+            pelunasanStatuses.includes('approved') ||
+            pelunasanStatuses.includes('lunas') ||
+            pelunasanStatuses.includes('paid') ||
+            (typeof user?.statusPelunasan === 'string' && ['approved', 'lunas', 'paid'].includes(user.statusPelunasan.toLowerCase()))
+         );
+
+         const userIsPaidOff = (
+            user?.nilaiPaketUsaha === 'Full Payment' ||
+            user?.isFullPayment === true ||
+            user?.isPaidOff === true ||
+            isPelunasanApproved ||
+            isKekuranganZero ||
+            paidByComparison
+         );
+
+         if (!userIsPaidOff) {
             return;
          }
-
-         console.log('Detected user as paid-off, checking agreement status from backend...');
 
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
             method: 'GET',
@@ -1537,8 +1576,6 @@ try {
          if (response.ok && result.success) {
             const { hasAccepted, agreementDetails } = result.data;
 
-            console.log('Agreement status from backend:', { hasAccepted, agreementDetails });
-
             // Ensure the agreement (if present) belongs to this user
             let acceptedForThisUser = hasAccepted;
             try {
@@ -1551,12 +1588,10 @@ try {
             } catch (e) { /* ignore */ }
 
             if (!acceptedForThisUser) {
-               console.log('User has not agreed to terms - showing agreement UI');
                // Agreement now only appears as modal
                setTimeout(() => { showAgreementModal(); }, 300);
             } else {
                const agreedAt = agreementDetails?.acceptedAt;
-               console.log('User has already agreed to terms on:', agreedAt);
                // Persist per-user cache
                localStorage.setItem(agreementStorageKey(), 'true');
             }
@@ -1572,11 +1607,9 @@ try {
    }
 
    function showAgreementModal() {
-      console.log('Attempting to show agreement modal...');
-      
       const modal = document.getElementById('agreement-modal');
+      
       if (modal) {
-         console.log('Modal element found, showing modal');
          
          // Remove hidden class and add animation
          modal.classList.remove('hidden');
@@ -1598,14 +1631,12 @@ try {
          // Update mitra information in the modal
          updateAgreementModalWithCurrentData();
          
-         console.log('Agreement modal is now visible');
       } else {
-         console.error('Modal element not found!');
+         console.error('[DEBUG] Modal element NOT found!');
       }
    }
 
    function hideAgreementModal() {
-      console.log('Hiding agreement modal...');
 
       const modal = document.getElementById('agreement-modal');
       if (modal) {
@@ -1618,8 +1649,6 @@ try {
             
             // Restore background scrolling
             document.body.style.overflow = '';
-            
-            console.log('Agreement modal hidden successfully');
          }, 300);
       }
    }
@@ -1633,7 +1662,6 @@ try {
 
          if (mitraDataString) {
             mitraData = JSON.parse(mitraDataString);
-            console.log('[DEBUG] Using mitra data from localStorage:', mitraData);
          }
 
          // If no data in localStorage, try to get from current session data
@@ -1642,7 +1670,6 @@ try {
             const windowData = (window as any).currentMitraData;
             if (windowData) {
                mitraData = windowData;
-               console.log('[DEBUG] Using mitra data from window object:', mitraData);
             }
          }
 
@@ -1679,27 +1706,23 @@ try {
 
    // Function to update mitra information in agreement modal
    function updateAgreementModalInfo(mitraData: any) {
-      console.log('[DEBUG] Updating agreement modal with mitra data:', mitraData);
 
       // Update Nama
       const namaElement = document.getElementById('agreement-nama');
       if (namaElement) {
          namaElement.textContent = mitraData?.namaMitra || mitraData?.nama || 'Tidak tersedia';
-         console.log('[DEBUG] Updated agreement nama:', namaElement.textContent);
       }
 
       // Update No HP
       const noHpElement = document.getElementById('agreement-no-hp');
       if (noHpElement) {
          noHpElement.textContent = mitraData?.noHp || mitraData?.nomorHp || mitraData?.phone || 'Tidak tersedia';
-         console.log('[DEBUG] Updated agreement no HP:', noHpElement.textContent);
       }
 
       // Update Email
       const emailElement = document.getElementById('agreement-email');
       if (emailElement) {
          emailElement.textContent = mitraData?.email || 'Tidak tersedia';
-         console.log('[DEBUG] Updated agreement email:', emailElement.textContent);
       }
 
       // Update Sistem Kemitraan
@@ -1708,14 +1731,12 @@ try {
          const sistemKemitraan = mitraData?.sistemKemitraan || 'Tidak tersedia';
          const paketUsaha = mitraData?.paketUsaha ? ` - ${mitraData.paketUsaha}` : '';
          kemitraanElement.textContent = sistemKemitraan + paketUsaha;
-         console.log('[DEBUG] Updated agreement kemitraan:', kemitraanElement.textContent);
       }
 
       // Update Alamat
       const alamatElement = document.getElementById('agreement-alamat');
       if (alamatElement) {
          alamatElement.textContent = mitraData?.alamatMitra || mitraData?.alamat || mitraData?.address || 'Tidak tersedia';
-         console.log('[DEBUG] Updated agreement alamat:', alamatElement.textContent);
       }
 
       // Update Nilai Paket Usaha
@@ -1731,7 +1752,6 @@ try {
          }
          
          nilaiPaketElement.textContent = nilaiPaket;
-         console.log('[DEBUG] Updated agreement nilai paket:', nilaiPaketElement.textContent);
       }
 
       // Update Brand Name in agreement text
@@ -1740,7 +1760,6 @@ try {
          // Use business package as brand name, fallback to partnership system if not available
          const brandName = mitraData?.paketUsaha || mitraData?.namaPaket || mitraData?.brandName || mitraData?.sistemKemitraan || 'Sagawa Group';
          brandNameElement.textContent = brandName;
-         console.log('[DEBUG] Updated agreement brand name:', brandNameElement.textContent);
       }
    }
 
@@ -1819,19 +1838,7 @@ try {
       }
    }
 
-   function updateStatisticsCards(data: any) {
-      // DEBUG: log data yang diterima agar tahu field mana yang ada
-      console.log('[DEBUG] updateStatisticsCards CALLED with data:', data);
-      console.log('[DEBUG] updateStatisticsCards - data keys:', Object.keys(data || {}));
-      console.log('[DEBUG] updateStatisticsCards - payment related fields:', {
-         kekurangan: data?.kekurangan,
-         statusPelunasan: data?.statusPelunasan,
-         pelunasanApproved: data?.pelunasanApproved,
-         nilaiPaketUsaha: data?.nilaiPaketUsaha,
-         isFullPayment: data?.isFullPayment,
-         isPaidOff: data?.isPaidOff,
-         pelunasan: data?.pelunasan
-      });
+   async function updateStatisticsCards(data: any) {
       // Kemitraan Status
       const kemitraanStatus = document.getElementById('kemitraan-status');
       if (kemitraanStatus) {
@@ -1922,24 +1929,8 @@ try {
 
          // Force show agreement if status is explicitly "Lunas" or isPaidOff is true
          const shouldShowAgreement = isPaidOff || hasLunasStatus;
-         console.log('[DEBUG] shouldShowAgreement calculation:', { isPaidOff, hasLunasStatus, shouldShowAgreement });
 
          // Debug logging
-         console.log('[DEBUG] Dashboard Payment Status Check:', {
-            email: data?.email,
-            nilaiPaketUsaha: data?.nilaiPaketUsaha,
-            isFullPayment: data?.isFullPayment,
-            isPaidOffFromData: data?.isPaidOff,
-            pelunasanApproved: data?.pelunasanApproved,
-            statusPelunasan: data?.statusPelunasan,
-            pelunasanStatuses,
-            kekurangan: data?.kekurangan,
-            hasKekurangan,
-            isKekuranganZero,
-            isPelunasanApproved,
-            isPaidOffResult: isPaidOff,
-            shouldShowAgreementResult: shouldShowAgreement
-         });
 
          if (shouldShowAgreement) {
             // Show explicitly as "Lunas" and keep element visible so user sees the status
@@ -1949,7 +1940,9 @@ try {
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
             
             // Agreement will now only appear as modal - no inline dashboard section
-            console.log('[DEBUG] User is paid off - agreement will appear as modal only');
+            
+            // Check agreement status from backend and show modal if needed
+            await checkAgreementStatusFromBackend(data);
          } else {
             pelunasanStatus.textContent = 'Belum Lunas';
             pelunasanStatus.className = 'text-red-600 font-bold';
@@ -1957,7 +1950,6 @@ try {
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
             
             // Agreement section removed from dashboard - no need to hide
-            console.log('[DEBUG] Agreement section removed from dashboard');
          }
       }
 
@@ -1996,20 +1988,16 @@ try {
          financialSection.classList.remove('hidden');
          updateFinancialSummary(data);
          initializeFinancialSection();
-         console.log('Financial section displayed for:', data.sistemKemitraan);
       } else if (financialSection) {
          financialSection.classList.add('hidden');
-         console.log('Financial section hidden for:', data.sistemKemitraan);
       }
       
       // Hide financial summary cards for self-managed mitra
       if (financialSummaryCards) {
          if (isSelfManaged) {
             financialSummaryCards.classList.add('hidden');
-            console.log('Financial summary cards hidden for self-managed mitra:', data.sistemKemitraan);
          } else {
             financialSummaryCards.classList.remove('hidden');
-            console.log('Financial summary cards displayed for:', data.sistemKemitraan);
          }
       }
    }
@@ -2038,15 +2026,9 @@ try {
          belanjaHarianElement.textContent = belanjaHarian.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
       }
 
-      console.log('Financial summary updated:', { omsetHarian, omsetBulanan, belanjaHarian });
    }
 
    function updateDetailedInfo(data: any) {
-      // Debug: Log data yang diterima untuk memeriksa field joinDate
-      console.log('[DEBUG] updateDetailedInfo called with data:', data);
-      console.log('[DEBUG] updateDetailedInfo - joinDate field:', data?.joinDate);
-      console.log('[DEBUG] updateDetailedInfo - createdAt field:', data?.createdAt);
-
       // Personal Information
       const detailNama = document.getElementById('detail-nama');
       const detailEmail = document.getElementById('detail-email');
@@ -2101,7 +2083,6 @@ try {
                      month: 'long',
                      day: 'numeric'
                   });
-                  console.log('[DEBUG] Join date displayed:', detailJoinDate.textContent, 'from field:', joinDateValue === data.joinDate ? 'joinDate' : joinDateValue === data.createdAt ? 'createdAt' : 'other');
                } else {
                   detailJoinDate.textContent = 'Format tanggal tidak valid';
                   console.warn('[DEBUG] Invalid join date format:', joinDateValue);
@@ -2117,14 +2098,6 @@ try {
                year: 'numeric',
                month: 'long',
                day: 'numeric'
-            });
-            console.log('[DEBUG] Using current date as fallback for join date:', detailJoinDate.textContent);
-            console.log('[DEBUG] Available date fields in data:', {
-               joinDate: data?.joinDate,
-               createdAt: data?.createdAt,
-               tanggalBergabung: data?.tanggalBergabung,
-               join_date: data?.join_date,
-               created_at: data?.created_at
             });
          }
       } else {
@@ -2168,18 +2141,9 @@ try {
 
    // Financial Section Functions - Google Sheets Integration
    function initializeFinancialSection() {
-      console.log('Initializing Google Sheets integration...');
-      
-      // Load Google Sheets URL for this user
       loadUserSheetsUrl();
-      
-      // Setup event listeners
       setupSheetsEventListeners();
-      
-      // Initial data load from Google Sheets
       loadFinancialDataFromSheets();
-      
-      // Setup auto-sync every 5 minutes
       setInterval(loadFinancialDataFromSheets, 5 * 60 * 1000);
    }
 
@@ -2237,10 +2201,8 @@ try {
                sheetsInput.value = result.data.sheetsUrl || '';
             }
             if (openBtn) openBtn.disabled = !(result.data.sheetsUrl && result.data.sheetsUrl.length > 0);
-            console.log('Google Sheets URL loaded:', result.data.sheetsUrl);
             updateConnectionStatus('connected', 'Terhubung ke Google Sheets');
          } else {
-            console.log('Creating new Google Sheets for user...');
             await createUserGoogleSheets();
          }
 
@@ -2276,8 +2238,6 @@ try {
             if (sheetsInput) {
                sheetsInput.value = result.data.sheetsUrl;
             }
-            
-            console.log('New Google Sheets created:', result.data.sheetsUrl);
             updateConnectionStatus('connected', 'Sheets baru dibuat');
             showNotification('Google Sheets baru telah dibuat untuk Anda!', 'success');
          } else {
@@ -2352,7 +2312,6 @@ try {
          if (response.ok && result.success) {
             const data = result.data;
             
-            // Update financial displays
             if (data.today) {
                updateTodayFinancialDisplay(data.today);
             }
@@ -2371,8 +2330,6 @@ try {
             
             updateConnectionStatus('connected', 'Data tersinkron');
             updateLastSyncTime();
-            
-            console.log('Financial data loaded from Google Sheets');
             
          } else {
             throw new Error(result.error || 'Gagal memuat data dari Sheets');
@@ -2416,12 +2373,12 @@ try {
             case 'syncing':
             case 'connecting':
                dot.classList.add('bg-blue-400');
-               text.textContent = `🔄 ${message}`;
+               text.textContent = `${message}`;
                break;
                
             case 'error':
                dot.classList.add('bg-red-400');
-               text.textContent = `❌ Error - ${message}`;
+               text.textContent = `Error - ${message}`;
                break;
                
             default:
@@ -2429,8 +2386,6 @@ try {
                text.textContent = message;
          }
       }
-      
-      console.log(`Google Sheets Status: ${status} - ${message}`);
    }
 
    function updateLastSyncTime() {
@@ -2439,7 +2394,6 @@ try {
          const now = new Date();
          timeElement.textContent = `Terakhir sync: ${now.toLocaleTimeString('id-ID')}`;
       }
-      console.log(`Data synced at: ${new Date().toLocaleTimeString('id-ID')}`);
    }
 
    // Update display functions (now receives data from Google Sheets)
@@ -2538,8 +2492,6 @@ try {
    }
 
    function useMockFinancialData() {
-      // Mock data for development/testing Google Sheets integration
-      console.log('Using mock Google Sheets data...');
       
       updateTodayFinancialDisplay({
          omset: 0,

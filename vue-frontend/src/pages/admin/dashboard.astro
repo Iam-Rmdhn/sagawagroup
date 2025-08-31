@@ -731,8 +731,6 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       const sidebarVisible = localStorage.getItem('sidebarVisible');
       const shouldBeVisible = sidebarVisible === 'true';
       
-      console.log('Initializing sidebar state:', shouldBeVisible); // Debug log
-      
       // Apply sidebar state
       if (shouldBeVisible) {
         sidebar.classList.remove('-translate-x-full');
@@ -760,26 +758,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }
   }
 
-  // Function to update main content margin
   function updateMainContentMargin(sidebarVisible: boolean) {
-    console.log('Dashboard: updating main content margin:', sidebarVisible); // Debug log
-    
     const mainContent = document.querySelector('.dashboard-bg');
     if (mainContent) {
-      // Remove existing margin classes
       mainContent.classList.remove('sm:ml-0', 'sm:ml-72');
       
       if (sidebarVisible && window.innerWidth >= 768) {
-        // Desktop/tablet with sidebar visible - add left margin
         mainContent.classList.add('sm:ml-72');
-        console.log('Dashboard: Added sm:ml-72'); // Debug log
       } else {
-        // Mobile or sidebar hidden - remove left margin
         mainContent.classList.add('sm:ml-0');
-        console.log('Dashboard: Added sm:ml-0'); // Debug log
       }
     } else {
-      console.log('Dashboard: Main content not found'); // Debug log
     }
   }
   function switchToUserStats() {
@@ -940,13 +929,6 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     if (totalFPElement) {
       totalFPElement.textContent = formatRupiah(totalFPAmount);
     }
-
-    console.log('Chart updated with real data:', {
-      dpPayments: dpPayments.length,
-      fpPayments: fpPayments.length,
-      totalDPAmount,
-      totalFPAmount
-    });
   }
 
   // Helper function to format currency
@@ -1569,8 +1551,6 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         imageSrc = `${imageData}`;
       }
       
-      console.log('Opening image modal with:', { title, imageSrc: imageSrc.substring(0, 50) + '...' });
-      
       image.src = imageSrc;
       image.alt = title;
       titleElement.textContent = title;
@@ -1788,16 +1768,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     });
 
-    // Start real-time updates
     startRealTimeUpdates();
-
-    // Handle window resize for responsive updates
     window.addEventListener('resize', function() {
       if (paymentChart) {
         const newIsMobile = window.innerWidth <= 640;
         const currentIsMobile = paymentChart.options.plugins.legend.display === false;
         
-        // Only update if mobile state changed
         if (newIsMobile !== currentIsMobile) {
           setTimeout(() => {
             paymentChart.destroy();
@@ -1809,10 +1785,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   }
 
   function startRealTimeUpdates() {
-    // Initial load with real data
     updateChartDataFromAPI();
-    
-    // Update every 30 seconds
     chartUpdateInterval = setInterval(updateChartDataFromAPI, 30000);
   }
 
@@ -1821,7 +1794,6 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       const token = localStorage.getItem('adminToken');
       if (!token) return;
 
-      // Fetch mitra data (same as dashboard stats)
       const response = await fetch(`${API_URL}/api/admin/mitra`, {
         method: 'GET',
         headers: {
@@ -1851,14 +1823,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       maximumFractionDigits: 0
     }).format(amount);
   }
-
-  // Initialize chart when DOM is ready
+  
   document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for the DOM to be fully ready
     setTimeout(initializePaymentChart, 100);
   });
 
-  // Clean up interval when page unloads
   window.addEventListener('beforeunload', function() {
     if (chartUpdateInterval) {
       clearInterval(chartUpdateInterval);
