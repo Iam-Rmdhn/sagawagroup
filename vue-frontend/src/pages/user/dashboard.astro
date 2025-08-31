@@ -9,7 +9,7 @@ let omsetHariIni = [];
 let omsetBulanIni = 0;
 let belanjaHariIni = [];
 try {
-   const res = await fetch("http://localhost:4000/api/sheets/omset");
+   const res = await fetch("http://localhost:5000/api/sheets/omset");
    if (res.ok) {
       const data = await res.json();
       omsetHariIni = data.omsetHariIni || [];
@@ -1014,7 +1014,7 @@ try {
 
 <script>
    // API URL configuration
-   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
 
    // Helper for per-user agreement storage key
    function agreementStorageKey() {

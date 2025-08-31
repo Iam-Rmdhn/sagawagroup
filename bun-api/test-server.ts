@@ -2,7 +2,7 @@
 console.log("Starting test server...");
 
 const server = Bun.serve({
-  port: 4000,
+  port: 5000,
   fetch(request) {
     const url = new URL(request.url);
     
