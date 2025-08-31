@@ -2,17 +2,19 @@
 export interface Props {
     title: string;
     description?: string;
-    canonical?: string;
     image?: string;
+    url?: string;
 }
 
 const { 
     title, 
-    description = "Sagawa Group - Jaringan Franchise Kuliner Jepang Terpercaya | Kagawa Coffee Corner, Kagawa Ricebowl & RM Nusantara. Investasi mulai 50 juta. Bergabung dengan brand kuliner Jepang terbaik di Indonesia!",
-    canonical = Astro.url.href,
-    image = "/assets/img/logo/sgw_logo_web.svg" 
+    description = "Sagawa Group - Jaringan kuliner terlengkap dengan Rice Bowl Jepang, Coffee Corner premium, dan cita rasa Nusantara. Bergabunglah dengan franchise terpercaya kami.",
+    image = "/images/og-image.jpg",
+    url = "https://www.sagawagroup.id"
 } = Astro.props;
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
 import '../styles/global.css';
 ---
 
@@ -21,14 +23,46 @@ import '../styles/global.css';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="franchise kuliner jepang, kagawa coffee corner, kagawa ricebowl, rm nusantara, sagawa group, investasi franchise, bisnis kuliner, makanan jepang, kopi jepang, ricebowl, franchise murah, peluang bisnis" />
+    <meta name="keywords" content="sagawa group, rice bowl jepang, coffee corner, franchise kuliner, restoran nusantara, bisnis franchise, makanan jepang, kopi premium" />
     <meta name="author" content="Sagawa Group" />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="id" />
-    <meta name="geo.region" content="ID" />
-    <meta name="geo.country" content="Indonesia" />
-    <link rel="canonical" href={canonical} />
+    <meta name="language" content="Indonesian" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="apple-mobile-web-app-title" content="Sagawa Group">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${url}${image}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Sagawa Group" />
+    <meta property="og:locale" content="id_ID" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={`${url}${image}`} />
+    <meta name="twitter:creator" content="@sagawagroup" />
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#f59e0b" />
+    
+    <!-- Favicon and App Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/web-app-manifest-192x192.png" />
@@ -36,104 +70,90 @@ import '../styles/global.css';
     <link rel="apple-touch-icon" sizes="192x192" href="/assets/icons/web-app-manifest-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="/assets/icons/web-app-manifest-512x512.png">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="apple-mobile-web-app-title" content="Sagawa Group">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     
-    <!-- Business Schema Markup -->
-    <script type="application/ld+json" is:inline>
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Sagawa Group",
-      "description": "Jaringan Franchise Kuliner Jepang Terpercaya di Indonesia",
-      "url": "https://sagawagroup.id",
-      "logo": "https://sagawagroup.id/vue-frontend/src/assets/img/logo/sgw_logo_web.svg",
-      "foundingDate": "2023",
-      "founder": {
-        "@type": "Organization",
-        "name": "Sagawa Group Management"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "Indonesia",
-        "addressRegion": "Jakarta"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+62-xxx-xxxx-xxxx",
-        "contactType": "customer service",
-        "email": "info@sagawagroup.id",
-        "availableLanguage": ["Indonesian", "English"]
-      },
-      "sameAs": [
-        "https://instagram.com/sagawagroup",
-        "https://facebook.com/sagawagroup",
-        "https://twitter.com/sagawagroup"
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Franchise Opportunities",
-        "itemListElement": [
-          {
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Sagawa Group",
+            "alternateName": "PT SAGAWA PANGAN NUSANTARA",
+            "url": "https://www.sagawagroup.id",
+            "logo": "https://www.sagawagroup.id/images/logo-sagawa.png",
+            "description": "Jaringan kuliner terlengkap dengan Rice Bowl Jepang, Coffee Corner premium, dan cita rasa Nusantara",
+            "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Jalan Sawo No. 156 RT. 004 RW. 001 Kel. CIganjur Kec. Jagakarsa Jakarta Selatan 12630",
+            "addressLocality": "Jakarta",
+            "addressCountry": "ID"
+            },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+62-818-0898-5548",
+            "contactType": "Customer Service",
+            "areaServed": "ID",
+            "availableLanguage": ["Indonesian", "English"]
+            },
+        "sameAs": [
+            "https://www.instagram.com/sagawagroup",
+            "https://www.facebook.com/sagawagroup",
+            "https://www.tiktok.com/@sagawagroup"
+        ],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Franchise Opportunities",
+            "itemListElement": [
+            {
             "@type": "Offer",
             "itemOffered": {
-              "@type": "Service",
-              "name": "Kagawa Coffee Corner Franchise",
-              "description": "Premium Japanese Coffee Experience Franchise"
+            "@type": "Service",
+            "name": "Kagawa Coffee Corner Franchise",
+            "description": "Premium Japanese Coffee Experience Franchise"
+                },
+                "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "50000000",
+                "priceCurrency": "IDR"
+                }
             },
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "price": "50000000",
-              "priceCurrency": "IDR"
-            }
-          },
-          {
+            {
             "@type": "Offer", 
             "itemOffered": {
-              "@type": "Service",
-              "name": "Kagawa Ricebowl Franchise",
-              "description": "Authentic Japanese Rice Bowls Franchise"
+            "@type": "Service",
+            "name": "Kagawa Ricebowl Franchise",
+            "description": "Authentic Japanese Rice Bowls Franchise"
+                },
+                "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "75000000",
+                "priceCurrency": "IDR"
+                }
             },
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "price": "75000000",
-              "priceCurrency": "IDR"
-            }
-          },
-          {
+            {
             "@type": "Offer",
             "itemOffered": {
-              "@type": "Service", 
-              "name": "RM Nusantara Franchise",
-              "description": "Fusion Japanese-Indonesian Cuisine Franchise"
-            },
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "price": "40000000", 
-              "priceCurrency": "IDR"
+            "@type": "Service", 
+            "name": "RM Nusantara Franchise",
+            "description": "Fusion Japanese-Indonesian Cuisine Franchise"
+                },
+                "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "40000000", 
+                "priceCurrency": "IDR"
+                }
             }
-          }
         ]
-      }
+    }
     }
     </script>
-    
-    <!-- Open Graph / Social Media Tags -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={Astro.url} />
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    
-    <!-- Performance Optimizations -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     

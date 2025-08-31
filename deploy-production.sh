@@ -116,7 +116,10 @@ build_frontend() {
     
     # Build for production
     print_status "Building frontend..."
-    bun run build
+    if ! bun run build; then
+        print_error "Frontend build failed!"
+        exit 1
+    fi
     
     # Copy built files to deployment directory
     if [ -d "dist" ]; then
@@ -135,7 +138,10 @@ deploy_api() {
     
     # Install dependencies
     print_status "Installing API dependencies..."
-    bun install
+    if ! bun install; then
+        print_error "API dependency installation failed!"
+        exit 1
+    fi
     
     # Copy API files
     cp -r . "$DEPLOY_DIR/api/"
@@ -152,33 +158,108 @@ deploy_api() {
     print_success "API deployed"
 }
 
-# Function to create PM2 ecosystem file
+rollback() {
+    print_status "Rolling back to previous deployment..."
+    if [ -d "/root/${backup_name}" ]; then
+        rm -rf "$DEPLOY_DIR"
+        mv "/root/${backup_name}" "$DEPLOY_DIR"
+        print_success "Rollback completed"
+    else
+        print_error "No backup found for rollback"
+    fi
+}
+
+main() {
+    print_header "SAGAWA GROUP PRODUCTION DEPLOYMENT"
+    print_status "Domain: ${WWW_DOMAIN}"
+    print_status "Starting deployment process..."
+    
+    # Pre-deployment checks
+    check_root
+    
+    # Execute deployment steps
+    backup_current
+    create_directories
+    install_dependencies
+    
+    if ! build_frontend; then
+        rollback
+        exit 1
+    fi
+    
+    if ! deploy_api; then
+        rollback
+        exit 1
+    fi
+    
+    create_pm2_ecosystem
+    set_permissions
+    create_nginx_config
+    enable_nginx_site
+    setup_ssl
+    create_health_check
+    start_services
+    
+    # Show final status
+    show_status
+}
+
+# Function to create PM2 ecosystem file (SINGLE VERSION)
 create_pm2_ecosystem() {
     print_status "Creating PM2 ecosystem file..."
     
-    cat > "$DEPLOY_DIR/ecosystem.config.js" << EOF
+    cat > "$DEPLOY_DIR/ecosystem.config.cjs" << 'EOF'
 module.exports = {
   apps: [
     {
-      name: '${PROJECT_NAME}-api',
+      name: 'sagawagroup-api',
       script: 'index.ts',
-      cwd: '${DEPLOY_DIR}/api',
+      cwd: '/var/www/sagawagroup/api',
       interpreter: 'bun',
+      
+      // Environment variables
       env: {
-        NODE_ENV: 'production',
-        PORT: ${API_PORT}
+        NODE_ENV: 'development',
+        PORT: 5000
       },
+      env_production: {
+        NODE_ENV: 'production',
+        PORT: 5000
+      },
+      
+      // Process management
       instances: 1,
       exec_mode: 'fork',
-      watch: false,
-      max_memory_restart: '1G',
-      error_file: '${DEPLOY_DIR}/logs/api-error.log',
-      out_file: '${DEPLOY_DIR}/logs/api-out.log',
-      log_file: '${DEPLOY_DIR}/logs/api-combined.log',
-      time: true,
+      
+      // Restart behavior
       autorestart: true,
+      watch: false,
       max_restarts: 10,
-      min_uptime: '10s'
+      min_uptime: '10s',
+      restart_delay: 4000,
+      
+      // Memory management
+      max_memory_restart: '1G',
+      
+      // Logging
+      error_file: '/var/www/sagawagroup/logs/api-error.log',
+      out_file: '/var/www/sagawagroup/logs/api-out.log',
+      log_file: '/var/www/sagawagroup/logs/api-combined.log',
+      time: true,
+      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+      
+      // Advanced options
+      kill_timeout: 5000,
+      listen_timeout: 3000,
+      
+      // Health monitoring
+      health_check_grace_period: 3000,
+      
+      // Source map support
+      source_map_support: true,
+      
+      // Process title for system monitoring
+      name: 'sagawagroup-api-process'
     }
   ]
 };
@@ -368,9 +449,18 @@ setup_ssl() {
     # Create webroot directory for challenge
     mkdir -p /var/www/certbot
     
-    # Obtain certificate
-    print_status "Obtaining SSL certificate for ${DOMAIN} and ${WWW_DOMAIN}..."
-    certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --email ${EMAIL} --agree-tos --non-interactive --redirect
+    # Check if certificate already exists
+    if certbot certificates 2>/dev/null | grep -q "${DOMAIN}"; then
+        print_warning "Existing SSL certificate found for ${DOMAIN}"
+        print_status "Expanding existing certificate to include ${WWW_DOMAIN}..."
+        
+        # Expand existing certificate
+        certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --email ${EMAIL} --agree-tos --non-interactive --expand --redirect
+    else
+        print_status "Obtaining new SSL certificate for ${DOMAIN} and ${WWW_DOMAIN}..."
+        # Obtain new certificate
+        certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --email ${EMAIL} --agree-tos --non-interactive --redirect
+    fi
     
     if [ $? -eq 0 ]; then
         print_success "SSL certificate obtained and configured"
@@ -381,17 +471,17 @@ setup_ssl() {
         print_success "SSL auto-renewal configured"
     else
         print_error "Failed to obtain SSL certificate"
-        print_warning "Continuing without SSL. You can run 'certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN}' manually later"
+        print_warning "Continuing without SSL. You can run 'certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --expand' manually later"
     fi
 }
 
-# Function to start services
+# Function to start services (SINGLE VERSION)
 start_services() {
     print_status "Starting services..."
     
     # Start API with PM2
     cd "$DEPLOY_DIR"
-    pm2 start ecosystem.config.js
+    pm2 start ecosystem.config.cjs --env production
     pm2 save
     pm2 startup
     
@@ -470,14 +560,6 @@ main() {
     # Pre-deployment checks
     check_root
     
-    # Confirm deployment
-    read -p "This will deploy Sagawa Group to production. Continue? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        print_status "Deployment cancelled"
-        exit 0
-    fi
-    
     # Execute deployment steps
     backup_current
     create_directories
@@ -517,6 +599,9 @@ show_usage() {
 
 # Parse command line arguments
 SKIP_SSL=false
+DEPLOY_FRONTEND=false
+DEPLOY_API=false
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         -h|--help)
@@ -525,6 +610,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-ssl)
             SKIP_SSL=true
+            shift
+            ;;
+        --frontend-only)
+            DEPLOY_FRONTEND=true
+            shift
+            ;;
+        --api-only)
+            DEPLOY_API=true
             shift
             ;;
         --domain)
@@ -547,6 +640,41 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Main function
+main() {
+    print_header "SAGAWA GROUP PRODUCTION DEPLOYMENT"
+    print_status "Domain: ${WWW_DOMAIN}"
+    print_status "Starting deployment process..."
+    
+    # Pre-deployment checks
+    check_root
+    
+    # Execute deployment steps
+    backup_current
+    create_directories
+    install_dependencies
+    
+    if [ "$DEPLOY_FRONTEND" = true ]; then
+        build_frontend
+    elif [ "$DEPLOY_API" = true ]; then
+        deploy_api
+    else
+        build_frontend
+        deploy_api
+    fi
+    
+    create_pm2_ecosystem
+    set_permissions
+    create_nginx_config
+    enable_nginx_site
+    setup_ssl
+    create_health_check
+    start_services
+    
+    # Show final status
+    show_status
+}
 
 # Skip SSL setup if requested
 if [ "$SKIP_SSL" = true ]; then
