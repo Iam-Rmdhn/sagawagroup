@@ -135,7 +135,7 @@ create_production_env() {
         
         # Update environment for production
         sed -i 's/NODE_ENV=development/NODE_ENV=production/g' "$BUILD_DIR/api/.env.production"
-        sed -i 's/PORT=5000/PORT=8765/g' "$BUILD_DIR/api/.env.production"
+        sed -i 's/PORT=5000/PORT=5000/g' "$BUILD_DIR/api/.env.production"
         sed -i 's|BASE_URL=http://localhost:5000|BASE_URL=https://www.sagawagroup.id|g' "$BUILD_DIR/api/.env.production"
         
         print_success "Production environment file created"
@@ -145,7 +145,7 @@ create_production_env() {
         cat > "$BUILD_DIR/api/.env.production" << 'EOF'
 # Production Environment Configuration
 NODE_ENV=production
-PORT=8765
+PORT=5000
 BASE_URL=https://www.sagawagroup.id
 
 # Database Configuration
@@ -179,11 +179,11 @@ module.exports = {
       // Environment variables
       env: {
         NODE_ENV: 'development',
-        PORT: 8765
+        PORT: 5000
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 8765
+        PORT: 5000
       },
       
       // Process management
@@ -195,7 +195,7 @@ module.exports = {
       watch: false,
       max_restarts: 10,
       min_uptime: '10s',
-      restart_delay: 8765,
+      restart_delay: 5000,
       
       // Memory management
       max_memory_restart: '1G',
