@@ -219,15 +219,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       // Clear session data but keep remembered credentials
       localStorage.removeItem('mitraToken');
       localStorage.removeItem('mitraUser');
-      localStorage.removeItem('mitraUserEmail');
-      
-      // Keep remembered credentials for next login
-      // localStorage.removeItem('rememberedEmail');
-      // localStorage.removeItem('rememberedPassword');
-      // localStorage.removeItem('rememberMe');
-      
-      console.log('User logged out, cleared session data but kept remembered credentials');
-      window.location.href = '/login';
+      localStorage.removeItem('mitraUserEmail');window.location.href = '/login';
     }
   });
 

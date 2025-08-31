@@ -276,11 +276,129 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
 </Layout>
 
 <script type="module">
+  // Input Sanitizer Class
+  class InputSanitizer {
+    /**
+     * Sanitize name input
+     */
+    static sanitizeName(input, strict = false) {
+      if (!input || typeof input !== 'string') return '';
+
+      if (!strict) {
+        // During typing, don't sanitize at all - let users type freely
+        return input;
+      }
+
+      // For strict validation, apply full sanitization
+      return input
+        // Remove dangerous characters
+        .replace(/[<>'"&\\]/g, '')
+        // Allow only letters, spaces, dots, apostrophes, and hyphens
+        .replace(/[^a-zA-Z\s.'’-]/g, '')
+        // Remove multiple spaces
+        .replace(/\s+/g, ' ')
+        // Trim and limit length
+        .trim()
+        .substring(0, 100);
+    }
+
+    /**
+     * Sanitize account number input
+     */
+    static sanitizeAccountNumber(input) {
+      if (!input || typeof input !== 'string') return '';
+
+      return input
+        .replace(/[^0-9]/g, '')
+        .substring(0, 30);
+    }
+    
+    static sanitizeBankName(input, strict = false) {
+      if (!input || typeof input !== 'string') return '';
+
+      if (!strict) {
+        return input;
+      }
+
+      return input
+        .replace(/[<>'"&\\]/g, '')
+        .replace(/[^a-zA-Z\s.-]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .substring(0, 100);
+    }
+  }
+
+  function setupInputSanitization() {
+    const textInputs = [
+      { id: 'namaPengirim', sanitizer: InputSanitizer.sanitizeName, label: 'Nama Pengirim' },
+      { id: 'noRekPengirim', sanitizer: InputSanitizer.sanitizeAccountNumber, label: 'No Rek Pengirim' },
+      { id: 'bankPengirim', sanitizer: InputSanitizer.sanitizeBankName, label: 'Bank Pengirim' }
+    ];
+
+    // Setup real-time sanitization for text inputs
+    textInputs.forEach(({ id, sanitizer, label }) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('input', function(e) {
+          const target = e.target;
+          const originalValue = target.value;
+          const hasDangerousChars = /[<>'"&\\]/.test(originalValue);
+
+          if (hasDangerousChars) {
+            try {
+              const sanitizedValue = sanitizer(originalValue, false);
+
+              if (originalValue !== sanitizedValue) {
+                const cursorPosition = target.selectionStart;
+                target.value = sanitizedValue;
+                if (cursorPosition !== null) {
+                  target.setSelectionRange(cursorPosition, cursorPosition);
+                }
+              }
+            } catch (error) {
+              console.error(`Error sanitizing ${label}:`, error);
+            }
+          }
+        });
+
+        element.addEventListener('paste', function(e) {
+          setTimeout(() => {
+            const target = e.target;
+            const originalValue = target.value;
+
+            const hasDangerousChars = /[<>'"&\\]/.test(originalValue);
+
+            if (hasDangerousChars) {
+              const sanitizedValue = sanitizer(originalValue, false);
+
+              if (originalValue !== sanitizedValue) {
+                target.value = sanitizedValue;
+              }
+            }
+          }, 0);
+        });
+
+        element.addEventListener('blur', function(e) {
+          const target = e.target;
+          if (target.value.length > 0) {
+            const sanitizedValue = sanitizer(target.value, true);
+            if (target.value !== sanitizedValue) {
+              target.value = sanitizedValue;
+            }
+          }
+        });
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
-    // Aktifkan tombol upload file
     document.getElementById('buktiTransferUploadBtn').addEventListener('click', function() {
       document.getElementById('buktiTransfer').click();
     });
+
+    setupInputSanitization();
+
     const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL)
       ? import.meta.env.PUBLIC_API_URL
       : 'http://localhost:4000';
@@ -318,7 +436,6 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
       msg.className = 'text-red-600 mt-4 text-center';
       return;
     }
-    // Preview dan validasi file bukti transfer (max 2MB)
     const buktiInput = document.getElementById('buktiTransfer');
     const buktiPreview = document.getElementById('buktiTransferPreview');
     const btnKirim = document.getElementById('btnKirimPelunasan');
@@ -483,6 +600,22 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
 
       const form = e.target;
       const formData = new FormData(form);
+
+      // Sanitize form data before submission
+      const namaPengirimValue = formData.get('namaPengirim');
+      const noRekPengirimValue = formData.get('noRekPengirim');
+      const bankPengirimValue = formData.get('bankPengirim');
+
+      if (namaPengirimValue) {
+        formData.set('namaPengirim', InputSanitizer.sanitizeName(namaPengirimValue, true));
+      }
+      if (noRekPengirimValue) {
+        formData.set('noRekPengirim', InputSanitizer.sanitizeAccountNumber(noRekPengirimValue));
+      }
+      if (bankPengirimValue) {
+        formData.set('bankPengirim', InputSanitizer.sanitizeBankName(bankPengirimValue, true));
+      }
+
       try {
         const res = await fetch(`${API_URL}/api/mitra/pelunasan`, {
           method: 'POST',

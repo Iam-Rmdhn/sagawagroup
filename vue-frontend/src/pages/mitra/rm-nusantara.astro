@@ -467,7 +467,6 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
   import 'swiper/css/pagination';
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing Swiper...');
     
     // Initialize Swiper
     const swiper = new Swiper('.mySwiper', {
@@ -545,7 +544,6 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
       // Events
       on: {
         init: function () {
-          console.log('Swiper initialized successfully');
           // Force apply custom pagination styles
           setTimeout(() => {
             const bullets = document.querySelectorAll('.swiper-pagination-bullet');
@@ -583,7 +581,6 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
           }, 100);
         },
         slideChange: function (swiper) {
-          console.log('Slide changed to:', swiper.activeIndex);
           // Re-apply styles on slide change
           setTimeout(() => {
             const bullets = document.querySelectorAll('.swiper-pagination-bullet');
@@ -623,6 +620,5 @@ import masgawImage from '../../assets/img/mall/masgaw-resto.png';
       },
     });
     
-    console.log('Swiper instance created:', swiper);
   });
 </script>

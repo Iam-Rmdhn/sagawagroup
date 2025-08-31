@@ -182,7 +182,6 @@ const { currentPage = "dashboard" } = Astro.props;
     // Handle backdrop clicks on mobile
     if (backdrop && sidebar) {
       backdrop.addEventListener('click', function() {
-        console.log('Backdrop clicked, closing sidebar'); // Debug log
         sidebar.classList.add('-translate-x-full');
         backdrop.classList.add('hidden');
         localStorage.setItem('sidebarVisible', 'false');
@@ -201,20 +200,15 @@ const { currentPage = "dashboard" } = Astro.props;
           if (mutation.attributeName === 'class') {
             const sidebarVisible = !sidebar.classList.contains('-translate-x-full');
             
-            console.log('Sidebar visibility changed:', sidebarVisible); // Debug log
-            
             // Show/hide backdrop only on mobile
             if (window.innerWidth < 768) {
               if (sidebarVisible) {
                 backdrop.classList.remove('hidden');
-                console.log('Backdrop shown (mobile)'); // Debug log
               } else {
                 backdrop.classList.add('hidden');
-                console.log('Backdrop hidden (mobile)'); // Debug log
               }
             } else {
               backdrop.classList.add('hidden');
-              console.log('Backdrop hidden (desktop)'); // Debug log
             }
           }
         });

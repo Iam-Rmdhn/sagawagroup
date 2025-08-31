@@ -91,15 +91,29 @@ import contohMitra from '../assets/img/contoh-mitra.png';
       }
     }
 
-    /* Enhanced mobile text sizing */
-    @media (max-width: 480px) {
-      .form-container {
-        padding: 0.75rem !important;
-      }
-      
-      input, select, textarea {
-        font-size: 16px !important; /* Prevent zoom on iOS */
-      }
+    /* Input sanitization indicators - hidden for security */
+    .input-sanitized {
+      /* No visual feedback to hide sanitization from users */
+    }
+
+    .input-error {
+      /* No visual feedback to hide sanitization from users */
+    }
+
+    .sanitization-notice {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .sanitization-notice.success {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border-color: #10b981;
+      color: #065f46;
     }
   </style>
 
@@ -194,17 +208,15 @@ import contohMitra from '../assets/img/contoh-mitra.png';
         </div>
       </div>
 
-      <!-- Form Container -->
-      <div class="form-container rounded-xl shadow-2xl p-3 sm:p-6 transition-all duration-300">
-        <!-- Back Button -->
-        <div class="mb-4 sm:mb-6">
-          <a href="/mitra" class="inline-flex items-center text-amber-600 hover:text-amber-700 transition-colors duration-200 text-sm sm:text-base">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- Back Button -->
+       <div class="mb-4 sm:mb-6">
+         <a href="/mitra" class="inline-flex items-center text-amber-600 hover:text-amber-700 transition-colors duration-200 text-sm sm:text-base">
+           <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            <span class="truncate">Kembali ke Produk Kemitraan</span>
-          </a>
-        </div>
+           </svg>
+         <span class="truncate">Kembali ke Produk Kemitraan</span>
+        </a>
+      </div>
 
         <!-- Step 1: Form Data -->
         <div id="form-step-1" class="space-y-6 sm:space-y-8">
@@ -364,7 +376,7 @@ import contohMitra from '../assets/img/contoh-mitra.png';
               
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <input type="tel" id="noHp" placeholder="No HP*" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
-                <input type="email" id="email" placeholder="Email*" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
+                <input type="text" id="email" placeholder="Email*" class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
               </div>
             </div>
             
@@ -565,6 +577,624 @@ import contohMitra from '../assets/img/contoh-mitra.png';
 </Layout>
 
 <script>
+// Input Sanitization System
+class InputSanitizer {
+  /**
+   * Sanitize text input - remove dangerous characters and normalize
+   */
+  static sanitizeText(input: string): string {
+    if (!input || typeof input !== 'string') return '';
+
+    return input
+      // Remove null bytes and control characters
+      .replace(/[\x00-\x1F\x7F]/g, '')
+      // Remove potential script tags and HTML
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<[^>]*>/g, '')
+      // Remove SQL injection patterns
+      .replace(/('|(\\x27)|(\\x2D\\x2D)|(\\#)|(\\x23)|(\;)|(\\x3B)|(\%3B)|(\%23)|(\%27)|(\%22)|(\%3C)|(\%3E)|(\%28)|(\%29)|(\%7B)|(\%7D)|(\%5B)|(\%5D)|(\%3A)|(\%40)|(\%2C)|(\%3F)|(\%26)|(\%3D)|(\%2B)|(\%24)|(\%7C)|(\%2E)|(\%2F)|(\%5C))/gi, '')
+      // Remove multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim whitespace
+      .trim()
+      // Limit length to prevent buffer overflow
+      .substring(0, 500);
+  }
+
+  /**
+   * Sanitize email input - less aggressive for real-time input
+   */
+  static sanitizeEmail(input: string, strict: boolean = false): string {
+    if (!input || typeof input !== 'string') return '';
+
+    let sanitized = input
+      .toLowerCase()
+      .trim()
+      // Remove dangerous characters
+      .replace(/[<>'"&\\]/g, '');
+
+    // For real-time input, be very permissive
+    if (!strict) {
+      // Allow almost any character during typing, only remove the most dangerous ones
+      sanitized = sanitized.replace(/[<>'"&\\]/g, '');
+      // Don't restrict characters during typing - let users type freely
+    } else {
+      // For strict validation, be more restrictive
+      sanitized = sanitized.replace(/[^a-zA-Z0-9@._\-]/g, '');
+
+      // Validate complete email format only in strict mode
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(sanitized)) {
+        return '';
+      }
+    }
+
+    return sanitized;
+  }
+
+  /**
+   * Validate email format (separate from sanitization)
+   */
+  static validateEmailFormat(email: string): boolean {
+    if (!email || typeof email !== 'string') return false;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email.trim());
+  }
+
+  /**
+   * Sanitize phone number input
+   */
+  static sanitizePhone(input: string): string {
+    if (!input || typeof input !== 'string') return '';
+
+    return input
+      // Remove all non-numeric characters except + and spaces
+      .replace(/[^0-9+\s-()]/g, '')
+      // Remove multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim and limit length
+      .trim()
+      .substring(0, 20);
+  }
+
+  /**
+   * Sanitize account number input
+   */
+  static sanitizeAccountNumber(input: string): string {
+    if (!input || typeof input !== 'string') return '';
+
+    return input
+      // Remove all non-numeric characters
+      .replace(/[^0-9]/g, '')
+      // Limit length for account numbers
+      .substring(0, 30);
+  }
+
+  /**
+   * Sanitize bank name input
+   */
+  static sanitizeBankName(input: string, strict: boolean = false): string {
+    if (!input || typeof input !== 'string') return '';
+
+    if (!strict) {
+      // During typing, don't sanitize at all - let users type freely
+      return input;
+    }
+
+    // For strict validation, apply full sanitization
+    return input
+      // Remove dangerous characters
+      .replace(/[<>'"&\\]/g, '')
+      // Allow only letters, spaces, dots, and hyphens
+      .replace(/[^a-zA-Z\s.-]/g, '')
+      // Remove multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim and limit length
+      .trim()
+      .substring(0, 100);
+  }
+
+  /**
+   * Sanitize address input
+   */
+  static sanitizeAddress(input: string, strict: boolean = false): string {
+    if (!input || typeof input !== 'string') return '';
+
+    if (!strict) {
+      // During typing, don't sanitize at all - let users type freely
+      return input;
+    }
+
+    // For strict validation, apply full sanitization
+    return input
+      // Remove dangerous characters
+      .replace(/[<>'"&\\]/g, '')
+      // Allow common address characters
+      .replace(/[^\w\s.,/-]/g, '')
+      // Remove multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim and limit length
+      .trim()
+      .substring(0, 300);
+  }
+
+  /**
+   * Sanitize name input
+   */
+  static sanitizeName(input: string, strict: boolean = false): string {
+    if (!input || typeof input !== 'string') return '';
+
+    if (!strict) {
+      // During typing, don't sanitize at all - let users type freely
+      return input;
+    }
+
+    // For strict validation, apply full sanitization
+    return input
+      // Remove dangerous characters
+      .replace(/[<>'"&\\]/g, '')
+      // Allow only letters, spaces, dots, apostrophes, and hyphens
+      .replace(/[^a-zA-Z\s.'’-]/g, '')
+      // Remove multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim and limit length
+      .trim()
+      .substring(0, 100);
+  }
+
+  /**
+   * Sanitize select/option values
+   */
+  static sanitizeSelectValue(input: string, allowedValues: string[]): string {
+    if (!input || typeof input !== 'string') return '';
+
+    const sanitized = input.trim();
+    return allowedValues.includes(sanitized) ? sanitized : '';
+  }
+
+  /**
+   * Sanitize radio button values
+   */
+  static sanitizeRadioValue(input: string, allowedValues: string[]): string {
+    if (!input || typeof input !== 'string') return '';
+
+    const sanitized = input.trim();
+    return allowedValues.includes(sanitized) ? sanitized : '';
+  }
+
+  /**
+   * Validate file upload
+   */
+  static validateFile(file: File, allowedTypes: string[], maxSize: number): { valid: boolean; error?: string } {
+    if (!file) {
+      return { valid: false, error: 'File tidak ditemukan' };
+    }
+
+    // Check file type
+    if (!allowedTypes.includes(file.type)) {
+      return { valid: false, error: `Tipe file tidak didukung. Gunakan: ${allowedTypes.join(', ')}` };
+    }
+
+    // Check file size
+    if (file.size > maxSize) {
+      const maxSizeMB = (maxSize / (1024 * 1024)).toFixed(1);
+      return { valid: false, error: `Ukuran file terlalu besar. Maksimal ${maxSizeMB}MB` };
+    }
+
+    // Check for dangerous file names
+    const dangerousPatterns = /(\.\.|\/|\\|script|exe|bat|cmd|com|pif|scr|vbs|js|jar|java|class|php|asp|jsp|pl|cgi|py|rb|sh)$/i;
+    if (dangerousPatterns.test(file.name)) {
+      return { valid: false, error: 'Nama file tidak aman' };
+    }
+
+    return { valid: true };
+  }
+
+  /**
+   * Sanitize all form data
+   */
+  static sanitizeFormData(formData: any): any {
+    const sanitized = { ...formData };
+
+    // Define allowed values for select and radio inputs
+    const allowedPaketUsaha = [
+      'Kagawa Coffee Corner',
+      'Kagawa Ricebowl',
+      'Kagawa Coffee & Ricebowl Corner',
+      'RM Nusantara',
+      'Independent Brand'
+    ];
+
+    const allowedSistemKemitraan = ['Autopilot', 'Semi Autopilot', 'Self Managed'];
+    const allowedNilaiPaket = ['DP', 'Full Payment'];
+    const allowedRmNusantaraSubMenu = ['WarNas', 'Mas Gaw', 'Masakan Mas Gawa'];
+
+    // Sanitize each field
+    sanitized.namaMitra = this.sanitizeName(formData.namaMitra || '', true); // Strict validation for final data
+    sanitized.alamatMitra = this.sanitizeAddress(formData.alamatMitra || '', true); // Strict validation for final data
+    sanitized.noHp = this.sanitizePhone(formData.noHp || '');
+    sanitized.email = this.sanitizeEmail(formData.email || '', true); // Strict validation for final data
+    sanitized.sales = this.sanitizeText(formData.sales || '');
+    sanitized.namaPengirim = this.sanitizeName(formData.namaPengirim || '', true); // Strict validation for final data
+    sanitized.noRekPengirim = this.sanitizeAccountNumber(formData.noRekPengirim || '');
+    sanitized.bankPengirim = this.sanitizeBankName(formData.bankPengirim || '', true); // Strict validation for final data
+
+    // Sanitize select and radio values
+    sanitized.paketUsaha = this.sanitizeSelectValue(formData.paketUsaha || '', allowedPaketUsaha);
+    sanitized.sistemKemitraan = this.sanitizeRadioValue(formData.sistemKemitraan || '', allowedSistemKemitraan);
+    sanitized.nilaiPaket = this.sanitizeRadioValue(formData.nilaiPaket || '', allowedNilaiPaket);
+    sanitized.rmNusantaraSubMenu = this.sanitizeRadioValue(formData.rmNusantaraSubMenu || '', allowedRmNusantaraSubMenu);
+
+    return sanitized;
+  }
+}
+
+// Real-time input sanitization
+function setupInputSanitization() {
+  // Text inputs that need sanitization
+  const textInputs = [
+    { id: 'namaMitra', sanitizer: InputSanitizer.sanitizeName, label: 'Nama Mitra' },
+    { id: 'alamatMitra', sanitizer: InputSanitizer.sanitizeAddress, label: 'Alamat Mitra' },
+    { id: 'noHp', sanitizer: InputSanitizer.sanitizePhone, label: 'No HP' },
+    { id: 'email', sanitizer: (input: string) => InputSanitizer.sanitizeEmail(input, false), label: 'Email' },
+    { id: 'sales', sanitizer: InputSanitizer.sanitizeText, label: 'PIC/Sales' },
+    { id: 'namaPengirim', sanitizer: InputSanitizer.sanitizeName, label: 'Nama Pengirim' },
+    { id: 'noRekPengirim', sanitizer: InputSanitizer.sanitizeAccountNumber, label: 'No Rek Pengirim' },
+    { id: 'bankPengirim', sanitizer: InputSanitizer.sanitizeBankName, label: 'Bank Pengirim' }
+  ];
+
+  // Setup real-time sanitization for text inputs
+  textInputs.forEach(({ id, sanitizer, label }) => {
+    const element = document.getElementById(id) as HTMLInputElement;
+    if (element) {
+      element.addEventListener('input', function(e) {
+        const target = e.target as HTMLInputElement;
+        const originalValue = target.value;
+
+        // Only sanitize if there are potentially dangerous characters
+        const hasDangerousChars = /[<>'"&\\]/.test(originalValue);
+
+        if (hasDangerousChars) {
+          try {
+            const sanitizedValue = sanitizer(originalValue, false); // Non-strict during typing
+
+            // Only update if value actually changed (dangerous characters were removed)
+            if (originalValue !== sanitizedValue) {
+              const cursorPosition = target.selectionStart;
+              target.value = sanitizedValue;
+              // Restore cursor position
+              if (cursorPosition !== null) {
+                target.setSelectionRange(cursorPosition, cursorPosition);
+              }
+              showSanitizationFeedback(target, 'sanitized', ``);
+            }
+          } catch (error) {
+            console.error(``, error);
+            // If sanitization fails, allow the input as-is
+            showSanitizationFeedback(target, 'error', ``);
+          }
+        }
+        // If no dangerous characters, do nothing - let user type freely
+      });
+
+      element.addEventListener('paste', function(e) {
+        // Allow paste, then check for dangerous characters
+        setTimeout(() => {
+          const target = e.target as HTMLInputElement;
+          const originalValue = target.value;
+
+          // Only sanitize if there are potentially dangerous characters
+          const hasDangerousChars = /[<>'"&\\]/.test(originalValue);
+
+          if (hasDangerousChars) {
+            const sanitizedValue = sanitizer(originalValue, false); // Non-strict for paste
+
+            if (originalValue !== sanitizedValue) {
+              target.value = sanitizedValue;
+              showSanitizationFeedback(target, 'sanitized', `${label} telah dibersihkan untuk keamanan`);
+            }
+          }
+        }, 0);
+      });
+
+      element.addEventListener('blur', function(e) {
+        const target = e.target as HTMLInputElement;
+        if (target.value.length > 0) {
+          // Use strict sanitization on blur for final validation
+          const sanitizedValue = sanitizer(target.value, true);
+          if (target.value !== sanitizedValue) {
+            target.value = sanitizedValue;
+          }
+
+          if (target.value === sanitizedValue) {
+            // For email, also check format on blur
+            if (id === 'email') {
+              if (InputSanitizer.validateEmailFormat(target.value)) {
+                showSanitizationFeedback(target, 'valid', `${label} valid`);
+              } else {
+                showSanitizationFeedback(target, 'error', `${label} format tidak valid`);
+              }
+            } else {
+              showSanitizationFeedback(target, 'valid', `${label} valid`);
+            }
+          }
+        }
+      });
+    }
+  });
+
+  // Setup file input validation
+  const documentsInput = document.getElementById('documentsUpload') as HTMLInputElement;
+  const buktiTransferInput = document.getElementById('buktiTransfer') as HTMLInputElement;
+
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  const maxSize = 5 * 1024 * 1024; // 5MB
+
+  if (documentsInput) {
+    documentsInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        const file = this.files[0];
+        const validation = InputSanitizer.validateFile(file, allowedTypes, maxSize);
+
+        if (!validation.valid) {
+          alert(`File dokumen tidak dapat diproses. Pastikan file dalam format yang didukung dan ukuran tidak melebihi batas.`);
+          this.value = '';
+          displayDocumentsPreview(null);
+          checkFormValidation();
+        } else {
+          // No feedback for valid files
+        }
+      }
+    });
+  }
+
+  if (buktiTransferInput) {
+    buktiTransferInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        const file = this.files[0];
+        const validation = InputSanitizer.validateFile(file, allowedTypes, maxSize);
+
+        if (!validation.valid) {
+          alert(`File bukti transfer tidak dapat diproses. Pastikan file dalam format yang didukung dan ukuran tidak melebihi batas.`);
+          this.value = '';
+          displayBuktiTransferPreview(null);
+          checkFormValidation();
+        } else {
+          // No feedback for valid files
+        }
+      }
+    });
+  }
+}
+
+// Function to show sanitization feedback
+function showSanitizationFeedback(element: HTMLElement, type: 'valid' | 'sanitized' | 'error', message: string) {
+  // Remove existing feedback
+  const existingFeedback = element.parentNode?.querySelector('.sanitization-notice');
+  if (existingFeedback) {
+    existingFeedback.remove();
+  }
+
+  // Remove existing classes
+  element.classList.remove('input-sanitized', 'input-error');
+
+  // Add appropriate class for visual feedback only (no text notification)
+  if (type === 'sanitized' || type === 'valid') {
+    element.classList.add('input-sanitized');
+  } else if (type === 'error') {
+    element.classList.add('input-error');
+  }
+
+  // Auto-remove visual feedback after 2 seconds
+  setTimeout(() => {
+    element.classList.remove('input-sanitized', 'input-error');
+  }, 2000);
+}
+
+// Enhanced form validation with sanitization
+function validateStep1WithSanitization() {
+  // Required fields (excluding Sales which is optional)
+  const required = ['sistemKemitraan', 'paketUsaha', 'namaMitra', 'alamatMitra', 'noHp', 'email', 'nilaiPaket', 'namaPengirim', 'noRekPengirim', 'bankPengirim'];
+
+  for (let field of required) {
+    let element: HTMLInputElement | null = null;
+
+    // Handle radio buttons differently
+    if (field === 'sistemKemitraan' || field === 'nilaiPaket') {
+      element = document.querySelector(`input[name="${field}"]:checked`) as HTMLInputElement;
+    } else {
+      element = document.getElementById(field) as HTMLInputElement;
+    }
+
+    if (!element || !element.value.trim()) {
+      alert(`Field ${field} harus diisi`);
+      if (field !== 'sistemKemitraan' && field !== 'nilaiPaket') {
+        element = document.getElementById(field) as HTMLInputElement;
+        element?.focus();
+      }
+      return false;
+    }
+  }
+
+  // Additional validation for specific fields
+  const emailElement = document.getElementById('email') as HTMLInputElement;
+  if (emailElement && emailElement.value) {
+    const sanitizedEmail = InputSanitizer.sanitizeEmail(emailElement.value, true);
+    if (!sanitizedEmail || !InputSanitizer.validateEmailFormat(emailElement.value)) {
+      alert('Format email tidak valid');
+      emailElement.focus();
+      return false;
+    }
+  }
+
+  const phoneElement = document.getElementById('noHp') as HTMLInputElement;
+  if (phoneElement && phoneElement.value) {
+    const sanitizedPhone = InputSanitizer.sanitizePhone(phoneElement.value);
+    if (!sanitizedPhone) {
+      alert('Format nomor HP tidak valid');
+      phoneElement.focus();
+      return false;
+    }
+  }
+
+  // Check RM Nusantara sub menu if RM Nusantara is selected
+  const paketUsahaElement = document.getElementById('paketUsaha') as HTMLSelectElement;
+  if (paketUsahaElement?.value === 'RM Nusantara') {
+    const rmSubMenuRadios = document.querySelectorAll('input[name="rmNusantaraSubMenu"]:checked');
+    if (rmSubMenuRadios.length === 0) {
+      alert('Silakan pilih sub menu RM Nusantara');
+      return false;
+    }
+  }
+
+  // Check file uploads with enhanced validation
+  const documentsUpload = document.getElementById('documentsUpload') as HTMLInputElement;
+  const buktiTransfer = document.getElementById('buktiTransfer') as HTMLInputElement;
+
+  if (!documentsUpload?.files?.length) {
+    alert('Silakan upload dokumen KTP, NPWP & foto diri mitra');
+    document.getElementById('documentsUploadArea')?.scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  if (!buktiTransfer?.files?.length) {
+    alert('Silakan upload bukti transfer');
+    document.getElementById('buktiTransferUploadArea')?.scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  // Validate file types and sizes with sanitization
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  const maxSize = 5 * 1024 * 1024; // 5MB
+
+  // Check documents
+  for (let i = 0; i < documentsUpload.files.length; i++) {
+    const file = documentsUpload.files[i];
+    const validation = InputSanitizer.validateFile(file, allowedTypes, maxSize);
+    if (!validation.valid) {
+      alert(`File dokumen: ${validation.error}`);
+      return false;
+    }
+  }
+
+  // Check bukti transfer
+  const buktiFile = buktiTransfer.files[0];
+  const validation = InputSanitizer.validateFile(buktiFile, allowedTypes, maxSize);
+  if (!validation.valid) {
+    alert(`File bukti transfer: ${validation.error}`);
+    return false;
+  }
+  return true;
+}
+
+// Enhanced form data collection with sanitization
+function collectFormDataWithSanitization() {
+  const rawData = collectFormData();
+  const sanitizedData = InputSanitizer.sanitizeFormData(rawData);
+
+  return sanitizedData;
+}
+
+// Enhanced form submission with sanitization
+async function submitFormWithSanitization() {
+  try {
+    const formData = collectFormDataWithSanitization();
+
+    // Update data with confirmation changes (also sanitize these)
+    const confirmNamaElement = document.getElementById('confirm-nama') as HTMLInputElement;
+    const confirmEmailElement = document.getElementById('confirm-email') as HTMLInputElement;
+    const confirmAlamatElement = document.getElementById('confirm-alamat') as HTMLInputElement;
+    const confirmHpElement = document.getElementById('confirm-hp') as HTMLInputElement;
+
+    if (confirmNamaElement) {
+      formData.namaMitra = InputSanitizer.sanitizeName(confirmNamaElement.value, true) || formData.namaMitra;
+    }
+    if (confirmEmailElement) {
+      formData.email = InputSanitizer.sanitizeEmail(confirmEmailElement.value, true) || formData.email;
+    }
+    if (confirmAlamatElement) {
+      formData.alamatMitra = InputSanitizer.sanitizeAddress(confirmAlamatElement.value, true) || formData.alamatMitra;
+    }
+    if (confirmHpElement) {
+      formData.noHp = InputSanitizer.sanitizePhone(confirmHpElement.value) || formData.noHp;
+    }
+
+    // Validate bank name
+    formData.bankPengirim = await validateBank(InputSanitizer.sanitizeBankName(formData.bankPengirim, true));
+
+    // Calculate final amounts
+    const dpAmount = DP_FIXED_AMOUNT; // Fixed 5 million
+    const discountedFullPrice = packagePrice - dayDiscount;
+    const finalAmount = formData.nilaiPaket === 'DP' ? dpAmount - dayDiscount : discountedFullPrice;
+
+    // Prepare form data for submission
+    const submitData = new FormData();
+
+    // Add all form fields except files
+    const formFields = [
+      'sistemKemitraan', 'paketUsaha', 'rmNusantaraSubMenu', 'namaMitra',
+      'alamatMitra', 'noHp', 'email', 'nilaiPaket', 'namaPengirim',
+      'noRekPengirim', 'bankPengirim', 'sales'
+    ];
+
+    formFields.forEach(key => {
+      if (formData[key as keyof typeof formData] && typeof formData[key as keyof typeof formData] === 'string') {
+        submitData.append(key, formData[key as keyof typeof formData] as string);
+      }
+    });
+
+    // Also send sales as jenisUsaha for backward compatibility
+    submitData.append('jenisUsaha', InputSanitizer.sanitizeText(formData.sales || ''));
+
+    // Get original price for backend
+    const priceData = packagePrices[formData.paketUsaha as keyof typeof packagePrices];
+    const originalPrice = priceData ? priceData.original : packagePrice;
+
+    // Add calculated values
+    submitData.append('hargaPaket', packagePrice.toString()); // Current discounted price
+    submitData.append('hargaAsli', originalPrice.toString()); // Original price
+    submitData.append('nominalDP', dpAmount.toString());
+    submitData.append('nominalFull', discountedFullPrice.toString());
+    submitData.append('kekurangan', (packagePrice - dpAmount).toString());
+    submitData.append('diskonHarian', dayDiscount.toString());
+    submitData.append('yangHarusDibayar', Math.max(0, finalAmount).toString());
+
+    // Add files
+    if (formData.documentsFiles && formData.documentsFiles.length > 0) {
+      // Only send the first file (KTP)
+      submitData.append('documents', formData.documentsFiles[0]);
+    }
+    if (formData.buktiTransferFile) {
+      submitData.append('buktiTransfer', formData.buktiTransferFile);
+    }
+    // Submit to backend
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+    const response = await fetch(`${API_URL}/api/mitra/register`, {
+      method: 'POST',
+      body: submitData
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+      const errorData = responseText ? JSON.parse(responseText) : {};
+      const errorMessage = errorData.error || errorData.details || 'Gagal mengirim formulir';
+      throw new Error(errorMessage);
+    }
+
+    // Move to step 3 (success)
+    updateProgressBar(3);
+    document.getElementById('form-step-2')?.classList.add('hidden');
+    document.getElementById('form-step-3')?.classList.remove('hidden');
+
+  } catch (error) {
+    console.error('[SANITIZATION] Error submitting form:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Terjadi kesalahan saat mengirim formulir';
+    alert(`Error: ${errorMessage}`);
+  }
+}
+
 // Package prices with original and discounted prices
 const packagePrices = {
   "Kagawa Coffee Corner": { original: 100000000, discounted: 89000000 },
@@ -700,8 +1330,27 @@ function performValidation() {
   }
 }
 
-// Make performValidation globally accessible for debugging
-(window as any).performValidation = performValidation;
+// Debug function to test email sanitization
+function testEmailSanitization() {
+  const testCases = [
+    'user@gmail.com',
+    'user@',
+    'user',
+    'user@gmail',
+    'user@domain.com',
+    'invalid email',
+    'user+tag@gmail.com',
+    'user.name@domain.co.uk'
+  ];
+
+  testCases.forEach(testCase => {
+    const result = InputSanitizer.sanitizeEmail(testCase, false);
+    const strictResult = InputSanitizer.sanitizeEmail(testCase, true);
+  });
+}
+
+// Make debug function available globally
+(window as any).testEmailSanitization = testEmailSanitization;
 
 // File preview functions
 function displayDocumentsPreview(files: FileList | null) {
@@ -749,7 +1398,7 @@ function displayDocumentsPreview(files: FileList | null) {
   
   const details = document.createElement('div');
   details.innerHTML = `
-    <p class="text-sm font-medium text-gray-800">Foto KTP: ${file.name}</p>
+    <p class="text-sm font-medium text-gray-800">${file.name}</p>
     <p class="text-xs text-gray-500">${formatFileSize(file.size)}</p>
   `;
   
@@ -897,6 +1546,9 @@ document.addEventListener('DOMContentLoaded', function() {
   checkFormBtn?.addEventListener('click', () => {
     performValidation();
   });
+  
+  // Setup input sanitization
+  setupInputSanitization();
   
   // Setup info tooltips
   setupInfoTooltips();
@@ -1097,7 +1749,7 @@ async function validateBank(bankInput: string) {
 // Form navigation
 const nextBtn = document.getElementById('nextBtn');
 nextBtn?.addEventListener('click', function() {
-  if (validateStep1()) {
+  if (validateStep1WithSanitization()) {
     showConfirmation();
     updateProgressBar(2);
   }
@@ -1115,7 +1767,7 @@ backBtn?.addEventListener('click', function() {
 
 const submitBtn = document.getElementById('submitBtn');
 submitBtn?.addEventListener('click', async function() {
-  await submitForm();
+  await submitFormWithSanitization();
   const step2Element = document.getElementById('form-step-2');
   const step3Element = document.getElementById('form-step-3');
   
@@ -1196,7 +1848,7 @@ function validateStep1() {
 }
 
 function showConfirmation() {
-  const formData = collectFormData();
+  const formData = collectFormDataWithSanitization();
   const confirmationHTML = generateConfirmationHTML(formData);
   const confirmationElement = document.getElementById('confirmationData');
   
@@ -1297,7 +1949,7 @@ function generateConfirmationHTML(data: any) {
           </div>
           <div>
             <label class="text-sm font-medium text-gray-600">Email:</label>
-            <input type="email" value="${data.email}" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" id="confirm-email">
+            <input type="text" value="${data.email}" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" id="confirm-email">
           </div>
           <div>
             <label class="text-sm font-medium text-gray-600">Alamat:</label>

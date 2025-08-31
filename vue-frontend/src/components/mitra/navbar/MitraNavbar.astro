@@ -254,11 +254,7 @@
       const sidebar = document.getElementById('logo-sidebar');
       const backdrop = document.getElementById('sidebar-backdrop');
       
-      console.log('Toggle button found:', !!sidebarToggle); // Debug log
-      console.log('Sidebar found:', !!sidebar); // Debug log
-      console.log('Backdrop found:', !!backdrop); // Debug log
-    
-    if (sidebarToggle && sidebar) {
+      if (sidebarToggle && sidebar) {
       // Initialize sidebar state
       let sidebarVisible = localStorage.getItem('sidebarVisible');
       
@@ -267,8 +263,6 @@
         sidebarVisible = window.innerWidth >= 768 ? 'true' : 'false';
         localStorage.setItem('sidebarVisible', sidebarVisible);
       }
-      
-      console.log('Initial sidebar visible state:', sidebarVisible); // Debug log
       
       // Apply initial state
       if (sidebarVisible === 'true') {
@@ -283,15 +277,10 @@
         e.preventDefault();
         e.stopPropagation();
         
-        console.log('Sidebar toggle clicked'); // Debug log
-        
         // Force clear any inline styles that might interfere
         sidebar.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         
         const isCurrentlyHidden = sidebar.classList.contains('-translate-x-full');
-        
-        console.log('Sidebar currently hidden:', isCurrentlyHidden); // Debug log
-        console.log('Current sidebar transform:', getComputedStyle(sidebar).transform); // Debug log
         
         if (isCurrentlyHidden) {
           // Show sidebar
@@ -312,8 +301,6 @@
               detail: { visible: true } 
             }));
           }, 50);
-          
-          console.log('Sidebar shown'); // Debug log
         } else {
           // Hide sidebar
           sidebar.classList.add('-translate-x-full');
@@ -333,14 +320,10 @@
               detail: { visible: false } 
             }));
           }, 50);
-          
-          console.log('Sidebar hidden'); // Debug log
         }
         
         // Debug: Check final state after a brief delay
         setTimeout(() => {
-          console.log('Final sidebar classes:', sidebar.className);
-          console.log('Final sidebar transform:', getComputedStyle(sidebar).transform);
         }, 100);
       });
       
@@ -363,7 +346,6 @@
     
     // Function to update main content margin
     function updateMainContentMargin(sidebarVisible: boolean) {
-      console.log('Updating main content margin:', sidebarVisible); // Debug log
       
       const mainContent = document.querySelector('.dashboard-bg') || 
                          document.querySelector('[class*="sm:ml-"]') ||
@@ -376,14 +358,11 @@
         if (sidebarVisible && window.innerWidth >= 768) {
           // Desktop/tablet with sidebar visible
           mainContent.classList.add('sm:ml-72');
-          console.log('Added sm:ml-72'); // Debug log
         } else {
           // Mobile or sidebar hidden
           mainContent.classList.add('sm:ml-0');
-          console.log('Added sm:ml-0'); // Debug log
         }
       } else {
-        console.log('Main content element not found'); // Debug log
       }
       
       // Also call dashboard-specific update if available

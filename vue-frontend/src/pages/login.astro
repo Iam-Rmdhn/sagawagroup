@@ -214,6 +214,26 @@ import Layout from '../layouts/Layout.astro';
     // API URL configuration
     const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8765';
 
+    // Input Sanitizer Class
+    class InputSanitizer {
+      static sanitizeEmail(input: string, strict: boolean = false): string {
+        if (!input) return '';
+        if (!strict) {
+          return input.replace(/[<>\"'`\\]/g, '');
+        }
+
+        let sanitized = input.trim().toLowerCase();
+        sanitized = sanitized.replace(/[<>\"'`\\]/g, '');
+
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(sanitized)) {
+          sanitized = sanitized.replace(/[^a-zA-Z0-9@._-]/g, '');
+        }
+
+        return sanitized;
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       const loginForm = document.getElementById('login-form');
       const emailInput = document.getElementById('email') as HTMLInputElement;
@@ -228,6 +248,45 @@ import Layout from '../layouts/Layout.astro';
       const togglePasswordBtn = document.getElementById('togglePassword');
       const eyeOpen = document.getElementById('eyeOpen');
       const eyeClosed = document.getElementById('eyeClosed');
+
+      // Setup input sanitization
+      setupInputSanitization();
+
+      function setupInputSanitization() {
+        if (emailInput) {
+          emailInput.addEventListener('input', function(e) {
+            const target = e.target as HTMLInputElement;
+            const originalValue = target.value;
+            const cursorPosition = target.selectionStart;
+
+            // Sanitize input during typing (non-strict mode)
+            const sanitizedValue = InputSanitizer.sanitizeEmail(originalValue, false);
+
+            // Only update if sanitization changed something
+            if (sanitizedValue !== originalValue) {
+              target.value = sanitizedValue;
+
+              // Restore cursor position if possible
+              if (cursorPosition !== null) {
+                const newPosition = Math.min(cursorPosition, sanitizedValue.length);
+                target.setSelectionRange(newPosition, newPosition);
+              }
+            }
+          });
+
+          // Handle paste events
+          emailInput.addEventListener('paste', function(e) {
+            const target = e.target as HTMLInputElement;
+            setTimeout(() => {
+              const originalValue = target.value;
+              const sanitizedValue = InputSanitizer.sanitizeEmail(originalValue, false);
+              if (sanitizedValue !== originalValue) {
+                target.value = sanitizedValue;
+              }
+            }, 0);
+          });
+        }
+      }
 
       // Check if user is already logged in
       if (typeof window !== 'undefined') {
@@ -324,6 +383,9 @@ import Layout from '../layouts/Layout.astro';
             return;
           }
 
+          // Sanitize email for submission (strict mode)
+          const sanitizedEmail = InputSanitizer.sanitizeEmail(email, true);
+
           setLoading(true);
           hideMessages();
 
@@ -334,7 +396,7 @@ import Layout from '../layouts/Layout.astro';
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                email: email,
+                email: sanitizedEmail,
                 password: password
               }),
             });
@@ -342,7 +404,6 @@ import Layout from '../layouts/Layout.astro';
             const result = await response.json();
 
             if (response.ok && result.success) {
-              // Login berhasil
               showSuccess('Login berhasil! Mengalihkan ke dashboard...');
               
               // Simpan data ke localStorage
@@ -352,7 +413,7 @@ import Layout from '../layouts/Layout.astro';
               // Simpan credentials jika remember me dicentang
               const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
               const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
-              saveCredentials(email, password, rememberMe);
+              saveCredentials(sanitizedEmail, password, rememberMe);
               
               // Redirect ke dashboard setelah delay singkat
               setTimeout(() => {
@@ -398,9 +459,7 @@ import Layout from '../layouts/Layout.astro';
             localStorage.removeItem('rememberedEmail');
             localStorage.removeItem('rememberedPassword');
             localStorage.removeItem('rememberMe');
-            console.log('Remember me credentials cleared');
           } else {
-            console.log('Remember me enabled');
           }
         });
       }
