@@ -32,6 +32,20 @@ Bun.serve({
     }
 
     try {
+      // Special handling for mitra_pelunasan DELETE requests
+      if (
+        req.method === "DELETE" &&
+        url.pathname.startsWith("/api/admin/mitra_pelunasan/") &&
+        url.pathname !== "/api/admin/mitra_pelunasan/approve"
+      ) {
+        const response = await mitraRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
       // Route handling
       if (
         url.pathname.startsWith("/api/auth") ||

@@ -16,6 +16,42 @@ export const mitraRoute = (req: Request): Promise<Response> => {
     return approvePelunasanController(req);
   }
 
+  // DELETE /api/admin/mitra_pelunasan/:id
+  if (
+    req.method === "DELETE" &&
+    url.pathname.startsWith("/api/admin/mitra_pelunasan/") &&
+    url.pathname !== "/api/admin/mitra_pelunasan/approve"
+  ) {
+    return (async () => {
+      const id = url.pathname.split("/api/admin/mitra_pelunasan/")[1];
+      if (!id) {
+        return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { deletePelunasanById } = await import(
+          "../services/mitra-pelunasan.services"
+        );
+        const result = await deletePelunasanById(id);
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        console.error("Error deleting pelunasan:", err);
+        return new Response(
+          JSON.stringify({
+            error: "Gagal menghapus data pelunasan",
+            success: false,
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
   // GET /api/mitra/pelunasan-exists?email=xxx
   if (req.method === "GET" && url.pathname === "/api/mitra/pelunasan-exists") {
     return (async () => {
