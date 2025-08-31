@@ -13,7 +13,7 @@ DOMAIN="sagawagroup.id"
 WWW_DOMAIN="www.sagawagroup.id"
 PROJECT_DIR="/root/sagawagroup"
 DEPLOY_DIR="/var/www/sagawagroup"
-API_PORT="8765"
+API_PORT="5000"
 FRONTEND_PORT="4321"
 EMAIL="admin@sagawagroup.id"  # For SSL certificate
 

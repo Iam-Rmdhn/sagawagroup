@@ -342,7 +342,7 @@ export async function approveMitraService(
       try {
         if (
           mitra.fotoKTP &&
-          mitra.fotoKTP.startsWith("http://localhost:4000/uploads/")
+          mitra.fotoKTP.startsWith("http://localhost:5000/uploads/")
         ) {
           const fileName = mitra.fotoKTP.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
@@ -359,7 +359,7 @@ export async function approveMitraService(
 
         if (
           mitra.buktiTransfer &&
-          mitra.buktiTransfer.startsWith("http://localhost:4000/uploads/")
+          mitra.buktiTransfer.startsWith("http://localhost:5000/uploads/")
         ) {
           const fileName = mitra.buktiTransfer.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
