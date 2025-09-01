@@ -22,6 +22,13 @@ on:
         required: false
         default: false
         type: boolean
+  
+  # Also trigger on push to main for immediate deployment  
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
 
 env:
   DEPLOY_TIMEOUT: 600  # 10 minutes timeout
@@ -30,7 +37,7 @@ jobs:
   pre-deploy-checks:
     name: Pre-deployment Checks
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
     outputs:
       deployment-id: ${{ steps.generate-id.outputs.deployment-id }}
       
@@ -78,8 +85,9 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create deployment notification
-      uses: rjstone/discord-webhook-notify@v1
       if: always()
+      continue-on-error: true
+      uses: rjstone/discord-webhook-notify@v1
       with:
         severity: info
         details: |

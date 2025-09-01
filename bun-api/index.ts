@@ -32,6 +32,24 @@ Bun.serve({
     }
 
     try {
+      // Health check endpoint
+      if (url.pathname === "/api/health") {
+        return new Response(
+          JSON.stringify({ 
+            status: "OK", 
+            timestamp: new Date().toISOString(),
+            service: "Sagawa Group API"
+          }), 
+          {
+            status: 200,
+            headers: {
+              ...corsHeaders,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
       // Special handling for mitra_pelunasan DELETE requests
       if (
         req.method === "DELETE" &&
