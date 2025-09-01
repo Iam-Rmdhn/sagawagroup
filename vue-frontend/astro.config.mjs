@@ -1,19 +1,16 @@
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  site: 'https://www.sagawagroup.id',
-  base: '/',
-  trailingSlash: 'never',
+  site: "https://www.sagawagroup.id",
+  base: "/",
+  trailingSlash: "never",
   build: {
-    format: 'directory'
+    format: "directory",
   },
   server: {
     port: 4321,
-    host: true
+    host: true,
   },
-  integrations: [
-    tailwind()
-  ]
+  integrations: [tailwind()],
 });
-
