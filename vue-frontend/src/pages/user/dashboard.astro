@@ -9,7 +9,7 @@ let omsetHariIni = [];
 let omsetBulanIni = 0;
 let belanjaHariIni = [];
 try {
-   const res = await fetch("http://localhost:6000/api/sheets/omset");
+   const res = await fetch("http://localhost:5000/api/sheets/omset");
    if (res.ok) {
       const data = await res.json();
       omsetHariIni = data.omsetHariIni || [];
