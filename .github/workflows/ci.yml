@@ -49,16 +49,32 @@ jobs:
     
     - name: Build frontend
       working-directory: ./vue-frontend
-      run: bun run build
-    
-    - name: Check build output
-      working-directory: ./vue-frontend
       run: |
-        if [ ! -d "dist" ]; then
-          echo "Build failed: dist directory not found"
+        # Set environment variables for build
+        export SITE=https://www.sagawagroup.id
+        export NODE_ENV=production
+        
+        # Install dependencies
+        bun install
+        
+        # Build with error handling
+        if ! bun run build; then
+          echo "Build failed, checking logs..."
+          echo "Package.json scripts:"
+          cat package.json | jq '.scripts'
+          echo "Astro config:"
+          cat astro.config.mjs || echo "No astro config found"
           exit 1
         fi
-        echo "Build successful: $(ls -la dist/)"
+        
+        # Verify build output
+        if [ ! -d "dist" ]; then
+          echo "No dist directory found after build"
+          exit 1
+        fi
+        
+        echo "Build successful, files generated:"
+        ls -la dist/
     
     - name: Upload frontend build artifacts
       uses: actions/upload-artifact@v4
