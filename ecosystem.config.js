@@ -1,21 +1,20 @@
 module.exports = {
   apps: [
     {
-      name: 'sagawagroup-api',
-      script: 'index.ts',
-      cwd: '/var/www/sagawagroup/api',
-      interpreter: 'bun',
-      
-      // Environment variables
+      name: "sagawagroup-api-production",
+      script: "bun-api/index.ts",
+      cwd: "/var/www/sagawagroup",
+      interpreter: "bun",
       env: {
-        NODE_ENV: 'development',
-        PORT: 5000
+        NODE_ENV: "production",
+        PORT: 5000,
+        BASE_URL: "https://www.sagawagroup.id"
       },
       env_production: {
-        NODE_ENV: 'production',
-        PORT: 5000
+        NODE_ENV: "production",
+        PORT: 5000,
+        BASE_URL: "https://www.sagawagroup.id"
       },
-      
       // Process management
       instances: 1,
       exec_mode: 'fork',

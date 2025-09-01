@@ -10,6 +10,14 @@
   "peerDependencies": {
     "typescript": "^5.9.2"
   },
+  "scripts": {
+    "dev": "bun --env-file=.env.development run index.ts",
+    "prod": "NODE_ENV=production PORT=5000 bun run index.ts",
+    "start": "bun run index.ts",
+    "update-images": "bun run update-images-url.ts",
+    "update-images:dev": "bun --env-file=.env.development run update-images-url.ts",
+    "update-images:prod": "NODE_ENV=production bun run update-images-url.ts"
+  },
   "dependencies": {
     "@datastax/astra-db-ts": "^2.0.2",
     "@types/jsonwebtoken": "9.0.10",
