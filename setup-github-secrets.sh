@@ -87,7 +87,7 @@ echo "=========================================="
 echo "  Test SSH Connection:"
 echo "=========================================="
 echo "Test the connection with:"
-echo "ssh -i ~/.ssh/github_actions root@YOUR_SERVER_IP"
+echo "ssh -i ~/.ssh/github_actions root@31.97.221.43"
 echo
 
 echo "=========================================="

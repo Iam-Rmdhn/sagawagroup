@@ -17,6 +17,9 @@ API_PORT="5000"
 FRONTEND_PORT="4321"
 EMAIL="admin@sagawagroup.id"  # For SSL certificate
 
+# Ensure bun is in PATH for the entire script
+export PATH="/root/.bun/bin:$PATH"
+
 # CI/CD specific variables
 DEPLOYMENT_MODE="interactive"
 LOG_FILE="/var/log/sagawagroup-deploy.log"
@@ -150,6 +153,22 @@ install_dependencies() {
         npm install -g pm2
     fi
     
+    # Ensure bun is available - install if not found
+    if ! command -v bun &> /dev/null; then
+        print_status "Installing Bun runtime..."
+        curl -fsSL https://bun.sh/install | bash
+        # Add bun to PATH for current session
+        export PATH="/root/.bun/bin:$PATH"
+        # Verify installation
+        if ! command -v bun &> /dev/null; then
+            print_error "Failed to install Bun runtime"
+            exit 1
+        fi
+        print_success "Bun runtime installed successfully"
+    else
+        print_status "Bun runtime already installed"
+    fi
+    
     print_success "System dependencies installed"
 }
 
@@ -157,6 +176,18 @@ install_dependencies() {
 build_frontend() {
     print_status "Building frontend for production..."
     cd "$PROJECT_DIR/vue-frontend"
+    
+    # Ensure bun is in PATH
+    export PATH="/root/.bun/bin:$PATH"
+    
+    # Verify bun is available
+    if ! command -v bun &> /dev/null; then
+        print_error "Bun is not available in PATH. Please install Bun first."
+        rollback_deployment
+        exit 1
+    fi
+    
+    print_status "Using Bun version: $(bun --version)"
     
     # Install dependencies
     print_status "Installing frontend dependencies..."
@@ -194,41 +225,30 @@ build_frontend() {
 }
 
 # Function to deploy API
+# Function to deploy API
 deploy_api() {
-    print_status "Deploying API..."
-    cd "$PROJECT_DIR/bun-api"
+    print_header "Deploying API"
     
-    # Install dependencies
-    print_status "Installing API dependencies..."
-    if ! bun install --frozen-lockfile; then
+    mkdir -p "$DEPLOY_DIR/api"
+    
+    # Copy API files
+    log_message "Copying API files to deployment directory"
+    rsync -av --exclude=node_modules --exclude=.git "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"
+    
+    # Copy environment file if it exists
+    if [ -f "$PROJECT_DIR/bun-api/.env" ]; then
+        cp "$PROJECT_DIR/bun-api/.env" "$DEPLOY_DIR/api/"
+    fi
+    
+    # Install API dependencies
+    log_message "Installing API dependencies with bun"
+    cd "$DEPLOY_DIR/api"
+    if ! bun install --production; then
         print_error "API dependency installation failed"
-        rollback_deployment
-        exit 1
+        return 1
     fi
     
-    # Copy API files (exclude node_modules and logs)
-    print_status "Copying API files..."
-    rsync -av --exclude='node_modules' --exclude='*.log' --exclude='.git' . "$DEPLOY_DIR/api/"
-    
-    # Copy environment file
-    if [ -f "$PROJECT_DIR/.env" ]; then
-        cp "$PROJECT_DIR/.env" "$DEPLOY_DIR/api/.env"
-        print_success "Environment file copied from project root"
-    elif [ -f ".env" ]; then
-        cp ".env" "$DEPLOY_DIR/api/.env"
-        print_success "Environment file copied from API directory"
-    else
-        print_warning "No .env file found. Please create one in $DEPLOY_DIR/api/"
-    fi
-    
-    # Validate API structure
-    if [ ! -f "$DEPLOY_DIR/api/index.ts" ]; then
-        print_error "API main file (index.ts) not found"
-        rollback_deployment
-        exit 1
-    fi
-    
-    print_success "API deployed successfully"
+    print_success "API deployed successfully with dependencies"
 }
 
 rollback() {
