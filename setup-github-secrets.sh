@@ -17,10 +17,15 @@ echo "=================="
 
 echo
 echo "🔧 SERVER CONNECTION:"
-echo "HOST                    = Your server IP address"
-echo "USERNAME               = SSH username (usually 'root')"
-echo "SSH_KEY                = Private SSH key content"
-echo "PORT                   = SSH port (default: 22)"
+echo "HOST                    = 31.97.221.43"
+echo "USERNAME               = root"
+echo "SSH_KEY                = b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACA7iC9j6BCR1KZnQYlDOn5NCrG8HGR9JkKjcW4KVG4gJgAAAJgAKrwnACq8
+JwAAAAtzc2gtZWQyNTUxOQAAACA7iC9j6BCR1KZnQYlDOn5NCrG8HGR9JkKjcW4KVG4gJg
+AAAEAaS8rV8nx/YYLLC1F5XYC56Qr6KC5ar+J4Hg6zIafZQjuIL2PoEJHUpmdBiUM6fk0K
+sbwcZH0mQqNxbgpUbiAmAAAADnJvb3RAc3J2OTY1MjU1AQIDBAUGBw==
+"
+echo "PORT                   = 22"
 
 echo
 echo "🌐 DOMAIN & SSL:"
@@ -35,13 +40,13 @@ echo "SESSION_SECRET        = $(openssl rand -hex 32)"
 
 echo
 echo "📊 DATABASE (Astra DB):"
-echo "ASTRA_DB_APPLICATION_TOKEN = Your Astra DB token"
-echo "ASTRA_DB_API_ENDPOINT     = Your Astra DB endpoint"
+echo "ASTRA_DB_APPLICATION_TOKEN = AstraCS:GcAHBNyZJEGUYJkYkEiJRXbr:c5a57f749b2bd125acb835fa98b1bcf8af879b8dad1876778696b5a2788d4407"
+echo "ASTRA_DB_API_ENDPOINT     = https://a1971aa5-5930-4854-82ef-747bd405cc0a-us-east-2.apps.astra.datastax.com"
 
 echo
 echo "📧 EMAIL CONFIGURATION:"
 echo "EMAIL_USER            = admin@sagawagroup.id"
-echo "EMAIL_PASS            = Your email password/app password"
+echo "EMAIL_PASS            = SagawaGroup222!"
 
 echo
 echo "🔔 NOTIFICATIONS (Optional):"
