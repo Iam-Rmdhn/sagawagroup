@@ -2,51 +2,75 @@ name: CI Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
+
+env:
+  NODE_ENV: production
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test-frontend:
     name: Test Frontend
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+    
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
-
+    
+    - name: Cache frontend dependencies
+      uses: actions/cache@v3
+      with:
+        path: vue-frontend/node_modules
+        key: ${{ runner.os }}-bun-frontend-${{ hashFiles('vue-frontend/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-frontend-
+    
     - name: Install frontend dependencies
       working-directory: ./vue-frontend
-      run: bun install
-
+      run: bun install --frozen-lockfile
+    
+    - name: Lint frontend code
+      working-directory: ./vue-frontend
+      run: |
+        bun run lint || echo "No linting configured"
+    
     - name: Run frontend tests
       working-directory: ./vue-frontend
       run: |
         bun run test:unit || echo "No tests configured"
-        bun run lint || echo "No linting configured"
-
+    
     - name: Build frontend
       working-directory: ./vue-frontend
       run: bun run build
-
+    
+    - name: Check build output
+      working-directory: ./vue-frontend
+      run: |
+        if [ ! -d "dist" ]; then
+          echo "Build failed: dist directory not found"
+          exit 1
+        fi
+        echo "Build successful: $(ls -la dist/)"
+    
     - name: Upload frontend build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: frontend-dist
+        name: frontend-dist-${{ github.sha }}
         path: vue-frontend/dist/
+        retention-days: 7
 
   test-api:
     name: Test API
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -55,43 +79,107 @@ jobs:
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
+    
+    - name: Cache API dependencies
+      uses: actions/cache@v3
+      with:
+        path: bun-api/node_modules
+        key: ${{ runner.os }}-bun-api-${{ hashFiles('bun-api/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-api-
 
     - name: Install API dependencies
       working-directory: ./bun-api
-      run: bun install
+      run: bun install --frozen-lockfile
+    
+    - name: Type check API
+      working-directory: ./bun-api
+      run: |
+        bun run type-check || echo "No type checking configured"
 
     - name: Run API tests
       working-directory: ./bun-api
       run: |
         bun test || echo "No tests configured"
-
-    - name: Type check
+    
+    - name: Build API (if build script exists)
       working-directory: ./bun-api
       run: |
-        bun run type-check || echo "No type checking configured"
+        bun run build || echo "No build step required for API"
+    
+    - name: Upload API artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-build-${{ github.sha }}
+        path: bun-api/
+        retention-days: 7
 
-  build-production:
-    name: Build Production
-    needs: [test-frontend, test-api]
+  security-scan:
+    name: Security Scan
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
+    needs: [test-frontend, test-api]
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+    
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
-
-    - name: Run production build script
+    
+    - name: Run security audit for frontend
+      working-directory: ./vue-frontend
       run: |
-        chmod +x ./production-build.sh
-        ./production-build.sh --frontend-only
+        bun install --frozen-lockfile
+        bun audit || echo "Security audit completed with warnings"
+    
+    - name: Run security audit for API
+      working-directory: ./bun-api
+      run: |
+        bun install --frozen-lockfile
+        bun audit || echo "Security audit completed with warnings"
 
-    - name: Upload production artifacts
+  build-production:
+    name: Build Production
+    needs: [test-frontend, test-api, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download frontend artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-dist-${{ github.sha }}
+        path: vue-frontend/dist/
+    
+    - name: Download API artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: api-build-${{ github.sha }}
+        path: bun-api/
+    
+    - name: Create deployment package
+      run: |
+        mkdir -p deployment-package
+        cp -r vue-frontend/dist deployment-package/frontend
+        cp -r bun-api deployment-package/api
+        cp deploy-production.sh deployment-package/
+        cp ecosystem.config.cjs deployment-package/ || echo "ecosystem.config.cjs not found"
+        
+        # Create deployment info
+        echo "Deployment Info:" > deployment-package/deployment-info.txt
+        echo "Branch: ${{ github.ref_name }}" >> deployment-package/deployment-info.txt
+        echo "Commit: ${{ github.sha }}" >> deployment-package/deployment-info.txt
+        echo "Build Time: $(date)" >> deployment-package/deployment-info.txt
+        echo "Triggered by: ${{ github.actor }}" >> deployment-package/deployment-info.txt
+    
+    - name: Upload production deployment package
       uses: actions/upload-artifact@v4
       with:
-        name: production-build
-        path: /tmp/sagawagroup-build/
+        name: production-package-${{ github.sha }}
+        path: deployment-package/
+        retention-days: 30

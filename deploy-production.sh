@@ -17,6 +17,13 @@ API_PORT="5000"
 FRONTEND_PORT="4321"
 EMAIL="admin@sagawagroup.id"  # For SSL certificate
 
+# CI/CD specific variables
+DEPLOYMENT_MODE="interactive"
+LOG_FILE="/var/log/sagawagroup-deploy.log"
+BACKUP_NAME=""
+CI_MODE=false
+SKIP_CONFIRMATION=false
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -25,27 +32,40 @@ BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
-# Function to print colored output
+# Enhanced logging function
+log_message() {
+    local level=$1
+    local message=$2
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] [$level] $message" | tee -a "$LOG_FILE"
+}
+
+# Function to print colored output with logging
 print_header() {
     echo -e "${PURPLE}============================================${NC}"
     echo -e "${PURPLE}  $1${NC}"
     echo -e "${PURPLE}============================================${NC}"
+    log_message "INFO" "$1"
 }
 
 print_status() {
     echo -e "${BLUE}[INFO]${NC} $1"
+    log_message "INFO" "$1"
 }
 
 print_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
+    log_message "SUCCESS" "$1"
 }
 
 print_warning() {
     echo -e "${YELLOW}[WARNING]${NC} $1"
+    log_message "WARNING" "$1"
 }
 
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
+    log_message "ERROR" "$1"
 }
 
 # Function to check if running as root
@@ -59,10 +79,38 @@ check_root() {
 # Function to backup current deployment if exists
 backup_current() {
     if [ -d "$DEPLOY_DIR" ]; then
-        local backup_name="sagawagroup-backup-$(date +%Y%m%d_%H%M%S)"
+        BACKUP_NAME="sagawagroup-backup-$(date +%Y%m%d_%H%M%S)"
         print_status "Backing up current deployment..."
-        mv "$DEPLOY_DIR" "/root/${backup_name}"
-        print_success "Current deployment backed up to /root/${backup_name}"
+        mv "$DEPLOY_DIR" "/root/${BACKUP_NAME}"
+        print_success "Current deployment backed up to /root/${BACKUP_NAME}"
+        
+        # Export backup name for potential rollback
+        export BACKUP_DIR="/root/${BACKUP_NAME}"
+    else
+        print_status "No existing deployment found, skipping backup"
+    fi
+}
+
+# Function to rollback deployment
+rollback_deployment() {
+    if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
+        print_warning "Rolling back deployment..."
+        if [ -d "$DEPLOY_DIR" ]; then
+            rm -rf "$DEPLOY_DIR"
+        fi
+        mv "$BACKUP_DIR" "$DEPLOY_DIR"
+        
+        # Restart services
+        cd "$DEPLOY_DIR"
+        if [ -f "ecosystem.config.cjs" ]; then
+            pm2 restart ecosystem.config.cjs --env production 2>/dev/null || true
+        fi
+        
+        print_success "Rollback completed"
+        return 0
+    else
+        print_error "No backup available for rollback"
+        return 1
     fi
 }
 
@@ -112,23 +160,37 @@ build_frontend() {
     
     # Install dependencies
     print_status "Installing frontend dependencies..."
-    bun install
+    if ! bun install --frozen-lockfile; then
+        print_error "Frontend dependency installation failed"
+        rollback_deployment
+        exit 1
+    fi
     
     # Build for production
     print_status "Building frontend..."
     if ! bun run build; then
-        print_error "Frontend build failed!"
+        print_error "Frontend build failed"
+        rollback_deployment
+        exit 1
+    fi
+    
+    # Validate build output
+    if [ ! -d "dist" ]; then
+        print_error "Frontend build failed - no dist directory found"
+        rollback_deployment
+        exit 1
+    fi
+    
+    # Check if dist directory has content
+    if [ -z "$(ls -A dist)" ]; then
+        print_error "Frontend build failed - dist directory is empty"
+        rollback_deployment
         exit 1
     fi
     
     # Copy built files to deployment directory
-    if [ -d "dist" ]; then
-        cp -r dist/* "$DEPLOY_DIR/frontend/"
-        print_success "Frontend built and deployed"
-    else
-        print_error "Frontend build failed - no dist directory found"
-        exit 1
-    fi
+    cp -r dist/* "$DEPLOY_DIR/frontend/"
+    print_success "Frontend built and deployed successfully"
 }
 
 # Function to deploy API
@@ -138,24 +200,35 @@ deploy_api() {
     
     # Install dependencies
     print_status "Installing API dependencies..."
-    if ! bun install; then
-        print_error "API dependency installation failed!"
+    if ! bun install --frozen-lockfile; then
+        print_error "API dependency installation failed"
+        rollback_deployment
         exit 1
     fi
     
-    # Copy API files
-    cp -r . "$DEPLOY_DIR/api/"
+    # Copy API files (exclude node_modules and logs)
+    print_status "Copying API files..."
+    rsync -av --exclude='node_modules' --exclude='*.log' --exclude='.git' . "$DEPLOY_DIR/api/"
     
     # Copy environment file
     if [ -f "$PROJECT_DIR/.env" ]; then
         cp "$PROJECT_DIR/.env" "$DEPLOY_DIR/api/.env"
+        print_success "Environment file copied from project root"
     elif [ -f ".env" ]; then
         cp ".env" "$DEPLOY_DIR/api/.env"
+        print_success "Environment file copied from API directory"
     else
         print_warning "No .env file found. Please create one in $DEPLOY_DIR/api/"
     fi
     
-    print_success "API deployed"
+    # Validate API structure
+    if [ ! -f "$DEPLOY_DIR/api/index.ts" ]; then
+        print_error "API main file (index.ts) not found"
+        rollback_deployment
+        exit 1
+    fi
+    
+    print_success "API deployed successfully"
 }
 
 rollback() {
@@ -587,6 +660,11 @@ show_usage() {
     echo "Options:"
     echo "  -h, --help              Show this help message"
     echo "  --skip-ssl              Skip SSL certificate setup"
+    echo "  --non-interactive       Run without user prompts (for CI/CD)"
+    echo "  --ci-mode               Enable CI/CD mode"
+    echo "  --frontend-only         Deploy only frontend"
+    echo "  --api-only              Deploy only API"
+    echo "  --log-file FILE         Custom log file path"
     echo "  --domain DOMAIN         Set custom domain (default: ${DOMAIN})"
     echo "  --email EMAIL           Set email for SSL certificate (default: ${EMAIL})"
     echo "  --api-port PORT         Set API port (default: ${API_PORT})"
@@ -594,6 +672,8 @@ show_usage() {
     echo "Examples:"
     echo "  $0                      # Full deployment with SSL"
     echo "  $0 --skip-ssl           # Deploy without SSL setup"
+    echo "  $0 --non-interactive    # CI/CD deployment"
+    echo "  $0 --frontend-only      # Deploy only frontend"
     echo "  $0 --domain example.com # Deploy to custom domain"
 }
 
@@ -612,6 +692,16 @@ while [[ $# -gt 0 ]]; do
             SKIP_SSL=true
             shift
             ;;
+        --non-interactive)
+            SKIP_CONFIRMATION=true
+            shift
+            ;;
+        --ci-mode)
+            CI_MODE=true
+            SKIP_CONFIRMATION=true
+            DEPLOYMENT_MODE="ci"
+            shift
+            ;;
         --frontend-only)
             DEPLOY_FRONTEND=true
             shift
@@ -619,6 +709,10 @@ while [[ $# -gt 0 ]]; do
         --api-only)
             DEPLOY_API=true
             shift
+            ;;
+        --log-file)
+            LOG_FILE="$2"
+            shift 2
             ;;
         --domain)
             DOMAIN="$2"
@@ -643,37 +737,70 @@ done
 
 # Main function
 main() {
+    # Initialize logging
+    mkdir -p "$(dirname "$LOG_FILE")"
+    touch "$LOG_FILE"
+    
     print_header "SAGAWA GROUP PRODUCTION DEPLOYMENT"
+    print_status "Deployment Mode: ${DEPLOYMENT_MODE}"
     print_status "Domain: ${WWW_DOMAIN}"
+    print_status "Log File: ${LOG_FILE}"
     print_status "Starting deployment process..."
     
     # Pre-deployment checks
     check_root
+    
+    # Skip confirmation for CI/CD mode
+    if [ "$SKIP_CONFIRMATION" != true ]; then
+        read -p "This will deploy Sagawa Group to production. Continue? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_status "Deployment cancelled"
+            exit 0
+        fi
+    else
+        print_status "Running in non-interactive mode"
+    fi
     
     # Execute deployment steps
     backup_current
     create_directories
     install_dependencies
     
+    # Deploy based on options
     if [ "$DEPLOY_FRONTEND" = true ]; then
+        print_status "Deploying frontend only..."
         build_frontend
     elif [ "$DEPLOY_API" = true ]; then
+        print_status "Deploying API only..."
         deploy_api
     else
+        print_status "Deploying full stack (frontend + API)..."
         build_frontend
         deploy_api
     fi
     
+    # Continue with remaining deployment steps
     create_pm2_ecosystem
     set_permissions
     create_nginx_config
     enable_nginx_site
-    setup_ssl
+    
+    # Skip SSL in CI mode unless specifically requested
+    if [ "$CI_MODE" = true ] && [ "$SKIP_SSL" != false ]; then
+        print_status "Skipping SSL setup in CI mode"
+    else
+        setup_ssl
+    fi
+    
     create_health_check
     start_services
     
     # Show final status
     show_status
+    
+    print_success "Deployment completed successfully!"
+    log_message "SUCCESS" "Deployment completed at $(date)"
 }
 
 # Skip SSL setup if requested
