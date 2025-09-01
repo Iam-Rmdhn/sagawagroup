@@ -4,8 +4,6 @@ const urlsToCache = [
   "/",
   "/index.html",
   "/favicon.svg",
-  "/global.css",
-  // Add other critical assets here
 ];
 
 self.addEventListener("install", (event) => {
