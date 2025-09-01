@@ -5,7 +5,10 @@ import { agreementRoute } from "./src/routes/agreement.route";
 import "./src/lib/db"; // Initialize database connection
 import dotenv from "dotenv";
 
-dotenv.config();
+// Only use dotenv.config() if not using --env-file flag
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
+  dotenv.config();
+}
 
 const PORT = process.env.PORT || 5000;
 
