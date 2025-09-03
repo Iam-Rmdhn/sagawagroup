@@ -236,7 +236,9 @@ deploy_api() {
     rsync -av --exclude=node_modules --exclude=.git "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"
     
     # Copy environment file if it exists
-    if [ -f "$PROJECT_DIR/bun-api/.env" ]; then
+    if [ -f "$PROJECT_DIR/bun-api/.env.production" ]; then
+        cp "$PROJECT_DIR/bun-api/.env.production" "$DEPLOY_DIR/api/.env"
+    elif [ -f "$PROJECT_DIR/bun-api/.env" ]; then
         cp "$PROJECT_DIR/bun-api/.env" "$DEPLOY_DIR/api/"
     fi
     

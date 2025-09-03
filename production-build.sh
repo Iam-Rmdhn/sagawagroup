@@ -135,7 +135,7 @@ create_production_env() {
         
         # Update environment for production
         sed -i 's/NODE_ENV=development/NODE_ENV=production/g' "$BUILD_DIR/api/.env.production"
-        sed -i 's/PORT=5000/PORT=5000/g' "$BUILD_DIR/api/.env.production"
+        sed -i 's/PORT=.*/PORT=5000/g' "$BUILD_DIR/api/.env.production"
         sed -i 's|BASE_URL=http://localhost:5000|BASE_URL=https://www.sagawagroup.id|g' "$BUILD_DIR/api/.env.production"
         
         print_success "Production environment file created"
