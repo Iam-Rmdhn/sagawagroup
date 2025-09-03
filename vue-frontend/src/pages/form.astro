@@ -1170,7 +1170,7 @@ async function submitFormWithSanitization() {
       submitData.append('buktiTransfer', formData.buktiTransferFile);
     }
     // Submit to backend
-    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
     const response = await fetch(`${API_URL}/api/mitra/register`, {
       method: 'POST',
       body: submitData
