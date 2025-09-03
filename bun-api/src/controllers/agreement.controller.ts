@@ -223,7 +223,7 @@ export const acceptAgreement = async (req: Request): Promise<Response> => {
     });
 
     if (result.success) {
-      console.log(`✅ Agreement successfully processed for mitra: ${mitraId}`);
+      console.log(`Agreement successfully processed for mitra: ${mitraId}`);
 
       return new Response(
         JSON.stringify({
@@ -248,7 +248,7 @@ export const acceptAgreement = async (req: Request): Promise<Response> => {
       );
     } else {
       console.log(
-        `❌ Agreement processing failed for mitra: ${mitraId}`,
+        `Agreement processing failed for mitra: ${mitraId}`,
         result.message
       );
 
