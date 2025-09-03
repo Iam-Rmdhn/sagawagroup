@@ -3,68 +3,128 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
+// Import all menu images
+import Kushiyaki from '../assets/img/menu/Kushiyaki.png';
+import Teriyakichickin from '../assets/img/menu/Teriyakichickin.png';
+import Kokonattsuchikin from '../assets/img/menu/Kokonattsuchikin.png';
+import Purukogi from '../assets/img/menu/Purukogi.png';
+import Kokonattsueuggu from '../assets/img/menu/Kokonattsueuggu.png';
+import americano from '../assets/img/menu/americano.png';
+import CappLatte from '../assets/img/menu/CappLatte.png';
+import OsakaCaramel from '../assets/img/menu/OsakaCaramel.png';
+import Mochachino from '../assets/img/menu/Mochachino.png';
+import affogato from '../assets/img/menu/affogato.png';
+import BlackCoffe from '../assets/img/menu/BlackCoffe.png';
+import Arren from '../assets/img/menu/Arren.png';
+import Lemonade from '../assets/img/menu/Lemonade.png';
+import Strawberry from '../assets/img/menu/Strawberry.png';
+import Sakura from '../assets/img/menu/Sakura.png';
+import Matcha from '../assets/img/menu/Matcha.png';
+import almond from '../assets/img/menu/almond.png';
+import bluberry from '../assets/img/menu/bluberry.png';
+import CheeseMilk from '../assets/img/menu/CheeseMilk.png';
+import CheeseNuts from '../assets/img/menu/CheeseNuts.png';
+import Coklat from '../assets/img/menu/Coklat.png';
+import Sprinkle from '../assets/img/menu/Sprinkle.png';
+import SugarSnow from '../assets/img/menu/SugarSnow.png';
+import MatchaCrumble from '../assets/img/menu/MatchaCrumble.png';
+import Tiramisu from '../assets/img/menu/Tiramisu.png';
+import orektempe from '../assets/img/menu/orektempe.png';
+import perkedel from '../assets/img/menu/perkedel.png';
+import ikanterikacang from '../assets/img/menu/ikanterikacang.png';
+import kentangmustofa from '../assets/img/menu/kentangmustofa.png';
+import kentangbalado from '../assets/img/menu/kentangbalado.png';
+import TelurDadar from '../assets/img/menu/TelurDadar.png';
+import TelurCeplok from '../assets/img/menu/TelurCeplok.png';
+import ayamgoreng from '../assets/img/menu/ayamgoreng.png';
+import ikangoreng from '../assets/img/menu/ikangoreng.png';
+import usus from '../assets/img/menu/usus.png';
+import acarkuning from '../assets/img/menu/acarkuning.png';
+import ikanpesmol from '../assets/img/menu/ikanpesmol.png';
+import tumislabu from '../assets/img/menu/tumislabu.png';
+import kikil from '../assets/img/menu/kikil.png';
+import sayursop from '../assets/img/menu/sayursop.png';
+import sayurbayam from '../assets/img/menu/sayurbayam.png';
+import sotoayam from '../assets/img/menu/sotoayam.png';
+import miegoreng from '../assets/img/menu/miegoreng.png';
+import jengkolsemur from '../assets/img/menu/jengkolsemur.png';
+import jengkolbalado from '../assets/img/menu/jengkolbalado.png';
+import sayurlodeh from '../assets/img/menu/sayurlodeh.png';
+import sayurnangka from '../assets/img/menu/sayurnangka.png';
+import kacangpanjang from '../assets/img/menu/kacangpanjang.png';
+import AyamSerundeng from '../assets/img/menu/AyamSerundeng.png';
+import keranghijau from '../assets/img/menu/keranghijau.png';
+import TempeTahu from '../assets/img/menu/TempeTahu.png';
+import gorengan from '../assets/img/menu/gorengan.png';
+import TerongBalado from '../assets/img/menu/TerongBalado.png';
+import udangbalado from '../assets/img/menu/udangbalado.png';
+import cumiasin from '../assets/img/menu/cumiasin.png';
+import ikantongkol from '../assets/img/menu/ikantongkol.png';
+
+// Menu Data
+
 const menus = [
   // 5 Rice Bowl
-{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: "/src/assets/img/menu/Kushiyaki.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: "/src/assets/img/menu/Teriyakichickin.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: "/src/assets/img/menu/Kokonattsuchikin.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: "/src/assets/img/menu/Purukogi.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: "/src/assets/img/menu/Kokonattsueuggu.png", category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
 
   // 21 Coffe Corner dan Rice Bowl & COffe Corner (diberi subcategory)
-{ name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "Rp 17.000", img: "/src/assets/img/menu/americano.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 25.000", img: "/src/assets/img/menu/CappLatte.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "Rp 25.000", img: "/src/assets/img/menu/OsakaCaramel.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "Rp 25.000", img: "/src/assets/img/menu/Mochachino.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "Rp 19.000", img: "/src/assets/img/menu/affogato.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "Rp 17.000", img: "/src/assets/img/menu/BlackCoffe.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "Rp 19.000", img: "/src/assets/img/menu/Arren.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
-{ name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "Rp 17.000", img: "/src/assets/img/menu/Lemonade.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "Rp 19.000", img: "/src/assets/img/menu/Strawberry.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "Rp 25.000", img: "/src/assets/img/menu/Sakura.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "Rp 29.000", img: "/src/assets/img/menu/Matcha.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
-{ name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/almond.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/bluberry.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/CheeseMilk.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/CheeseNuts.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Coklat.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Sprinkle.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/SugarSnow.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/MatchaCrumble.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
-{ name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: "/src/assets/img/menu/Tiramisu.png", category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "Rp 17.000", img: americano, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 25.000", img: CappLatte, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "Rp 25.000", img: OsakaCaramel, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konbanwa Mochachino", desc: "Kombinasi espresso, susu segar, dan sentuhan cokelat, memberikan rasa manis pekat yang menenangkan.", price: "Rp 25.000", img: Mochachino, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Affogato or Argeggato", desc: "Espresso panas yang dituangkan di atas es krim, menghadirkan kombinasi pahit-manis yang nikmat.", price: "Rp 19.000", img: affogato, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Shibuya Black Coffee", desc: "Kopi hitam klasik dengan rasa bold dan aroma kuat, cocok untuk pencinta kopi murni tanpa campuran.", price: "Rp 17.000", img: BlackCoffe, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Konnichiwa Aren Latte", desc: "Perpaduan espresso, susu segar, dan gula aren asli, memberikan rasa manis alami dengan aroma khas Nusantara.", price: "Rp 19.000", img: Arren, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
+{ name: "Fresh Lemonade", desc: "Perpaduan jeruk lemon asli dengan simple syrup, menyajikan rasa segar manis-asam yang menyegarkan.", price: "Rp 17.000", img: Lemonade, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Strawberry Lite", desc: "Minuman ringan dengan puree stroberi segar dan sirup rasa manis, cocok untuk pencinta buah.", price: "Rp 19.000", img: Strawberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Sakura Chevalotte", desc: "Susu segar berpadu bubuk rasa unik ala Jepang, memberikan sensasi lembut dan manis elegan.", price: "Rp 25.000", img: Sakura, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Matcha Polo", desc: "Susu segar premium dengan bubuk matcha pilihan, menghasilkan rasa creamy dengan aroma teh hijau khas.", price: "Rp 29.000", img: Matcha, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["non-coffee", "non-coffe"] },
+{ name: "Donat almond", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: almond, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat blubery", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: bluberry, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Milk", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: CheeseMilk, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Cheese Nuts", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: CheeseNuts, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Coklat", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Coklat, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sprinkle", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Sprinkle, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Sugar Snow", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: SugarSnow, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: MatchaCrumble, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
+{ name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Tiramisu, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 
   // 25 Warung Makan Nusantara
-  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: "/src/assets/img/menu/orektempe.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: "/src/assets/img/menu/perkedel.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: "/src/assets/img/menu/ikanterikacang.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Mustofa", desc: "Irisan kentang tipis goreng kriuk berbumbu pedas manis.", img: "/src/assets/img/menu/kentangmustofa.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: "/src/assets/img/menu/kentangbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: "/src/assets/img/menu/TelurDadar.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Ceplok / Balado / Semur", desc: "Telur ceplok dengan pilihan sambal balado atau kuah semur.", img: "/src/assets/img/menu/TelurCeplok.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: "/src/assets/img/menu/ayamgoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: "/src/assets/img/menu/ikangoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Usus", desc: "Usus ayam dimasak dengan bumbu gurih pedas.", img: "/src/assets/img/menu/usus.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: "/src/assets/img/menu/acarkuning.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: "/src/assets/img/menu/ikanpesmol.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: "/src/assets/img/menu/tumislabu.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: "/src/assets/img/menu/kikil.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: "/src/assets/img/menu/sayursop.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: "/src/assets/img/menu/sayurbayam.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Soto Ayam", desc: "Sup ayam berkuah kuning gurih dengan rempah.", img: "/src/assets/img/menu/sotoayam.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Mie Goreng", desc: "Mie kuning goreng dengan bumbu khas.", img: "/src/assets/img/menu/miegoreng.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Semur", desc: "Jengkol empuk dimasak kuah semur manis gurih.", img: "/src/assets/img/menu/jengkolsemur.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: "/src/assets/img/menu/jengkolbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: "/src/assets/img/menu/sayurlodeh.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: "/src/assets/img/menu/sayurnangka.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kacang Panjang Tumis", desc: "Kacang panjang ditumis dengan bumbu sederhana.", img: "/src/assets/img/menu/kacangpanjang.png", category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ayam Goreng Serundeng", desc: "Ayam goreng dengan taburan serundeng kelapa gurih.", img: "/src/assets/img/menu/AyamSerundeng.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: "/src/assets/img/menu/keranghijau.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: "/src/assets/img/menu/TempeTahu.png", category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: "/src/assets/img/menu/gorengan.png", category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: "/src/assets/img/menu/TerongBalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: "/src/assets/img/menu/udangbalado.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: "/src/assets/img/menu/cumiasin.png", category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: "/src/assets/img/menu/ikantongkol.png", category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: orektempe, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: perkedel, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: ikanterikacang, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Mustofa", desc: "Irisan kentang tipis goreng kriuk berbumbu pedas manis.", img: kentangmustofa, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: kentangbalado, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: TelurDadar, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Telur Ceplok / Balado / Semur", desc: "Telur ceplok dengan pilihan sambal balado atau kuah semur.", img: TelurCeplok, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: ayamgoreng, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: ikangoreng, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Usus", desc: "Usus ayam dimasak dengan bumbu gurih pedas.", img: usus, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: acarkuning, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: ikanpesmol, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: tumislabu, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: kikil, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: sayursop, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: sayurbayam, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Soto Ayam", desc: "Sup ayam berkuah kuning gurih dengan rempah.", img: sotoayam, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Mie Goreng", desc: "Mie kuning goreng dengan bumbu khas.", img: miegoreng, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Jengkol Semur", desc: "Jengkol empuk dimasak kuah semur manis gurih.", img: jengkolsemur, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: jengkolbalado, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: sayurlodeh, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: sayurnangka, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Kacang Panjang Tumis", desc: "Kacang panjang ditumis dengan bumbu sederhana.", img: kacangpanjang, category: "R & M Nusantara", subcategory: "Sayur" },
+  { name: "Ayam Goreng Serundeng", desc: "Ayam goreng dengan taburan serundeng kelapa gurih.", img: AyamSerundeng, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: keranghijau, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "R & M Nusantara", subcategory: "Gorengan" },
+  { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: gorengan, category: "R & M Nusantara", subcategory: "Gorengan" },
+  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: udangbalado, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: cumiasin, category: "R & M Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: ikantongkol, category: "R & M Nusantara", subcategory: "Lauk" },
 ];
 ---
 
@@ -227,7 +287,7 @@ const menus = [
               >
                 <div class="relative bg-gray-100">
                   <img 
-                    src={menu.img} 
+                    src={menu.img.src} 
                     alt={menu.name} 
                     class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center lazy-img"
                     loading="lazy"

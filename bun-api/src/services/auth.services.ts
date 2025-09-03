@@ -359,7 +359,7 @@ export async function approveMitraService(
 
         if (
           mitra.buktiTransfer &&
-          mitra.buktiTransfer.startsWith("http://localhost:5000/uploads/")
+          mitra.buktiTransfer.startsWith("http://localhost:6000/uploads/")
         ) {
           const fileName = mitra.buktiTransfer.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;

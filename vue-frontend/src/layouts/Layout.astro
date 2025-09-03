@@ -105,6 +105,14 @@ import '../styles/global.css';
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+
+    <!-- Versioned CSS for Cache Busting -->
+    <link rel="stylesheet" href="styles.css?v=1.0.1">
+
     
     <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -124,9 +132,9 @@ import '../styles/global.css';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Site Verification (uncomment when ready) -->
-    <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> -->
-    <!-- <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" /> -->
+    <!-- Site Verification -->
+    <meta name="google-site-verification" content="KuVB9QPYMVfH0urZQd62EWYWX3hme3xRA_RuqWqhJEo" />
+    <meta name="msvalidate.01" content="FE3752D24C208FEC6C8BB2D824ABF1C9" />
     
     <!-- Additional Meta Tags -->
     <meta name="application-name" content="Sagawa Group" />
@@ -136,44 +144,12 @@ import '../styles/global.css';
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
-    <!-- Analytics (uncomment when ready) -->
-    <!-- Google Analytics -->
-    <!--
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
-    -->
-    
-    <!-- Facebook Pixel -->
-    <!--
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window,document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', 'YOUR_PIXEL_ID'); 
-        fbq('track', 'PageView');
-    </script>
-    <noscript>
-        <img height="1" width="1" 
-        src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
-    </noscript>
-    -->
 </head>
 
 <body>
     <main>
         <slot />
     </main>
-    
     <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
