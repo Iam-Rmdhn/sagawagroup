@@ -266,17 +266,20 @@
         <div class="mt-12 bg-gray-800 rounded-2xl p-8">
             <h3 class="text-white font-semibold text-lg mb-4">Implementasi Code</h3>
             <div class="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                <pre class="text-gray-300 text-sm"><code>// Setup realtime data fetching
-const fetchSocialMediaData = async () => {
-  const response = await fetch('/api/social-stats');
-  const data = await response.json();
-  
-  // Update counters with animation
-  updateCounters(data.data);
-};
+                <pre class="text-gray-300 text-sm">
+                    <code>// Setup realtime data fetching
+                        const fetchSocialMediaData = async () => {
+                        const response = await fetch('/api/social-stats');
+                        const data = await response.json();
+                        
+                        // Update counters with animation
+                        updateCounters(data.data);
+                        };
 
-// Auto refresh every 5 minutes
-setInterval(fetchSocialMediaData, 300000);</code></pre>
+                        // Auto refresh every 5 minutes
+                        setInterval(fetchSocialMediaData, 300000);
+                    </code>
+                </pre>
             </div>
         </div>
     </div>
