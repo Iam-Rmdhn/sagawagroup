@@ -64,14 +64,21 @@ import ikantongkol from '../assets/img/menu/ikantongkol.png';
 // Menu Data
 
 const menus = [
-  // 5 Rice Bowl
-{ name: "Kushiyaki", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Teriyakichickin", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsuchikin", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Purukogi Gyuniku", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
-{ name: "Kokonattsueuggu", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: ["Rice Bowl", "Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+  // 5 Rice Bowl - Pure Rice Bowl brand only
+{ name: "Kushiyaki Rice Bowl", desc: "Sate ayam khas Jepang dengan saus spesial disajikan dengan nasi hangat.", price: "Rp 18.000", img: Kushiyaki, category: "Rice Bowl", subcategory: "rice-bowl" },
+{ name: "Teriyaki Chicken Rice Bowl", desc: "Ayam panggang dengan saus teriyaki disajikan dengan nasi hangat.", price: "Rp 20.000", img: Teriyakichickin, category: "Rice Bowl", subcategory: "rice-bowl" },
+{ name: "Coconut Chicken Rice Bowl", desc: "Ayam goreng tepung dengan taburan kelapa disajikan dengan nasi hangat.", price: "Rp 19.000", img: Kokonattsuchikin, category: "Rice Bowl", subcategory: "rice-bowl" },
+{ name: "Bulgogi Beef Rice Bowl", desc: "Daging sapi iris dengan saus bulgogi disajikan dengan nasi hangat.", price: "Rp 22.000", img: Purukogi, category: "Rice Bowl", subcategory: "rice-bowl" },
+{ name: "Coconut Egg Rice Bowl", desc: "Nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: "Rice Bowl", subcategory: "rice-bowl" },
 
-  // 21 Coffe Corner dan Rice Bowl & COffe Corner (diberi subcategory)
+  // Rice Bowl & Coffee Corner combo items
+{ name: "Kushiyaki Combo", desc: "Sate ayam khas Jepang dengan saus spesial.", price: "Rp 18.000", img: Kushiyaki, category: ["Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Teriyaki Chicken Combo", desc: "Ayam panggang dengan saus teriyaki.", price: "Rp 20.000", img: Teriyakichickin, category: ["Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Coconut Chicken Combo", desc: "Ayam goreng tepung dengan taburan kelapa.", price: "Rp 19.000", img: Kokonattsuchikin, category: ["Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Bulgogi Beef Combo", desc: "Daging sapi iris dengan saus bulgogi.", price: "Rp 22.000", img: Purukogi, category: ["Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+{ name: "Coconut Egg Combo", desc: "nasi putih hangat dengan telur ceplok renyah bertabur serundeng gurih dan ditemani nugget ayam yang nikmat.", price: "Rp 15.000", img: Kokonattsueuggu, category: ["Rice Bowl & Coffe Corner"], subcategory: ["makanan-berat", "special"] },
+
+  // Coffe Corner dan Rice Bowl & COffe Corner (diberi subcategory)
 { name: "Tokyo Americano", desc: "Kopi hitam klasik dengan rasa bold.", price: "Rp 17.000", img: americano, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
 { name: "Kyoto Capp Latte", desc: "Kopi susu dengan foam lembut.", price: "Rp 25.000", img: CappLatte, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
 { name: "Osaka Caramel Latte", desc: "Kopi susu dengan caramel khas Osaka.", price: "Rp 25.000", img: OsakaCaramel, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["coffee", "coffe"] },
@@ -93,38 +100,27 @@ const menus = [
 { name: "Donat Matcha Crumble", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: MatchaCrumble, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 { name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Tiramisu, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 
-  // 25 Warung Makan Nusantara
-  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: orektempe, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: perkedel, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: ikanterikacang, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Mustofa", desc: "Irisan kentang tipis goreng kriuk berbumbu pedas manis.", img: kentangmustofa, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: kentangbalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: TelurDadar, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Telur Ceplok / Balado / Semur", desc: "Telur ceplok dengan pilihan sambal balado atau kuah semur.", img: TelurCeplok, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: ayamgoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: ikangoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Usus", desc: "Usus ayam dimasak dengan bumbu gurih pedas.", img: usus, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: acarkuning, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: ikanpesmol, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: tumislabu, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: kikil, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: sayursop, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: sayurbayam, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Soto Ayam", desc: "Sup ayam berkuah kuning gurih dengan rempah.", img: sotoayam, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Mie Goreng", desc: "Mie kuning goreng dengan bumbu khas.", img: miegoreng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Semur", desc: "Jengkol empuk dimasak kuah semur manis gurih.", img: jengkolsemur, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: jengkolbalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: sayurlodeh, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: sayurnangka, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Kacang Panjang Tumis", desc: "Kacang panjang ditumis dengan bumbu sederhana.", img: kacangpanjang, category: "R & M Nusantara", subcategory: "Sayur" },
-  { name: "Ayam Goreng Serundeng", desc: "Ayam goreng dengan taburan serundeng kelapa gurih.", img: AyamSerundeng, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: keranghijau, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Gorengan", desc: "Aneka gorengan khas warteg.", img: gorengan, category: "R & M Nusantara", subcategory: "Gorengan" },
-  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: udangbalado, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Cumi Asin Tumis", desc: "Cumi asin ditumis pedas gurih.", img: cumiasin, category: "R & M Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Tongkol Goreng Pedas", desc: "Tongkol goreng dimasak sambal pedas.", img: ikantongkol, category: "R & M Nusantara", subcategory: "Lauk" },
+  // Warung Makan Nusantara
+  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: orektempe, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: perkedel, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: ikanterikacang, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: kentangbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: TelurDadar, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: ayamgoreng, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: ikangoreng, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: acarkuning, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: ikanpesmol, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: tumislabu, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: kikil, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: sayursop, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: sayurbayam, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: jengkolbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: sayurlodeh, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: sayurnangka, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: keranghijau, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "RM Nusantara", subcategory: "Gorengan" },
+  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: udangbalado, category: "RM Nusantara", subcategory: "Lauk" },
 ];
 ---
 
@@ -163,75 +159,339 @@ const menus = [
     </div>
   </section>
 
-  <main class="food_section py-8 sm:py-12 px-2 sm:px-4 bg-white relative mt-[-1px]" x-data="{ filter: 'all', subfilter: 'all' }">
+  <main class="food_section py-8 sm:py-12 px-2 sm:px-4 bg-white relative mt-[-1px]" x-data="{ 
+    brandFilter: '', 
+    categoryFilter: '', 
+    brandDropdownOpen: false, 
+    categoryDropdownOpen: false,
+    clearFilters() {
+      this.brandFilter = '';
+      this.categoryFilter = '';
+      this.brandDropdownOpen = false;
+      this.categoryDropdownOpen = false;
+    },
+    getBrandText() {
+      return this.brandFilter || 'Filter by Brand';
+    },
+    getCategoryText() {
+      return this.categoryFilter || 'Filter by Category';
+    }
+  }">
     <div class="container mx-auto max-w-6xl">
 
-      <!-- Filter Menu -->
+      <!-- Header Section -->
       <div class="text-center mb-8 sm:mb-12 scroll-animate opacity-0 transform translate-y-[30px] px-2">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 hover:text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">
-          Pilih Kategori Menu
+          Menu Pilihan Terbaik
         </h2>
         <p class="text-sm sm:text-base text-gray-600 animate-fade-in-up animation-delay-200 mb-6 sm:mb-8 leading-relaxed">
-          Temukan menu favorit dari berbagai kategori pilihan kami
+          Temukan menu favorit dari berbagai brand dan kategori pilihan kami
         </p>
       </div>
-      
-      <ul class="filters_menu flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 px-2">
-        <li :class="filter === 'all' ? 'active' : ''" @click="filter = 'all'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm">
-          Semua Menu
-        </li>
-        <li :class="filter === 'Rice Bowl' ? 'active' : ''" @click="filter = 'Rice Bowl'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
-          Rice Bowl
-        </li>
-        <li :class="filter === 'Coffe Corner' ? 'active' : ''" @click="filter = 'Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
-          Coffee Corner
-        </li>
-        <li :class="filter === 'Rice Bowl & Coffe Corner' ? 'active' : ''" @click="filter = 'Rice Bowl & Coffe Corner'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
-          <span class="hidden sm:inline">Rice Bowl & Coffee</span>
-          <span class="sm:hidden">RB & Coffee</span>
-        </li>
-        <li :class="filter === 'R & M Nusantara' ? 'active' : ''" @click="filter = 'R & M Nusantara'; subfilter = 'all'" class="cursor-pointer px-4 py-2 rounded-lg bg-gray-50 text-gray-700 font-medium transition-all duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">
-          RM Nusantara
-        </li>
-      </ul>
 
-      <!-- Subfilter for Coffee Corner -->
-      <template x-if="filter === 'Coffe Corner'">
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
-          <ul class="filters_menu flex flex-wrap justify-center gap-2">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Donut</li>
-          </ul>
+      <!-- Filter Section with Horizontal Layout -->
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8 px-2 sm:px-0">
+        <!-- Filter Dropdowns -->
+        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+          <!-- Brand Filter Dropdown -->
+          <div class="relative" x-data>
+            <button 
+              @click="brandDropdownOpen = !brandDropdownOpen"
+              :class="brandFilter ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'"
+              class="filter-button flex items-center justify-between w-full sm:min-w-48 sm:w-auto px-4 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm whitespace-nowrap"
+            >
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                <span x-text="getBrandText()" class="text-sm"></span>
+              </div>
+              <svg 
+                :class="brandDropdownOpen ? 'rotate-180' : ''"
+                class="w-4 h-4 transition-transform duration-200" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            
+            <div 
+              x-show="brandDropdownOpen"
+              x-transition:enter="transition ease-out duration-200"
+              x-transition:enter-start="opacity-0 scale-95"
+              x-transition:enter-end="opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-150"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-95"
+              @click.away="brandDropdownOpen = false"
+              class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            >
+              <div class="py-2">
+                <button 
+                  @click="brandFilter = 'Rice Bowl'; categoryFilter = ''; brandDropdownOpen = false"
+                  :class="brandFilter === 'Rice Bowl' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                  class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                >
+                  Rice Bowl
+                </button>
+                <button 
+                  @click="brandFilter = 'Coffe Corner'; brandDropdownOpen = false"
+                  :class="brandFilter === 'Coffe Corner' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                  class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                >
+                  Coffee Corner
+                </button>
+                <button 
+                  @click="brandFilter = 'Rice Bowl & Coffe Corner'; brandDropdownOpen = false"
+                  :class="brandFilter === 'Rice Bowl & Coffe Corner' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                  class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                >
+                  Rice Bowl & Coffee Corner 
+                </button>
+                <button 
+                  @click="brandFilter = 'RM Nusantara'; brandDropdownOpen = false"
+                  :class="brandFilter === 'RM Nusantara' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                  class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                >
+                  RM Nusantara
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Filter Dropdown -->
+          <div class="relative" x-data>
+            <button 
+              @click="brandFilter === 'Rice Bowl' ? null : (categoryDropdownOpen = !categoryDropdownOpen)"
+              :disabled="brandFilter === 'Rice Bowl'"
+              :class="brandFilter === 'Rice Bowl' ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed' : (categoryFilter ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50')"
+              class="filter-button flex items-center justify-between w-full sm:min-w-48 sm:w-auto px-4 py-3 rounded-lg font-medium transition-all duration-200 shadow-sm whitespace-nowrap"
+            >
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                <span x-text="brandFilter === 'Rice Bowl' ? 'No Categories' : getCategoryText()" class="text-sm"></span>
+              </div>
+              <svg 
+                :class="categoryDropdownOpen ? 'rotate-180' : ''"
+                class="w-4 h-4 ml-2 transition-transform duration-200" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            
+            <div 
+              x-show="categoryDropdownOpen"
+              x-transition:enter="transition ease-out duration-200"
+              x-transition:enter-start="opacity-0 scale-95"
+              x-transition:enter-end="opacity-100 scale-100"
+              x-transition:leave="transition ease-in duration-150"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-95"
+              @click.away="categoryDropdownOpen = false"
+              class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            >
+              <div class="py-2">
+                <!-- No categories for Rice Bowl only -->
+                <template x-if="brandFilter === 'Rice Bowl'">
+                  <div class="px-4 py-3 text-gray-500 text-sm text-center">
+                    Tidak ada kategori untuk Rice Bowl
+                  </div>
+                </template>
+
+                <!-- Categories for Rice Bowl & Coffee Corner -->
+                <template x-if="brandFilter === 'Rice Bowl & Coffe Corner'">
+                  <div>
+                    <button 
+                      @click="categoryFilter = 'makanan-berat'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'makanan-berat' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Makanan Berat
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'non-coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'non-coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Non Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'donat'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'donat' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Donut
+                    </button>
+                  </div>
+                </template>
+                
+                <!-- Categories for Coffee Corner -->
+                <template x-if="brandFilter === 'Coffe Corner'">
+                  <div>
+                    <button 
+                      @click="categoryFilter = 'coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'non-coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'non-coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Non Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'donat'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'donat' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Donut
+                    </button>
+                  </div>
+                </template>
+                
+                <!-- Categories for RM Nusantara -->
+                <template x-if="brandFilter === 'RM Nusantara'">
+                  <div>
+                    <button 
+                      @click="categoryFilter = 'Lauk'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Lauk' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Lauk
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'Sayur'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Sayur' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Sayur & Sop
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'Gorengan'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Gorengan' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Gorengan
+                    </button>
+                  </div>
+                </template>
+
+                <!-- Show all categories when no brand filter is selected -->
+                <template x-if="!brandFilter">
+                  <div>
+                    <button 
+                      @click="categoryFilter = 'makanan-berat'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'makanan-berat' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Makanan Berat
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'non-coffee'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'non-coffee' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Non Coffee
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'donat'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'donat' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Donut
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'Lauk'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Lauk' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Lauk
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'Sayur'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Sayur' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Sayur & Sop
+                    </button>
+                    <button 
+                      @click="categoryFilter = 'Gorengan'; categoryDropdownOpen = false"
+                      :class="categoryFilter === 'Gorengan' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
+                      class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
+                    >
+                      Gorengan
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
         </div>
-      </template>
 
-      <!-- Subfilter for Rice Bowl & Coffee Corner -->
-      <template x-if="filter === 'Rice Bowl & Coffe Corner'">
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
-          <ul class="filters_menu flex flex-wrap justify-center gap-2">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
-            <li :class="subfilter === 'makanan-berat' ? 'sub-active' : ''" @click="subfilter = 'makanan-berat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Makanan Berat</li>
-            <li :class="subfilter === 'coffee' ? 'sub-active' : ''" @click="subfilter = 'coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Coffee</li>
-            <li :class="subfilter === 'non-coffee' ? 'sub-active' : ''" @click="subfilter = 'non-coffee'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Non Coffee</li>
-            <li :class="subfilter === 'donat' ? 'sub-active' : ''" @click="subfilter = 'donat'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Donut</li>
-          </ul>
+        <!-- Clear Filter Button -->
+        <button 
+          @click="clearFilters()"
+          :disabled="!brandFilter && !categoryFilter"
+          :class="(brandFilter || categoryFilter) ? 'opacity-100 scale-100 cursor-pointer' : 'opacity-50 scale-95 cursor-not-allowed'"
+          class="flex items-center gap-2 px-4 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-all duration-200 shadow-sm w-full sm:w-auto justify-center disabled:hover:bg-red-500"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+          <span class="text-sm">Clear Filter</span>
+        </button>
+      </div>
+
+      <!-- Active Filters Display -->
+      <div class="mb-6 px-2 sm:px-0" x-show="brandFilter || categoryFilter">
+        <div class="flex flex-wrap gap-2">
+          <span class="text-sm text-gray-600">Active filters:</span>
+          <template x-if="brandFilter">
+            <span class="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
+              Brand: <span x-text="brandFilter"></span>
+              <button @click="brandFilter = ''" class="ml-1 hover:text-amber-600">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </span>
+          </template>
+          <template x-if="categoryFilter">
+            <span class="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
+              Category: <span x-text="categoryFilter"></span>
+              <button @click="categoryFilter = ''" class="ml-1 hover:text-orange-600">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </span>
+          </template>
         </div>
-      </template>
-
-      <!-- Subfilter for R & M Nusantara -->
-      <template x-if="filter === 'R & M Nusantara'">
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 mx-2 sm:mx-0">
-          <ul class="filters_menu flex flex-wrap justify-center gap-2">
-            <li :class="subfilter === 'all' ? 'sub-active' : ''" @click="subfilter = 'all'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Semua</li>
-            <li :class="subfilter === 'Lauk' ? 'sub-active' : ''" @click="subfilter = 'Lauk'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Lauk</li>
-            <li :class="subfilter === 'Sayur' ? 'sub-active' : ''" @click="subfilter = 'Sayur'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm whitespace-nowrap">Sayur & Sop</li>
-            <li :class="subfilter === 'Gorengan' ? 'sub-active' : ''" @click="subfilter = 'Gorengan'" class="cursor-pointer px-3 py-1.5 rounded bg-white text-gray-600 font-medium transition-colors duration-200 hover:bg-gray-100 text-sm">Gorengan</li>
-          </ul>
-        </div>
-      </template>
-
+      </div>
       <!-- Menu Cards -->
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 px-2 sm:px-0">
         {
@@ -239,44 +499,31 @@ const menus = [
             // Ambil kategori & subkategori utama untuk atribut
             const mainCategory = Array.isArray(menu.category) ? menu.category[0] : menu.category;
             const mainSubcategory = Array.isArray(menu.subcategory) ? menu.subcategory[0] : menu.subcategory;
+            
+            // Create attributes for filtering
+            const categories = Array.isArray(menu.category) ? menu.category.join(',') : menu.category;
+            const subcategories = Array.isArray(menu.subcategory) ? menu.subcategory.join(',') : (menu.subcategory || '');
+            
             return (
               <div
                 x-show={`
-                  filter === 'all'
-                  || (
-                    Array.from($el.dataset.category.split(',')).includes(filter)
-                    && (
-                      subfilter === 'all'
-                      || (
-                        filter === 'Coffe Corner'
-                        && (
-                          (subfilter === 'coffee' && ($el.dataset.subcategory === 'coffee' || $el.dataset.subcategory === 'coffe'))
-                          || (subfilter === 'non-coffee' && ($el.dataset.subcategory === 'non-coffee' || $el.dataset.subcategory === 'non-coffe'))
-                          || (subfilter === 'donat' && $el.dataset.subcategory === 'donat')
-                        )
-                      )
-                      || (
-                        filter === 'Rice Bowl & Coffe Corner'
-                        && (
-                          (subfilter === 'makanan-berat' && ($el.dataset.subcategory === 'makanan-berat' || $el.dataset.subcategory === 'special'))
-                          || (subfilter === 'coffee' && ($el.dataset.subcategory === 'coffee' || $el.dataset.subcategory === 'coffe'))
-                          || (subfilter === 'non-coffee' && ($el.dataset.subcategory === 'non-coffee' || $el.dataset.subcategory === 'non-coffe'))
-                          || (subfilter === 'donat' && $el.dataset.subcategory === 'donat')
-                        )
-                      )
-                      || (
-                        filter === 'R & M Nusantara'
-                        && (
-                          (subfilter === 'Lauk' && $el.dataset.subcategory === 'Lauk')
-                          || (subfilter === 'Sayur' && $el.dataset.subcategory === 'Sayur')
-                          || (subfilter === 'Gorengan' && $el.dataset.subcategory === 'Gorengan')
-                        )
-                      )
+                  (brandFilter === '' && categoryFilter === '') ||
+                  (brandFilter === 'Rice Bowl' && 
+                   \`${categories}\`.includes('Rice Bowl') && 
+                   !\`${categories}\`.includes('Coffe Corner') &&
+                   categoryFilter === '') ||
+                  (brandFilter !== 'Rice Bowl' && (
+                    (brandFilter === '' || \`${categories}\`.includes(brandFilter)) &&
+                    (categoryFilter === '' || 
+                     \`${subcategories}\`.includes(categoryFilter) ||
+                     (categoryFilter === 'coffee' && (\`${subcategories}\`.includes('coffe') || \`${subcategories}\`.includes('coffee'))) ||
+                     (categoryFilter === 'non-coffee' && (\`${subcategories}\`.includes('non-coffe') || \`${subcategories}\`.includes('non-coffee'))) ||
+                     (categoryFilter === 'makanan-berat' && (\`${subcategories}\`.includes('special') || \`${subcategories}\`.includes('makanan-berat')))
                     )
-                  )
+                  ))
                 `}
-                data-category={Array.isArray(menu.category) ? menu.category.join(',') : menu.category}
-                data-subcategory={mainSubcategory}
+                data-category={categories}
+                data-subcategory={subcategories}
                 x-transition:enter="transition ease-out duration-500"
                 x-transition:enter-start="opacity-0 scale-95 rotate-3"
                 x-transition:enter-end="opacity-100 scale-100 rotate-0"
@@ -285,17 +532,36 @@ const menus = [
                 x-transition:leave-end="opacity-0 scale-95 rotate-3"
                 class="menu-card bg-white rounded-2xl shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
               >
-                <div class="relative bg-gray-100">
-                  <img 
-                    src={menu.img.src} 
-                    alt={menu.name} 
-                    class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center lazy-img"
-                    loading="lazy"
-                    onload="this.style.opacity=1"
-                    style="opacity: 0; transition: opacity 0.3s ease-in-out;"
-                  />
-                  <div class="absolute inset-0 bg-gray-200 animate-pulse skeleton-img" style="display: block;">
-                    <div class="w-full h-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-size-200 animate-shimmer"></div>
+                <div class="relative bg-gray-100 overflow-hidden">
+                  <!-- Optimized Image with Progressive Loading -->
+                  <div class="relative">
+                    <!-- Low quality placeholder (base64 blurred image) -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 animate-pulse"></div>
+                    
+                    <!-- Main optimized image -->
+                    <img 
+                      src={menu.img.src} 
+                      alt={menu.name} 
+                      class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center transition-all duration-500 ease-in-out transform hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                      fetchpriority="low"
+                      style="opacity: 0;"
+                      onload="
+                        this.style.opacity = '1';
+                        this.previousElementSibling.style.display = 'none';
+                      "
+                      onerror="
+                        this.style.opacity = '1';
+                        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTAwIDEwMEwxNTAgNzVMMjAwIDEwMEwxNzUgMTI1TDEyNSAxMjVMMTAwIDEwMFoiIGZpbGw9IiNEMUQ1REIiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMDAiIHI9IjUiIGZpbGw9IiNBNEE0QTQiLz48L3N2Zz4=';
+                        this.previousElementSibling.style.display = 'none';
+                      "
+                    />
+                  </div>
+                  
+                  <!-- Loading indicator -->
+                  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300" id="loading-indicator">
+                    <div class="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                   </div>
                 </div>
                 <div class="p-2 sm:p-4 lg:p-6 flex-1 flex flex-col">
@@ -304,6 +570,16 @@ const menus = [
                   <div class="flex justify-between items-center mt-auto pt-1 sm:pt-2 border-t border-gray-100">
                     <div class="flex flex-col">
                       <span class="font-bold text-sm sm:text-lg lg:text-xl text-green-600">{menu.price}</span>
+                      <div class="flex flex-wrap gap-1 mt-1">
+                        <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">
+                          {mainCategory}
+                        </span>
+                        {mainSubcategory && (
+                          <span class="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                            {mainSubcategory}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -311,6 +587,25 @@ const menus = [
             )
           })
         }
+      </div>
+
+      <!-- No Results Message -->
+      <div x-show="brandFilter !== '' && selectedCategories.length > 0" 
+           x-data="{ 
+             get hasVisibleItems() {
+               const menuCards = document.querySelectorAll('.menu-card[x-show]');
+               return Array.from(menuCards).some(card => card.style.display !== 'none');
+             }
+           }"
+           x-show="!hasVisibleItems"
+           class="text-center py-12 px-4">
+        <div class="bg-gray-50 rounded-lg p-8 max-w-md mx-auto">
+          <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.5-.886-6.121-2.343"></path>
+          </svg>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Tidak Ada Menu Ditemukan</h3>
+          <p class="text-gray-600 text-sm">Coba ubah filter kategori yang dipilih untuk melihat menu lainnya.</p>
+        </div>
       </div>
 
       <!-- Call to Action Section -->
@@ -426,6 +721,83 @@ const menus = [
       box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
     }
 
+    /* Brand Filter Dropdown Styles */
+    select:focus {
+      outline: none;
+    }
+    
+    select option {
+      padding: 8px 12px;
+      background: white;
+      color: #374151;
+    }
+    
+    select option:hover {
+      background: #f3f4f6;
+    }
+
+    /* Checkbox Styles */
+    input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    input[type="checkbox"]:checked {
+      background: #f59e0b;
+      border-color: #f59e0b;
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    input[type="checkbox"]:hover {
+      border-color: #f59e0b;
+    }
+
+    input[type="checkbox"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+
+    /* Dropdown Styles */
+    .dropdown-shadow {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Scroll Styles for Dropdown */
+    .dropdown-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dropdown-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+
+    .dropdown-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    .dropdown-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
     /* Menu Card Simple Styles */
     .menu-card {
       position: relative;
@@ -481,47 +853,316 @@ const menus = [
         flex-shrink: 0;
       }
     }
+
+    /* Dropdown Styles */
+    .dropdown-menu {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      min-width: 100%;
+      width: max-content;
+      min-width: 200px;
+    }
+
+    .dropdown-menu button {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.875rem;
+      transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+      border: none;
+      background: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .dropdown-menu button:hover {
+      background-color: #f9fafb;
+    }
+
+    .dropdown-menu button.active {
+      background-color: #fef3c7;
+      color: #d97706;
+      font-weight: 600;
+    }
+
+    /* Filter Button Responsive Width */
+    .filter-button {
+      min-width: 12rem; /* 192px */
+      width: auto;
+      max-width: 16rem; /* 256px on mobile */
+    }
+
+    @media (min-width: 640px) {
+      .filter-button {
+        max-width: none;
+        width: auto;
+      }
+    }
+
+    /* Clear filter button animations */
+    .clear-filter-btn {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .clear-filter-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Active filter chips */
+    .filter-chip {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .filter-chip:hover {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      transform: scale(1.05);
+    }
+
+    .filter-chip button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .filter-chip button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile responsive improvements */
+    @media (max-width: 768px) {
+      .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .dropdown-menu {
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+
+      .filter-dropdowns {
+        width: 100%;
+      }
+
+      .clear-filter-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Image Loading Optimizations */
+    .menu-card img {
+      will-change: opacity, transform;
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .menu-card:hover img {
+      transform: scale(1.05) translateZ(0);
+    }
+
+    /* Progressive Loading Styles */
+    .image-placeholder {
+      background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                  linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                  linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                  linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      animation: loading-pattern 2s linear infinite;
+    }
+
+    @keyframes loading-pattern {
+      0% { background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+      100% { background-position: 20px 20px, 20px 30px, 30px 10px, 10px 20px; }
+    }
+
+    /* Improved skeleton loading */
+    .skeleton-loading {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-wave 1.5s infinite;
+    }
+
+    @keyframes skeleton-wave {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Lazy loading performance */
+    .lazy-load-container {
+      contain: layout style paint;
+    }
+
+    /* Reduce layout shifts */
+    .menu-card {
+      contain: layout style;
+    }
+
+    /* Optimize transitions */
+    .menu-card * {
+      will-change: auto;
+    }
+
+    .menu-card:hover * {
+      will-change: transform;
+    }
+
+    /* Mobile dropdown specific styles */
+    @media (max-width: 640px) {
+      .dropdown-mobile-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .dropdown-content-mobile {
+        background: white;
+        border-radius: 12px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow-y: auto;
+        width: 100%;
+      }
+
+      /* Reduce image size for mobile */
+      .menu-card img {
+        height: 8rem; /* 128px -> 32px savings */
+      }
+    }
   </style>
 
   <script is:inline>
-    // Intersection Observer for scroll animations
+    // Optimized Intersection Observer for better performance
     document.addEventListener('DOMContentLoaded', function() {
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-      
-      const observer = new IntersectionObserver((entries) => {
+      // Scroll animations observer
+      const scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
+            scrollObserver.unobserve(entry.target); // Stop observing once animated
           }
         });
-      }, observerOptions);
-      
-      // Observe all elements with scroll-animate class
-      document.querySelectorAll('.scroll-animate').forEach(el => {
-        observer.observe(el);
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
       });
       
-      // Enhanced lazy loading with skeleton removal
-      const images = document.querySelectorAll('.lazy-img');
-      images.forEach(img => {
-        img.addEventListener('load', function() {
-          const skeleton = this.nextElementSibling;
-          if (skeleton && skeleton.classList.contains('skeleton-img')) {
-            skeleton.style.display = 'none';
+      // Observe scroll animations
+      document.querySelectorAll('.scroll-animate').forEach(el => {
+        scrollObserver.observe(el);
+      });
+      
+      // Optimized image lazy loading observer
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            
+            // Show loading indicator
+            const loadingIndicator = img.parentElement.querySelector('#loading-indicator');
+            if (loadingIndicator) {
+              loadingIndicator.style.opacity = '1';
+            }
+            
+            // Preload image
+            const tempImg = new Image();
+            tempImg.onload = function() {
+              // Image loaded successfully
+              img.src = this.src;
+              img.style.opacity = '1';
+              
+              // Hide loading indicator and placeholder
+              if (loadingIndicator) loadingIndicator.style.opacity = '0';
+              const placeholder = img.previousElementSibling;
+              if (placeholder) placeholder.style.display = 'none';
+              
+              // Add loaded class for additional styling
+              img.classList.add('loaded');
+            };
+            
+            tempImg.onerror = function() {
+              // Handle error - show placeholder
+              img.style.opacity = '1';
+              if (loadingIndicator) loadingIndicator.style.opacity = '0';
+              
+              // Set fallback image
+              img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTAwIDEwMEwxNTAgNzVMMjAwIDEwMEwxNzUgMTI1TDEyNSAxMjVMMTAwIDEwMFoiIGZpbGw9IiNEMUQ1REIiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMDAiIHI9IjUiIGZpbGw9IiNBNEE0QTQiLz48L3N2Zz4=';
+            };
+            
+            // Start loading
+            tempImg.src = img.dataset.src || img.src;
+            
+            // Stop observing this image
+            imageObserver.unobserve(img);
           }
         });
-        
-        // Error handling - hide skeleton if image fails
-        img.addEventListener('error', function() {
-          const skeleton = this.nextElementSibling;
-          if (skeleton && skeleton.classList.contains('skeleton-img')) {
-            skeleton.style.display = 'none';
-          }
-          this.style.opacity = '1';
-        });
+      }, {
+        threshold: 0.01,
+        rootMargin: '50px 0px 50px 0px' // Start loading 50px before image enters viewport
+      });
+      
+      // Observe all images
+      document.querySelectorAll('.menu-card img').forEach(img => {
+        // Store original src in data attribute
+        img.dataset.src = img.src;
+        img.src = ''; // Clear src to prevent immediate loading
+        imageObserver.observe(img);
+      });
+      
+      // Performance optimization: Debounce resize events
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          // Re-observe images if needed after resize
+          document.querySelectorAll('.menu-card img:not(.loaded)').forEach(img => {
+            if (!img.dataset.observed) {
+              imageObserver.observe(img);
+              img.dataset.observed = 'true';
+            }
+          });
+        }, 250);
+      });
+      
+      // Preconnect to image domains for faster loading
+      const preconnectLink = document.createElement('link');
+      preconnectLink.rel = 'preconnect';
+      preconnectLink.href = window.location.origin;
+      document.head.appendChild(preconnectLink);
+      
+      // Add resource hints for critical images (first few visible)
+      const criticalImages = document.querySelectorAll('.menu-card img');
+      const firstFewImages = Array.from(criticalImages).slice(0, 4); // First 4 images
+      
+      firstFewImages.forEach(img => {
+        const preloadLink = document.createElement('link');
+        preloadLink.rel = 'preload';
+        preloadLink.as = 'image';
+        preloadLink.href = img.dataset.src || img.src;
+        document.head.appendChild(preloadLink);
       });
     });
   </script>

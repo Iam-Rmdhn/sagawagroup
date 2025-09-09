@@ -388,7 +388,7 @@ server {
     
     # Redirect all other HTTP traffic to HTTPS
     location / {
-        return 301 https://\$host\$request_uri;
+        return 301 https://$host$request_uri;
     }
 }
 
@@ -432,13 +432,13 @@ server {
         limit_req zone=api burst=20 nodelay;
         proxy_pass http://localhost:${API_PORT}/api/;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
@@ -454,46 +454,56 @@ server {
         limit_req zone=login burst=3 nodelay;
         proxy_pass http://localhost:${API_PORT}/api/auth/login;
         proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
     
     # Upload files proxy
     location /uploads/ {
         proxy_pass http://localhost:${API_PORT}/uploads/;
         proxy_http_version 1.1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
         
         # File upload limits
         client_max_body_size 10M;
     }
     
-    # Static files with caching
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+    # Static files with caching - versioned files can be cached longer
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)(\?v=\d+)?$ {
         expires 1y;
         add_header Cache-Control "public, immutable" always;
         access_log off;
         
         # Optional: Enable CORS for fonts
         location ~* \.(woff|woff2|ttf|eot)$ {
-            add_header Access-Control-Allow-Origin "*";
+            add_header Access-Control-Allow-Origin "*" always;
         }
     }
     
-    # HTML files with short cache
+    # HTML files with no cache to ensure fresh content
     location ~* \.html$ {
-        expires 1h;
-        add_header Cache-Control "public, must-revalidate" always;
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+    
+    # Root files with no cache
+    location = / {
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache";
+        add_header Expires "0";
     }
     
     # Frontend routes (SPA fallback)
     location / {
-        try_files \$uri \$uri/ /index.html;
+        try_files $uri $uri/ /index.html;
     }
     
     # Security headers
