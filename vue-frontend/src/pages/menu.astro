@@ -493,7 +493,7 @@ const menus = [
         </div>
       </div>
       <!-- Menu Cards -->
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 px-2 sm:px-0">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 px-2 sm:px-0">
         {
           menus.map(menu => {
             // Ambil kategori & subkategori utama untuk atribut
@@ -542,7 +542,7 @@ const menus = [
                     <img 
                       src={menu.img.src} 
                       alt={menu.name} 
-                      class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center transition-all duration-500 ease-in-out transform hover:scale-105"
+                      class="w-full h-32 sm:h-48 lg:h-52 object-cover object-center transition-all duration-500 ease-in-out transform"
                       loading="lazy"
                       decoding="async"
                       fetchpriority="low"
@@ -669,11 +669,11 @@ const menus = [
       animation: float 3s ease-in-out infinite;
     }
 
-    /* Fade In Up Animation */
+    /* Enhanced Fade Animations */
     @keyframes fade-in-up {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
       }
       to {
         opacity: 1;
@@ -681,32 +681,174 @@ const menus = [
       }
     }
 
-    .animate-fade-in-up {
-      animation: fade-in-up 0.8s ease-out;
+    @keyframes fade-in-left {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
-    /* Animation Delays */
+    @keyframes fade-in-right {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fade-in-scale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fade-in-blur {
+      from {
+        opacity: 0;
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+
+    /* Animation Classes with Smooth Timing */
+    .animate-fade-in-up {
+      animation: fade-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .animate-fade-in-left {
+      animation: fade-in-left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .animate-fade-in-right {
+      animation: fade-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .animate-fade-in-scale {
+      animation: fade-in-scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .animate-fade-in-blur {
+      animation: fade-in-blur 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Floating Animation for Background Elements */
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+      }
+      50% { 
+        transform: translateY(-10px) rotate(2deg); 
+      }
+    }
+
+    @keyframes float-delayed {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+      }
+      50% { 
+        transform: translateY(-15px) rotate(-2deg); 
+      }
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-float-delayed {
+      animation: float-delayed 4s ease-in-out infinite;
+    }
+
+    /* Hero Section Enhanced Styling */
+    .hero-section {
+      background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.9) 0%, 
+        rgba(249, 115, 22, 0.8) 25%,
+        rgba(239, 68, 68, 0.8) 50%,
+        rgba(245, 158, 11, 0.9) 75%,
+        rgba(217, 119, 6, 0.9) 100%
+      );
+    }
+
+    /* Smooth Animation Delays with Better Timing */
+    .delay-50 { animation-delay: 0.05s; }
     .delay-100 { animation-delay: 0.1s; }
+    .delay-150 { animation-delay: 0.15s; }
     .delay-200 { animation-delay: 0.2s; }
+    .delay-250 { animation-delay: 0.25s; }
     .delay-300 { animation-delay: 0.3s; }
+    .delay-350 { animation-delay: 0.35s; }
     .delay-400 { animation-delay: 0.4s; }
+    .delay-450 { animation-delay: 0.45s; }
     .delay-500 { animation-delay: 0.5s; }
     .delay-600 { animation-delay: 0.6s; }
     .delay-700 { animation-delay: 0.7s; }
+    .delay-800 { animation-delay: 0.8s; }
+    .delay-900 { animation-delay: 0.9s; }
+    .delay-1000 { animation-delay: 1s; }
     
+    .animation-delay-100 { animation-delay: 0.1s; }
     .animation-delay-200 { animation-delay: 0.2s; }
+    .animation-delay-300 { animation-delay: 0.3s; }
     .animation-delay-400 { animation-delay: 0.4s; }
+    .animation-delay-500 { animation-delay: 0.5s; }
     .animation-delay-600 { animation-delay: 0.6s; }
+    .animation-delay-700 { animation-delay: 0.7s; }
+    .animation-delay-800 { animation-delay: 0.8s; }
 
-    /* Enhanced Scroll Animation */
+    /* Enhanced Scroll Animation with Smooth Transitions */
     .scroll-animate {
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform, opacity;
     }
     
     .scroll-animate.in-view {
       opacity: 1 !important;
       transform: translateX(0) translateY(0) !important;
     }
+
+    /* Staggered Menu Card Animations */
+    .menu-card {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform, opacity;
+    }
+
+    .menu-card.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Staggered animation delays for menu cards */
+    .menu-card:nth-child(1) { transition-delay: 0s; }
+    .menu-card:nth-child(2) { transition-delay: 0.1s; }
+    .menu-card:nth-child(3) { transition-delay: 0.2s; }
+    .menu-card:nth-child(4) { transition-delay: 0.3s; }
+    .menu-card:nth-child(5) { transition-delay: 0.4s; }
+    .menu-card:nth-child(6) { transition-delay: 0.5s; }
+    .menu-card:nth-child(7) { transition-delay: 0.6s; }
+    .menu-card:nth-child(8) { transition-delay: 0.7s; }
+    .menu-card:nth-child(9) { transition-delay: 0.8s; }
+    .menu-card:nth-child(10) { transition-delay: 0.9s; }
+    .menu-card:nth-child(11) { transition-delay: 1s; }
+    .menu-card:nth-child(12) { transition-delay: 1.1s; }
 
     /* Filter Menu Styles */
     .filters_menu li.active {
@@ -798,9 +940,40 @@ const menus = [
       background: #94a3b8;
     }
 
-    /* Menu Card Simple Styles */
+    /* Enhanced Menu Card Hover Effects */
     .menu-card {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform, opacity;
       position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.8s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .menu-card:hover::before {
+      left: 100%;
+    }
+
+    .menu-card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .menu-card.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
 
     /* Text truncation utilities for mobile */
@@ -1055,58 +1228,106 @@ const menus = [
   </style>
 
   <script is:inline>
-    // Optimized Intersection Observer for better performance
+    // Enhanced Intersection Observer for smoother animations
     document.addEventListener('DOMContentLoaded', function() {
-      // Scroll animations observer
+      // Enhanced scroll animations observer with better performance
       const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
+            // Add staggered delay for smoother appearance
+            setTimeout(() => {
+              entry.target.classList.add('in-view');
+            }, index * 50); // 50ms stagger between elements
+            
             scrollObserver.unobserve(entry.target); // Stop observing once animated
           }
         });
       }, {
-        threshold: 0.1,
+        threshold: 0.15, // Trigger when 15% visible
         rootMargin: '0px 0px -50px 0px'
       });
       
-      // Observe scroll animations
-      document.querySelectorAll('.scroll-animate').forEach(el => {
+      // Observe scroll animations with better performance
+      document.querySelectorAll('.scroll-animate, .menu-card').forEach(el => {
         scrollObserver.observe(el);
       });
       
-      // Optimized image lazy loading observer
+      // Enhanced menu card animations
+      const menuCardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            // Natural staggered animation based on card position
+            const delay = Array.from(entry.target.parentElement.children).indexOf(entry.target) * 100;
+            setTimeout(() => {
+              entry.target.classList.add('in-view');
+            }, delay);
+            
+            menuCardObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px'
+      });
+      
+      // Observe menu cards separately for better control
+      document.querySelectorAll('.menu-card').forEach(card => {
+        menuCardObserver.observe(card);
+      });
+      
+      // Optimized image lazy loading observer with fade effect
       const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
             
-            // Show loading indicator
+            // Show loading indicator with fade
             const loadingIndicator = img.parentElement.querySelector('#loading-indicator');
             if (loadingIndicator) {
+              loadingIndicator.style.transition = 'opacity 0.3s ease';
               loadingIndicator.style.opacity = '1';
             }
             
-            // Preload image
+            // Preload image with smooth fade-in
             const tempImg = new Image();
             tempImg.onload = function() {
-              // Image loaded successfully
+              // Image loaded successfully with smooth transition
+              img.style.transition = 'opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
               img.src = this.src;
               img.style.opacity = '1';
               
-              // Hide loading indicator and placeholder
-              if (loadingIndicator) loadingIndicator.style.opacity = '0';
+              // Hide loading indicator with fade
+              if (loadingIndicator) {
+                loadingIndicator.style.opacity = '0';
+                setTimeout(() => {
+                  loadingIndicator.style.display = 'none';
+                }, 300);
+              }
+              
+              // Hide placeholder with fade
               const placeholder = img.previousElementSibling;
-              if (placeholder) placeholder.style.display = 'none';
+              if (placeholder) {
+                placeholder.style.transition = 'opacity 0.3s ease';
+                placeholder.style.opacity = '0';
+                setTimeout(() => {
+                  placeholder.style.display = 'none';
+                }, 300);
+              }
               
               // Add loaded class for additional styling
               img.classList.add('loaded');
             };
             
             tempImg.onerror = function() {
-              // Handle error - show placeholder
+              // Handle error with smooth transition
+              img.style.transition = 'opacity 0.5s ease';
               img.style.opacity = '1';
-              if (loadingIndicator) loadingIndicator.style.opacity = '0';
+              if (loadingIndicator) {
+                loadingIndicator.style.opacity = '0';
+                setTimeout(() => {
+                  loadingIndicator.style.display = 'none';
+                }, 300);
+              }
               
               // Set fallback image
               img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNMTAwIDEwMEwxNTAgNzVMMjAwIDEwMEwxNzUgMTI1TDEyNSAxMjVMMTAwIDEwMFoiIGZpbGw9IiNEMUQ1REIiLz48Y2lyY2xlIGN4PSIxNTAiIGN5PSIxMDAiIHI9IjUiIGZpbGw9IiNBNEE0QTQiLz48L3N2Zz4=';
@@ -1121,23 +1342,25 @@ const menus = [
         });
       }, {
         threshold: 0.01,
-        rootMargin: '50px 0px 50px 0px' // Start loading 50px before image enters viewport
+        rootMargin: '100px 0px 100px 0px' // Start loading 100px before image enters viewport
       });
       
-      // Observe all images
+      // Observe all images with initial fade setup
       document.querySelectorAll('.menu-card img').forEach(img => {
         // Store original src in data attribute
         img.dataset.src = img.src;
         img.src = ''; // Clear src to prevent immediate loading
+        img.style.opacity = '0'; // Start hidden
+        img.style.transition = 'opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         imageObserver.observe(img);
       });
       
-      // Performance optimization: Debounce resize events
+      // Performance optimization: Smooth debounced resize events
       let resizeTimeout;
       window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function() {
-          // Re-observe images if needed after resize
+          // Re-observe images if needed after resize with smooth transition
           document.querySelectorAll('.menu-card img:not(.loaded)').forEach(img => {
             if (!img.dataset.observed) {
               imageObserver.observe(img);
@@ -1147,23 +1370,47 @@ const menus = [
         }, 250);
       });
       
-      // Preconnect to image domains for faster loading
+      // Enhanced preconnect setup
       const preconnectLink = document.createElement('link');
       preconnectLink.rel = 'preconnect';
       preconnectLink.href = window.location.origin;
       document.head.appendChild(preconnectLink);
       
-      // Add resource hints for critical images (first few visible)
+      // Add resource hints for critical images with priority
       const criticalImages = document.querySelectorAll('.menu-card img');
-      const firstFewImages = Array.from(criticalImages).slice(0, 4); // First 4 images
+      const firstFewImages = Array.from(criticalImages).slice(0, 6); // First 6 images
       
-      firstFewImages.forEach(img => {
+      firstFewImages.forEach((img, index) => {
         const preloadLink = document.createElement('link');
         preloadLink.rel = 'preload';
         preloadLink.as = 'image';
         preloadLink.href = img.dataset.src || img.src;
+        
+        // Add priority for first 3 images
+        if (index < 3) {
+          preloadLink.fetchpriority = 'high';
+        }
+        
         document.head.appendChild(preloadLink);
       });
+      
+      // Add smooth scroll behavior
+      document.documentElement.style.scrollBehavior = 'smooth';
+      
+      // Optimize will-change for better performance
+      const optimizeWillChange = () => {
+        document.querySelectorAll('.menu-card, .scroll-animate').forEach(el => {
+          el.addEventListener('animationstart', () => {
+            el.style.willChange = 'transform, opacity';
+          });
+          
+          el.addEventListener('animationend', () => {
+            el.style.willChange = 'auto';
+          });
+        });
+      };
+      
+      optimizeWillChange();
     });
   </script>
 </Layout>
