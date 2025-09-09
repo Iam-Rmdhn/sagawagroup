@@ -7,11 +7,23 @@ const urlsToCache = [
   "/favicon.svg",
 ];
 
+// Helper function to check if a URL should be cached (skip extension URLs)
+const shouldCacheUrl = (url) => {
+  return !(
+    url.includes("chrome-extension://") ||
+    url.includes("moz-extension://") ||
+    url.includes("safari-extension://") ||
+    url.includes("edge-extension://")
+  );
+};
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      // Filter out extension URLs before caching
+      const validUrls = urlsToCache.filter(url => shouldCacheUrl(url));
       return Promise.allSettled(
-        urlsToCache.map((url) =>
+        validUrls.map((url) =>
           cache.add(url).catch((err) => {
             // console.warn(`Failed to cache ${url}:`, err);
           })
@@ -22,11 +34,15 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  // Skip caching for API requests and POST requests
+  // Skip caching for API requests, POST requests, and browser extensions
   if (
     event.request.method !== "GET" ||
     event.request.url.includes("/api/") ||
-    event.request.url.includes("localhost")
+    event.request.url.includes("localhost") ||
+    event.request.url.startsWith("chrome-extension://") ||
+    event.request.url.startsWith("moz-extension://") ||
+    event.request.url.startsWith("safari-extension://") ||
+    event.request.url.startsWith("edge-extension://")
   ) {
     return;
   }
