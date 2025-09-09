@@ -12,5 +12,16 @@ export default defineConfig({
     port: 4321,
     host: true,
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
+          assetFileNames: 'assets/[name].[hash].[ext]',
+        },
+      },
+    },
+  },
   integrations: [tailwind()],
 });
