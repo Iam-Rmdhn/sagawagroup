@@ -276,18 +276,20 @@ function renderContent(answer: FAQAnswer | string) {
         </div>
         <div class="max-w-5xl mx-auto">
             <div class="space-y-6">
-                {faqs.map((faq) => (
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-amber-500">
+                {faqs.map((faq, index) => (
+                    <div class="faq-card bg-white p-6 rounded-xl shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg">
                         <details class="group">
                             <summary class="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-900 group-hover:text-amber-600 transition-colors duration-300">
                                 <span class="pr-4">{faq.question}</span>
-                                <span class="transform transition-transform duration-300 group-open:rotate-45 flex-shrink-0">
+                                <span class="faq-icon flex-shrink-0">
                                     <svg class="w-6 h-6 text-gray-500 group-hover:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
                                     </svg>
                                 </span>
                             </summary>
-                            <Fragment set:html={renderContent(faq.answer as FAQAnswer)} />
+                            <div class="faq-content">
+                                <Fragment set:html={renderContent(faq.answer as FAQAnswer)} />
+                            </div>
                         </details>
                     </div>
                 ))}
@@ -306,13 +308,83 @@ function renderContent(answer: FAQAnswer | string) {
     details > summary {
         list-style: none;
     }
-    details[open] summary ~ div {
-        animation: slide-down 0.3s ease-out forwards;
+    
+    /* Enhanced FAQ Animation Styles */
+    .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding-top: 0;
+        padding-bottom: 0;
     }
-    @keyframes slide-down {
+    
+    details[open] .faq-content {
+        max-height: 1000px;
+        opacity: 1;
+        transform: translateY(0);
+        padding-top: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    /* Summary hover effects */
+    details summary {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        margin: -0.5rem;
+    }
+    
+    details summary:hover {
+        background-color: rgba(245, 158, 11, 0.05);
+    }
+    
+    /* Icon rotation animation */
+    .faq-icon {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    details[open] .faq-icon {
+        transform: rotate(45deg);
+    }
+    
+    /* Card hover animation */
+    .faq-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(0);
+    }
+    
+    .faq-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Stagger animation for multiple FAQ items */
+    .faq-card {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    .faq-card:nth-child(1) { animation-delay: 0.1s; }
+    .faq-card:nth-child(2) { animation-delay: 0.2s; }
+    .faq-card:nth-child(3) { animation-delay: 0.3s; }
+    .faq-card:nth-child(4) { animation-delay: 0.4s; }
+    .faq-card:nth-child(5) { animation-delay: 0.5s; }
+    .faq-card:nth-child(6) { animation-delay: 0.6s; }
+    .faq-card:nth-child(7) { animation-delay: 0.7s; }
+    .faq-card:nth-child(8) { animation-delay: 0.8s; }
+    .faq-card:nth-child(9) { animation-delay: 0.9s; }
+    .faq-card:nth-child(10) { animation-delay: 1.0s; }
+    .faq-card:nth-child(11) { animation-delay: 1.1s; }
+    .faq-card:nth-child(12) { animation-delay: 1.2s; }
+    .faq-card:nth-child(13) { animation-delay: 1.3s; }
+    
+    @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(30px);
         }
         to {
             opacity: 1;
@@ -334,4 +406,144 @@ function renderContent(answer: FAQAnswer | string) {
         color: #6b7280;
         font-style: italic;
     }
+    
+    /* Smooth border animation */
+    .faq-card {
+        border: 2px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+    
+    .faq-card:hover {
+        border-color: rgba(245, 158, 11, 0.3);
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced FAQ animation handling
+        const faqDetails = document.querySelectorAll('details');
+        
+        faqDetails.forEach((detail, index) => {
+            const summary = detail.querySelector('summary');
+            const content = detail.querySelector('.faq-content') as HTMLElement;
+            
+            if (summary && content) {
+                summary.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Close other open details for accordion effect (optional)
+                    // faqDetails.forEach((otherDetail) => {
+                    //     if (otherDetail !== detail && otherDetail.hasAttribute('open')) {
+                    //         otherDetail.removeAttribute('open');
+                    //     }
+                    // });
+                    
+                    if (detail.hasAttribute('open')) {
+                        // Closing animation
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        
+                        requestAnimationFrame(() => {
+                            content.style.maxHeight = '0px';
+                            content.style.opacity = '0';
+                            content.style.transform = 'translateY(-10px)';
+                            content.style.paddingTop = '0';
+                            content.style.paddingBottom = '0';
+                        });
+                        
+                        setTimeout(() => {
+                            detail.removeAttribute('open');
+                        }, 300);
+                    } else {
+                        // Opening animation
+                        detail.setAttribute('open', '');
+                        
+                        const fullHeight = content.scrollHeight;
+                        content.style.maxHeight = '0px';
+                        content.style.opacity = '0';
+                        content.style.transform = 'translateY(-10px)';
+                        
+                        requestAnimationFrame(() => {
+                            content.style.maxHeight = fullHeight + 'px';
+                            content.style.opacity = '1';
+                            content.style.transform = 'translateY(0)';
+                            content.style.paddingTop = '1rem';
+                            content.style.paddingBottom = '0.5rem';
+                        });
+                        
+                        // Reset max-height after animation completes
+                        setTimeout(() => {
+                            content.style.maxHeight = 'none';
+                        }, 400);
+                    }
+                });
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const faqCards = document.querySelectorAll('.faq-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    (entry.target as HTMLElement).style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        faqCards.forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Add ripple effect on click
+        faqDetails.forEach((detail) => {
+            const summary = detail.querySelector('summary') as HTMLElement;
+            if (summary) {
+                summary.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(245, 158, 11, 0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                        z-index: 1;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            }
+        });
+    });
+
+    // Add ripple animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
