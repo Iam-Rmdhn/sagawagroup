@@ -16,8 +16,10 @@ Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
+    const host = req.headers.get('host') || '';
+    const isAdminSubdomain = host.includes('admin.sagawagroup.id');
 
-    // Add CORS headers
+    // Add CORS headers with dynamic origin handling
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -25,6 +27,11 @@ Bun.serve({
         "Content-Type, Authorization, X-Requested-With, Accept, Origin",
       "Access-Control-Max-Age": "86400",
     };
+
+    // Enhanced CORS for admin subdomain
+    if (isAdminSubdomain) {
+      corsHeaders["Access-Control-Allow-Origin"] = `https://${host}`;
+    }
 
     // Handle preflight requests
     if (req.method === "OPTIONS") {
@@ -35,13 +42,15 @@ Bun.serve({
     }
 
     try {
-      // Health check endpoint
+      // Health check endpoint with subdomain info
       if (url.pathname === "/api/health") {
         return new Response(
           JSON.stringify({ 
             status: "OK", 
             timestamp: new Date().toISOString(),
-            service: "Sagawa Group API"
+            service: "Sagawa Group API",
+            subdomain: isAdminSubdomain ? "admin" : "main",
+            host: host
           }), 
           {
             status: 200,
