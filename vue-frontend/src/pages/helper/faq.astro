@@ -85,16 +85,16 @@ import FAQSection from '../../components/FAQSection.astro';
     // Search functionality
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('faqSearch');
-        const faqCards = document.querySelectorAll('.bg-white');
+        const faqCards = document.querySelectorAll('.faq-card');
 
         if (searchInput) {
             searchInput.addEventListener('input', function(e) {
                 const target = e.target as HTMLInputElement | null;
                 const searchTerm = target ? target.value.toLowerCase() : '';
                 
-                faqCards.forEach(card => {
+                faqCards.forEach((card, index) => {
                     const question = card.querySelector('summary');
-                    const answer = card.querySelector('p');
+                    const answer = card.querySelector('.faq-content');
                     
                     if (question && answer) {
                         const questionText = question.textContent?.toLowerCase() ?? '';
@@ -103,34 +103,59 @@ import FAQSection from '../../components/FAQSection.astro';
                         const cardElement = card as HTMLElement;
                         if (questionText.includes(searchTerm) || answerText.includes(searchTerm)) {
                             cardElement.style.display = 'block';
+                            cardElement.style.animationDelay = `${index * 0.1}s`;
                             cardElement.classList.add('animate-fade-in-up');
                         } else {
                             cardElement.style.display = 'none';
                         }
                     }
                 });
+                
+                // If search is empty, show all cards
+                if (searchTerm === '') {
+                    faqCards.forEach((card, index) => {
+                        const cardElement = card as HTMLElement;
+                        cardElement.style.display = 'block';
+                        cardElement.style.animationDelay = `${index * 0.1}s`;
+                    });
+                }
             });
         }
 
-        // Animate FAQ cards on scroll
+        // Enhanced Intersection Observer for scroll animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const faqCardsForObserver = document.querySelectorAll('.bg-white');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    (entry.target as HTMLElement).style.animationPlayState = 'running';
+                    const element = entry.target as HTMLElement;
+                    element.style.animationPlayState = 'running';
+                    element.classList.add('animate-fade-in-up');
                 }
             });
         }, observerOptions);
 
-        faqCardsForObserver.forEach((card, index) => {
-            (card as HTMLElement).style.animationDelay = `${index * 0.1}s`;
+        faqCards.forEach((card, index) => {
+            const cardElement = card as HTMLElement;
+            cardElement.style.animationDelay = `${index * 0.1}s`;
+            cardElement.style.animationPlayState = 'paused';
             observer.observe(card);
         });
+
+        // Add smooth scrolling to FAQ section when coming from search
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollToFAQ = urlParams.get('scroll');
+        if (scrollToFAQ === 'faq') {
+            setTimeout(() => {
+                const faqSection = document.querySelector('.faq-card');
+                if (faqSection) {
+                    faqSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 500);
+        }
     });
 </script>
 
