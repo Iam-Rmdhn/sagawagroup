@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 # Domain variables
 ADMIN_DOMAIN="admin.sagawagroup.id"
 WWW_ADMIN_DOMAIN="www.admin.sagawagroup.id"
-EMAIL="your-email@example.com"  # Replace with your email
+EMAIL="admin@sagawagroup.id"  # Replace with your email
 
 echo -e "${YELLOW}Setting up SSL certificates for:${NC}"
 echo -e "  - $ADMIN_DOMAIN"
