@@ -62,7 +62,7 @@ sudo ./setup-admin-ssl.sh
 **Catatan**: Edit email address di script sebelum menjalankan:
 ```bash
 # Edit setup-admin-ssl.sh
-EMAIL="your-email@example.com"  # Replace with your email
+EMAIL="admin@sagawagroup.id"  # Replace with your email
 ```
 
 ### 4. Test Configuration
