@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 ---
-<Layout title="Admin Login">
+<Layout title="Admin Login - Sagawa Group">
 
 <style>
     .animated-bg {
@@ -207,7 +207,7 @@ import Layout from '../../layouts/Layout.astro';
       <div class="mt-3 sm:mt-4 text-center">
         <p class="text-sm text-gray-600">
           Belum punya akun? 
-          <a href="/registermin" class="font-medium text-amber-600 hover:text-amber-500 transition-colors">
+          <a href="/register" class="font-medium text-amber-600 hover:text-amber-500 transition-colors">
             Daftar sekarang
           </a>
         </p>
@@ -381,6 +381,12 @@ import Layout from '../../layouts/Layout.astro';
       window.location.href = '/admin/dashboard';
     }
 
+    // Check if we're on admin subdomain and update API URL accordingly
+    const isAdminSubdomain = window.location.hostname.includes('admin.sagawagroup.id');
+    const API_URL = isAdminSubdomain ? 
+      `https://${window.location.hostname}` : 
+      (import.meta.env.PUBLIC_API_URL || 'http://localhost:5000');
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -407,7 +413,6 @@ import Layout from '../../layouts/Layout.astro';
       setLoading(true);
 
       try {
-        const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
         const response = await fetch(`${API_URL}/api/admin/login`, {
           method: 'POST',
           headers: {

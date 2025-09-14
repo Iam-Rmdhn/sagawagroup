@@ -29,37 +29,29 @@ import Sprinkle from '../assets/img/menu/Sprinkle.png';
 import SugarSnow from '../assets/img/menu/SugarSnow.png';
 import MatchaCrumble from '../assets/img/menu/MatchaCrumble.png';
 import Tiramisu from '../assets/img/menu/Tiramisu.png';
-import orektempe from '../assets/img/menu/orektempe.png';
-import perkedel from '../assets/img/menu/perkedel.png';
-import ikanterikacang from '../assets/img/menu/ikanterikacang.png';
-import kentangmustofa from '../assets/img/menu/kentangmustofa.png';
-import kentangbalado from '../assets/img/menu/kentangbalado.png';
-import TelurDadar from '../assets/img/menu/TelurDadar.png';
-import TelurCeplok from '../assets/img/menu/TelurCeplok.png';
-import ayamgoreng from '../assets/img/menu/ayamgoreng.png';
-import ikangoreng from '../assets/img/menu/ikangoreng.png';
-import usus from '../assets/img/menu/usus.png';
-import acarkuning from '../assets/img/menu/acarkuning.png';
+
+// RM Nusantara
 import ikanpesmol from '../assets/img/menu/ikanpesmol.png';
-import tumislabu from '../assets/img/menu/tumislabu.png';
+import acarkuning from '../assets/img/menu/acar-kuning.png';
+import ayamsuirbalado from '../assets/img/menu/ayam-suir-balado.png';
 import kikil from '../assets/img/menu/kikil.png';
-import sayursop from '../assets/img/menu/sayursop.png';
-import sayurbayam from '../assets/img/menu/sayurbayam.png';
-import sotoayam from '../assets/img/menu/sotoayam.png';
-import miegoreng from '../assets/img/menu/miegoreng.png';
-import jengkolsemur from '../assets/img/menu/jengkolsemur.png';
-import jengkolbalado from '../assets/img/menu/jengkolbalado.png';
-import sayurlodeh from '../assets/img/menu/sayurlodeh.png';
-import sayurnangka from '../assets/img/menu/sayurnangka.png';
-import kacangpanjang from '../assets/img/menu/kacangpanjang.png';
-import AyamSerundeng from '../assets/img/menu/AyamSerundeng.png';
-import keranghijau from '../assets/img/menu/keranghijau.png';
-import TempeTahu from '../assets/img/menu/TempeTahu.png';
-import gorengan from '../assets/img/menu/gorengan.png';
-import TerongBalado from '../assets/img/menu/TerongBalado.png';
-import udangbalado from '../assets/img/menu/udangbalado.png';
-import cumiasin from '../assets/img/menu/cumiasin.png';
-import ikantongkol from '../assets/img/menu/ikantongkol.png';
+import telordadar from '../assets/img/menu/telor-dadar.png';
+import tumisjamur from '../assets/img/menu/tumis-jamur.png';
+import atiampelabalado from '../assets/img/menu/ati-ampela-balado.png';
+import ayambalado from '../assets/img/menu/ayam-balado.png';
+import ayamkecap from '../assets/img/menu/ayam-kecap.png';
+import bakwanjagung from '../assets/img/menu/bakwan-jagung.png';
+import bakwansayur from '../assets/img/menu/bakwan-sayur.png';
+import jengkolbalado from '../assets/img/menu/jengkol-balado.png';
+import kentangbalado from '../assets/img/menu/kentang-balado.png';
+import kerangbumbukuning from '../assets/img/menu/kerang-bumbu-kuning.png';
+import orekbasah from '../assets/img/menu/orek-basah.png';
+import telorbalado from '../assets/img/menu/telor-balado.png';
+import telorsemur from '../assets/img/menu/telor-semur.png';
+import terikacang from '../assets/img/menu/teri-kacang.png';
+import tongkolbalado from '../assets/img/menu/tongkol-balado.png';
+import tumiskacangpanjang from '../assets/img/menu/tumis-kacang-panjang.png';
+import ususbumbukuning from '../assets/img/menu/usus-bumbu-kuning.png';
 
 // Menu Data
 
@@ -101,26 +93,27 @@ const menus = [
 { name: "Donat Tiramisu", desc: "Donat klasik dengan taburan gula halus.", price: "Rp 10.000", img: Tiramisu, category: ["Coffe Corner", "Rice Bowl & Coffe Corner"], subcategory: ["donat", "donat"] },
 
   // Warung Makan Nusantara
-  { name: "Orek Tempe", desc: "Tempe goreng kering dimasak dengan bumbu manis pedas.", img: orektempe, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Perkedel", desc: "Kentang tumbuk dibentuk bulat lalu digoreng.", img: perkedel, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Teri Kacang", desc: "Ikan teri goreng dicampur dengan kacang tanah pedas manis.", img: ikanterikacang, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Kentang Balado", desc: "Kentang goreng dibalut sambal balado.", img: kentangbalado, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Telur Dadar", desc: "Telur kocok goreng tebal dan gurih.", img: TelurDadar, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Ayam Goreng", desc: "Potongan ayam digoreng garing berbumbu.", img: ayamgoreng, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Ikan Goreng", desc: "Ikan segar digoreng renyah.", img: ikangoreng, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Acar Kuning", desc: "Sayuran segar dimasak acar dengan kuah kuning.", img: acarkuning, category: "RM Nusantara", subcategory: "Sayur" },
   { name: "Ikan Pesmol Kuning", desc: "Ikan dimasak bumbu pesmol kuning khas Sunda.", img: ikanpesmol, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Tumis Labu", desc: "Sayuran tumis sederhana khas warteg.", img: tumislabu, category: "RM Nusantara", subcategory: "Sayur" },
-  { name: "Kikil", desc: "Kikil sapi empuk dimasak dengan bumbu semur pedas.", img: kikil, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Sop", desc: "Sup sayuran dengan kuah bening segar.", img: sayursop, category: "RM Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Bayam", desc: "Bayam segar direbus dengan kuah bening.", img: sayurbayam, category: "RM Nusantara", subcategory: "Sayur" },
-  { name: "Jengkol Balado", desc: "Jengkol goreng pedas balado khas Nusantara.", img: jengkolbalado, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Sayur Lodeh", desc: "Sayuran dalam kuah santan gurih.", img: sayurlodeh, category: "RM Nusantara", subcategory: "Sayur" },
-  { name: "Sayur Nangka", desc: "Nangka muda dimasak santan pedas gurih.", img: sayurnangka, category: "RM Nusantara", subcategory: "Sayur" },
-  { name: "Kerang Hijau", desc: "Kerang hijau dimasak pedas gurih.", img: keranghijau, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Tempe Tahu Goreng", desc: "Tempe dan tahu goreng gurih.", img: TempeTahu, category: "RM Nusantara", subcategory: "Gorengan" },
-  { name: "Terong Balado", desc: "Terong dimasak dengan sambal balado.", img: TerongBalado, category: "RM Nusantara", subcategory: "Lauk" },
-  { name: "Udang Balado", desc: "Udang dimasak dengan sambal balado.", img: udangbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Acar Kuning", desc: "Sayur acar kuning segar gurih.", img: acarkuning, category: "RM Nusantara", subcategory: "Sayur" },
+  { name: "Ayam Suir Balado", desc: "Ayam suir pedas balado khas Nusantara.", img: ayamsuirbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Kikil", desc: "Kikil empuk dimasak bumbu gurih.", img: kikil, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Telor Dadar", desc: "Telur dadar lembut cocok untuk lauk.", img: telordadar, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Tumis Jamur", desc: "Jamur segar ditumis bumbu sederhana.", img: tumisjamur, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ati Ampela Balado", desc: "Ati ampela pedas bumbu balado.", img: atiampelabalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ayam Balado", desc: "Ayam dimasak dengan bumbu balado pedas.", img: ayambalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Ayam Kecap", desc: "Ayam manis gurih dimasak kecap.", img: ayamkecap, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Bakwan Jagung", desc: "Gorengan jagung renyah gurih.", img: bakwanjagung, category: "RM Nusantara", subcategory: "Gorengan" },
+  { name: "Bakwan Sayur", desc: "Gorengan sayur segar renyah.", img: bakwansayur, category: "RM Nusantara", subcategory: "Gorengan" },
+  { name: "Jengkol Balado", desc: "Jengkol pedas khas bumbu balado.", img: jengkolbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Kentang Balado", desc: "Kentang pedas gurih bumbu balado.", img: kentangbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Kerang Bumbu Kuning", desc: "Kerang dimasak dengan bumbu kuning gurih.", img: kerangbumbukuning, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Orek Basah", desc: "Tempe orek basah manis gurih.", img: orekbasah, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Telor Balado", desc: "Telur dimasak bumbu balado pedas.", img: telorbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Telor Semur", desc: "Telur direbus dimasak kuah semur.", img: telorsemur, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Teri Kacang", desc: "Teri dan kacang goreng gurih.", img: terikacang, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Tongkol Balado", desc: "Ikan tongkol pedas bumbu balado.", img: tongkolbalado, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Tumis Kacang Panjang", desc: "Kacang panjang ditumis bumbu sederhana.", img: tumiskacangpanjang, category: "RM Nusantara", subcategory: "Lauk" },
+  { name: "Usus Bumbu Kuning", desc: "Usus ayam dimasak bumbu kuning.", img: ususbumbukuning, category: "RM Nusantara", subcategory: "Lauk" },
 ];
 ---
 
@@ -271,7 +264,8 @@ const menus = [
             >
               <div class="flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"></path>
                 </svg>
                 <span x-text="brandFilter === 'Rice Bowl' ? 'No Categories' : getCategoryText()" class="text-sm"></span>
               </div>
@@ -436,7 +430,7 @@ const menus = [
                       :class="categoryFilter === 'Sayur' ? 'bg-amber-50 text-amber-600 font-semibold' : 'text-gray-700 hover:bg-gray-50'"
                       class="w-full px-4 py-2 text-left text-sm transition-colors duration-150"
                     >
-                      Sayur & Sop
+                      Sayur
                     </button>
                     <button 
                       @click="categoryFilter = 'Gorengan'; categoryDropdownOpen = false"

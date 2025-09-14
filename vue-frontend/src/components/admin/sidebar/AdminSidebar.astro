@@ -71,8 +71,8 @@ const { currentPage = "dashboard" } = Astro.props;
             <div class="flex w-full relative overflow-hidden group/buttongroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
                <!-- Main button with light orange background similar to image -->
                <button type="button" id="users-main-button" class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-r-0 border-orange-200/50 hover:border-orange-300 z-10">
-                  <svg class="w-6 h-6 text-orange-500 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                     <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                  <svg class="w-6 h-6 text-orange-500 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                     <path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"/>
                   </svg>
                   <span class="ml-3 font-medium text-orange-900">Kelola Pengguna</span>
                </button>
@@ -130,9 +130,8 @@ const { currentPage = "dashboard" } = Astro.props;
         <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'pelunasan' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300'}`}
           onclick="window.location.href='/admin/pelunasan'">
           <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'pelunasan' ? 'bg-white/20' : 'bg-amber-100 group-hover:bg-amber-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'pelunasan' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-              <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
-              <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+            <svg class={`w-5 h-5 transition-colors ${currentPage === 'pelunasan' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd"/>
             </svg>
           </div>
           <span class="ml-3 font-medium">Pelunasan Mitra</span>
@@ -142,7 +141,7 @@ const { currentPage = "dashboard" } = Astro.props;
          <!-- Menu -->
       <li>
         <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'reports' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 text-gray-700 hover:text-orange-800 border border-gray-200 hover:border-orange-300'}`}
-          onclick="window.location.href='/admin/reports'">
+          onclick="window.location.href='/admin/kelola-menu'">
           <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'reports' ? 'bg-white/20' : 'bg-orange-100 group-hover:bg-orange-200'}`}>
             <svg class={`w-5 h-5 transition-colors ${currentPage === 'reports' ? 'text-white' : 'text-orange-600 group-hover:text-orange-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
@@ -157,14 +156,13 @@ const { currentPage = "dashboard" } = Astro.props;
          <!-- Settings -->
       <li>
         <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'settings' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-gray-700 hover:text-red-800 border border-gray-200 hover:border-red-300'}`}
-          onclick="window.location.href='/admin/settings'">
+          onclick="window.location.href='/admin/kelola-aplikasi'">
           <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'settings' ? 'bg-white/20' : 'bg-red-100 group-hover:bg-red-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'settings' ? 'text-white' : 'text-red-600 group-hover:text-red-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <svg class={`w-5 h-5 transition-colors ${currentPage === 'settings' ? 'text-white' : 'text-red-600 group-hover:text-red-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
             </svg>
           </div>
-          <span class="ml-3 font-medium">Settings</span>
+          <span class="ml-3 font-medium">Kelola Aplikasi</span>
         </button>
       </li>
       </ul>
