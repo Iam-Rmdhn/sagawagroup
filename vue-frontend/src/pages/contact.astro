@@ -5,6 +5,12 @@ import Footer from '../components/Footer.astro';
 ---
 
 <Layout title="Kontak Kami – Sagawa Group">
+	<!-- Enhanced Security Headers -->
+	<meta http-equiv="X-Content-Type-Options" content="nosniff" slot="head">
+	<meta http-equiv="X-Frame-Options" content="DENY" slot="head">
+	<meta http-equiv="X-XSS-Protection" content="1; mode=block" slot="head">
+	<meta name="referrer" content="strict-origin-when-cross-origin" slot="head">
+	
 	<div class="flex flex-col min-h-screen">
 		<Navbar />
 		<main class="flex-1">
@@ -91,13 +97,18 @@ import Footer from '../components/Footer.astro';
 											Nama Lengkap
 										</span>
 									</label>
-									<div class="relative">
+									<div class="relative security-indicator">
 										<input
 											type="text"
 											id="name"
 											name="name"
 											required
+											maxlength="100"
+											autocomplete="name"
+											spellcheck="false"
 											placeholder="Masukkan nama lengkap Anda"
+											pattern="[a-zA-Z\s\-'\.]{2,100}"
+											title="Nama hanya boleh mengandung huruf, spasi, tanda hubung, dan apostrof (2-100 karakter)"
 											class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-400 transition-all duration-300 hover:border-gray-300 bg-gray-50/50 focus:bg-white text-gray-900 placeholder-gray-400"
 										/>
 										<div class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -116,13 +127,17 @@ import Footer from '../components/Footer.astro';
 											Domisili
 										</span>
 									</label>
-									<div class="relative">
+									<div class="relative security-indicator">
 										<input
 											type="text"
 											id="domisili"
 											name="domisili"
 											required
+											maxlength="200"
+											autocomplete="address-level2"
+											spellcheck="false"
 											placeholder="Masukkan domisili/alamat tempat tinggal Anda"
+											title="Domisili/alamat tempat tinggal (maksimal 200 karakter)"
 											class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-400 transition-all duration-300 hover:border-gray-300 bg-gray-50/50 focus:bg-white text-gray-900 placeholder-gray-400"
 										/>
 										<div class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -140,19 +155,28 @@ import Footer from '../components/Footer.astro';
 											Pesan Anda
 										</span>
 									</label>
-									<div class="relative">
+									<div class="relative security-indicator">
 										<textarea
 											id="message"
 											name="message"
 											rows="5"
+											maxlength="1000"
+											spellcheck="true"
 											placeholder="Tuliskan pesan, pertanyaan, atau keperluan Anda..."
 											required
+											title="Pesan Anda (maksimal 1000 karakter)"
 											class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-400 resize-none transition-all duration-300 hover:border-gray-300 bg-gray-50/50 focus:bg-white text-gray-900 placeholder-gray-400 min-h-[120px]"
 										></textarea>
 										<div class="absolute top-3 right-3">
 											<div class="w-2 h-2 bg-green-400 rounded-full opacity-0 indicator transition-opacity duration-300"></div>
 										</div>
 									</div>
+								</div>
+
+								<!-- Honeypot field to catch bots (hidden from users) -->
+								<div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+									<label for="website">Website (leave empty):</label>
+									<input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
 								</div>
 
 								<!-- Two Admin Buttons Side by Side -->
@@ -269,37 +293,388 @@ import Footer from '../components/Footer.astro';
 
   <!-- CLIENT-SIDE SCRIPT -->
   <script>
-    // Function to handle admin button clicks
-    function handleAdminContact(adminNumber: string, phoneNumber: string) {
+    // Input sanitization and validation utilities
+    const InputSanitizer = {
+      // Maximum lengths for security
+      MAX_LENGTHS: {
+        name: 100,
+        domisili: 200,
+        message: 1000
+      },
+
+      // Rate limiting
+      lastSubmission: 0,
+      MIN_INTERVAL: 5000, // 5 seconds between submissions
+
+      // Sanitize HTML and remove dangerous characters
+      sanitizeHTML(input: string): string {
+        if (!input) return '';
+        
+        // First, completely remove < and > characters
+        let sanitized = input.replace(/[<>]/g, '');
+        
+        // Remove HTML tags and script content (additional safety)
+        sanitized = sanitized
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/<[^>]+>/g, '')
+          .replace(/javascript:/gi, '')
+          .replace(/on\w+\s*=/gi, '')
+          .replace(/data:/gi, '')
+          .replace(/vbscript:/gi, '');
+
+        // Escape HTML entities
+        const div = document.createElement('div');
+        div.textContent = sanitized;
+        sanitized = div.innerHTML;
+
+        return sanitized.trim();
+      },
+
+      // Validate input length and content
+      validateInput(value: string, field: string): { valid: boolean; error?: string } {
+        if (!value || value.length === 0) {
+          return { valid: false, error: `${field} tidak boleh kosong` };
+        }
+
+        const maxLength = this.MAX_LENGTHS[field as keyof typeof this.MAX_LENGTHS] || 100;
+        if (value.length > maxLength) {
+          return { valid: false, error: `${field} terlalu panjang (maksimal ${maxLength} karakter)` };
+        }
+
+        // Check for suspicious patterns including < and > characters
+        const suspiciousPatterns = [
+          /[<>]/,  // Block angle brackets completely
+          /<script/i,
+          /javascript:/i,
+          /on\w+\s*=/i,
+          /data:\s*text\/html/i,
+          /vbscript:/i,
+          /<iframe/i,
+          /<object/i,
+          /<embed/i,
+          /eval\s*\(/i,
+          /document\./i,
+          /window\./i
+        ];
+
+        for (const pattern of suspiciousPatterns) {
+          if (pattern.test(value)) {
+            return { valid: false, error: `${field} mengandung karakter yang tidak diizinkan` };
+          }
+        }
+
+        return { valid: true };
+      },
+
+      // Validate name specifically
+      validateName(name: string): { valid: boolean; error?: string } {
+        const sanitized = this.sanitizeHTML(name);
+        
+        if (sanitized.length < 2) {
+          return { valid: false, error: 'Nama minimal 2 karakter' };
+        }
+
+        // Only allow letters, spaces, apostrophes, hyphens
+        if (!/^[a-zA-Z\s\-'\.]+$/.test(sanitized)) {
+          return { valid: false, error: 'Nama hanya boleh mengandung huruf, spasi, tanda hubung, dan apostrof' };
+        }
+
+        return this.validateInput(sanitized, 'name');
+      },
+
+      // Check rate limiting
+      checkRateLimit(): { valid: boolean; error?: string } {
+        const now = Date.now();
+        if (now - this.lastSubmission < this.MIN_INTERVAL) {
+          const remainingTime = Math.ceil((this.MIN_INTERVAL - (now - this.lastSubmission)) / 1000);
+          return { valid: false, error: `Mohon tunggu ${remainingTime} detik sebelum mengirim pesan lagi` };
+        }
+        return { valid: true };
+      }
+    };
+
+    // Enhanced form validation with visual feedback
+    function validateForm(): { valid: boolean; errors: string[] } {
       const nameInput = document.getElementById("name") as HTMLInputElement;
       const domisiliInput = document.getElementById("domisili") as HTMLInputElement;
       const messageInput = document.getElementById("message") as HTMLTextAreaElement;
       
-      const name = nameInput.value.trim();
-      const domisili = domisiliInput.value.trim();
-      const message = messageInput.value.trim();
+      const errors: string[] = [];
 
-      if (!name || !domisili || !message) {
-        alert("Mohon isi nama, domisili, dan pesan Anda");
+      // Clear previous error states
+      [nameInput, domisiliInput, messageInput].forEach(input => {
+        input.classList.remove('border-red-500', 'bg-red-50');
+        input.classList.add('border-gray-200');
+      });
+
+      // Rate limiting check
+      const rateLimitCheck = InputSanitizer.checkRateLimit();
+      if (!rateLimitCheck.valid) {
+        errors.push(rateLimitCheck.error!);
+        return { valid: false, errors };
+      }
+
+      // Honeypot check (anti-bot)
+      const honeypotInput = document.getElementById("website") as HTMLInputElement;
+      if (honeypotInput && honeypotInput.value.trim() !== '') {
+        // Bot detected - silently fail
+        console.warn('Bot detected via honeypot');
+        return { valid: false, errors: ['Terjadi kesalahan validasi'] };
+      }
+
+      // Validate name
+      const nameValidation = InputSanitizer.validateName(nameInput.value);
+      if (!nameValidation.valid) {
+        errors.push(nameValidation.error!);
+        nameInput.classList.add('border-red-500', 'bg-red-50');
+        nameInput.classList.remove('border-gray-200');
+      }
+
+      // Validate domisili
+      const domisiliValidation = InputSanitizer.validateInput(
+        InputSanitizer.sanitizeHTML(domisiliInput.value), 
+        'domisili'
+      );
+      if (!domisiliValidation.valid) {
+        errors.push(domisiliValidation.error!);
+        domisiliInput.classList.add('border-red-500', 'bg-red-50');
+        domisiliInput.classList.remove('border-gray-200');
+      }
+
+      // Validate message
+      const messageValidation = InputSanitizer.validateInput(
+        InputSanitizer.sanitizeHTML(messageInput.value), 
+        'message'
+      );
+      if (!messageValidation.valid) {
+        errors.push(messageValidation.error!);
+        messageInput.classList.add('border-red-500', 'bg-red-50');
+        messageInput.classList.remove('border-gray-200');
+      }
+
+      return { valid: errors.length === 0, errors };
+    }
+
+    // Show error messages to user
+    function showErrors(errors: string[]) {
+      // Remove existing error messages
+      const existingErrors = document.querySelectorAll('.form-error-message');
+      existingErrors.forEach(el => el.remove());
+
+      if (errors.length === 0) return;
+
+      // Create error container
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'form-error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4';
+      
+      const errorList = document.createElement('ul');
+      errorList.className = 'list-disc list-inside space-y-1';
+      
+      errors.forEach(error => {
+        const li = document.createElement('li');
+        li.textContent = error;
+        errorList.appendChild(li);
+      });
+
+      errorContainer.appendChild(errorList);
+      
+      // Insert before form
+      const form = document.getElementById('contactForm');
+      form?.parentNode?.insertBefore(errorContainer, form);
+
+      // Auto-remove after 8 seconds
+      setTimeout(() => {
+        errorContainer.remove();
+      }, 8000);
+    }
+
+    // Function to handle admin button clicks with enhanced security
+    function handleAdminContact(adminNumber: string, phoneNumber: string) {
+      // Validate form first
+      const validation = validateForm();
+      if (!validation.valid) {
+        showErrors(validation.errors);
         return;
       }
 
-      const url =
-        `https://api.whatsapp.com/send?phone=${phoneNumber}&text=` +
-        encodeURIComponent(
-          `Halo Admin ${adminNumber} Sagawa Group!\n\nPerkenalkan, saya *${name}*\nDomisili: ${domisili}\n\nSaya ingin menyampaikan:\n${message}\n\nMohon informasi lebih lanjut. Terima kasih! 🙏`
-        );
+      const nameInput = document.getElementById("name") as HTMLInputElement;
+      const domisiliInput = document.getElementById("domisili") as HTMLInputElement;
+      const messageInput = document.getElementById("message") as HTMLTextAreaElement;
+      
+      // Sanitize all inputs
+      const name = InputSanitizer.sanitizeHTML(nameInput.value.trim());
+      const domisili = InputSanitizer.sanitizeHTML(domisiliInput.value.trim());
+      const message = InputSanitizer.sanitizeHTML(messageInput.value.trim());
 
+      // Double-check after sanitization
+      if (!name || !domisili || !message) {
+        showErrors(["Mohon isi semua field dengan benar"]);
+        return;
+      }
+
+      // Update rate limiting
+      InputSanitizer.lastSubmission = Date.now();
+
+      // Create WhatsApp URL with sanitized content
+      const whatsappMessage = `Halo Admin ${adminNumber} Sagawa Group!\n\nPerkenalkan, saya *${name}*\nDomisili: ${domisili}\n\nSaya ingin menyampaikan:\n${message}\n\nMohon informasi lebih lanjut. Terima kasih! 🙏`;
+      
+      const url = `https://api.whatsapp.com/send?phone=${encodeURIComponent(phoneNumber)}&text=${encodeURIComponent(whatsappMessage)}`;
+
+      // Open WhatsApp
       window.open(url, "_blank");
 
-      // Reset form
-      nameInput.value = "";
-      domisiliInput.value = "";
-      messageInput.value = "";
+      // Show success message
+      const successMessage = document.createElement('div');
+      successMessage.className = 'form-success-message bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4';
+      successMessage.textContent = 'Pesan berhasil dikirim ke WhatsApp! Anda akan diarahkan ke aplikasi WhatsApp.';
+      
+      const form = document.getElementById('contactForm');
+      form?.parentNode?.insertBefore(successMessage, form);
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        nameInput.value = "";
+        domisiliInput.value = "";
+        messageInput.value = "";
+        successMessage.remove();
+      }, 3000);
+    }
+
+    // Real-time input validation and sanitization
+    function setupRealTimeValidation() {
+      const nameInput = document.getElementById("name") as HTMLInputElement;
+      const domisiliInput = document.getElementById("domisili") as HTMLInputElement;
+      const messageInput = document.getElementById("message") as HTMLTextAreaElement;
+
+      // Add input event listeners for real-time validation
+      [nameInput, domisiliInput, messageInput].forEach(input => {
+        if (!input) return;
+
+        // Sanitize on input and block < > characters immediately
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+          const originalValue = target.value;
+          
+          // Immediately remove < and > characters
+          let cleanValue = originalValue.replace(/[<>]/g, '');
+          
+          // Apply full sanitization
+          const sanitizedValue = InputSanitizer.sanitizeHTML(cleanValue);
+          
+          // Update value if it was sanitized
+          if (originalValue !== sanitizedValue) {
+            target.value = sanitizedValue;
+            
+            // Show warning if < or > were removed
+            if (/[<>]/.test(originalValue)) {
+              const warningEl = target.parentElement?.querySelector('.input-warning') as HTMLElement;
+              if (!warningEl) {
+                const warning = document.createElement('div');
+                warning.className = 'input-warning text-xs text-red-500 mt-1 animate-pulse';
+                warning.textContent = 'Karakter < dan > tidak diizinkan dan telah dihapus';
+                target.parentElement?.appendChild(warning);
+                
+                // Remove warning after 3 seconds
+                setTimeout(() => warning.remove(), 3000);
+              }
+            }
+          }
+
+          // Visual feedback for length limits
+          const fieldName = target.name as keyof typeof InputSanitizer.MAX_LENGTHS;
+          const maxLength = InputSanitizer.MAX_LENGTHS[fieldName] || 100;
+          const currentLength = sanitizedValue.length;
+          
+          // Add character counter
+          let counter = target.parentElement?.querySelector('.char-counter') as HTMLElement;
+          if (!counter) {
+            counter = document.createElement('div');
+            counter.className = 'char-counter text-xs text-gray-500 mt-1';
+            target.parentElement?.appendChild(counter);
+          }
+          
+          counter.textContent = `${currentLength}/${maxLength}`;
+          
+          // Color coding for length warning
+          if (currentLength > maxLength * 0.9) {
+            counter.className = 'char-counter text-xs text-orange-500 mt-1';
+          } else if (currentLength > maxLength * 0.8) {
+            counter.className = 'char-counter text-xs text-yellow-600 mt-1';
+          } else {
+            counter.className = 'char-counter text-xs text-gray-500 mt-1';
+          }
+
+          // Remove error styling on valid input
+          if (currentLength <= maxLength && sanitizedValue.length > 0) {
+            target.classList.remove('border-red-500', 'bg-red-50');
+            target.classList.add('border-gray-200');
+          }
+        });
+
+        // Prevent dangerous key combinations and block < > characters
+        input.addEventListener('keydown', (e: any) => {
+          // Block < and > characters directly
+          if (e.key === '<' || e.key === '>' || e.key === 'Less' || e.key === 'Greater') {
+            e.preventDefault();
+            
+            // Show immediate feedback
+            const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+            target.style.borderColor = '#ef4444';
+            target.style.backgroundColor = '#fef2f2';
+            
+            setTimeout(() => {
+              target.style.borderColor = '';
+              target.style.backgroundColor = '';
+            }, 500);
+            
+            return false;
+          }
+          
+          // Block common dangerous key combinations
+          if ((e.ctrlKey || e.metaKey) && (e.key === 'v')) {
+            // Allow paste but we'll sanitize it
+            setTimeout(() => {
+              const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+              target.value = InputSanitizer.sanitizeHTML(target.value);
+            }, 0);
+          }
+        });
+
+        // Sanitize pasted content and remove < > characters
+        input.addEventListener('paste', (e) => {
+          setTimeout(() => {
+            const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+            const originalValue = target.value;
+            
+            // Remove < and > first, then apply full sanitization
+            let cleanValue = originalValue.replace(/[<>]/g, '');
+            target.value = InputSanitizer.sanitizeHTML(cleanValue);
+            
+            // Show warning if < or > were in pasted content
+            if (/[<>]/.test(originalValue)) {
+              const warningEl = target.parentElement?.querySelector('.paste-warning') as HTMLElement;
+              if (!warningEl) {
+                const warning = document.createElement('div');
+                warning.className = 'paste-warning text-xs text-orange-600 mt-1 font-medium';
+                warning.textContent = 'Konten yang di-paste telah dibersihkan dari karakter < dan >';
+                target.parentElement?.appendChild(warning);
+                
+                // Remove warning after 4 seconds
+                setTimeout(() => warning.remove(), 4000);
+              }
+            }
+            
+            target.dispatchEvent(new Event('input')); // Trigger input validation
+          }, 0);
+        });
+      });
     }
 
     // Add event listeners to admin buttons
     document.addEventListener('DOMContentLoaded', () => {
+      // Setup real-time validation
+      setupRealTimeValidation();
+
       // Admin 1 Button
       const admin1Btn = document.querySelector('.admin-1-btn');
       admin1Btn?.addEventListener('click', (e: Event) => {
@@ -312,6 +687,23 @@ import Footer from '../components/Footer.astro';
       admin2Btn?.addEventListener('click', (e: Event) => {
         e.preventDefault();
         handleAdminContact('2', '628179243081');
+      });
+
+      // Add form submission prevention for security
+      const form = document.getElementById('contactForm');
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent normal form submission
+        return false;
+      });
+
+      // Add CSP-like behavior - prevent inline script execution
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.hasAttribute('onclick')) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.warn('Inline onclick prevented for security');
+        }
       });
     });
   </script>
@@ -526,6 +918,107 @@ import Footer from '../components/Footer.astro';
 		color: rgb(180 83 9);
 	}
 
+	/* Form Security & Validation Styles */
+	.form-error-message {
+		animation: slideInFromTop 0.3s ease-out;
+	}
+
+	.form-success-message {
+		animation: slideInFromTop 0.3s ease-out;
+	}
+
+	@keyframes slideInFromTop {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Input validation states */
+	.group-input input.border-red-500,
+	.group-input textarea.border-red-500 {
+		animation: shake 0.5s ease-in-out;
+		box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+	}
+
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+		20%, 40%, 60%, 80% { transform: translateX(2px); }
+	}
+
+	/* Warning messages for blocked characters */
+	.input-warning,
+	.paste-warning {
+		animation: fadeInWarning 0.3s ease-out;
+		border-left: 3px solid #ef4444;
+		padding-left: 8px;
+		background-color: rgba(254, 242, 242, 0.8);
+		border-radius: 4px;
+		padding: 4px 8px;
+	}
+
+	@keyframes fadeInWarning {
+		from {
+			opacity: 0;
+			transform: translateY(-5px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Character counter styling */
+	.char-counter {
+		font-size: 0.75rem;
+		text-align: right;
+		transition: color 0.2s ease;
+	}
+
+	/* Enhanced security indicators */
+	.security-indicator {
+		position: relative;
+	}
+
+	/* Loading state for buttons */
+	.admin-btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		transform: none !important;
+	}
+
+	.admin-btn.loading::after {
+		content: '';
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		margin: auto;
+		border: 2px solid transparent;
+		border-top-color: #ffffff;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	/* Prevent text selection on sensitive elements */
+	.admin-btn,
+	.form-error-message,
+	.form-success-message {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
 	/* Accessibility improvements */
 	@media (prefers-reduced-motion: reduce) {
 		.animate-float,
@@ -535,7 +1028,9 @@ import Footer from '../components/Footer.astro';
 		.animate-bounce-in,
 		.animate-pulse-gentle,
 		.animate-gradient-shift,
-		.animate-expand {
+		.animate-expand,
+		.form-error-message,
+		.form-success-message {
 			animation: none;
 		}
 		
