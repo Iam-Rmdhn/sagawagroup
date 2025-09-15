@@ -375,11 +375,13 @@ limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
 EOF
 
     # Create main site configuration
-    cat > "/etc/nginx/sites-available/sagawagroup" << EOF
+    # We use a template with placeholders and then substitute the variables
+    # This prevents shell expansion of Nginx variables like $host, $remote_addr, etc.
+    cat > "/etc/nginx/sites-available/sagawagroup" << 'EOF'
 # HTTP server - redirect to HTTPS
 server {
     listen 80;
-    server_name ${DOMAIN} ${WWW_DOMAIN};
+    server_name __DOMAIN__ __WWW_DOMAIN__;
     
     # Let's Encrypt challenge
     location /.well-known/acme-challenge/ {
@@ -395,11 +397,11 @@ server {
 # HTTPS server
 server {
     listen 443 ssl http2;
-    server_name ${DOMAIN} ${WWW_DOMAIN};
+    server_name __DOMAIN__ __WWW_DOMAIN__;
     
     # SSL configuration (will be managed by Certbot)
-    ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/__DOMAIN__/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/__DOMAIN__/privkey.pem;
     
     # Modern SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -409,7 +411,7 @@ server {
     ssl_session_timeout 10m;
     
     # Document root
-    root ${DEPLOY_DIR}/frontend;
+    root __DEPLOY_DIR__/frontend;
     index index.html;
     
     # Gzip compression
@@ -430,7 +432,7 @@ server {
     # API proxy with rate limiting
     location /api/ {
         limit_req zone=api burst=20 nodelay;
-        proxy_pass http://localhost:${API_PORT}/api/;
+        proxy_pass http://localhost:__API_PORT__/api/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -444,7 +446,7 @@ server {
         proxy_read_timeout 60s;
         
         # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://${DOMAIN}, https://${WWW_DOMAIN}' always;
+        add_header 'Access-Control-Allow-Origin' 'https://__DOMAIN__, https://__WWW_DOMAIN__' always;
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
         add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization' always;
     }
@@ -452,7 +454,7 @@ server {
     # Login endpoint with stricter rate limiting
     location /api/auth/login {
         limit_req zone=login burst=3 nodelay;
-        proxy_pass http://localhost:${API_PORT}/api/auth/login;
+        proxy_pass http://localhost:__API_PORT__/api/auth/login;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -462,7 +464,7 @@ server {
     
     # Upload files proxy
     location /uploads/ {
-        proxy_pass http://localhost:${API_PORT}/uploads/;
+        proxy_pass http://localhost:__API_PORT__/uploads/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -523,6 +525,12 @@ server {
     error_page 500 502 503 504 /50x.html;
 }
 EOF
+
+    # Now substitute the placeholders with actual values
+    sed -i "s|__DOMAIN__|${DOMAIN}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__WWW_DOMAIN__|${WWW_DOMAIN}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__API_PORT__|${API_PORT}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__DEPLOY_DIR__|${DEPLOY_DIR}|g" "/etc/nginx/sites-available/sagawagroup"
     
     print_success "Nginx configuration created"
 }
