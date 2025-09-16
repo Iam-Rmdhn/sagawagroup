@@ -1,5 +1,5 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 

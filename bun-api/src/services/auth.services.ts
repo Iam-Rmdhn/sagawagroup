@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 import { UserModel, type User } from "../models/user.model";
 import { AdminModel, type Admin } from "../models/admin.model";
 import { MitraModel, type Mitra } from "../models/mitra.model";
