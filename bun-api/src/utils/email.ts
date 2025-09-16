@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import * as nodemailer from "nodemailer";
 
 // Konfigurasi transporter dengan setting yang lebih lengkap
 const transporter = nodemailer.createTransport({

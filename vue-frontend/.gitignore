@@ -15,10 +15,7 @@ pnpm-debug.log*
 
 # environment variables - CRITICAL: Never commit API keys!
 .env
-.env.local
-.env.production
-.env.development
-.env.*.local
+.env.dev
 
 # Social Media API credentials - SECURITY CRITICAL
 instagram-*.json
