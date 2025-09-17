@@ -74,16 +74,27 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         </div>
       </div>
 
-      <!-- Login & Register Buttons -->
-      <div class="flex items-center space-x-3">
-        <a href="/login" class="hidden lg:flex bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors duration-200 items-center shadow-sm">
+      <!-- Login/Dashboard Buttons (Desktop Only) -->
+      <div class="hidden lg:flex items-center space-x-3">
+        <!-- Desktop Login Button -->
+        <a id="desktop-login-button" href="/login" class="flex bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-sm font-medium transition-all duration-300 items-center shadow-sm">
           Login
           <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
           </svg>
         </a>
+        
+        <!-- Desktop Dashboard Button -->
+        <a id="desktop-dashboard-button" href="/dashboard" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-sm font-medium transition-all duration-300 items-center shadow-sm">
+          Dashboard
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM7 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+          </svg>
+        </a>
+      </div>
 
-        <!-- Mobile menu button -->
+        <!-- Mobile menu button (Mobile Only) -->
+        <div class="lg:hidden">
         <div class="lg:hidden">
           <button type="button" id="mobile-menu-button" class="text-gray-600 hover:text-red-500 focus:outline-none focus:text-red-500 p-2">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,12 +166,21 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
         Kontak
       </a>
 
-      <!-- Login & Register Buttons for Mobile -->
+      <!-- Login/Dashboard Buttons for Mobile -->
       <div class="p-2 ml-4 border-t border-gray-200 space-y-2">
-        <a href="/login" class="mobile-nav-link inline-flex items-center border font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed data-[shape=pill]:rounded-full data-[width=full]:w-full focus:shadow-none text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md bg-amber-500 border-amber-800 text-slate-50 hover:bg-amber-700 hover:border-amber-800">
+        <!-- Mobile Login Button -->
+        <a id="mobile-login-button" href="/login" class="mobile-nav-link inline-flex items-center border font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed data-[shape=pill]:rounded-full data-[width=full]:w-full focus:shadow-none text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md bg-amber-500 border-amber-800 text-slate-50 hover:bg-amber-700 hover:border-amber-800">
           Login
           <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+        </a>
+        
+        <!-- Mobile Dashboard Button -->
+        <a id="mobile-dashboard-button" href="/dashboard" class="mobile-nav-link inline-flex items-center border font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed data-[shape=pill]:rounded-full data-[width=full]:w-full focus:shadow-none text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md bg-amber-500 border-amber-800 text-slate-50 hover:bg-amber-700 hover:border-amber-800" style="display: none;">
+          Dashboard
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM7 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
           </svg>
         </a>
       </div>
@@ -176,6 +196,14 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
   .nav-link-active,
   .mobile-nav-link-active {
     color: #e3342f;
+  }
+
+  /* Smooth transitions for auth buttons */
+  #desktop-login-button,
+  #desktop-dashboard-button,
+  #mobile-login-button,
+  #mobile-dashboard-button {
+    transition: all 0.3s ease-in-out;
   }
 
   #desktop-mitra-arrow-button:focus {
@@ -277,6 +305,101 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
 </style>
 
 <script>
+  // Function to check if user is logged in
+  function isUserLoggedIn() {
+    // Check for authentication token in localStorage
+    const token = localStorage.getItem('authToken') || localStorage.getItem('auth_token') || localStorage.getItem('token');
+    const userSession = localStorage.getItem('userSession') || localStorage.getItem('user');
+    
+    // Return true if any authentication indicator exists
+    return !!(token || userSession);
+  }
+
+  // Function to update auth buttons based on login status
+  function updateAuthButtons() {
+    const isLoggedIn = isUserLoggedIn();
+    
+    // Desktop button elements
+    const desktopLoginButton = document.getElementById('desktop-login-button');
+    const desktopDashboardButton = document.getElementById('desktop-dashboard-button');
+    
+    // Mobile button elements
+    const mobileLoginButton = document.getElementById('mobile-login-button');
+    const mobileDashboardButton = document.getElementById('mobile-dashboard-button');
+    
+    if (isLoggedIn) {
+      // Hide login buttons and show dashboard buttons
+      if (desktopLoginButton) {
+        desktopLoginButton.style.display = 'none';
+      }
+      if (desktopDashboardButton) {
+        desktopDashboardButton.style.display = 'flex';
+      }
+      
+      if (mobileLoginButton) {
+        mobileLoginButton.style.display = 'none';
+      }
+      if (mobileDashboardButton) {
+        mobileDashboardButton.style.display = 'inline-flex';
+      }
+    } else {
+      // Show login buttons and hide dashboard buttons
+      if (desktopLoginButton) {
+        desktopLoginButton.style.display = 'flex';
+      }
+      if (desktopDashboardButton) {
+        desktopDashboardButton.style.display = 'none';
+      }
+      
+      if (mobileLoginButton) {
+        mobileLoginButton.style.display = 'inline-flex';
+      }
+      if (mobileDashboardButton) {
+        mobileDashboardButton.style.display = 'none';
+      }
+    }
+  }
+
+  // Helper function to simulate login for testing
+  function simulateLogin(token = 'test-auth-token') {
+    localStorage.setItem('authToken', token);
+    console.log('Login simulated, token set:', token);
+    updateAuthButtons();
+  }
+
+  // Helper function to simulate logout for testing
+  function simulateLogout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userSession');
+    localStorage.removeItem('user');
+    console.log('Logout simulated, all tokens removed');
+    updateAuthButtons();
+  }
+
+  // Helper function to check current login status
+  function checkLoginStatus() {
+    const isLoggedIn = isUserLoggedIn();
+    console.log('Login status:', isLoggedIn);
+    console.log('Available tokens:', {
+      authToken: localStorage.getItem('authToken'),
+      auth_token: localStorage.getItem('auth_token'),
+      token: localStorage.getItem('token'),
+      userSession: localStorage.getItem('userSession'),
+      user: localStorage.getItem('user')
+    });
+    return isLoggedIn;
+  }
+
+  // Expose functions globally for testing purposes (can be removed in production)
+  if (typeof window !== 'undefined') {
+    (window as any).simulateLogin = simulateLogin;
+    (window as any).simulateLogout = simulateLogout;
+    (window as any).updateAuthButtons = updateAuthButtons;
+    (window as any).checkLoginStatus = checkLoginStatus;
+  }
+
   // Toggle mobile menu with smooth animation
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
@@ -326,8 +449,17 @@ import sagawaLogo from '../assets/img/sagawa_logo.svg?url';
     });
   }
 
-  // Set active nav link
+  // Initialize auth buttons and set active nav link
   document.addEventListener('DOMContentLoaded', () => {
+    // Update auth buttons based on login status
+    updateAuthButtons();
+    
+    // Listen for storage changes to update buttons when user logs in/out in another tab
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'authToken' || event.key === 'auth_token' || event.key === 'token' || event.key === 'userSession' || event.key === 'user') {
+        updateAuthButtons();
+      }
+    });
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     const currentPath = window.location.pathname;
