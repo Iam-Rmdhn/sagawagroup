@@ -41,7 +41,7 @@
             <div>
               <button type="button" id="user-menu-button" class="group flex items-center space-x-3 text-sm bg-gradient-to-br from-amber-100 to-orange-100 hover:from-orange-100 hover:to-red-100 rounded-xl p-2 focus:ring-4 focus:ring-amber-200 transition-all duration-200 shadow-md hover:shadow-lg" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                 <span class="sr-only">Open user menu</span>
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 group-hover:from-orange-500 group-hover:to-red-600 flex items-center justify-center text-white font-bold shadow-lg transition-all duration-200" id="user-avatar">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 group-hover:from-orange-500 group-hover:to-red-600 flex items-center justify-center text-white font-bold shadow-lg transition-all duration-200" id="user-avatar">
                   A
                 </div>
                 <div class="hidden md:block text-left">
@@ -59,7 +59,7 @@
               <!-- User Info Header -->
               <div class="px-6 py-4 bg-gradient-to-r from-amber-50 to-orange-50" role="none">
                 <div class="flex items-center space-x-3">
-                  <div class="w-12 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg" id="user-avatar-large">
+                  <div class="w-8 h-7 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg" id="user-avatar-large">
                     A
                   </div>
                   <div>
@@ -74,7 +74,7 @@
               <ul class="py-2" role="none">
                 <li>
                   <a href="/" class="flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-800 transition-all duration-200 group" role="menuitem">
-                    <div class="w-8 h-8 rounded-lg bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center mr-3 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-amber-100 group-hover:bg-amber-200 flex items-center justify-center mr-3 transition-colors">
                       <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clip-rule="evenodd"></path>
                       </svg>
@@ -90,7 +90,7 @@
               <!-- Logout Section -->
               <div class="py-2 bg-gradient-to-r from-red-50 to-orange-50">
                 <button id="logout-btn" class="flex items-center w-full text-left px-6 py-3 text-sm text-red-700 hover:bg-red-100 hover:text-red-800 transition-all duration-200 group" role="menuitem">
-                  <div class="w-8 h-8 rounded-lg bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-3 transition-colors">
+                  <div class="w-8 h-8 rounded-full bg-red-100 group-hover:bg-red-200 flex items-center justify-center mr-3 transition-colors">
                     <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
@@ -226,7 +226,7 @@
 
         // Add loading state
         logoutBtn.innerHTML = `
-          <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center mr-3">
+          <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
             <svg class="w-4 h-4 text-red-600 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

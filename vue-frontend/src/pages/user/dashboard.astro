@@ -1078,22 +1078,32 @@ try {
       // Setup agreement modal for new users
       setupAgreementModal();
 
-      // Listen for sidebar toggle events to adjust main content margin
-      window.addEventListener('sidebarToggle', function(event: Event) {
-         const customEvent = event as CustomEvent;
-         const isVisible = customEvent.detail.visible;
-         updateDashboardMargin(isVisible);
-      });
+      // Initialize dashboard margin when DOM is ready
+      const initializeDashboard = () => {
+         // Initial sidebar state check and apply margin
+         initializeDashboardMargin();
+         
+         // Listen for sidebar toggle events to adjust main content margin
+         window.addEventListener('sidebarToggle', function(event: Event) {
+            const customEvent = event as CustomEvent;
+            const isVisible = customEvent.detail.visible;
+            updateDashboardMargin(isVisible);
+         });
 
-      // Initial sidebar state check and apply margin
-      initializeDashboardMargin();
+         // Handle window resize to adjust margin
+         window.addEventListener('resize', function() {
+            const sidebarVisible = localStorage.getItem('sidebarVisible');
+            const isVisible = sidebarVisible === 'true';
+            updateDashboardMargin(isVisible);
+         });
+      };
 
-      // Handle window resize to adjust margin
-      window.addEventListener('resize', function() {
-         const sidebarVisible = localStorage.getItem('sidebarVisible');
-         const isVisible = sidebarVisible === 'true';
-         updateDashboardMargin(isVisible);
-      });
+      // Ensure DOM is ready before initializing
+      if (document.readyState === 'loading') {
+         document.addEventListener('DOMContentLoaded', initializeDashboard);
+      } else {
+         initializeDashboard();
+      }
 
       // Listen for navbar actions
       document.addEventListener('mitraNavbarAction', function(event: Event) {
@@ -1258,26 +1268,36 @@ try {
 
    // Function to update dashboard margin dynamically
    function updateDashboardMargin(sidebarVisible: boolean) {
-      const mainDashboard = document.getElementById('main-dashboard');
-      
-      if (mainDashboard) {
+      // Wait for DOM to be ready if called too early
+      const tryUpdateMargin = () => {
+         const mainDashboard = document.getElementById('main-dashboard');
          
-         // Remove existing margin classes
-         mainDashboard.classList.remove('sm:ml-0', 'sm:ml-72');
-         
-         if (sidebarVisible && window.innerWidth >= 768) {
-            // Desktop/tablet with sidebar visible - add left margin
-            mainDashboard.classList.add('sm:ml-72');
+         if (mainDashboard) {
+            // Remove existing margin classes
+            mainDashboard.classList.remove('sm:ml-0', 'sm:ml-72');
+            
+            if (sidebarVisible && window.innerWidth >= 768) {
+               // Desktop/tablet with sidebar visible - add left margin
+               mainDashboard.classList.add('sm:ml-72');
+            } else {
+               // Mobile or sidebar hidden - no left margin
+               mainDashboard.classList.add('sm:ml-0');
+            }
+            
+            // Force reflow to ensure smooth transition
+            mainDashboard.offsetHeight;
          } else {
-            // Mobile or sidebar hidden - no left margin
-            mainDashboard.classList.add('sm:ml-0');
+            // If element not found, try again after DOM is ready
+            if (document.readyState === 'loading') {
+               document.addEventListener('DOMContentLoaded', tryUpdateMargin);
+            } else {
+               // DOM is ready but element still not found - wait a bit
+               setTimeout(tryUpdateMargin, 100);
+            }
          }
-         
-         // Force reflow to ensure smooth transition
-         mainDashboard.offsetHeight;
-      } else {
-         console.error('Main dashboard element not found');
-      }
+      };
+      
+      tryUpdateMargin();
    }
 
    function setupAgreementModal() {
