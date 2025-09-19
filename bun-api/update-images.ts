@@ -1,10 +1,24 @@
 import { initializeCollections } from "./src/lib/db";
 import { MitraModel } from "./src/models/mitra.model";
 
-// Sample image URLs for demo (KTP dan Transfer saja)
+// Environment-aware base URL
+const getBaseURL = () => {
+  const port = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 : 6000);
+  const env = process.env.NODE_ENV || 'development';
+  
+  if (env === 'production') {
+    return process.env.BASE_URL || 'https://www.sagawagroup.id';
+  } else {
+    return `http://localhost:${port}`;
+  }
+};
+
+const BASE_URL = getBaseURL();
+
+// Sample image URLs with environment-aware URL
 const sampleImages = {
-  ktp: "http://localhost:5000/uploads/sample-ktp.jpg",
-  transfer: "http://localhost:5000/uploads/sample-transfer.jpg",
+  ktp: `${BASE_URL}/uploads/sample-ktp.jpg`,
+  transfer: `${BASE_URL}/uploads/sample-transfer.jpg`,
 };
 
 async function updateMitraImages() {
@@ -28,13 +42,13 @@ async function updateMitraImages() {
         if (mitra.fotoKTP.startsWith("uploaded:")) {
           // Convert uploaded:filename to URL
           const filename = mitra.fotoKTP.replace("uploaded:", "");
-          updates.fotoKTP = `http://localhost:5000/uploads/${filename}`;
+          updates.fotoKTP = `${BASE_URL}/uploads/${filename}`;
         } else if (mitra.fotoKTP.startsWith("data:")) {
           // Replace base64 with sample URL
           updates.fotoKTP = sampleImages.ktp;
         } else if (mitra.fotoKTP.includes(".")) {
           // Plain filename to URL
-          updates.fotoKTP = `http://localhost:5000/uploads/${mitra.fotoKTP}`;
+          updates.fotoKTP = `${BASE_URL}/uploads/${mitra.fotoKTP}`;
         }
       }
 
@@ -42,13 +56,13 @@ async function updateMitraImages() {
         if (mitra.buktiTransfer.startsWith("uploaded:")) {
           // Convert uploaded:filename to URL
           const filename = mitra.buktiTransfer.replace("uploaded:", "");
-          updates.buktiTransfer = `http://localhost:5000/uploads/${filename}`;
+          updates.buktiTransfer = `${BASE_URL}/uploads/${filename}`;
         } else if (mitra.buktiTransfer.startsWith("data:")) {
           // Replace base64 with sample URL
           updates.buktiTransfer = sampleImages.transfer;
         } else if (mitra.buktiTransfer.includes(".")) {
           // Plain filename to URL
-          updates.buktiTransfer = `http://localhost:5000/uploads/${mitra.buktiTransfer}`;
+          updates.buktiTransfer = `${BASE_URL}/uploads/${mitra.buktiTransfer}`;
         }
       }
 
