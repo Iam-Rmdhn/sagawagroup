@@ -5,38 +5,49 @@ import { agreementRoute } from "./src/routes/agreement.route";
 import "./src/lib/db"; // Initialize database connection
 import dotenv from "dotenv";
 
-// Only use dotenv.config() if not using --env-file flag
-if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
-  dotenv.config();
+// Load environment variables based on NODE_ENV
+if (process.env.NODE_ENV === 'development') {
+  dotenv.config({ path: '.env.development' });
+} else if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: '.env.production' });
+} else {
+  // Default to development if NODE_ENV is not set
+  dotenv.config({ path: '.env.development' });
 }
 
-const PORT = process.env.PORT || 5000;
+// Set port based on environment
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 
+  (process.env.NODE_ENV === 'production' ? 5000 : 6000);
 
 Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
     const host = req.headers.get('host') || '';
+    const origin = req.headers.get('origin') || '';
     const isAdminSubdomain = host.includes('admin.sagawagroup.id');
 
-    // Add CORS headers with dynamic origin handling
+    // Add comprehensive CORS headers to handle Chrome's stricter policies
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers":
-        "Content-Type, Authorization, X-Requested-With, Accept, Origin",
+        "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token",
+      "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "86400",
+      "Vary": "Origin",
     };
 
-    // Enhanced CORS for admin subdomain
-    if (isAdminSubdomain) {
-      corsHeaders["Access-Control-Allow-Origin"] = `https://${host}`;
+    // Enhanced CORS for admin subdomain or when origin is specified
+    if (isAdminSubdomain || origin) {
+      corsHeaders["Access-Control-Allow-Origin"] = origin || `https://${host}`;
+      corsHeaders["Vary"] = "Origin";
     }
 
     // Handle preflight requests
     if (req.method === "OPTIONS") {
       return new Response(null, {
-        status: 200,
+        status: 204,
         headers: corsHeaders,
       });
     }
@@ -50,7 +61,9 @@ Bun.serve({
             timestamp: new Date().toISOString(),
             service: "Sagawa Group API",
             subdomain: isAdminSubdomain ? "admin" : "main",
-            host: host
+            host: host,
+            port: PORT,
+            environment: process.env.NODE_ENV || "development"
           }), 
           {
             status: 200,
@@ -177,4 +190,5 @@ Bun.serve({
 });
 
 console.log(`Server running on http://localhost:${PORT}`);
+console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
 console.log(`AstraDB connection initialized`);

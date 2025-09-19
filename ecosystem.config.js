@@ -1,14 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: "sagawagroup-api-production",
+      name: "sagawagroup-api",
       script: "bun-api/index.ts",
       cwd: "/var/www/sagawagroup",
       interpreter: "bun",
       env: {
-        NODE_ENV: "production",
-        PORT: 5000,
-        BASE_URL: "https://www.sagawagroup.id"
+        NODE_ENV: "development",
+        PORT: 6000,
+        BASE_URL: "http://localhost:6000"
       },
       env_production: {
         NODE_ENV: "production",
@@ -56,7 +56,7 @@ module.exports = {
       user: 'root',
       host: 'localhost',
       ref: 'origin/main',
-      repo: 'https://github.com/your-repo/sagawagroup.git',
+      repo: 'https://github.com/tsubametaa/sagawagroup.git',
       path: '/var/www/sagawagroup',
       'pre-deploy-local': '',
       'post-deploy': 'cd /var/www/sagawagroup/api && bun install && pm2 reload ecosystem.config.js --env production',

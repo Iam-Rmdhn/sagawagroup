@@ -340,9 +340,15 @@ export async function approveMitraService(
 
       // Delete associated files if they exist
       try {
+        // Get base URL from environment
+        const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
+          ? 'https://www.sagawagroup.id' 
+          : `http://localhost:${process.env.PORT || '6000'}`);
+        const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
+        
         if (
           mitra.fotoKTP &&
-          mitra.fotoKTP.startsWith("http://localhost:5000/uploads/")
+          mitra.fotoKTP.startsWith(UPLOADS_PREFIX)
         ) {
           const fileName = mitra.fotoKTP.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
@@ -359,7 +365,7 @@ export async function approveMitraService(
 
         if (
           mitra.buktiTransfer &&
-          mitra.buktiTransfer.startsWith("http://localhost:6000/uploads/")
+          mitra.buktiTransfer.startsWith(UPLOADS_PREFIX)
         ) {
           const fileName = mitra.buktiTransfer.split("/uploads/")[1];
           const filePath = `./uploads/${fileName}`;
@@ -471,9 +477,15 @@ export async function deleteMitraService(mitraId: string) {
 
     // Delete associated files if they exist
     try {
+      // Get base URL from environment
+      const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
+        ? 'https://www.sagawagroup.id' 
+        : `http://localhost:${process.env.PORT || '6000'}`);
+      const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
+      
       if (
         mitra.fotoKTP &&
-        mitra.fotoKTP.startsWith("http://localhost:5000/uploads/")
+        mitra.fotoKTP.startsWith(UPLOADS_PREFIX)
       ) {
         const fileName = mitra.fotoKTP.split("/uploads/")[1];
         const filePath = `./uploads/${fileName}`;
@@ -490,7 +502,7 @@ export async function deleteMitraService(mitraId: string) {
 
       if (
         mitra.buktiTransfer &&
-        mitra.buktiTransfer.startsWith("http://localhost:5000/uploads/")
+        mitra.buktiTransfer.startsWith(UPLOADS_PREFIX)
       ) {
         const fileName = mitra.buktiTransfer.split("/uploads/")[1];
         const filePath = `./uploads/${fileName}`;
