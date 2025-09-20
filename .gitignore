@@ -1,6 +1,6 @@
 # environment variables
 .env
-.env.dev
+.env.development
 
 # Node.js dependencies
 node_modules/

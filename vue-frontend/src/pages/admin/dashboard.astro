@@ -800,18 +800,34 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
   // Function to update stats with smooth animation
   function updateStats(mitras: any[], isUserMenu: boolean = false) {
+    console.log('Updating stats with mitras data:', mitras); // Debug log
+    
     const totalUsers = mitras.length;
     const pendingCount = mitras.filter(m => m.status === 'pending').length;
     const approvedCount = mitras.filter(m => m.status === 'approved').length;
     
-    // Calculate DP and FP totals
-    const dpTotal = mitras
-      .filter(m => m.nilaiPaketUsaha === 'DP')
-      .reduce((sum, m) => sum + (m.yangHarusDibayar || 0), 0);
-      
-    const fpTotal = mitras
-      .filter(m => m.nilaiPaketUsaha === 'Full Payment')
-      .reduce((sum, m) => sum + (m.yangHarusDibayar || 0), 0);
+    // Calculate DP and FP totals with more flexible filtering
+    const dpMitra = mitras.filter(m => {
+      // Check multiple possible values for DP
+      return m.nilaiPaketUsaha === 'DP' || 
+             m.nilaiPaketUsaha === 'Down Payment' || 
+             m.paketUsaha === 'DP' ||
+             m.paketUsaha === 'Down Payment';
+    });
+    
+    const fpMitra = mitras.filter(m => {
+      // Check multiple possible values for Full Payment
+      return m.nilaiPaketUsaha === 'Full Payment' || 
+             m.nilaiPaketUsaha === 'FP' || 
+             m.paketUsaha === 'Full Payment' ||
+             m.paketUsaha === 'FP';
+    });
+    
+    console.log('DP Mitra:', dpMitra); // Debug log
+    console.log('FP Mitra:', fpMitra); // Debug log
+    
+    const dpTotal = dpMitra.reduce((sum, m) => sum + (m.yangHarusDibayar || m.nominalDP || m.hargaPaket || 0), 0);
+    const fpTotal = fpMitra.reduce((sum, m) => sum + (m.yangHarusDibayar || m.nominalFull || m.hargaPaket || 0), 0);
 
     // Animate stats updates
     const animateNumber = (element: HTMLElement | null, finalValue: string, duration: number = 800) => {

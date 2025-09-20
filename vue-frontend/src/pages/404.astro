@@ -1,14 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
 
 const title = "Halaman Tidak Ditemukan - Sagawa Group";
 const description = "Maaf, halaman yang Anda cari tidak ditemukan. Kembali ke beranda untuk melanjutkan menjelajahi Sagawa Group.";
 ---
 
 <Layout title={title} description={description}>
-  <Navbar />
 
   <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 text-center">
@@ -55,5 +52,4 @@ const description = "Maaf, halaman yang Anda cari tidak ditemukan. Kembali ke be
     </div>
   </main>
 
-  <Footer />
 </Layout>
