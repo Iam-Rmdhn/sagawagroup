@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "NODE_ENV=development bun run index.ts",
     "prod": "NODE_ENV=production bun run index.ts",
-    "start": "bun run index.ts",
+    "start": "NODE_ENV=production bun run index.ts",
     "update-images": "bun run update-images-url.ts",
     "update-images:dev": "NODE_ENV=development bun run update-images-url.ts",
     "update-images:prod": "NODE_ENV=production bun run update-images-url.ts"
@@ -32,7 +32,7 @@
     "bun-types": "1.2.19",
     "cassandra-driver": "4.8.0",
     "csstype": "3.1.3",
-    "dotenv": "17.2.1",
+    "dotenv": "^17.2.2",
     "ecdsa-sig-formatter": "1.0.11",
     "fuse.js": "7.1.0",
     "google-auth-library": "^10.2.1",

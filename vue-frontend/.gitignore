@@ -14,8 +14,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # environment variables - CRITICAL: Never commit API keys!
-.env
-.env.dev
+.environment
 
 # Social Media API credentials - SECURITY CRITICAL
 instagram-*.json

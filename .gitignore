@@ -1,5 +1,5 @@
 # environment variables
-.env
+.env.production
 .env.development
 
 # Node.js dependencies

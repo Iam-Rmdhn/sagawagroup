@@ -3,21 +3,10 @@ import { mitraRoute } from "./src/routes/mitra.route";
 import { sheetsRoute } from "./src/routes/sheets.route";
 import { agreementRoute } from "./src/routes/agreement.route";
 import "./src/lib/db"; // Initialize database connection
-import dotenv from "dotenv";
+import { ENV } from "./src/env";
 
-// Load environment variables based on NODE_ENV
-if (process.env.NODE_ENV === 'development') {
-  dotenv.config({ path: '.env.development' });
-} else if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: '.env.production' });
-} else {
-  // Default to development if NODE_ENV is not set
-  dotenv.config({ path: '.env.development' });
-}
-
-// Set port based on environment
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 
-  (process.env.NODE_ENV === 'production' ? 5000 : 6000);
+// Use the port from our environment configuration
+const PORT = ENV.PORT;
 
 Bun.serve({
   port: PORT,
@@ -63,7 +52,7 @@ Bun.serve({
             subdomain: isAdminSubdomain ? "admin" : "main",
             host: host,
             port: PORT,
-            environment: process.env.NODE_ENV || "development"
+            environment: ENV.NODE_ENV
           }), 
           {
             status: 200,
@@ -190,5 +179,5 @@ Bun.serve({
 });
 
 console.log(`Server running on http://localhost:${PORT}`);
-console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+console.log(`Environment: ${ENV.NODE_ENV}`);
 console.log(`AstraDB connection initialized`);
