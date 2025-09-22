@@ -40,13 +40,13 @@ fi
 echo "   📁 Backups stored in: $BACKUP_DIR"
 echo ""
 
-# Deploy nginx admin subdomain configuration
-echo -e "${YELLOW}2. Deploying admin subdomain nginx configuration...${NC}"
-if [ -f "/root/sagawagroup/nginx-admin-subdomain.conf" ]; then
-    cp /root/sagawagroup/nginx-admin-subdomain.conf /etc/nginx/sites-available/admin-sagawagroup
-    echo "   ✓ Admin subdomain config deployed"
+# Deploy nginx admin subdomain configuration (temporary HTTP-only version)
+echo -e "${YELLOW}2. Deploying admin subdomain nginx configuration (HTTP-only)...${NC}"
+if [ -f "/root/sagawagroup/nginx-admin-subdomain-temp.conf" ]; then
+    cp /root/sagawagroup/nginx-admin-subdomain-temp.conf /etc/nginx/sites-available/admin-sagawagroup
+    echo "   ✓ Admin subdomain config deployed (HTTP-only for SSL setup)"
 else
-    echo -e "${RED}   ✗ nginx-admin-subdomain.conf not found${NC}"
+    echo -e "${RED}   ✗ nginx-admin-subdomain-temp.conf not found${NC}"
     exit 1
 fi
 
@@ -148,6 +148,7 @@ echo -e "   - Or A record: admin.sagawagroup.id -> your server IP"
 echo ""
 echo -e "2. ${YELLOW}Setup SSL certificates:${NC}"
 echo -e "   - Run: ${GREEN}sudo ./setup-admin-ssl.sh${NC}"
+echo -e "   - This will upgrade to full HTTPS configuration"
 echo ""
 echo -e "3. ${YELLOW}Test the subdomain:${NC}"
 echo -e "   - HTTP: ${BLUE}http://admin.sagawagroup.id${NC} (should redirect to HTTPS)"

@@ -385,7 +385,7 @@ import Layout from '../../layouts/Layout.astro';
     const isAdminSubdomain = window.location.hostname.includes('admin.sagawagroup.id');
     const API_URL = isAdminSubdomain ? 
       `https://${window.location.hostname}` : 
-      (import.meta.env.PUBLIC_API_URL || 'http://localhost:5000');
+      (import.meta.env.PUBLIC_API_URL || 'http://localhost:6000');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
