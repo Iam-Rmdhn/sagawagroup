@@ -10,6 +10,7 @@ const PORT = ENV.PORT;
 
 Bun.serve({
   port: PORT,
+  hostname: "0.0.0.0", // Allow access from any IP address
   async fetch(req) {
     const url = new URL(req.url);
     const host = req.headers.get('host') || '';
@@ -29,7 +30,12 @@ Bun.serve({
 
     // Enhanced CORS for admin subdomain or when origin is specified
     if (isAdminSubdomain || origin) {
-      corsHeaders["Access-Control-Allow-Origin"] = origin || `https://${host}`;
+      // For development, allow localhost origins
+      if (ENV.NODE_ENV === "development") {
+        corsHeaders["Access-Control-Allow-Origin"] = origin || "*";
+      } else {
+        corsHeaders["Access-Control-Allow-Origin"] = origin || `https://${host}`;
+      }
       corsHeaders["Vary"] = "Origin";
     }
 
@@ -178,6 +184,6 @@ Bun.serve({
   },
 });
 
-console.log(`Server running on http://localhost:${PORT}`);
+console.log(`Server running on http://0.0.0.0:${PORT}`);
 console.log(`Environment: ${ENV.NODE_ENV}`);
 console.log(`AstraDB connection initialized`);

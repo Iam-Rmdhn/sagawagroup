@@ -11,13 +11,26 @@ const envFile =
     ? ".env.production" 
     : ".env.development";
 
-// Load the appropriate environment file
-const envPath = path.resolve(process.cwd(), envFile);
-const result = dotenv.config({ path: envPath });
+// Try multiple paths for the environment file
+const possiblePaths = [
+  path.resolve(process.cwd(), envFile),
+  path.resolve(process.cwd(), '..', envFile),
+  path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), '..', '.env')
+];
+
+let result: dotenv.DotenvConfigOutput = { error: new Error("No environment file found") };
+for (const envPath of possiblePaths) {
+  result = dotenv.config({ path: envPath });
+  if (!result.error) {
+    console.log(`Loaded environment variables from: ${envPath}`);
+    break;
+  }
+}
 
 // Check if the environment file was loaded successfully
 if (result.error) {
-  console.warn(`Warning: Could not load ${envFile}, using default environment variables`);
+  console.warn(`Warning: Could not load ${envFile} or .env from common locations, using default environment variables`);
 }
 
 // Function to get required environment variables

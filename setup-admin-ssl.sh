@@ -40,9 +40,9 @@ fi
 echo -e "${YELLOW}Backing up nginx configuration...${NC}"
 cp /etc/nginx/sites-available/sagawagroup /etc/nginx/sites-available/sagawagroup.backup.$(date +%Y%m%d_%H%M%S)
 
-# Copy admin subdomain configuration
+# Copy admin subdomain configuration (final version)
 echo -e "${YELLOW}Installing admin subdomain nginx configuration...${NC}"
-cp ./nginx-admin-subdomain.conf /etc/nginx/sites-available/admin-sagawagroup
+cp ./nginx-admin-final.conf /etc/nginx/sites-available/admin-sagawagroup
 
 # Enable admin subdomain site
 ln -sf /etc/nginx/sites-available/admin-sagawagroup /etc/nginx/sites-enabled/admin-sagawagroup
