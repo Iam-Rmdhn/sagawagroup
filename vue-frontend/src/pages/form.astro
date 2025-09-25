@@ -871,8 +871,24 @@ import contohMitra from '../assets/img/contoh-mitra.png';
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
           <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">Terima Kasih!</h2>
-          <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 px-4">Formulir pendaftaran mitra anda berhasil terkirim,, silakan tunggu </p>
-          <p class="text-xs sm:text-sm text-gray-500 px-4">Tim kami akan menghubungi Anda dalam 1-2 hari kerja.</p>
+          <p class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 px-4">Formulir pendaftaran mitra anda berhasil terkirim, silakan tunggu </p>
+          <p class="text-xs sm:text-sm text-gray-500 mb-4 px-4">Tim kami akan menghubungi Anda dalam 1-2 hari kerja.</p>
+          
+          <!-- Countdown and Redirect Message -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mx-4 sm:mx-8">
+            <div class="flex items-center justify-center space-x-2">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <p class="text-sm text-blue-700">
+                Anda akan diarahkan ke halaman utama dalam 
+                <span id="countdown" class="font-bold text-blue-800">5</span> detik
+              </p>
+            </div>
+            <button id="redirectNow" class="mt-3 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+              Kembali Sekarang
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1601,6 +1617,9 @@ async function submitFormWithSanitization() {
     updateProgressBar(3);
     document.getElementById('form-step-2')?.classList.add('hidden');
     document.getElementById('form-step-3')?.classList.remove('hidden');
+    
+    // Start countdown and redirect after 5 seconds
+    startCountdownAndRedirect();
 
   } catch (error) {
     console.error('[SANITIZATION] Error submitting form:', error);
@@ -1959,6 +1978,38 @@ function removeBuktiTransferFile() {
     displayBuktiTransferPreview(null);
   }
   checkFormValidation();
+}
+
+// Function to start countdown and redirect to homepage
+function startCountdownAndRedirect() {
+  let countdown = 5;
+  const countdownElement = document.getElementById('countdown');
+  const redirectButton = document.getElementById('redirectNow');
+  
+  // Update countdown display
+  const updateCountdown = () => {
+    if (countdownElement) {
+      countdownElement.textContent = countdown.toString();
+    }
+    
+    if (countdown <= 0) {
+      // Redirect to homepage
+      window.location.href = '/';
+    } else {
+      countdown--;
+      setTimeout(updateCountdown, 1000);
+    }
+  };
+  
+  // Start countdown
+  setTimeout(updateCountdown, 1000);
+  
+  // Add click event to redirect button for immediate redirect
+  if (redirectButton) {
+    redirectButton.addEventListener('click', () => {
+      window.location.href = '/';
+    });
+  }
 }
 
 // Event listeners for file inputs

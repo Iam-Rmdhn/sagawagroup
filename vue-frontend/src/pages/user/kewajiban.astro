@@ -13,6 +13,16 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
 <!-- Modern Kewajiban Styles -->
 <style>
+  /* CSS Custom Properties for performance */
+  :root {
+    --primary-gradient: linear-gradient(135deg, #f59e0b, #fbbf24);
+    --success-gradient: linear-gradient(135deg, #22c55e, #16a34a);
+    --warning-gradient: linear-gradient(135deg, #f59e0b, #fbbf24);
+    --danger-gradient: linear-gradient(135deg, #ef4444, #dc2626);
+    --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  
   /* Global fixes for scroll stability */
   * {
     transform: translateZ(0);
@@ -24,8 +34,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
   *::after {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
   }
   
   body, html {
@@ -35,73 +43,57 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     background-color: #fefefe;
   }
   
-  /* Ensure logout button is always clickable */
-  #logout-btn {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-  
-  #logout-btn:disabled {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-    opacity: 1 !important;
+  /* Optimized card styling */
+  .modern-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .modern-card:hover {
-    transform: translate3d(0, -4px, 0);
-    box-shadow: 0 20px 25px -5px rgba(251, 191, 36, 0.1), 0 10px 10px -5px rgba(251, 191, 36, 0.04);
-    border-color: rgba(251, 191, 36, 0.2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
   }
 
-  /* Status badge styling */
+  /* Optimized status badge styling */
   .status-badge {
-    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
-    animation: pulse 2s infinite;
+    background: var(--warning-gradient);
   }
   
   .status-badge-success {
-    background: linear-gradient(135deg, rgb(34 197 94), rgb(22 163 74));
+    background: var(--success-gradient);
   }
   
   .status-badge-warning {
-    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+    background: var(--warning-gradient);
   }
   
   .status-badge-danger {
-    background: linear-gradient(135deg, rgb(239 68 68), rgb(220 38 38));
-  }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    background: var(--danger-gradient);
   }
 
-  /* Button styling */
+  /* Optimized button styling */
   .btn-primary {
-    background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--primary-gradient);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .btn-primary:hover {
-    background: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(245, 158, 11, 0.3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
   }
   
   .btn-success {
-    background: linear-gradient(135deg, rgb(34 197 94), rgb(22 163 74)) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--success-gradient) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .btn-success:hover {
-    background: linear-gradient(135deg, rgb(21 128 61), rgb(22 101 52)) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(34, 197, 94, 0.3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
   }
 
-  /* Loading animation */
+  /* Optimized loading animation */
   .loading-shimmer {
-    background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.3) 50%, rgba(251, 191, 36, 0.1) 100%);
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
   }
@@ -109,13 +101,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
-  }
-
-  /* Payment info styling */
-  .payment-info-card {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(251, 191, 36, 0.9) 50%, rgba(249, 115, 22, 0.95) 100%);
-    border: 1px solid rgba(251, 191, 36, 0.3);
-    backdrop-filter: blur(8px);
   }
 
   /* Mobile responsive improvements */
@@ -126,29 +111,8 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     }
     
     .modern-card:hover {
-      transform: translate3d(0, -2px, 0);
+      transform: translateY(-1px);
     }
-    
-    .mobile-stack {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .mobile-center {
-      text-align: center;
-    }
-    
-    .mobile-full-width {
-      width: 100%;
-    }
-  }
-
-  /* Enhanced mobile text sizing */
-  @media (max-width: 480px) {
-    .text-mobile-lg { font-size: 1.125rem; }
-    .text-mobile-xl { font-size: 1.25rem; }
-    .text-mobile-2xl { font-size: 1.5rem; }
-    .text-mobile-3xl { font-size: 1.875rem; }
   }
 </style>
   <MitraNavbar />
@@ -233,24 +197,98 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       }
     } catch (e) { /* fallback to localhost */ }
     
-    const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
+    // Cache session data to avoid repeated localStorage access
+    const sessionData = {
+      email: localStorage.getItem('mitraUserEmail') || localStorage.getItem('email'),
+      token: localStorage.getItem('mitraToken')
+    };
+    
     const loadingState = document.getElementById('loading-state');
     const container = document.getElementById('kewajiban-content');
     let mitra = null;
 
-    if (email) {
+    if (sessionData.email) {
       try {
-        const res = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`);
-        const data = await res.json();
-        if (res.ok && !data.error) mitra = data;
-      } catch (e) { }
+        // Sequential API calls with individual error handling for better reliability
+        let mitraRes, agreementRes, pelunasanRes;
+        let mitraData, agreementData, pelunasanData;
+        
+        // 1. Get mitra data (most critical)
+        try {
+          mitraRes = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(sessionData.email)}`);
+          if (mitraRes.ok) {
+            mitraData = await mitraRes.json();
+            if (!mitraData.error) mitra = mitraData;
+          }
+        } catch (e) {
+          console.error('Mitra API Error:', e);
+        }
+
+        // 2. Get agreement status (optional)
+        let agreementAccepted = true; // Default to true
+        if (sessionData.token) {
+          try {
+            agreementRes = await fetch(`${API_URL}/api/mitra/agreement-status`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${sessionData.token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            if (agreementRes.ok) {
+              agreementData = await agreementRes.json();
+              if (agreementData.success) {
+                agreementAccepted = !!agreementData.data.hasAccepted;
+              }
+            }
+          } catch (e) {
+            console.error('Agreement API Error:', e);
+            // Keep default agreementAccepted = true
+          }
+        }
+
+        // 3. Get pelunasan status (optional)
+        let pelunasanExists = false; // Default to false
+        try {
+          pelunasanRes = await fetch(`${API_URL}/api/mitra/pelunasan-exists?email=${encodeURIComponent(sessionData.email)}`);
+          if (pelunasanRes.ok) {
+            pelunasanData = await pelunasanRes.json();
+            if (pelunasanData && typeof pelunasanData.exists !== 'undefined') {
+              pelunasanExists = !!pelunasanData.exists;
+            }
+          }
+        } catch (e) {
+          console.error('Pelunasan API Error:', e);
+          // Fallback to localStorage
+          pelunasanExists = localStorage.getItem('sudahPelunasan') === '1';
+        }
+
+        // Store results for later use
+        window.kewajibanData = { agreementAccepted, pelunasanExists };
+
+      } catch (e) { 
+        console.error('General API Error:', e);
+        // Fallback to localStorage for pelunasan status
+        window.kewajibanData = { 
+          agreementAccepted: true, 
+          pelunasanExists: localStorage.getItem('sudahPelunasan') === '1' 
+        };
+      }
+    } else {
+      // No email found
+      window.kewajibanData = { 
+        agreementAccepted: true, 
+        pelunasanExists: false 
+      };
     }
 
-    // Hide loading state
+    // Always hide loading state and show content, regardless of API success/failure
     if (loadingState) loadingState.classList.add('hidden');
     if (container) container.classList.remove('hidden');
 
+    // Check if we have mitra data
     if (!mitra) {
+      console.warn('No mitra data found. Email:', sessionData.email);
       container.innerHTML = `
         <div class="modern-card rounded-xl p-4 sm:p-8 text-center max-w-md mx-auto">
           <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-3 sm:mb-4">
@@ -259,20 +297,40 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
             </svg>
           </div>
           <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">Data Tidak Ditemukan</h3>
-          <p class="text-red-600 mb-3 sm:mb-4 text-sm sm:text-base">Data mitra tidak ditemukan. Silakan login ulang.</p>
-          <a href="/login" class="btn-success inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto justify-center">
-            Login Ulang
-          </a>
+          <p class="text-red-600 mb-3 sm:mb-4 text-sm sm:text-base">
+            Data mitra tidak ditemukan untuk email: <br>
+            <code class="text-xs bg-gray-100 px-2 py-1 rounded">${sessionData.email || 'Tidak ada email'}</code>
+          </p>
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <button onclick="window.location.reload()" class="btn-primary px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto">
+              Muat Ulang
+            </button>
+            <a href="/login" class="btn-success inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto justify-center">
+              Login Ulang
+            </a>
+          </div>
         </div>
       `;
       return;
     }
 
     try {
-      // Update navbar profile info
-      if (typeof window !== 'undefined' && window.mitraNavbar && typeof window.mitraNavbar.updateUserInfo === 'function') {
-        window.mitraNavbar.updateUserInfo(mitra);
+      // Update navbar profile info (optional, don't fail if this doesn't work)
+      try {
+        if (typeof window !== 'undefined' && window.mitraNavbar && typeof window.mitraNavbar.updateUserInfo === 'function') {
+          window.mitraNavbar.updateUserInfo(mitra);
+        }
+      } catch (navError) {
+        console.warn('Navbar update failed:', navError);
       }
+
+      // Safe payment status logic with detailed logging
+      console.log('Processing payment status for mitra:', {
+        email: mitra?.email,
+        kekurangan: mitra?.kekurangan,
+        nilaiPaketUsaha: mitra?.nilaiPaketUsaha,
+        statusPelunasan: mitra?.statusPelunasan
+      });
 
       // Check payment status logic
       const hasKekurangan = mitra && typeof mitra.kekurangan !== 'undefined' && mitra.kekurangan !== null;
@@ -323,27 +381,9 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       } catch (e) { /* ignore */ }
 
       if (isPaidOff) {
-        // Show paid-off status
-        let agreementAccepted = true;
-        try {
-          const token = localStorage.getItem('mitraToken');
-          if (token) {
-            const agreementRes = await fetch(`${API_URL}/api/mitra/agreement-status`, {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
-            });
-            const agreementData = await agreementRes.json();
-            if (agreementRes.ok && agreementData.success) {
-              agreementAccepted = !!agreementData.data.hasAccepted;
-            }
-          }
-        } catch (e) {
-          console.error('Error checking agreement status:', e);
-        }
-
+        // Use cached agreement data
+        const agreementAccepted = window.kewajibanData?.agreementAccepted !== false;
+        
         const extraAction = agreementAccepted ? '' : `
           <div class="mt-4 sm:mt-6 p-3 sm:p-4 bg-white border-l-4 border-amber-500 rounded-xl shadow-md">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -356,7 +396,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
               </div>
             </div>
             <div class="mt-3 sm:mt-4">
-              <a href="/user/dashboard" class="btn-primary inline-flex items-center px-4 text-red-400 sm:px-6 py-2 sm:py-3 font-semibold rounded-xl shadow-lg w-full sm:w-auto text-center justify-center">
+              <a href="/user/dashboard" class="btn-primary inline-flex items-center px-4 text-white sm:px-6 py-2 sm:py-3 font-semibold rounded-xl shadow-lg w-full sm:w-auto text-center justify-center">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
@@ -492,6 +532,15 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         `;
       }
     } catch (err) {
+      console.error('Critical rendering error:', err);
+      console.error('Error details:', {
+        message: err.message,
+        stack: err.stack,
+        mitra: mitra ? 'Present' : 'Missing',
+        email: sessionData?.email
+      });
+      
+      // Robust fallback UI
       container.innerHTML = `
         <div class="modern-card rounded-xl p-4 sm:p-8 text-center max-w-md mx-auto">
           <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-3 sm:mb-4">
@@ -500,41 +549,57 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
             </svg>
           </div>
           <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">Terjadi Kesalahan</h3>
-          <p class="text-red-600 mb-3 sm:mb-4 text-sm sm:text-base">Gagal mengambil data mitra.</p>
-          <button onclick="window.location.reload()" class="btn-success px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto">
-            Muat Ulang
-          </button>
+          <p class="text-red-600 mb-3 sm:mb-4 text-sm sm:text-base">
+            Error saat memproses data mitra.<br>
+            <small class="text-gray-500">${err.message}</small>
+          </p>
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <button onclick="window.location.reload()" class="btn-primary px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto">
+              Muat Ulang
+            </button>
+            <a href="/user/dashboard" class="btn-success px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto text-center">
+              Ke Dashboard
+            </a>
+          </div>
         </div>
       `;
     }
 
-    // Check pelunasan status
-    const btnBayar = document.getElementById('btnBayarPelunasan');
-    const notifPelunasan = document.getElementById('notifPelunasan');
-    if (email && btnBayar && notifPelunasan) {
-      let pelunasanExists = false;
-      try {
-        const resPelunasan = await fetch(`${API_URL}/api/mitra/pelunasan-exists?email=${encodeURIComponent(email)}`);
-        const dataPelunasan = await resPelunasan.json();
-        pelunasanExists = !!dataPelunasan.exists;
-      } catch (e) {
-        pelunasanExists = localStorage.getItem('sudahPelunasan') === '1';
-      }
+    // Safe pelunasan status checking with cached data
+    try {
+      const btnBayar = document.getElementById('btnBayarPelunasan');
+      const notifPelunasan = document.getElementById('notifPelunasan');
       
-      if (pelunasanExists) {
-        // Replace pay button with disabled state
-        btnBayar.classList.remove('btn-success');
-        btnBayar.classList.add('bg-gray-500', 'text-white', 'cursor-not-allowed');
-        btnBayar.removeAttribute('href');
-        btnBayar.setAttribute('disabled', 'true');
-        btnBayar.innerHTML = `
-          <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <span class="truncate">Menunggu Verifikasi</span>
-        `;
-        notifPelunasan.classList.remove('hidden');
+      if (sessionData.email && btnBayar && notifPelunasan) {
+        // Use cached pelunasan data with safe fallback
+        const pelunasanExists = (window.kewajibanData?.pelunasanExists === true) || 
+                               (localStorage.getItem('sudahPelunasan') === '1');
+        
+        console.log('Pelunasan check:', {
+          cached: window.kewajibanData?.pelunasanExists,
+          localStorage: localStorage.getItem('sudahPelunasan'),
+          final: pelunasanExists
+        });
+        
+        if (pelunasanExists) {
+          // Replace pay button with disabled state
+          btnBayar.classList.remove('btn-success');
+          btnBayar.classList.add('bg-gray-500', 'text-white', 'cursor-not-allowed');
+          btnBayar.removeAttribute('href');
+          btnBayar.setAttribute('disabled', 'true');
+          btnBayar.innerHTML = `
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="truncate">Menunggu Verifikasi</span>
+          `;
+          notifPelunasan.classList.remove('hidden');
+        }
+      } else {
+        console.warn('Pelunasan button elements not found or missing email');
       }
+    } catch (pelunasanError) {
+      console.error('Error in pelunasan status check:', pelunasanError);
     }
   });
 
