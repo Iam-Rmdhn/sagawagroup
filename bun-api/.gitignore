@@ -44,7 +44,7 @@ user-files/
 **/uploads/**
 
 #Spreadsheets
-!mitra-sheets.json
+mitra-sheets.json
 
 # caches
 .eslintcache
