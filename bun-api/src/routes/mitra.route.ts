@@ -79,6 +79,34 @@ export const mitraRoute = (req: Request): Promise<Response> => {
       }
     })();
   }
+
+  // GET /api/pelunasan/by-email?email=xxx
+  if (req.method === "GET" && url.pathname === "/api/pelunasan/by-email") {
+    return (async () => {
+      const email = url.searchParams.get("email");
+      if (!email) {
+        return new Response(JSON.stringify({ error: "email wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { MitraPelunasanModel } = await import(
+          "../models/mitra-pelunasan.model"
+        );
+        const pelunasan = await MitraPelunasanModel.findByEmail(email);
+        return new Response(JSON.stringify(pelunasan), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        return new Response(
+          JSON.stringify({ error: "Gagal mengambil data pelunasan" }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
   // GET /api/mitra/by-email?email=xxx
   if (req.method === "GET" && url.pathname === "/api/mitra/by-email") {
     return (async () => {

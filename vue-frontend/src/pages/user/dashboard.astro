@@ -9,7 +9,7 @@ let omsetHariIni = [];
 let omsetBulanIni = 0;
 let belanjaHariIni = [];
 try {
-   const res = await fetch("http://localhost:5000/api/sheets/omset");
+   const res = await fetch("http://localhost:3000/api/sheets/omset");
    if (res.ok) {
       const data = await res.json();
       omsetHariIni = data.omsetHariIni || [];
@@ -995,7 +995,7 @@ try {
             
             <div class="flex justify-end">
                <button type="button" id="submit-agreement" disabled class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white cursor-not-allowed sm:w-auto sm:text-sm transition-all duration-200">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                   </svg>
                   Setuju dan Lanjutkan
@@ -1008,7 +1008,7 @@ try {
 
 <script>
    // API URL configuration
-   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
 
    // Helper for per-user agreement storage key
    function agreementStorageKey() {
@@ -1724,7 +1724,7 @@ try {
       // Update Nama
       const namaElement = document.getElementById('agreement-nama');
       if (namaElement) {
-         namaElement.textContent = mitraData?.namaMitra || mitraData?.nama || 'Tidak tersedia';
+         namaElement.textContent = mitraData?.nama || mitraData?.namaMitra || 'Tidak tersedia';
       }
 
       // Update No HP
@@ -1824,9 +1824,10 @@ try {
          localStorage.setItem('mitraUserEmail', data.email);
       }
 
-      // Update avatar with first letter of name
+      // Update avatar with first letter of name - support both nama and namaMitra fields
       const profileAvatar = document.getElementById('profile-avatar');
-      const firstLetter = (data.namaMitra || 'M').charAt(0).toUpperCase();
+      const displayName = data.nama || data.namaMitra || 'M';
+      const firstLetter = displayName.charAt(0).toUpperCase();
       
       if (profileAvatar) profileAvatar.textContent = firstLetter;
 
@@ -1835,7 +1836,7 @@ try {
       const profileEmail = document.getElementById('profile-email');
       const profileStatus = document.getElementById('profile-status');
 
-      if (profileName) profileName.textContent = data.namaMitra || 'Nama tidak tersedia';
+      if (profileName) profileName.textContent = displayName || 'Nama tidak tersedia';
       if (profileEmail) profileEmail.textContent = data.email || 'Email tidak tersedia';
 
       // Status badge
@@ -2049,7 +2050,7 @@ try {
       const detailHp = document.getElementById('detail-hp');
       const detailAlamat = document.getElementById('detail-alamat');
 
-      if (detailNama) detailNama.textContent = data.namaMitra || 'Tidak tersedia';
+      if (detailNama) detailNama.textContent = data.nama || data.namaMitra || 'Tidak tersedia';
       if (detailEmail) detailEmail.textContent = data.email || 'Tidak tersedia';
       if (detailHp) detailHp.textContent = data.noHp || 'Tidak tersedia';
       if (detailAlamat) detailAlamat.textContent = data.alamatMitra || 'Tidak tersedia';
