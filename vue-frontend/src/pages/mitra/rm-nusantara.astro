@@ -13,6 +13,8 @@ import comingSoon from '../../assets/img/coming-soon.jpg';
 ---
 
 <Layout title="RM Nusantara - Peluang Mitra">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" is:inline></script>
   <Navbar />
   
   <main class="min-h-screen bg-white overflow-hidden">
@@ -37,7 +39,6 @@ import comingSoon from '../../assets/img/coming-soon.jpg';
                       <img 
                         src={rmwImage.src} 
                         alt="RM Nusantara Mall" 
-                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                         class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
@@ -47,7 +48,6 @@ import comingSoon from '../../assets/img/coming-soon.jpg';
                       <img 
                         src={warnasImage.src} 
                         alt="Warnas Mall" 
-                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                         class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
@@ -57,11 +57,14 @@ import comingSoon from '../../assets/img/coming-soon.jpg';
                       <img 
                         src={masgawImage.src} 
                         alt="Masgaw Mall Restaurant" 
-                        class="w-full h-full object-cover rounded-xl sm:rounded-2xl"
                         class="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl"
                       />
                     </div>
                   </div>
+                  
+                  <!-- Add Navigation -->
+                  <div class="swiper-button-next"></div>
+                  <div class="swiper-button-prev"></div>
                   
                   <!-- Add Pagination -->
                   <div class="swiper-pagination"></div>
@@ -644,169 +647,126 @@ import comingSoon from '../../assets/img/coming-soon.jpg';
   }
 </style>
 
-<script>
-  // Import Swiper and modules
-  import Swiper from 'swiper';
-  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
-  // Import Swiper styles
-  import 'swiper/css';
-  import 'swiper/css/navigation';
-  import 'swiper/css/pagination';
-
+<script is:inline>
   document.addEventListener('DOMContentLoaded', function() {
+    // Wait for Swiper to load from CDN
+    if (typeof Swiper !== 'undefined') {
+      initializeSwiper();
+    } else {
+      // If Swiper is not loaded yet, wait for it
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+      script.onload = function() {
+        initializeSwiper();
+      };
+      document.head.appendChild(script);
+    }
     
-    // Initialize Swiper
-    const swiper = new Swiper('.mySwiper', {
-      // Configure modules
-      modules: [Navigation, Pagination, Autoplay],
-      
-      // Basic settings
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: true,
-      
-      // Pagination
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        bulletClass: 'swiper-pagination-bullet',
-        bulletActiveClass: 'swiper-pagination-bullet-active',
-        renderBullet: function (index, className) {
-          return '<span class="' + className + '" style="width: 16px !important; height: 6px !important; border-radius: 3px !important; background: rgba(252, 211, 77, 0.6) !important; display: inline-block !important; margin: 0 2px !important; transition: all 0.3s ease !important;"></span>';
+    function initializeSwiper() {
+      const swiper = new Swiper('.mySwiper', {
+        // Basic settings
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        centeredSlides: true,
+        
+        // Pagination
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: false,
         },
-      },
-      
-      // Navigation arrows
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      
-      // Autoplay with touch-friendly settings
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      
-      // Touch settings for better mobile experience
-      touchEventsTarget: 'container',
-      touchRatio: 1,
-      touchAngle: 45,
-      grabCursor: true,
-      
-      // Better performance on mobile
-      watchSlidesProgress: true,
-      
-      // Effects
-      effect: 'slide',
-      speed: 600,
-      
-      // Enhanced responsive breakpoints
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-          navigation: {
-            enabled: false
-          }
+        
+        // Navigation arrows
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 20,
-          navigation: {
-            enabled: true
-          }
+        
+        // Autoplay
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
         },
-        768: {
-          slidesPerView: 1,
-          spaceBetween: 30,
+        
+        // Touch settings
+        grabCursor: true,
+        
+        // Effects
+        effect: 'slide',
+        speed: 600,
+        
+        // Responsive breakpoints
+        breakpoints: {
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 1,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 1,
+            spaceBetween: 30,
+          },
         },
-        1024: {
-          slidesPerView: 1,
-          spaceBetween: 30,
-        },
-      },
-      
-      // Events
-      on: {
-        init: function () {
-          // Force apply custom pagination styles
-          setTimeout(() => {
-            const bullets = document.querySelectorAll('.swiper-pagination-bullet');
-            const isMobile = window.innerWidth < 640;
-            const isTablet = window.innerWidth < 768;
-            
-            bullets.forEach(bullet => {
-              const htmlBullet = bullet as HTMLElement;
-              if (isMobile) {
-                htmlBullet.style.width = '16px';
-                htmlBullet.style.height = '6px';
-                htmlBullet.style.borderRadius = '3px';
-                htmlBullet.style.margin = '0 2px';
-              } else if (isTablet) {
-                htmlBullet.style.width = '20px';
-                htmlBullet.style.height = '7px';
-                htmlBullet.style.borderRadius = '3.5px';
-                htmlBullet.style.margin = '0 3px';
-              } else {
+        
+        // Events
+        on: {
+          init: function () {
+            // Apply custom pagination styles
+            setTimeout(function() {
+              const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+              bullets.forEach(function(bullet) {
+                const htmlBullet = bullet;
                 htmlBullet.style.width = '24px';
                 htmlBullet.style.height = '8px';
                 htmlBullet.style.borderRadius = '4px';
+                htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
+                htmlBullet.style.opacity = '1';
                 htmlBullet.style.margin = '0 4px';
+                htmlBullet.style.transition = 'all 0.3s ease';
+              });
+              
+              const activeBullet = document.querySelector('.swiper-pagination-bullet-active');
+              if (activeBullet) {
+                activeBullet.style.background = '#fbbf24';
+                activeBullet.style.transform = 'scale(1.2)';
+                activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
               }
-              htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
-              htmlBullet.style.transition = 'all 0.3s ease';
-            });
-            
-            const activeBullet = document.querySelector('.swiper-pagination-bullet-active') as HTMLElement;
-            if (activeBullet) {
-              activeBullet.style.background = '#fbbf24';
-              activeBullet.style.transform = 'scale(1.2)';
-              activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
-            }
-          }, 100);
-        },
-        slideChange: function (swiper) {
-          // Re-apply styles on slide change
-          setTimeout(() => {
-            const bullets = document.querySelectorAll('.swiper-pagination-bullet');
-            const isMobile = window.innerWidth < 640;
-            const isTablet = window.innerWidth < 768;
-            
-            bullets.forEach(bullet => {
-              const htmlBullet = bullet as HTMLElement;
-              if (isMobile) {
-                htmlBullet.style.width = '16px';
-                htmlBullet.style.height = '6px';
-                htmlBullet.style.borderRadius = '3px';
-                htmlBullet.style.margin = '0 2px';
-              } else if (isTablet) {
-                htmlBullet.style.width = '20px';
-                htmlBullet.style.height = '7px';
-                htmlBullet.style.borderRadius = '3.5px';
-                htmlBullet.style.margin = '0 3px';
-              } else {
+            }, 100);
+          },
+          slideChange: function () {
+            // Re-apply styles on slide change
+            setTimeout(function() {
+              const bullets = document.querySelectorAll('.swiper-pagination-bullet');
+              bullets.forEach(function(bullet) {
+                const htmlBullet = bullet;
                 htmlBullet.style.width = '24px';
                 htmlBullet.style.height = '8px';
                 htmlBullet.style.borderRadius = '4px';
+                htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
+                htmlBullet.style.opacity = '1';
                 htmlBullet.style.margin = '0 4px';
+                htmlBullet.style.transition = 'all 0.3s ease';
+              });
+              
+              const activeBullet = document.querySelector('.swiper-pagination-bullet-active');
+              if (activeBullet) {
+                activeBullet.style.background = '#fbbf24';
+                activeBullet.style.transform = 'scale(1.2)';
+                activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
               }
-              htmlBullet.style.background = 'rgba(252, 211, 77, 0.6)';
-              htmlBullet.style.transition = 'all 0.3s ease';
-            });
-            
-            const activeBullet = document.querySelector('.swiper-pagination-bullet-active') as HTMLElement;
-            if (activeBullet) {
-              activeBullet.style.background = '#fbbf24';
-              activeBullet.style.transform = 'scale(1.2)';
-              activeBullet.style.boxShadow = '0 2px 8px rgba(251, 191, 36, 0.4)';
-            }
-          }, 50);
+            }, 50);
+          },
         },
-      },
-    });
-    
+      });
+    }
   });
 </script>
