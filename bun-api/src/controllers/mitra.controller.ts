@@ -52,9 +52,23 @@ export const registerMitraController = async (
     const documents = formData.getAll("documents") as unknown as File[];
     const buktiTransfer = formData.get("buktiTransfer") as unknown as File;
 
-    // Helper function to save file and return URL
+    // Helper function to validate and save file and return URL
     const saveFileAndGetUrl = async (file: File): Promise<string> => {
       console.log(`Saving file: ${file.name}, size: ${file.size} bytes`);
+
+      // Validate file type - only allow JPG/PNG
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error(
+          `File type ${file.type} tidak diizinkan. Hanya menerima format JPG atau PNG.`
+        );
+      }
+
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        throw new Error(`Ukuran file terlalu besar. Maksimal 5MB.`);
+      }
 
       // Generate unique filename to avoid conflicts
       const timestamp = Date.now();

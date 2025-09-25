@@ -693,11 +693,11 @@ import contohMitra from '../assets/img/contoh-mitra.png';
                     <path d="m8 17 4-4 4 4"/>
                   </svg>
                   <div class="text-left">
-                    <p class="text-gray-600 font-medium text-sm">Upload Dokumen</p>
+                    <p class="text-gray-600 font-medium text-sm">Upload Dokumen Mitra</p>
                     <p class="text-xs text-gray-400">KTP, NPWP, Foto Mitra • Max 2MB</p>
                   </div>
                 </div>
-                <input type="file" id="documentsUpload" accept="image/*,application/pdf" class="hidden">
+                <input type="file" id="documentsUpload" accept="image/jpeg,image/jpg,image/png" class="hidden">
                 <button type="button" id="documentsUploadBtn" class="mt-2 px-3 py-1.5 bg-amber-500 text-white rounded text-xs hover:bg-amber-600 transition-colors">
                   Pilih File
                 </button>
@@ -779,10 +779,10 @@ import contohMitra from '../assets/img/contoh-mitra.png';
                 </svg>
                 <div class="text-left">
                   <p class="text-gray-600 font-medium text-sm">Upload Bukti Transfer</p>
-                  <p class="text-xs text-gray-400">JPG, PNG, PDF • Max 5MB</p>
+                  <p class="text-xs text-gray-400">JPG, PNG • Max 5MB</p>
                 </div>
               </div>
-              <input type="file" id="buktiTransfer" accept="image/*,application/pdf" class="hidden">
+              <input type="file" id="buktiTransfer" accept="image/jpeg,image/jpg,image/png" class="hidden">
               <button type="button" id="buktiTransferUploadBtn" class="mt-2 px-3 py-1.5 bg-amber-500 text-white rounded text-xs hover:bg-amber-600 transition-colors">
                 Pilih File
               </button>
@@ -1203,7 +1203,7 @@ class InputSanitizer {
 
     // Check file type
     if (!allowedTypes.includes(file.type)) {
-      return { valid: false, error: `Tipe file tidak didukung. Gunakan: ${allowedTypes.join(', ')}` };
+      return { valid: false, error: `Tipe file tidak didukung. Hanya menerima format JPG atau PNG` };
     }
 
     // Check file size
@@ -1358,7 +1358,7 @@ function setupInputSanitization() {
   const documentsInput = document.getElementById('documentsUpload') as HTMLInputElement;
   const buktiTransferInput = document.getElementById('buktiTransfer') as HTMLInputElement;
 
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
   const maxSize = 5 * 1024 * 1024; // 5MB
 
   if (documentsInput) {
@@ -1368,7 +1368,7 @@ function setupInputSanitization() {
         const validation = InputSanitizer.validateFile(file, allowedTypes, maxSize);
 
         if (!validation.valid) {
-          alert(`File dokumen tidak dapat diproses. Pastikan file dalam format yang didukung dan ukuran tidak melebihi batas.`);
+          alert(`File dokumen tidak dapat diproses. Pastikan file dalam format JPG atau PNG dan ukuran tidak melebihi 5MB.`);
           this.value = '';
           displayDocumentsPreview(null);
           checkFormValidation();
@@ -1386,7 +1386,7 @@ function setupInputSanitization() {
         const validation = InputSanitizer.validateFile(file, allowedTypes, maxSize);
 
         if (!validation.valid) {
-          alert(`File bukti transfer tidak dapat diproses. Pastikan file dalam format yang didukung dan ukuran tidak melebihi batas.`);
+          alert(`File bukti transfer tidak dapat diproses. Pastikan file dalam format JPG atau PNG dan ukuran tidak melebihi 5MB.`);
           this.value = '';
           displayBuktiTransferPreview(null);
           checkFormValidation();
@@ -1495,7 +1495,7 @@ function validateStep1WithSanitization() {
   }
 
   // Validate file types and sizes with sanitization
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
   const maxSize = 5 * 1024 * 1024; // 5MB
 
   // Check documents
@@ -1825,26 +1825,18 @@ function displayDocumentsPreview(files: FileList | null) {
   const previewElement = document.createElement('div');
   previewElement.className = 'flex-shrink-0';
   
-  // Check if file is an image
-  if (file.type.startsWith('image/')) {
-    const img = document.createElement('img');
-    img.className = 'w-12 h-12 object-cover rounded border shadow-sm';
-    img.alt = 'Preview';
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      img.src = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-    
-    previewElement.appendChild(img);
-  } else {
-    // Show file icon for PDFs
-    const iconDiv = document.createElement('div');
-    iconDiv.className = 'w-12 h-12 bg-red-100 rounded border flex items-center justify-center';
-    iconDiv.innerHTML = '<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>';
-    previewElement.appendChild(iconDiv);
-  }
+  // Show image preview (now only accepting JPG/PNG)
+  const img = document.createElement('img');
+  img.className = 'w-12 h-12 object-cover rounded border shadow-sm';
+  img.alt = 'Preview';
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    img.src = e.target?.result as string;
+  };
+  reader.readAsDataURL(file);
+  
+  previewElement.appendChild(img);
   
   // File details
   const fileDetails = document.createElement('div');
@@ -1896,26 +1888,18 @@ function displayBuktiTransferPreview(file: File | null) {
     const previewElement = document.createElement('div');
     previewElement.className = 'flex-shrink-0';
     
-    // Check if file is an image
-    if (file.type.startsWith('image/')) {
-      const img = document.createElement('img');
-      img.className = 'w-12 h-12 object-cover rounded border shadow-sm';
-      img.alt = 'Preview bukti transfer';
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        img.src = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-      
-      previewElement.appendChild(img);
-    } else {
-      // Show file icon for PDFs
-      const iconDiv = document.createElement('div');
-      iconDiv.className = 'w-12 h-12 bg-red-100 rounded border flex items-center justify-center';
-      iconDiv.innerHTML = '<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>';
-      previewElement.appendChild(iconDiv);
-    }
+    // Show image preview (now only accepting JPG/PNG)
+    const img = document.createElement('img');
+    img.className = 'w-12 h-12 object-cover rounded border shadow-sm';
+    img.alt = 'Preview bukti transfer';
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+    
+    previewElement.appendChild(img);
     
     // File details
     const fileDetails = document.createElement('div');
@@ -2498,14 +2482,14 @@ function validateStep1() {
   }
   
   // Validate file types and sizes
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
   const maxSize = 5 * 1024 * 1024; // 5MB
   
   // Check documents
   for (let i = 0; i < documentsUpload.files.length; i++) {
     const file = documentsUpload.files[i];
     if (!allowedTypes.includes(file.type)) {
-      alert(`File ${file.name} tidak didukung. Gunakan format JPG, PNG, atau PDF`);
+      alert(`File ${file.name} tidak didukung. Gunakan format JPG atau PNG saja`);
       return false;
     }
     if (file.size > maxSize) {
@@ -2517,7 +2501,7 @@ function validateStep1() {
   // Check bukti transfer
   const buktiFile = buktiTransfer.files[0];
   if (!allowedTypes.includes(buktiFile.type)) {
-    alert(`File bukti transfer tidak didukung. Gunakan format JPG, PNG, atau PDF`);
+    alert(`File bukti transfer tidak didukung. Gunakan format JPG atau PNG saja`);
     return false;
   }
   if (buktiFile.size > maxSize) {
