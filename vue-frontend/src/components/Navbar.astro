@@ -153,10 +153,13 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
         
         <!-- Desktop Dashboard Button -->
         <a id="desktop-dashboard-button" href="/dashboard" class="hidden bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium transition-all duration-300 items-center shadow-sm">
-          Dashboard
-          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM7 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard mr-2">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
           </svg>
+          Dashboard
         </a>
       </div>
 
@@ -258,10 +261,13 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
         
         <!-- Mobile Dashboard Button -->
         <a id="mobile-dashboard-button" href="/dashboard" class="mobile-nav-link items-center font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed data-[shape=pill]:rounded-full data-[width=full]:w-full focus:shadow-none text-sm rounded-md py-2 px-4 shadow-sm hover:shadow-md bg-red-500 text-white hover:bg-red-700">
-          Dashboard
-          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM7 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard mr-2">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
           </svg>
+          Dashboard
         </a>
       </div>
     </div>
@@ -442,25 +448,48 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
 <script>
   // Function to check if user is logged in
   function isUserLoggedIn() {
-    // Check for authentication token in localStorage
-    const token = localStorage.getItem('authToken') || localStorage.getItem('auth_token') || localStorage.getItem('token');
-    const userSession = localStorage.getItem('userSession') || localStorage.getItem('user');
+    // Check for user authentication tokens
+    const userToken = localStorage.getItem('mitraToken');
+    
+    // Check for admin authentication tokens
+    const adminToken = localStorage.getItem('adminToken');
+    
+    // Check for generic authentication tokens
+    const genericToken = localStorage.getItem('authToken') || 
+                        localStorage.getItem('auth_token') || 
+                        localStorage.getItem('token');
+    const userSession = localStorage.getItem('userSession') || 
+                       localStorage.getItem('user');
     
     // Return true if any authentication indicator exists
-    return !!(token || userSession);
+    return !!(userToken || adminToken || genericToken || userSession);
+  }
+
+  // Function to determine user type based on tokens
+  function getUserType() {
+    const userToken = localStorage.getItem('mitraToken');
+    const adminToken = localStorage.getItem('adminToken');
+    
+    if (adminToken) {
+      return 'admin';
+    } else if (userToken) {
+      return 'user';
+    }
+    return null;
   }
 
   // Function to update auth buttons based on login status
   function updateAuthButtons() {
     const isLoggedIn = isUserLoggedIn();
+    const userType = getUserType(); // Determine if user or admin
     
     // Desktop button elements
-    const desktopLoginButton = document.getElementById('desktop-login-button');
-    const desktopDashboardButton = document.getElementById('desktop-dashboard-button');
+    const desktopLoginButton = document.getElementById('desktop-login-button') as HTMLAnchorElement;
+    const desktopDashboardButton = document.getElementById('desktop-dashboard-button') as HTMLAnchorElement;
     
     // Mobile button elements
-    const mobileLoginButton = document.getElementById('mobile-login-button');
-    const mobileDashboardButton = document.getElementById('mobile-dashboard-button');
+    const mobileLoginButton = document.getElementById('mobile-login-button') as HTMLAnchorElement;
+    const mobileDashboardButton = document.getElementById('mobile-dashboard-button') as HTMLAnchorElement;
     
     if (isLoggedIn) {
       // Hide login buttons and show dashboard buttons
@@ -469,6 +498,13 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
       }
       if (desktopDashboardButton) {
         desktopDashboardButton.style.display = 'flex';
+        
+        // Set dashboard link based on user type
+        if (userType === 'admin') {
+          desktopDashboardButton.href = '/admin/dashboard';
+        } else {
+          desktopDashboardButton.href = '/user/dashboard';
+        }
       }
       
       if (mobileLoginButton) {
@@ -476,6 +512,13 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
       }
       if (mobileDashboardButton) {
         mobileDashboardButton.style.display = 'inline-flex';
+        
+        // Set dashboard link based on user type
+        if (userType === 'admin') {
+          mobileDashboardButton.href = '/admin/dashboard';
+        } else {
+          mobileDashboardButton.href = '/user/dashboard';
+        }
       }
     } else {
       // Show login buttons and hide dashboard buttons
@@ -496,14 +539,20 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
   }
 
   // Helper function to simulate login for testing
-  function simulateLogin(token = 'test-auth-token') {
-    localStorage.setItem('authToken', token);
-    console.log('Login simulated, token set:', token);
+  function simulateLogin(token = 'test-auth-token', userType = 'user') {
+    if (userType === 'admin') {
+      localStorage.setItem('adminToken', token);
+    } else {
+      localStorage.setItem('mitraToken', token);
+    }
+    console.log('Login simulated, token set:', token, 'for user type:', userType);
     updateAuthButtons();
   }
 
   // Helper function to simulate logout for testing
   function simulateLogout() {
+    localStorage.removeItem('mitraToken');
+    localStorage.removeItem('adminToken');
     localStorage.removeItem('authToken');
     localStorage.removeItem('auth_token');
     localStorage.removeItem('token');
@@ -516,15 +565,18 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
   // Helper function to check current login status
   function checkLoginStatus() {
     const isLoggedIn = isUserLoggedIn();
-    console.log('Login status:', isLoggedIn);
+    const userType = getUserType();
+    console.log('Login status:', isLoggedIn, 'User type:', userType);
     console.log('Available tokens:', {
+      mitraToken: localStorage.getItem('mitraToken'),
+      adminToken: localStorage.getItem('adminToken'),
       authToken: localStorage.getItem('authToken'),
       auth_token: localStorage.getItem('auth_token'),
       token: localStorage.getItem('token'),
       userSession: localStorage.getItem('userSession'),
       user: localStorage.getItem('user')
     });
-    return isLoggedIn;
+    return { isLoggedIn, userType };
   }
 
   // Expose functions globally for testing purposes (can be removed in production)
@@ -533,6 +585,7 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
     (window as any).simulateLogout = simulateLogout;
     (window as any).updateAuthButtons = updateAuthButtons;
     (window as any).checkLoginStatus = checkLoginStatus;
+    (window as any).getUserType = getUserType;
   }
 
   // Toggle mobile menu with smooth animation
@@ -599,7 +652,9 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
     
     // Listen for storage changes to update buttons when user logs in/out in another tab
     window.addEventListener('storage', (event) => {
-      if (event.key === 'authToken' || event.key === 'auth_token' || event.key === 'token' || event.key === 'userSession' || event.key === 'user') {
+      if (event.key === 'mitraToken' || event.key === 'adminToken' || 
+          event.key === 'authToken' || event.key === 'auth_token' || 
+          event.key === 'token' || event.key === 'userSession' || event.key === 'user') {
         updateAuthButtons();
       }
     });
