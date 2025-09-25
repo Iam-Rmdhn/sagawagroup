@@ -50,6 +50,35 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
       border-color: rgba(251, 191, 36, 0.2);
     }
 
+    /* Image preview styling */
+    .image-preview {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 12px;
+      border: 2px solid #d1d5db;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      padding: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .preview-overlay:hover {
+      background: rgba(220, 38, 38, 0.8);
+    }
+
     /* Mobile responsive improvements */
     @media (max-width: 640px) {
       .mobile-stack {
@@ -60,13 +89,17 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
       .mobile-center {
         text-align: center;
       }
+
+      .image-preview {
+        max-height: 200px;
+      }
     }
   </style>
 
   <div id="formPelunasanContainer">
     <script type="module">
       document.addEventListener('DOMContentLoaded', async () => {
-        let API_URL = 'http://localhost:5000';
+        let API_URL = 'http://localhost:3000';
         try {
           if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
             if (import.meta.env.PUBLIC_API_URL && import.meta.env.PUBLIC_API_URL.startsWith('http')) {
@@ -144,7 +177,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
                 Form Pelunasan Kewajiban
               </h2>
               <p class="text-gray-600 text-sm sm:text-base">Lengkapi data pelunasan dan upload bukti transfer</p>
-              <div class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg">
+              <div class="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg">
                 <p class="text-xs text-amber-700 flex items-center">
                   <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
@@ -155,14 +188,13 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
             </div>
           </div>
           <!-- Info pembayaran -->
-          <div class="bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 rounded-xl p-4 sm:p-6 mb-6">
             <div class="flex items-center mb-3">
               <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"></path>
               </svg>
               <h3 class="text-base sm:text-lg font-semibold text-amber-800">Informasi Pembayaran</h3>
             </div>
-            <div class="space-y-2">
+            <div class="space-y-2 mb-3">
               <div class="bg-white bg-opacity-60 rounded-lg p-3 sm:p-4 border border-amber-200">
                 <p class="text-sm text-gray-700 mb-3">Pembayaran dapat dilakukan melalui rekening:</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
@@ -181,33 +213,39 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
                   <p class="text-xs text-red-700 font-semibold">(Sertakan bukti transfer)</p>
                 </div>
               </div>
-            </div>
           </div>
           <form id="formPelunasan" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="space-y-4 mb-6">
+              <!-- Nama Mitra -->
               <div>
                 <label for="namaMitra" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Nama Mitra</label>
                 <input id="namaMitra" name="namaMitra" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Nama Mitra*" readonly />
               </div>
+              
+              <!-- Alamat Mitra -->
               <div>
                 <label for="alamatMitra" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Alamat Mitra</label>
-                <input id="alamatMitra" name="alamatMitra" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Alamat Mitra*" readonly />
+                <textarea id="alamatMitra" name="alamatMitra" rows="3" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all resize-none" placeholder="Alamat Mitra*" readonly></textarea>
               </div>
-              <div>
-                <label for="noHp" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">No HP</label>
-                <input id="noHp" name="noHp" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="No HP*" readonly />
-              </div>
-              <div>
-                <label for="email" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Email</label>
-                <input id="email" name="email" type="email" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Email*" readonly />
-              </div>
-              <div>
-                <label for="paketUsaha" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Kemitraan</label>
-                <input id="paketUsaha" name="paketUsaha" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Kemitraan*" readonly />
-              </div>
-              <div>
-                <label for="nominalPelunasan" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Nominal Pelunasan</label>
-                <input id="nominalPelunasan" name="nominalPelunasan" type="number" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Nominal Pelunasan*" required readonly />
+
+              <!-- Grid untuk field lainnya -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="noHp" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">No HP</label>
+                  <input id="noHp" name="noHp" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="No HP*" readonly />
+                </div>
+                <div>
+                  <label for="email" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Email</label>
+                  <input id="email" name="email" type="email" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Email*" readonly />
+                </div>
+                <div>
+                  <label for="paketUsaha" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Kemitraan</label>
+                  <input id="paketUsaha" name="paketUsaha" type="text" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Kemitraan*" readonly />
+                </div>
+                <div>
+                  <label for="nominalPelunasan" class="block text-gray-800 font-semibold mb-2 text-sm sm:text-base">Nominal Pelunasan</label>
+                  <input id="nominalPelunasan" name="nominalPelunasan" type="number" class="w-full px-4 py-3 border border-amber-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 text-sm sm:text-base focus:border-amber-400 focus:ring-2 focus:ring-amber-200 transition-all" placeholder="Nominal Pelunasan*" required readonly />
+                </div>
               </div>
             </div>
             <div class="mb-8">
@@ -215,16 +253,26 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
                 Upload Bukti Transfer <span class="text-red-500">*</span>
               </label>
               <div id="buktiTransferUploadArea" class="border-2 border-dashed border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 sm:p-8 text-center transition-all duration-200 hover:border-amber-400 hover:from-amber-100 hover:to-orange-100">
-                <svg class="w-10 h-10 sm:w-12 sm:h-12 text-amber-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
-                <div class="font-bold text-base sm:text-lg text-gray-800 mb-2">Upload Bukti Transfer <span class="text-red-500">*</span></div>
-                <div class="text-gray-600 text-sm mb-1">JPG, PNG, atau PDF (Maksimal 2MB)</div>
-                <div class="text-amber-600 text-xs mb-4 font-medium">Wajib diisi untuk memproses pelunasan</div>
+                <!-- Upload Icon dan Text (akan disembunyikan saat ada preview) -->
+                <div id="uploadPlaceholder">
+                  <svg class="w-10 h-10 sm:w-12 sm:h-12 text-amber-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                  <div class="font-bold text-base sm:text-lg text-gray-800 mb-2">Upload Bukti Transfer <span class="text-red-500">*</span></div>
+                  <div class="text-gray-600 text-sm mb-1">JPG, PNG, atau PDF (Maksimal 2MB)</div>
+                  <div class="text-amber-600 text-xs mb-4 font-medium">Wajib diisi untuk memproses pelunasan</div>
+                </div>
+
+                <!-- Preview Area (akan ditampilkan saat ada file) -->
+                <div id="previewArea" class="hidden">
+                  <div id="imagePreviewContainer" class="mb-4"></div>
+                  <div id="fileInfoContainer" class="mb-4"></div>
+                </div>
+
                 <input id="buktiTransfer" name="buktiTransfer" type="file" accept="image/*,application/pdf" class="hidden" required />
                 <button type="button" id="buktiTransferUploadBtn" class="btn-primary mt-2 px-4 sm:px-6 py-2 sm:py-3 text-white rounded-xl font-semibold flex items-center justify-center mx-auto text-sm sm:text-base shadow-lg">
                   <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                  Pilih File Bukti Transfer
+                  <span id="uploadBtnText">Pilih File Bukti Transfer</span>
                 </button>
                 <div id="buktiTransferPreview" class="mt-3 text-xs text-gray-600"></div>
               </div>
@@ -401,7 +449,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
 
     const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL)
       ? import.meta.env.PUBLIC_API_URL
-      : 'http://localhost:5000';
+      : 'http://localhost:3000';
     const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
     const msg = document.getElementById('formPelunasanMsg');
     if (!email) {
@@ -417,7 +465,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         msg.className = 'text-red-600 mt-4 text-center';
         return;
       }
-      document.getElementById('namaMitra').value = data.namaMitra || '';
+      document.getElementById('namaMitra').value = data.nama || data.namaMitra || '';
       document.getElementById('email').value = data.email || '';
       document.getElementById('alamatMitra').value = data.alamatMitra || '';
       document.getElementById('noHp').value = data.noHp || '';
@@ -439,69 +487,138 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
     const buktiInput = document.getElementById('buktiTransfer');
     const buktiPreview = document.getElementById('buktiTransferPreview');
     const btnKirim = document.getElementById('btnKirimPelunasan');
-    function updateBtnKirimState() {
-      const file = buktiInput.files[0];
-      const namaPengirim = document.getElementById('namaPengirim').value.trim();
-      const noRekPengirim = document.getElementById('noRekPengirim').value.trim();
-      const bankPengirim = document.getElementById('bankPengirim').value.trim();
-      
-      const isFileValid = file && file.size <= 2 * 1024 * 1024;
-      const areFieldsValid = namaPengirim && noRekPengirim && bankPengirim;
-      
-      if (isFileValid && areFieldsValid) {
-        btnKirim.disabled = false;
-        btnKirim.classList.remove('bg-gray-400', 'cursor-not-allowed', 'bg-gray-600', 'opacity-50', 'shadow-none');
-        btnKirim.classList.add('btn-success');
-      } else {
-        btnKirim.disabled = true;
-        btnKirim.classList.remove('btn-success');
-        btnKirim.classList.add('bg-gray-600', 'cursor-not-allowed', 'opacity-50', 'shadow-none');
-      }
-    }
     buktiInput.addEventListener('change', function() {
-      buktiPreview.innerHTML = '';
       const file = this.files[0];
+      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+      const previewArea = document.getElementById('previewArea');
+      const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      const fileInfoContainer = document.getElementById('fileInfoContainer');
+      const uploadBtnText = document.getElementById('uploadBtnText');
+      const uploadArea = document.getElementById('buktiTransferUploadArea');
+      
+      // Reset preview
+      buktiPreview.innerHTML = '';
+      imagePreviewContainer.innerHTML = '';
+      fileInfoContainer.innerHTML = '';
+      
       if (file) {
         if (file.size > 2 * 1024 * 1024) {
+          // File terlalu besar
           buktiPreview.textContent = 'Ukuran file maksimal 2MB!';
+          buktiPreview.className = 'mt-3 text-sm text-red-600 font-semibold';
           buktiInput.value = '';
-          updateBtnKirimState();
-        } else {
-          // Buat preview file dengan ikon, nama, size, dan tombol hapus
-          const wrapper = document.createElement('div');
-          wrapper.className = 'flex items-center bg-gray-50 rounded-xl px-4 py-3 mt-2 shadow-sm';
-
-          // Ikon file
-          const icon = document.createElement('span');
-          icon.innerHTML = `<svg class="w-7 h-7 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="#ECFDF5"/><path d="M9 12h6M9 16h6M9 8h6" stroke="#10B981" stroke-width="2" stroke-linecap="round"/></svg>`;
-          wrapper.appendChild(icon);
-
-          // Info nama dan size
-          const info = document.createElement('div');
-          info.className = 'flex-1';
-          info.innerHTML = `<div class="font-medium text-gray-900">${file.name}</div><div class="text-xs text-gray-500">${(file.size/1024).toFixed(2)} KB</div>`;
-          wrapper.appendChild(info);
-
-          // Tombol hapus
-          const removeBtn = document.createElement('button');
-          removeBtn.type = 'button';
-          removeBtn.className = 'ml-4 text-red-500 hover:text-red-700 text-lg font-bold focus:outline-none';
-          removeBtn.innerHTML = '&times;';
-          removeBtn.title = 'Hapus file';
-          removeBtn.onclick = function() {
-            buktiInput.value = '';
-            buktiPreview.innerHTML = '';
-            updateBtnKirimState();
-          };
-          wrapper.appendChild(removeBtn);
-
-          buktiPreview.appendChild(wrapper);
-          updateBtnKirimState();
+          
+          // Kembalikan ke state awal
+          uploadPlaceholder.classList.remove('hidden');
+          previewArea.classList.add('hidden');
+          uploadBtnText.textContent = 'Pilih File Bukti Transfer';
+          uploadArea.classList.remove('border-green-400', 'border-red-300');
+          uploadArea.classList.add('border-amber-300');
+          
+          window.updateBtnKirimState();
+          return;
         }
+
+        // Sembunyikan placeholder dan tampilkan preview
+        uploadPlaceholder.classList.add('hidden');
+        previewArea.classList.remove('hidden');
+        uploadBtnText.textContent = 'Ganti File';
+        
+        // Update border color
+        uploadArea.classList.remove('border-amber-300', 'border-red-300');
+        uploadArea.classList.add('border-green-400');
+
+        // Cek apakah file adalah gambar
+        if (file.type.startsWith('image/')) {
+          // Buat preview gambar
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'preview-container';
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'image-preview mx-auto';
+            img.alt = 'Preview bukti transfer';
+            
+            // Tombol hapus overlay
+            const removeOverlay = document.createElement('div');
+            removeOverlay.className = 'preview-overlay';
+            removeOverlay.title = 'Hapus file';
+            removeOverlay.innerHTML = `
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            `;
+            removeOverlay.onclick = function() {
+              clearPreview();
+            };
+            
+            previewContainer.appendChild(img);
+            previewContainer.appendChild(removeOverlay);
+            imagePreviewContainer.appendChild(previewContainer);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // Preview untuk file non-gambar (PDF)
+          const fileIcon = document.createElement('div');
+          fileIcon.className = 'flex items-center justify-center mb-4';
+          fileIcon.innerHTML = `
+            <div class="bg-red-100 rounded-full p-4">
+              <svg class="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          `;
+          imagePreviewContainer.appendChild(fileIcon);
+        }
+
+        // Info file
+        const fileInfo = document.createElement('div');
+        fileInfo.className = 'bg-white bg-opacity-60 rounded-lg p-3 border border-green-200';
+        fileInfo.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="font-medium text-gray-900 text-sm truncate">${file.name}</div>
+              <div class="text-xs text-gray-600">${(file.size/1024).toFixed(2)} KB • ${file.type}</div>
+            </div>
+            <button type="button" onclick="clearPreview()" class="ml-3 text-red-500 hover:text-red-700 p-1 rounded">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+        fileInfoContainer.appendChild(fileInfo);
+
+        window.updateBtnKirimState();
       } else {
-        updateBtnKirimState();
+        clearPreview();
       }
     });
+
+    // Fungsi untuk membersihkan preview
+    function clearPreview() {
+      const buktiInput = document.getElementById('buktiTransfer');
+      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+      const previewArea = document.getElementById('previewArea');
+      const uploadBtnText = document.getElementById('uploadBtnText');
+      const uploadArea = document.getElementById('buktiTransferUploadArea');
+      const buktiPreview = document.getElementById('buktiTransferPreview');
+      
+      buktiInput.value = '';
+      buktiPreview.innerHTML = '';
+      
+      uploadPlaceholder.classList.remove('hidden');
+      previewArea.classList.add('hidden');
+      uploadBtnText.textContent = 'Pilih File Bukti Transfer';
+      
+      uploadArea.classList.remove('border-green-400', 'border-red-300');
+      uploadArea.classList.add('border-amber-300');
+      
+      window.updateBtnKirimState();
+    }
+
     // Fungsi untuk validasi real-time field sumber dana
     function validateField(fieldId, isValid) {
       const field = document.getElementById(fieldId);
@@ -523,7 +640,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         }
         const isValid = this.value.trim().length > 0;
         validateField(fieldId, isValid);
-        updateBtnKirimState();
+        window.updateBtnKirimState();
       });
     });
 
@@ -546,7 +663,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         uploadArea.classList.add('border-red-300');
       }
       
-      updateBtnKirimState();
+      window.updateBtnKirimState();
     });
 
     document.getElementById('formPelunasan').addEventListener('submit', async (e) => {
@@ -669,4 +786,58 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
       }
     });
   });
+
+  // Fungsi global untuk update status tombol kirim
+  window.updateBtnKirimState = function() {
+    const buktiInput = document.getElementById('buktiTransfer');
+    const btnKirim = document.getElementById('btnKirimPelunasan');
+    const namaPengirim = document.getElementById('namaPengirim');
+    const noRekPengirim = document.getElementById('noRekPengirim');
+    const bankPengirim = document.getElementById('bankPengirim');
+    
+    if (!buktiInput || !btnKirim || !namaPengirim || !noRekPengirim || !bankPengirim) {
+      return;
+    }
+    
+    const file = buktiInput.files[0];
+    const namaPengirimValue = namaPengirim.value.trim();
+    const noRekPengirimValue = noRekPengirim.value.trim();
+    const bankPengirimValue = bankPengirim.value.trim();
+    
+    const isFileValid = file && file.size <= 2 * 1024 * 1024;
+    const areFieldsValid = namaPengirimValue && noRekPengirimValue && bankPengirimValue;
+    
+    if (isFileValid && areFieldsValid) {
+      btnKirim.disabled = false;
+      btnKirim.classList.remove('bg-gray-400', 'cursor-not-allowed', 'bg-gray-600', 'opacity-50', 'shadow-none');
+      btnKirim.classList.add('btn-success');
+    } else {
+      btnKirim.disabled = true;
+      btnKirim.classList.remove('btn-success');
+      btnKirim.classList.add('bg-gray-600', 'cursor-not-allowed', 'opacity-50', 'shadow-none');
+    }
+  };
+
+  // Fungsi global untuk membersihkan preview (dapat dipanggil dari onclick)
+  window.clearPreview = function() {
+    const buktiInput = document.getElementById('buktiTransfer');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const previewArea = document.getElementById('previewArea');
+    const uploadBtnText = document.getElementById('uploadBtnText');
+    const uploadArea = document.getElementById('buktiTransferUploadArea');
+    const buktiPreview = document.getElementById('buktiTransferPreview');
+    
+    buktiInput.value = '';
+    buktiPreview.innerHTML = '';
+    
+    uploadPlaceholder.classList.remove('hidden');
+    previewArea.classList.add('hidden');
+    uploadBtnText.textContent = 'Pilih File Bukti Transfer';
+    
+    uploadArea.classList.remove('border-green-400', 'border-red-300');
+    uploadArea.classList.add('border-amber-300');
+    
+    // Call updateBtnKirimState
+    window.updateBtnKirimState();
+  };
 </script>
