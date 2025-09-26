@@ -2,7 +2,7 @@
 
 /**
  * Get the base URL for the application based on environment
- * @returns The base URL (e.g., http://localhost:6000 or https://www.sagawagroup.id)
+ * @returns The base URL (e.g., http://localhost:3000 or https://www.sagawagroup.id)
  */
 export function getBaseUrl(): string {
   // Check if we're in a Bun environment
@@ -16,14 +16,14 @@ export function getBaseUrl(): string {
     if (process.env.NODE_ENV === 'production') {
       return 'https://www.sagawagroup.id';
     } else {
-      // For development, use the PORT from environment or default to 6000
-      const port = process.env.PORT || '6000';
+      // For development, use the PORT from environment or default to 3000
+      const port = process.env.PORT || '3000';
       return `http://localhost:${port}`;
     }
   }
   
   // Fallback
-  return 'http://localhost:6000';
+  return 'http://localhost:3000';
 }
 
 /**

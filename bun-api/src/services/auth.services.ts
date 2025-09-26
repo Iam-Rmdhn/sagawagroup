@@ -343,7 +343,7 @@ export async function approveMitraService(
         // Get base URL from environment
         const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
           ? 'https://www.sagawagroup.id' 
-          : `http://localhost:${process.env.PORT || '6000'}`);
+          : `http://localhost:${process.env.PORT || '3000'}`);
         const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
         
         if (
@@ -480,7 +480,7 @@ export async function deleteMitraService(mitraId: string) {
       // Get base URL from environment
       const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
         ? 'https://www.sagawagroup.id' 
-        : `http://localhost:${process.env.PORT || '6000'}`);
+        : `http://localhost:${process.env.PORT || '3000'}`);
       const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
       
       if (

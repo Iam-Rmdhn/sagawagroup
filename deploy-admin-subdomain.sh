@@ -126,16 +126,22 @@ chown -R www-data:www-data /var/www/sagawagroup/frontend
 chmod -R 755 /var/www/sagawagroup/frontend
 echo -e "${GREEN}   ✓ Permissions set${NC}"
 
-# Restart backend API
+# Restart backend API with production configuration
 echo -e "${YELLOW}8. Restarting backend API...${NC}"
-cd /root/sagawagroup/bun-api
 if command -v pm2 &> /dev/null; then
-    pm2 restart sagawa-api || pm2 start ecosystem.config.js
-    echo -e "${GREEN}   ✓ Backend API restarted with PM2${NC}"
+    cd /root/sagawagroup
+    pm2 restart sagawagroup-api || pm2 start ecosystem.config.js --env production
+    echo -e "${GREEN}   ✓ Backend API restarted with PM2 using production configuration${NC}"
 else
-    # If PM2 is not available, we'll just note it
-    echo -e "${YELLOW}   ! PM2 not found. Please manually restart the backend API${NC}"
-    echo -e "${YELLOW}   ! Command: cd /root/sagawagroup/bun-api && bun run start${NC}"
+    # If PM2 is not available, attempt to run using the server script with production environment
+    cd /root/sagawagroup/bun-api
+    if [ -f "server.sh" ]; then
+        NODE_ENV=production ./server.sh restart
+        echo -e "${GREEN}   ✓ Backend API restarted with server.sh using production configuration${NC}"
+    else
+        echo -e "${YELLOW}   ! PM2 not found and server.sh not available. Please manually restart the backend API${NC}"
+        echo -e "${YELLOW}   ! Command: cd /root/sagawagroup/bun-api && NODE_ENV=production PORT=5000 bun run index.ts${NC}"
+    fi
 fi
 
 echo ""

@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # Server management script for Sagawa Group API
-PORT=6000
+# Use environment variable or default to 3000 for dev, 5000 for production
+NODE_ENV=${NODE_ENV:-development}
+if [ "$NODE_ENV" = "production" ]; then
+    PORT=5000
+else
+    PORT=3000
+fi
 
 case "$1" in
     start)
@@ -15,8 +21,10 @@ case "$1" in
             exit 1
         fi
         
-        # Start server in background
-        nohup bun run dev > server.log 2>&1 &
+        # Start server in background with proper environment
+        export NODE_ENV=$NODE_ENV
+        export PORT=$PORT
+        nohup bun run index.ts > server.log 2>&1 &
         SERVER_PID=$!
         echo $SERVER_PID > server.pid
         

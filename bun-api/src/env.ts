@@ -66,7 +66,7 @@ if (!VALID_NODE_ENVS.includes(nodeEnv)) {
 }
 
 // Validate and parse PORT
-const port = getEnvVar("PORT", nodeEnv === "production" ? "5000" : "6000");
+const port = getEnvVar("PORT", nodeEnv === "production" ? "5000" : "3000");
 const portNum = parseInt(port, 10);
 if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
   throw new Error("PORT must be a valid number between 1 and 65535");
@@ -76,13 +76,13 @@ if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
 export const ENV = {
   NODE_ENV: nodeEnv,
   PORT: portNum,
-  BASE_URL: getEnvVar("BASE_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:6000"),
+  BASE_URL: getEnvVar("BASE_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:3000"),
   CORS_ORIGIN: parseArray(process.env.CORS_ORIGIN),
   CORS_CREDENTIALS: parseBoolean(process.env.CORS_CREDENTIALS, false),
   JWT_SECRET: getRequiredEnvVar("JWT_SECRET"),
   ASTRA_DB_APPLICATION_TOKEN: getRequiredEnvVar("ASTRA_DB_APPLICATION_TOKEN"),
   ASTRA_DB_API_ENDPOINT: getRequiredEnvVar("ASTRA_DB_API_ENDPOINT"),
-  PUBLIC_API_URL: getEnvVar("PUBLIC_API_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:6000"),
+  PUBLIC_API_URL: getEnvVar("PUBLIC_API_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:3000"),
   LOG_LEVEL: getEnvVar("LOG_LEVEL", nodeEnv === "production" ? "info" : "debug"),
 };
 

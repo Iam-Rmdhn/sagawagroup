@@ -3,7 +3,7 @@ import { MitraModel } from "./src/models/mitra.model";
 
 // Environment-aware base URL
 const getBaseURL = () => {
-  const port = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 : 6000);
+  const port = process.env.PORT || (process.env.NODE_ENV === 'production' ? 5000 : 3000);
   const env = process.env.NODE_ENV || 'development';
   
   if (env === 'production') {
