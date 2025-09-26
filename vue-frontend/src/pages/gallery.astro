@@ -303,7 +303,7 @@ const galleryImages = [
     let isTransitioning = false;
 
     // YouTube API configuration - sekarang menggunakan backend API
-    const BACKEND_API_BASE = 'http://localhost:3000';
+    const BACKEND_API_BASE = window.location.protocol + '//' + window.location.host;
     
     let youtubeVideos = [];
     let videosCache = null;
