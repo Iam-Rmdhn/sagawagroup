@@ -1,5 +1,6 @@
 ---
 // Admin Navbar Component - Modern Redesign
+import logoSgw from '/src/assets/img/logo_s.svg';
 ---
 
 <nav class="fixed top-0 z-50 w-full bg-white shadow-lg border-b-4 border-gradient-to-r from-amber-500 via-orange-500 to-red-500">
@@ -21,7 +22,7 @@
           <a href="/admin/dashboard" class="flex items-center space-x-3 group">
             <div class="relative">
               <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 p-2 group-hover:from-orange-400 group-hover:to-red-500 transition-all duration-300 shadow-lg">
-                <img src="/src/assets/img/logo_s.svg" alt="Sagawa Logo" class="w-full h-full object-contain filter brightness-0 invert">
+                <img src={logoSgw.src} alt="" class="w-full h-full object-contain filter brightness-0 invert">
               </div>
               <div class="absolute -inset-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
             </div>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import logoLogin from '../assets/img/sagawa_logo.svg';
 ---
 <Layout title="Login">
 
@@ -107,7 +108,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="w-full max-w-md mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6 transition-all duration-300 hover:shadow-2xl relative z-10">
       <!-- Logo and Title -->
       <div class="flex flex-col items-center justify-center mb-1 sm:mb-2">
-        <img src="/src/assets/img/sagawa_logo.svg" alt="Sagawa Logo" class="w-24 sm:w-32 h-auto mb-3 sm:mb-4" />
+        <img src={logoLogin.src} alt="" class="w-24 sm:w-32 h-auto mb-3 sm:mb-4" />
         <h1 class="text-2xl sm:text-3xl font-bold text-center text-amber-600">Selamat Datang</h1>
         <p class="text-gray-500 text-center mt-1 sm:mt-2 text-sm sm:text-base">Masuk ke akun Anda untuk melanjutkan</p>
       </div>
