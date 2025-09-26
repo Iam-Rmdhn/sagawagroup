@@ -7,8 +7,8 @@ module.exports = {
       interpreter: "bun",
       env: {
         NODE_ENV: "development",
-        PORT: 6000,
-        BASE_URL: "http://localhost:6000"
+        PORT: 3000,
+        BASE_URL: "http://localhost:3000"
       },
       env_production: {
         NODE_ENV: "production",
