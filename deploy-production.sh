@@ -11,7 +11,7 @@ set -e  # Exit on any error
 PROJECT_NAME="sagawagroup"
 DOMAIN="sagawagroup.id"
 WWW_DOMAIN="www.sagawagroup.id"
-PROJECT_DIR="/root/sagawagroup"
+PROJECT_DIR="/home/ilham/sagawagroup"
 DEPLOY_DIR="/var/www/sagawagroup"
 API_PORT="5000"
 FRONTEND_PORT="4321"
@@ -79,16 +79,39 @@ check_root() {
     fi
 }
 
+# Function to validate project directory
+validate_project() {
+    print_status "Validating project directory..."
+    
+    if [ ! -d "$PROJECT_DIR" ]; then
+        print_error "Project directory not found: $PROJECT_DIR"
+        print_error "Please ensure the Sagawa Group project is cloned at $PROJECT_DIR"
+        exit 1
+    fi
+    
+    if [ ! -d "$PROJECT_DIR/vue-frontend" ]; then
+        print_error "Frontend directory not found: $PROJECT_DIR/vue-frontend"
+        exit 1
+    fi
+    
+    if [ ! -d "$PROJECT_DIR/bun-api" ]; then
+        print_error "API directory not found: $PROJECT_DIR/bun-api"
+        exit 1
+    fi
+    
+    print_success "Project directory validation passed"
+}
+
 # Function to backup current deployment if exists
 backup_current() {
     if [ -d "$DEPLOY_DIR" ]; then
         BACKUP_NAME="sagawagroup-backup-$(date +%Y%m%d_%H%M%S)"
         print_status "Backing up current deployment..."
-        mv "$DEPLOY_DIR" "/root/${BACKUP_NAME}"
-        print_success "Current deployment backed up to /root/${BACKUP_NAME}"
+        mv "$DEPLOY_DIR" "/var/backups/${BACKUP_NAME}"
+        print_success "Current deployment backed up to /var/backups/${BACKUP_NAME}"
         
         # Export backup name for potential rollback
-        export BACKUP_DIR="/root/${BACKUP_NAME}"
+        export BACKUP_DIR="/var/backups/${BACKUP_NAME}"
     else
         print_status "No existing deployment found, skipping backup"
     fi
@@ -125,6 +148,7 @@ create_directories() {
     mkdir -p "$DEPLOY_DIR/api"
     mkdir -p "$DEPLOY_DIR/uploads"
     mkdir -p "$DEPLOY_DIR/logs"
+    mkdir -p "/var/backups"  # Create backup directory
     print_success "Deployment directories created"
 }
 
@@ -191,7 +215,7 @@ build_frontend() {
     
     # Install dependencies
     print_status "Installing frontend dependencies..."
-    if ! bun install --frozen-lockfile; then
+    if ! sudo -u ilham bun install; then
         print_error "Frontend dependency installation failed"
         rollback_deployment
         exit 1
@@ -199,7 +223,7 @@ build_frontend() {
     
     # Build for production
     print_status "Building frontend..."
-    if ! bun run build; then
+    if ! sudo -u ilham bun run build; then
         print_error "Frontend build failed"
         rollback_deployment
         exit 1
@@ -243,12 +267,20 @@ deploy_api() {
     fi
     
     # Install API dependencies
-    log_message "Installing API dependencies with bun"
-    cd "$DEPLOY_DIR/api"
-    if ! bun install --production; then
+    log_message "Installing API dependencies with npm"
+    cd "$DEPLOY_DIR/api" || {
+        print_error "Failed to navigate to API directory: $DEPLOY_DIR/api"
+        return 1
+    }
+    log_message "Current directory: $(pwd)"
+    log_message "Package.json exists: $(ls -la package.json)"
+    # Install as root then fix ownership
+    if ! npm install --production --omit=dev; then
         print_error "API dependency installation failed"
         return 1
     fi
+    # Fix ownership of node_modules
+    chown -R ilham:ilham node_modules/
     
     print_success "API deployed successfully with dependencies"
 }
@@ -789,6 +821,7 @@ main() {
     
     # Pre-deployment checks
     check_root
+    validate_project
     
     # Skip confirmation for CI/CD mode
     if [ "$SKIP_CONFIRMATION" != true ]; then
