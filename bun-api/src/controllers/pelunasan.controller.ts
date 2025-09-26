@@ -32,7 +32,7 @@ export const pelunasanMitraController = async (
       const filePath = `uploads/${fileName}`;
       await Bun.write(filePath, buktiTransfer);
       const baseUrl =
-        process.env.BASE_URL || `http://localhost:${process.env.PORT || 6000}`;
+        process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
       pelunasanData.buktiTransfer = `${baseUrl}/uploads/${fileName}`;
     } else {
       return new Response(
