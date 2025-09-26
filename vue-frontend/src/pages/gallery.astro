@@ -214,13 +214,38 @@ const galleryImages = [
 
             <!-- Video Content -->
             <div class="filter-section" id="video-section">
-              <div class="text-center py-16">
+              <!-- Loading state -->
+              <div id="videos-loading" class="text-center py-16">
                 <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl p-12 max-w-2xl mx-auto border border-blue-200 shadow-xl">
-                  <h3 class="text-3xl font-bold text-gray-800 mb-4">Video Content</h3>
-                  <p class="text-gray-600 mb-6 text-lg">Koleksi video promosi dan dokumentasi kegiatan Sagawa Group</p>
-                  <div class="bg-white rounded-xl p-4 text-sm text-blue-600 font-medium shadow-inner">
-                    Konten video sedang dalam proses penambahan
-                  </div>
+                  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <h3 class="text-2xl font-bold text-gray-800 mb-2">Memuat Video...</h3>
+                  <p class="text-gray-600">Mengambil video terbaru dari YouTube</p>
+                </div>
+              </div>
+
+              <!-- Error state -->
+              <div id="videos-error" class="text-center py-16 hidden">
+                <div class="bg-gradient-to-br from-red-50 to-pink-100 rounded-3xl p-12 max-w-2xl mx-auto border border-red-200 shadow-xl">
+                  <h3 class="text-3xl font-bold text-gray-800 mb-4">Gagal Memuat Video</h3>
+                  <p class="text-gray-600 mb-6 text-lg">Tidak dapat mengambil video dari YouTube saat ini</p>
+                  <button id="retry-videos" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors">
+                    Coba Lagi
+                  </button>
+                </div>
+              </div>
+
+              <!-- Videos container -->
+              <div id="videos-container" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                  <!-- Videos will be dynamically loaded here -->
+                </div>
+              </div>
+
+              <!-- Empty state -->
+              <div id="videos-empty" class="text-center py-16 hidden">
+                <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl p-12 max-w-2xl mx-auto border border-gray-200 shadow-xl">
+                  <h3 class="text-3xl font-bold text-gray-800 mb-4">Belum Ada Video</h3>
+                  <p class="text-gray-600 mb-6 text-lg">Video YouTube akan muncul di sini setelah Anda mengupload video baru</p>
                 </div>
               </div>
             </div>
@@ -266,6 +291,287 @@ const galleryImages = [
     let autoplayInterval = null;
     let isTransitioning = false;
 
+    // YouTube API configuration - sekarang menggunakan backend API
+    const BACKEND_API_BASE = 'http://localhost:5000'; // Ganti dengan URL backend production Anda
+    
+    let youtubeVideos = [];
+    let videosCache = null;
+    let lastFetchTime = 0;
+
+    // Fungsi untuk mengecek dan menggunakan cache (tetap di frontend untuk UX yang lebih baik)
+    function getCachedVideos() {
+      try {
+        const cached = localStorage.getItem('youtube_videos_cache');
+        const cacheTime = localStorage.getItem('youtube_videos_cache_time');
+        
+        if (cached && cacheTime) {
+          const timeDiff = Date.now() - parseInt(cacheTime);
+          // Cache 5 menit (300000 ms)
+          if (timeDiff < 300000) {
+            return JSON.parse(cached);
+          }
+        }
+      } catch (error) {
+        console.log('Cache error:', error);
+      }
+      return null;
+    }
+
+    // Fungsi untuk menyimpan ke cache
+    function setCachedVideos(videos) {
+      try {
+        localStorage.setItem('youtube_videos_cache', JSON.stringify(videos));
+        localStorage.setItem('youtube_videos_cache_time', Date.now().toString());
+      } catch (error) {
+        console.log('Cache save error:', error);
+      }
+    }
+
+    // YouTube API Functions - menggunakan backend API
+    async function fetchYouTubeVideos(forceRefresh = false) {
+      try {
+        showLoadingState();
+
+        // Cek cache dulu jika tidak force refresh
+        if (!forceRefresh) {
+          const cachedVideos = getCachedVideos();
+          if (cachedVideos) {
+            console.log('Using cached YouTube videos');
+            youtubeVideos = cachedVideos;
+            if (youtubeVideos.length === 0) {
+              showEmptyState();
+            } else {
+              displayYouTubeVideos(youtubeVideos, true); // true = from cache
+            }
+            return;
+          }
+        }
+        
+        // Fetch dari backend API
+        const refreshParam = forceRefresh ? '?refresh=true' : '';
+        const apiUrl = `${BACKEND_API_BASE}/api/youtube/videos${refreshParam}`;
+        
+        console.log('Fetching from backend API:', apiUrl);
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        youtubeVideos = data.data || [];
+        
+        // Simpan ke cache hanya jika tidak dari cache backend
+        if (!data.fromCache) {
+          setCachedVideos(youtubeVideos);
+        }
+        
+        if (youtubeVideos.length === 0) {
+          showEmptyState();
+        } else {
+          displayYouTubeVideos(youtubeVideos, data.fromCache);
+        }
+        
+      } catch (error) {
+        console.error('Error fetching YouTube videos:', error);
+        
+        // Coba gunakan cache lama jika ada error
+        const cachedVideos = getCachedVideos();
+        if (cachedVideos && cachedVideos.length > 0) {
+          console.log('Using fallback cache due to error');
+          youtubeVideos = cachedVideos;
+          displayYouTubeVideos(youtubeVideos, true);
+        } else {
+          showErrorState(error.message);
+        }
+      }
+    }
+
+    function showLoadingState() {
+      document.getElementById('videos-loading').classList.remove('hidden');
+      document.getElementById('videos-error').classList.add('hidden');
+      document.getElementById('videos-container').classList.add('hidden');
+      document.getElementById('videos-empty').classList.add('hidden');
+    }
+
+    function showErrorState(errorMessage = 'Tidak dapat mengambil video dari YouTube saat ini') {
+      const errorDiv = document.getElementById('videos-error');
+      const errorContainer = errorDiv.querySelector('.bg-gradient-to-br');
+      
+      // Update error message
+      const errorText = errorContainer.querySelector('p');
+      if (errorText) {
+        errorText.textContent = errorMessage;
+      }
+      
+      document.getElementById('videos-loading').classList.add('hidden');
+      document.getElementById('videos-error').classList.remove('hidden');
+      document.getElementById('videos-container').classList.add('hidden');
+      document.getElementById('videos-empty').classList.add('hidden');
+    }
+
+
+
+    function showEmptyState() {
+      document.getElementById('videos-loading').classList.add('hidden');
+      document.getElementById('videos-error').classList.add('hidden');
+      document.getElementById('videos-container').classList.add('hidden');
+      document.getElementById('videos-empty').classList.remove('hidden');
+    }
+
+    function displayYouTubeVideos(videos, fromCache = false) {
+      const container = document.querySelector('#videos-container .grid');
+      
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      // Tambahkan indikator cache jika dari cache
+      if (fromCache) {
+        const cacheIndicator = document.createElement('div');
+        cacheIndicator.className = 'col-span-full text-center mb-4';
+        cacheIndicator.innerHTML = `
+          <div class="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm border border-blue-200">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+            </svg>
+            <span>Video dari cache (diperbarui otomatis setiap 5 menit)</span>
+          </div>
+        `;
+        container.appendChild(cacheIndicator);
+      }
+      
+      videos.forEach((video, index) => {
+        // Data dari backend sudah diproses, jadi kita langsung gunakan
+        if (!video.id) return;
+
+        const videoCard = createVideoCard({
+          id: video.id,
+          title: video.title,
+          description: video.description,
+          thumbnail: video.thumbnail,
+          publishedAt: video.publishedAt,
+          channelTitle: video.channelTitle
+        }, index);
+        
+        container.appendChild(videoCard);
+      });
+
+      document.getElementById('videos-loading').classList.add('hidden');
+      document.getElementById('videos-error').classList.add('hidden');
+      document.getElementById('videos-container').classList.remove('hidden');
+      document.getElementById('videos-empty').classList.add('hidden');
+    }
+
+    function createVideoCard(video, index) {
+      const card = document.createElement('div');
+      card.className = 'video-card group cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl';
+      card.style.animationDelay = `${index * 0.1}s`;
+      
+      const publishDate = new Date(video.publishedAt).toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      card.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 h-full flex flex-col">
+          <!-- Thumbnail -->
+          <div class="relative aspect-video overflow-hidden">
+            <img 
+              src="${video.thumbnail}" 
+              alt="${video.title}"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <!-- Play button -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="bg-red-600 text-white rounded-full p-4 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- YouTube logo -->
+            <div class="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+              YOUTUBE
+            </div>
+          </div>
+          
+          <!-- Content -->
+          <div class="p-4 flex-1 flex flex-col">
+            <h3 class="font-bold text-gray-800 text-sm lg:text-base mb-2 line-clamp-2 group-hover:text-red-600 transition-colors">
+              ${video.title}
+            </h3>
+            
+            <p class="text-gray-600 text-xs lg:text-sm mb-3 line-clamp-3 flex-1">
+              ${video.description.substring(0, 120)}${video.description.length > 120 ? '...' : ''}
+            </p>
+            
+            <div class="flex items-center justify-between text-xs text-gray-500 mt-auto">
+              <span class="font-medium">${video.channelTitle}</span>
+              <span>${publishDate}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add click event to open YouTube video
+      card.addEventListener('click', function() {
+        openYouTubeVideo(video.id);
+      });
+
+      return card;
+    }
+
+    function openYouTubeVideo(videoId) {
+      // Data video dari backend sudah memiliki field 'url' yang lengkap
+      // Tapi untuk backward compatibility, kita tetap buat URL jika perlu
+      const url = videoId.startsWith('http') ? videoId : `https://www.youtube.com/watch?v=${videoId}`;
+      
+      // Option 1: Open in new tab
+      window.open(url, '_blank');
+      
+      // Option 2: Embed in modal (uncomment if you prefer modal)
+      // showVideoModal(videoId);
+    }
+
+    function showVideoModal(videoId) {
+      // Create modal for embedded YouTube video
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4';
+      modal.innerHTML = `
+        <div class="relative bg-white rounded-2xl overflow-hidden max-w-4xl w-full max-h-[90vh]">
+          <button class="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-colors" onclick="this.closest('.fixed').remove()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <div class="aspect-video">
+            <iframe 
+              src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+              class="w-full h-full" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+    }
+
     // Filter functionality
     function initFilters() {
       const filterTabs = document.querySelectorAll('.filter-tab');
@@ -309,11 +615,19 @@ const galleryImages = [
             filterSubtitle.textContent = filterData[filter].subtitle;
           }
           
-          // Restart slider if foto filter is selected
+          // Handle different filter actions
           if (filter === 'foto') {
+            // Restart slider if foto filter is selected
             setTimeout(function() {
               initSlider();
             }, 300);
+          } else if (filter === 'video') {
+            // Load YouTube videos if video filter is selected
+            if (youtubeVideos.length === 0) {
+              setTimeout(function() {
+                fetchYouTubeVideos();
+              }, 300);
+            }
           }
         });
       });
@@ -536,6 +850,22 @@ const galleryImages = [
     // Initialize everything
     initFilters();
     initSlider();
+
+    // Add retry button event listener
+    const retryBtn = document.getElementById('retry-videos');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => fetchYouTubeVideos(true)); // Force refresh
+    }
+
+    // Add refresh functionality for development/testing
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev')) {
+      console.log('Development mode: YouTube cache can be cleared with clearYouTubeCache()');
+      window.clearYouTubeCache = function() {
+        localStorage.removeItem('youtube_videos_cache');
+        localStorage.removeItem('youtube_videos_cache_time');
+        console.log('YouTube cache cleared');
+      };
+    }
 
     // Show instruction tooltip
     const tooltip = document.createElement('div');
@@ -916,6 +1246,110 @@ const galleryImages = [
     opacity: 1;
     border-color: rgba(249, 115, 22, 1);
     transform: scale(1.1);
+  }
+
+  /* YouTube Video Cards Styling */
+  .video-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .video-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Line clamp utility classes */
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Loading spinner */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Video grid responsive */
+  #videos-container .grid {
+    gap: 1.5rem;
+  }
+
+  /* Cache indicator styling */
+  .col-span-full {
+    grid-column: 1 / -1;
+  }
+
+  /* Error state code styling */
+  #videos-error code {
+    background-color: #f3f4f6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  @media (max-width: 768px) {
+    #videos-container .grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 0 0.5rem;
+    }
+    
+    .video-card .bg-white {
+      border-radius: 1rem;
+    }
+    
+    .video-card h3 {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    
+    .video-card p {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    #videos-container .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    #videos-container .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Enhanced video card hover effects */
+  .video-card .absolute.inset-0.flex {
+    backdrop-filter: blur(2px);
+  }
+
+  .video-card:hover .aspect-video img {
+    filter: brightness(0.8);
   }
 
   /* Responsive adjustments */

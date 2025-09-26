@@ -2,6 +2,7 @@ import { authRoute } from "./src/routes/auth.route";
 import { mitraRoute } from "./src/routes/mitra.route";
 import { sheetsRoute } from "./src/routes/sheets.route";
 import { agreementRoute } from "./src/routes/agreement.route";
+import { youtubeRoute } from "./src/routes/youtube.route";
 import "./src/lib/db"; // Initialize database connection
 import { ENV } from "./src/env";
 
@@ -13,9 +14,9 @@ Bun.serve({
   hostname: "0.0.0.0", // Allow access from any IP address
   async fetch(req) {
     const url = new URL(req.url);
-    const host = req.headers.get('host') || '';
-    const origin = req.headers.get('origin') || '';
-    const isAdminSubdomain = host.includes('admin.sagawagroup.id');
+    const host = req.headers.get("host") || "";
+    const origin = req.headers.get("origin") || "";
+    const isAdminSubdomain = host.includes("admin.sagawagroup.id");
 
     // Add comprehensive CORS headers to handle Chrome's stricter policies
     const corsHeaders = {
@@ -25,7 +26,7 @@ Bun.serve({
         "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "86400",
-      "Vary": "Origin",
+      Vary: "Origin",
     };
 
     // Enhanced CORS for admin subdomain or when origin is specified
@@ -34,7 +35,8 @@ Bun.serve({
       if (ENV.NODE_ENV === "development") {
         corsHeaders["Access-Control-Allow-Origin"] = origin || "*";
       } else {
-        corsHeaders["Access-Control-Allow-Origin"] = origin || `https://${host}`;
+        corsHeaders["Access-Control-Allow-Origin"] =
+          origin || `https://${host}`;
       }
       corsHeaders["Vary"] = "Origin";
     }
@@ -51,15 +53,15 @@ Bun.serve({
       // Health check endpoint with subdomain info
       if (url.pathname === "/api/health") {
         return new Response(
-          JSON.stringify({ 
-            status: "OK", 
+          JSON.stringify({
+            status: "OK",
             timestamp: new Date().toISOString(),
             service: "Sagawa Group API",
             subdomain: isAdminSubdomain ? "admin" : "main",
             host: host,
             port: PORT,
-            environment: ENV.NODE_ENV
-          }), 
+            environment: ENV.NODE_ENV,
+          }),
           {
             status: 200,
             headers: {
@@ -122,6 +124,16 @@ Bun.serve({
         url.pathname === "/api/mitra/agreements"
       ) {
         const response = await agreementRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // YouTube routes
+      if (url.pathname.startsWith("/api/youtube")) {
+        const response = await youtubeRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
           response.headers.set(key, value);
