@@ -19,6 +19,28 @@ export interface YouTubeValidationResult {
 }
 
 /**
+ * Fungsi untuk menghitung tanggal publishedAfter
+ * Jika nilai adalah "auto_7_days", akan return tanggal 7 hari yang lalu
+ */
+export const getPublishedAfterDate = (
+  publishedAfterConfig: string | null
+): string | null => {
+  if (!publishedAfterConfig) return null;
+
+  if (publishedAfterConfig === "auto_7_days") {
+    // Hitung 7 hari yang lalu
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    // Return dalam format ISO string yang dibutuhkan YouTube API
+    return sevenDaysAgo.toISOString();
+  }
+
+  // Jika bukan auto, return value asli (bisa berupa tanggal manual)
+  return publishedAfterConfig;
+};
+
+/**
  * Default YouTube configuration menggunakan environment variables
  */
 export const getYouTubeConfig = (): YouTubeConfig => {
@@ -32,13 +54,15 @@ export const getYouTubeConfig = (): YouTubeConfig => {
     // Playlist ID (opsional) - bisa ditambahkan ke .env jika diperlukan
     playlistId: process.env.YOUTUBE_PLAYLIST_ID || null,
 
-    // Pengaturan default
-    maxResults: parseInt(process.env.YOUTUBE_MAX_RESULTS || "9"),
+    // Pengaturan default - hanya tampilkan 3 video terbaru
+    maxResults: parseInt(process.env.YOUTUBE_MAX_RESULTS || "3"),
     orderBy: (process.env.YOUTUBE_ORDER_BY as any) || "date",
-    publishedAfter: process.env.YOUTUBE_PUBLISHED_AFTER || null,
+    publishedAfter: getPublishedAfterDate(
+      process.env.YOUTUBE_PUBLISHED_AFTER || null
+    ),
 
-    // Cache timeout (default 5 menit)
-    cacheTimeout: parseInt(process.env.YOUTUBE_CACHE_TIMEOUT || "300000"), // 5 menit dalam ms
+    // Cache timeout (default 7 hari)
+    cacheTimeout: parseInt(process.env.YOUTUBE_CACHE_TIMEOUT || "604800000"), // 7 hari dalam ms
   };
 };
 
@@ -131,6 +155,8 @@ export interface ProcessedVideo {
   publishedAt: string;
   channelTitle: string;
   url: string;
+  duration?: string;
+  isShorts?: boolean; // Menandai apakah ini video shorts
 }
 
 /**
@@ -163,16 +189,33 @@ export const processYouTubeVideos = (
 
 /**
  * Fungsi untuk build URL API YouTube
+ * Mengambil video dan shorts dari channel
  */
-export const buildYouTubeApiUrl = (config: YouTubeConfig): string => {
+export const buildYouTubeApiUrl = (
+  config: YouTubeConfig,
+  searchType?: "video" | "shorts" | "all"
+): string => {
   const baseParams = `maxResults=${config.maxResults}&key=${config.apiKey}`;
+
+  // Tentukan type berdasarkan searchType parameter
+  let contentType = "video";
+  if (searchType === "shorts") {
+    contentType = "video"; // Shorts juga merupakan video
+  } else if (searchType === "all") {
+    contentType = "video"; // Ambil semua video (termasuk shorts)
+  }
 
   if (config.playlistId) {
     // URL untuk playlist
     return `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${config.playlistId}&${baseParams}`;
   } else if (config.channelId) {
-    // URL untuk channel
-    let channelParams = `part=snippet&channelId=${config.channelId}&order=${config.orderBy}&type=video`;
+    // URL untuk channel - akan mengambil video dan shorts
+    let channelParams = `part=snippet&channelId=${config.channelId}&order=${config.orderBy}&type=${contentType}`;
+
+    // Untuk shorts, tambahkan filter durasi pendek (di bawah 1 menit)
+    if (searchType === "shorts") {
+      channelParams += "&videoDuration=short"; // Durasi pendek (<4 menit, tapi umumnya shorts <1 menit)
+    }
 
     // Tambahkan filter tanggal jika ada
     if (config.publishedAfter) {
