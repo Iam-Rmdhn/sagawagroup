@@ -234,10 +234,10 @@ const galleryImages = [
                 </div>
               </div>
 
-              <!-- Videos container -->
+              <!-- Videos container - optimized for 3 latest videos -->
               <div id="videos-container" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-                  <!-- Videos will be dynamically loaded here -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4 max-w-6xl mx-auto">
+                  <!-- Videos will be dynamically loaded here (max 3 latest videos) -->
                 </div>
               </div>
 
@@ -297,6 +297,10 @@ const galleryImages = [
     let youtubeVideos = [];
     let videosCache = null;
     let lastFetchTime = 0;
+
+    // Catatan: Backend dikonfigurasi untuk hanya mengambil 3 video terbaru
+    // Video lama akan otomatis digantikan dengan video baru yang diupload
+    // Pengurutan berdasarkan tanggal upload (terbaru ke terlama)
 
     // Fungsi untuk mengecek dan menggunakan cache (tetap di frontend untuk UX yang lebih baik)
     function getCachedVideos() {
@@ -426,20 +430,13 @@ const galleryImages = [
       
       container.innerHTML = '';
       
-      // Tambahkan indikator cache jika dari cache
-      if (fromCache) {
-        const cacheIndicator = document.createElement('div');
-        cacheIndicator.className = 'col-span-full text-center mb-4';
-        cacheIndicator.innerHTML = `
-          <div class="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm border border-blue-200">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-            </svg>
-            <span>Video dari cache (diperbarui otomatis setiap 5 menit)</span>
-          </div>
-        `;
-        container.appendChild(cacheIndicator);
-      }
+      // Tambahkan informasi tentang 3 video terbaru
+      const infoIndicator = document.createElement('div');
+      infoIndicator.className = 'col-span-full text-center mb-6';
+      const cacheText = fromCache ? ' (dari cache)' : '';
+      infoIndicator.innerHTML = ` 
+      `;
+      container.appendChild(infoIndicator);
       
       videos.forEach((video, index) => {
         // Data dari backend sudah diproses, jadi kita langsung gunakan
@@ -451,7 +448,10 @@ const galleryImages = [
           description: video.description,
           thumbnail: video.thumbnail,
           publishedAt: video.publishedAt,
-          channelTitle: video.channelTitle
+          channelTitle: video.channelTitle,
+          url: video.url,
+          isShorts: video.isShorts || false,
+          duration: video.duration || ''
         }, index);
         
         container.appendChild(videoCard);
@@ -474,6 +474,16 @@ const galleryImages = [
         day: 'numeric'
       });
 
+      // Label untuk shorts atau video biasa
+      const contentTypeLabel = video.isShorts ? 
+        '<span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">SHORTS</span>' : 
+        '<span class="inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-medium">VIDEO</span>';
+      
+      // Format durasi jika ada
+      const durationText = video.duration ? formatDuration(video.duration) : '';
+      const durationDisplay = durationText ? 
+        `<span class="absolute bottom-2 right-2 bg-black/75 text-white text-xs px-1.5 py-0.5 rounded">${durationText}</span>` : '';
+
       card.innerHTML = `
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 h-full flex flex-col">
           <!-- Thumbnail -->
@@ -494,6 +504,14 @@ const galleryImages = [
                 </svg>
               </div>
             </div>
+            
+            <!-- Content Type Label (Shorts/Video) -->
+            <div class="absolute top-3 left-3">
+              ${contentTypeLabel}
+            </div>
+            
+            <!-- Duration -->
+            ${durationDisplay}
             
             <!-- YouTube logo -->
             <div class="absolute top-3 right-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
@@ -525,6 +543,24 @@ const galleryImages = [
       });
 
       return card;
+    }
+
+    function formatDuration(isoDuration) {
+      // Parse ISO 8601 duration format (PT1M30S = 1 minute 30 seconds)
+      const match = isoDuration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+      
+      if (!match) return '';
+      
+      const minutes = parseInt(match[1] || '0', 10);
+      const seconds = parseInt(match[2] || '0', 10);
+      
+      if (minutes === 0) {
+        return `${seconds}s`;
+      } else if (seconds === 0) {
+        return `${minutes}m`;
+      } else {
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      }
     }
 
     function openYouTubeVideo(videoId) {
@@ -585,8 +621,8 @@ const galleryImages = [
           subtitle: 'Swipe untuk melihat foto-foto eksklusif dari berbagai outlet kami'
         },
         video: {
-          title: 'Video Promosi',
-          subtitle: 'Tonton video dokumentasi dan promosi Sagawa Group'
+          title: '3 Video YouTube Terbaru',
+          subtitle: 'Video dan Shorts terbaru dari 7 hari terakhir yang diperbarui otomatis setiap 5 menit'
         },
         instagram: {
           title: 'Instagram Feed',
@@ -1310,11 +1346,12 @@ const galleryImages = [
     font-family: 'Courier New', monospace;
   }
 
+  /* Responsive layout optimized for max 3 videos */
   @media (max-width: 768px) {
     #videos-container .grid {
       grid-template-columns: 1fr;
-      gap: 1rem;
-      padding: 0 0.5rem;
+      gap: 1.5rem;
+      padding: 0 1rem;
     }
     
     .video-card .bg-white {
@@ -1329,17 +1366,47 @@ const galleryImages = [
     .video-card p {
       font-size: 0.75rem;
     }
-  }
 
-  @media (min-width: 769px) and (max-width: 1024px) {
-    #videos-container .grid {
-      grid-template-columns: repeat(2, 1fr);
+    .videos-info-banner {
+      margin: 0 1rem 1.5rem 1rem;
+      padding: 0.75rem;
+    }
+
+    .videos-info-banner span {
+      font-size: 0.75rem;
     }
   }
 
-  @media (min-width: 1025px) {
+  @media (min-width: 769px) and (max-width: 1199px) {
+    #videos-container .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    
+    /* Center single video if only 1 video */
+    #videos-container .grid .video-card:only-child {
+      grid-column: 1 / -1;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (min-width: 1200px) {
     #videos-container .grid {
       grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    
+    /* Center videos if less than 3 */
+    #videos-container .grid:has(.video-card:nth-child(2):last-child) {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    #videos-container .grid .video-card:only-child {
+      grid-column: 1 / -1;
+      max-width: 400px;
+      margin: 0 auto;
     }
   }
 

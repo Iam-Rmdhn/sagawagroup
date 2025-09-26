@@ -31,6 +31,7 @@ export class YouTubeService {
 
   /**
    * Mengambil video dari YouTube API dengan caching
+   * Mengambil video dan shorts dari channel
    */
   async getVideos(forceRefresh: boolean = false): Promise<{
     success: boolean;
@@ -60,8 +61,8 @@ export class YouTubeService {
         };
       }
 
-      // Fetch dari YouTube API
-      const apiUrl = buildYouTubeApiUrl(this.config);
+      // Fetch semua video (termasuk shorts) dari channel
+      const apiUrl = buildYouTubeApiUrl(this.config, "all");
       console.log("Fetching from YouTube API:", apiUrl);
 
       const response = await fetch(apiUrl);
@@ -76,8 +77,8 @@ export class YouTubeService {
         throw new Error("No items found in YouTube API response");
       }
 
-      // Proses video data
-      const processedVideos = processYouTubeVideos(data.items);
+      // Proses video data dan ambil detail durasi untuk mendeteksi shorts
+      const processedVideos = await this.processVideosWithDetails(data.items);
 
       // Simpan ke cache
       this.cache.set(cacheKey, {
@@ -192,6 +193,92 @@ export class YouTubeService {
   updateConfig(newConfig: Partial<YouTubeConfig>): void {
     this.config = { ...this.config, ...newConfig };
     this.clearCache(); // Clear cache when config changes
+  }
+
+  /**
+   * Process videos dengan detail durasi untuk mendeteksi shorts
+   */
+  private async processVideosWithDetails(
+    items: any[]
+  ): Promise<ProcessedVideo[]> {
+    // Ambil basic video data dulu
+    const basicVideos = processYouTubeVideos(items);
+
+    // Ambil video IDs untuk query detail
+    const videoIds = basicVideos.map((video) => video.id).filter((id) => id);
+
+    if (videoIds.length === 0) {
+      return basicVideos;
+    }
+
+    try {
+      // Query video details untuk mendapatkan durasi
+      const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
+        ","
+      )}&key=${this.config.apiKey}`;
+
+      const detailsResponse = await fetch(detailsUrl);
+
+      if (!detailsResponse.ok) {
+        console.warn("Could not fetch video details, returning basic data");
+        return basicVideos;
+      }
+
+      const detailsData = (await detailsResponse.json()) as any;
+
+      // Buat map untuk detail berdasarkan video ID
+      const detailsMap = new Map();
+      if (detailsData.items) {
+        detailsData.items.forEach((item: any) => {
+          detailsMap.set(item.id, item);
+        });
+      }
+
+      // Gabungkan data basic dengan details
+      return basicVideos.map((video) => {
+        const details = detailsMap.get(video.id);
+        let isShorts = false;
+        let duration = "";
+
+        if (
+          details &&
+          details.contentDetails &&
+          details.contentDetails.duration
+        ) {
+          duration = details.contentDetails.duration;
+          // Parse ISO 8601 duration format (PT1M30S = 1 minute 30 seconds)
+          isShorts = this.isVideoShorts(duration);
+        }
+
+        return {
+          ...video,
+          duration,
+          isShorts,
+        };
+      });
+    } catch (error) {
+      console.warn("Error fetching video details:", error);
+      return basicVideos;
+    }
+  }
+
+  /**
+   * Menentukan apakah video adalah shorts berdasarkan durasi
+   */
+  private isVideoShorts(isoDuration: string): boolean {
+    // Parse ISO 8601 duration format
+    // Format: PT#M#S atau PT#S (dimana # adalah angka)
+    const match = isoDuration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
+
+    if (!match) return false;
+
+    const minutes = parseInt(match[1] || "0", 10);
+    const seconds = parseInt(match[2] || "0", 10);
+
+    const totalSeconds = minutes * 60 + seconds;
+
+    // YouTube Shorts biasanya maksimal 60 detik
+    return totalSeconds <= 60;
   }
 
   // Private methods
