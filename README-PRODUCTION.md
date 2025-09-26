@@ -20,11 +20,23 @@ Panduan lengkap untuk deployment production dengan Nginx dan SSL/TLS untuk domai
 
 ### 1. Deployment Lengkap (Recommended)
 ```bash
-# Deployment otomatis dengan SSL
+# Deployment otomatis dengan HTTP-only (SSL akan disetup terpisah)
 sudo ./deploy-production.sh
 
-# atau deployment tanpa SSL (setup SSL terpisah)
+# atau deployment langsung dengan SSL (jika certificate sudah ada)
+sudo ./deploy-production.sh --force-ssl
+
+# atau deployment tanpa SSL setup
 sudo ./deploy-production.sh --skip-ssl
+```
+
+**Note**: Script akan otomatis detect apakah SSL certificate sudah ada:
+- **Jika certificate ada**: Menggunakan HTTPS configuration dengan redirect
+- **Jika certificate belum ada**: Menggunakan HTTP-only configuration
+
+Untuk setup SSL setelah deployment HTTP, jalankan:
+```bash
+sudo ./setup-ssl.sh
 ```
 
 ### 2. Deployment Bertahap
