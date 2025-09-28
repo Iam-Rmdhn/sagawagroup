@@ -68,6 +68,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			button { min-height: 44px; min-width: 44px; }
 			.modern-table button { min-height: 36px; }
 		}
+		
+		/* Image Modal Styles */
+		#imageModal {
+			backdrop-filter: blur(2px);
+			-webkit-backdrop-filter: blur(2px);
+		}
+		
+		#imageModal img {
+			max-width: 95vw;
+			max-height: 95vh;
+			box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+		}
+		
+		/* Ensure modal stacking order */
+		.z-\[100\] {
+			z-index: 100 !important;
+		}
+		
+		.z-\[110\] {
+			z-index: 110 !important;
+		}
 	</style>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script>
@@ -139,11 +160,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		</div>
 	</div>
 	<!-- Modal untuk Detail Pelunasan Mitra -->
-	<div id="pelunasanDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+	<div id="pelunasanDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
 		<div class="flex items-end justify-center min-h-screen px-2 pt-4 pb-4 text-center sm:block sm:p-0 sm:items-center">
-			<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closePelunasanDetailModal()"></div>
+			<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closePelunasanDetailModal()" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;"></div>
 			<!-- Mobile: Full screen modal, Desktop: Max width modal -->
-			<div class="inline-block align-bottom bg-white rounded-t-2xl sm:rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full max-h-[90vh] sm:max-h-[80vh]">
+			<div class="inline-block align-bottom bg-white rounded-t-2xl sm:rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full max-h-[90vh] sm:max-h-[80vh]" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
 				<div class="bg-white px-3 pt-4 pb-4 sm:px-6 sm:pt-5 sm:pb-4 max-h-[90vh] sm:max-h-[80vh] overflow-y-auto">
 					<!-- Header with better mobile spacing -->
 					<div class="flex justify-between items-start mb-4 sticky top-0 bg-white pb-2 border-b border-gray-100 sm:border-none sm:pb-4">
@@ -164,19 +185,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 	</div>
 
 	<!-- Image Modal untuk memperbesar gambar -->
-	<div id="imageModal" class="hidden fixed inset-0 z-60 bg-black bg-opacity-90" style="align-items: center; justify-content: center; padding: 1rem;">
-		<div class="relative max-w-full max-h-full">
-			<button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300 z-10">
-				<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+	<div id="imageModal" class="hidden fixed inset-0 z-[100] bg-black bg-opacity-90 p-4" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+		<div class="relative max-w-6xl max-h-full flex items-center justify-center w-full h-full">
+			<button onclick="closeImageModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 z-[110] bg-black bg-opacity-50 rounded-full p-2 transition-all hover:bg-opacity-70">
+				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
 				</svg>
 			</button>
-			<img id="modalImage" src="" alt="Bukti Transfer" class="max-w-full max-h-full object-contain rounded-lg">
+			<img id="modalImage" src="" alt="Bukti Transfer" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
 		</div>
 	</div>
 
 	<script>
-		const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+		const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
 		
 		// Listen for navbar actions
 		document.addEventListener('adminNavbarAction', function(event: Event) {
@@ -198,23 +219,61 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		async function loadPelunasanData(): Promise<void> {
 			const tableBody = document.getElementById('pelunasan-table-body');
 			const token = localStorage.getItem('adminToken');
-			if (!token || !tableBody) return;
+			if (!token || !tableBody) {
+				console.error('Missing token or table body element');
+				return;
+			}
+			
 			try {
+				console.log('Loading pelunasan data...');
+				console.log('API_URL:', API_URL);
+				console.log('Token exists:', !!token);
+				
 				tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
-				const response = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, {
+				
+				// Add cache-busting parameter to prevent caching issues
+				const cacheBuster = new Date().getTime();
+				console.log('Fetching from:', `${API_URL}/api/admin/mitra_pelunasan?t=${cacheBuster}`);
+				
+				const response = await fetch(`${API_URL}/api/admin/mitra_pelunasan?t=${cacheBuster}`, {
 					method: 'GET',
-					headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+					headers: { 
+						'Authorization': `Bearer ${token}`, 
+						'Content-Type': 'application/json',
+						'Cache-Control': 'no-cache, no-store, must-revalidate',
+						'Pragma': 'no-cache',
+						'Expires': '0'
+					},
 				});
-				if (!response.ok) throw new Error('Failed to fetch pelunasan data');
+				
+				console.log('Response status:', response.status);
+				console.log('Response ok:', response.ok);
+				
+				if (!response.ok) {
+					const errorText = await response.text();
+					console.error('Response error:', errorText);
+					throw new Error(`HTTP ${response.status}: ${errorText}`);
+				}
+				
 				const result = await response.json();
+				console.log('Pelunasan data loaded:', result);
+				
 				if (result.success && result.data) {
 					const pelunasans = result.data;
+					console.log('Number of pelunasan records:', pelunasans.length);
+					
 					if (pelunasans.length === 0) {
 						tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">Tidak ada data pelunasan</td></tr>`;
 						return;
 					}
 					let tableHTML = '';
-					  pelunasans.forEach((item: any, idx: number) => {
+					pelunasans.forEach((item: any, idx: number) => {
+						console.log(`Processing item ${idx + 1}:`, { 
+							namaMitra: item.namaMitra, 
+							statusPelunasan: item.statusPelunasan,
+							updatedAt: item.updatedAt
+						});
+						
 						const statusColor = item.statusPelunasan === 'lunas' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200';
 						tableHTML += `
 							<tr class="bg-white hover:bg-gradient-to-r hover:from-orange-50/30 hover:to-amber-50/30 transition-all duration-200 ${idx % 2 === 0 ? 'bg-gray-50/30' : ''}">
@@ -243,12 +302,21 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 							</tr>
 						`;
 					});
+					console.log('Final table HTML length:', tableHTML.length);
+					
+					// Force DOM update
 					tableBody.innerHTML = tableHTML;
+					
+					// Force browser reflow/repaint
+					tableBody.offsetHeight;
+					
 				} else {
+					console.error('Load data failed:', result);
 					tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>';
 				}
 					} catch (error) {
 						const err = error as any;
+						console.error('Load pelunasan data error:', err);
 						tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-red-500">Error: ${err.message || err}</td></tr>`;
 					}
 		}
@@ -387,15 +455,26 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			if (modal && img) {
 				img.src = imageUrl;
 				modal.classList.remove('hidden');
+				// Use flexbox layout when modal is shown
 				modal.style.display = 'flex';
+				modal.style.alignItems = 'center';
+				modal.style.justifyContent = 'center';
+				
+				// Prevent scrolling on body when modal is open
+				document.body.style.overflow = 'hidden';
 			}
 		}
 
 		function closeImageModal(): void {
 			const modal = document.getElementById('imageModal');
-			if (modal) {
+			const img = document.getElementById('modalImage') as HTMLImageElement;
+			if (modal && img) {
 				modal.classList.add('hidden');
 				modal.style.display = 'none';
+				img.src = ''; // Clear image src to prevent memory leaks
+				
+				// Restore body scroll
+				document.body.style.overflow = '';
 			}
 		}
 		function formatCurrency(amount: number): string {
@@ -408,6 +487,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			loadPelunasanData();
 			const refreshBtn = document.getElementById('refresh-btn');
 			if (refreshBtn) refreshBtn.addEventListener('click', function(e) { e.preventDefault(); loadPelunasanData(); });
+			
+			// Add event listeners for image modal
+			const imageModal = document.getElementById('imageModal');
+			if (imageModal) {
+				// Close modal when clicking on the backdrop
+				imageModal.addEventListener('click', function(e) {
+					if (e.target === imageModal) {
+						closeImageModal();
+					}
+				});
+			}
+			
+			// Close modal with ESC key
+			document.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape') {
+					const modal = document.getElementById('imageModal');
+					if (modal && !modal.classList.contains('hidden')) {
+						closeImageModal();
+					}
+				}
+			});
 		});
 		// Extend window type for global functions
 		(window as any).showPelunasanDetail = showPelunasanDetail;
@@ -445,31 +545,57 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			}
 			
 			try {
+				console.log('Approve pelunasan - namaMitra:', namaMitra);
+				console.log('API_URL:', API_URL);
+				
 				const response = await fetch(`${API_URL}/api/admin/mitra_pelunasan/approve`, {
 					method: 'POST',
-					headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+					headers: { 
+						'Authorization': `Bearer ${token}`, 
+						'Content-Type': 'application/json'
+					},
 					body: JSON.stringify({ namaMitra })
 				});
+				console.log('Approve response status:', response.status);
 				const data = await response.json();
+				console.log('Approve response data:', data);
+				
 				if (response.ok && data.success) {
+					// Show success message
 					await import('sweetalert2').then(Swal => {
 						Swal.default.fire({
 							title: "Berhasil!",
 							text: "Pelunasan mitra telah disetujui",
-							icon: "success"
+							icon: "success",
+							timer: 2000,
+							showConfirmButton: false
 						});
 					});
-					loadPelunasanData();
+					
+					// Force refresh data with multiple strategies
+					console.log('Reloading pelunasan data after approve...');
+					
+					// Strategy 1: Immediate reload
+					await loadPelunasanData();
+					
+					// Strategy 2: Delayed reload for safety
+					setTimeout(async () => {
+						console.log('Secondary reload after 1 second...');
+						await loadPelunasanData();
+					}, 1000);
+					
 				} else {
+					console.error('Approve failed:', data);
 					await import('sweetalert2').then(Swal => {
 						Swal.default.fire({
 							title: "Error",
-							text: data.message || 'Gagal approve pelunasan',
+							text: data.message || data.error || 'Gagal approve pelunasan',
 							icon: "error"
 						});
 					});
 				}
 			} catch (err) {
+				console.error('Approve pelunasan error:', err);
 				await import('sweetalert2').then(Swal => {
 					Swal.default.fire({
 						title: "Error",

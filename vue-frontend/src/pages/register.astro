@@ -426,7 +426,7 @@ import Layout from '../layouts/Layout.astro';
       setLoading(true);
 
       try {
-        const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+        const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
         const response = await fetch(`${API_URL}/api/admin/register`, {
           method: 'POST',
           headers: {
