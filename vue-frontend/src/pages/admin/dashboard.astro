@@ -497,10 +497,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
 <AdminSidebar currentPage="dashboard" />
 
-<div class="dashboard-bg min-h-screen p-4 sm:ml-72 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+<div class="dashboard-bg min-h-screen p-4 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
    <div class="p-6 mt-16" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <!-- Welcome Header -->
-      <div class="mb-8">
+      <div class="mb-8 pt-2 sm:mb-8">
          <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl">
             <div class="flex items-center space-x-4">
                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -906,71 +906,46 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     });
 
-    // Navbar interactions are now handled by AdminNavbar component
-
     // Handle refresh button
     const refreshBtn = document.getElementById('refresh-btn');
     if (refreshBtn) {
       refreshBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Get current active filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
       });
     }
-
-    // Sidebar toggle is now handled by AdminNavbar component
   });
 
   // Function to initialize sidebar state
   function initializeSidebarState() {
     const sidebar = document.getElementById('logo-sidebar');
-    const mainContent = document.querySelector('.dashboard-bg');
+    const backdrop = document.getElementById('sidebar-backdrop');
     
-    if (sidebar && mainContent) {
-      const sidebarVisible = localStorage.getItem('sidebarVisible');
-      const shouldBeVisible = sidebarVisible === 'true';
-      
-      // Apply sidebar state
-      if (shouldBeVisible) {
-        sidebar.classList.remove('-translate-x-full');
-      } else {
-        sidebar.classList.add('-translate-x-full');
-      }
-      
-      // Apply main content margin
-      updateMainContentMargin(shouldBeVisible);
+    if (sidebar) {
+      // Always start with sidebar hidden (overlay mode)
+      sidebar.classList.add('-translate-x-full');
+      localStorage.setItem('sidebarVisible', 'false');
       
       // Listen for sidebar toggle events from navbar
       window.addEventListener('sidebarToggle', function(e: Event) {
         const customEvent = e as CustomEvent;
         const visible = customEvent.detail?.visible;
-        if (typeof visible === 'boolean') {
-          updateMainContentMargin(visible);
+        
+        // Show/hide backdrop for overlay effect on all screen sizes
+        if (backdrop && typeof visible === 'boolean') {
+          if (visible) {
+            backdrop.classList.remove('hidden');
+          } else {
+            backdrop.classList.add('hidden');
+          }
         }
-      });
-      
-      // Handle window resize
-      window.addEventListener('resize', function() {
-        const currentVisible = !sidebar.classList.contains('-translate-x-full');
-        updateMainContentMargin(currentVisible);
       });
     }
   }
 
-  function updateMainContentMargin(sidebarVisible: boolean) {
-    const mainContent = document.querySelector('.dashboard-bg');
-    if (mainContent) {
-      mainContent.classList.remove('sm:ml-0', 'sm:ml-72');
-      
-      if (sidebarVisible && window.innerWidth >= 768) {
-        mainContent.classList.add('sm:ml-72');
-      } else {
-        mainContent.classList.add('sm:ml-0');
-      }
-    } else {
-    }
-  }
+  // updateMainContentMargin function removed - using overlay mode instead
+  
   function switchToUserStats() {
     const dashboardStats = document.querySelector('.dashboard-stats');
     const userStats = document.querySelector('.user-stats');
