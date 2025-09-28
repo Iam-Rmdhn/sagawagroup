@@ -302,8 +302,9 @@ const galleryImages = [
     let autoplayInterval = null;
     let isTransitioning = false;
 
-    // YouTube API configuration - sekarang menggunakan backend API
-    const BACKEND_API_BASE = window.location.protocol + '//' + window.location.host;
+    // YouTube API configuration - menggunakan environment variable yang benar
+    const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+    const BACKEND_API_BASE = API_URL;
     
     let youtubeVideos = [];
     let videosCache = null;
@@ -367,14 +368,45 @@ const galleryImages = [
         const apiUrl = `${BACKEND_API_BASE}/api/youtube/videos${refreshParam}`;
         
         console.log('Fetching from backend API:', apiUrl);
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        console.log('API_URL configuration:', API_URL);
+        console.log('Using force refresh:', forceRefresh);
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          // Add timeout to prevent hanging
+          signal: AbortSignal.timeout(10000) // 10 second timeout
+        });
 
-        if (!response.ok || !data.success) {
-          throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Improved JSON parsing with error handling
+        let data;
+        try {
+          const responseText = await response.text();
+          if (!responseText.trim()) {
+            throw new Error('Empty response from server');
+          }
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          throw new Error(`JSON parsing failed: ${parseError.message}`);
+        }
+
+        if (!data.success) {
+          throw new Error(data.message || 'Unknown API error');
         }
 
         youtubeVideos = data.data || [];
+        console.log('YouTube API response success:', {
+          videosCount: youtubeVideos.length,
+          fromCache: data.fromCache,
+          videos: youtubeVideos.map(v => ({ id: v.id, title: v.title }))
+        });
         
         // Simpan ke cache hanya jika tidak dari cache backend
         if (!data.fromCache) {
@@ -382,6 +414,7 @@ const galleryImages = [
         }
         
         if (youtubeVideos.length === 0) {
+          console.warn('No YouTube videos returned from API');
           showEmptyState();
         } else {
           displayYouTubeVideos(youtubeVideos, data.fromCache);
@@ -390,14 +423,101 @@ const galleryImages = [
       } catch (error) {
         console.error('Error fetching YouTube videos:', error);
         
+        let errorMessage = 'Tidak dapat mengambil video dari YouTube saat ini';
+        
+        if (error.name === 'AbortError') {
+          errorMessage = 'Timeout: Server terlalu lama merespon. Silakan coba lagi.';
+        } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.';
+        } else if (error.message.includes('JSON parsing failed')) {
+          errorMessage = 'Data tidak valid dari server. Silakan refresh halaman.';
+        }
+        
         // Coba gunakan cache lama jika ada error
         const cachedVideos = getCachedVideos();
         if (cachedVideos && cachedVideos.length > 0) {
-          console.log('Using fallback cache due to error');
+          console.log('Using fallback cache due to error:', errorMessage);
           youtubeVideos = cachedVideos;
           displayYouTubeVideos(youtubeVideos, true);
+          
+          // Show warning about using cached data
+          const warningDiv = document.createElement('div');
+          warningDiv.className = 'bg-amber-100 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg mb-4 text-sm';
+          warningDiv.innerHTML = `
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+              </svg>
+              Menampilkan video dari cache karena server bermasalah. Data mungkin tidak terbaru.
+            </div>
+          `;
+          
+          const container = document.querySelector('#videos-container .grid');
+          if (container) {
+            container.insertBefore(warningDiv, container.firstChild);
+          }
         } else {
-          showErrorState(error.message);
+          // Development fallback - use mock data if API fails
+          if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev')) {
+            console.warn('Using development fallback data for YouTube videos');
+            const mockVideos = [
+              {
+                id: 'W9XCz_I-a-8',
+                title: 'Catering Acara Spesial Mu, Mulai Rp. 10.000/Pack Looh 🤗',
+                description: 'Video promosi catering spesial dari Sagawa Group dengan harga terjangkau mulai dari Rp. 10.000 per pack.',
+                thumbnail: 'https://i.ytimg.com/vi/W9XCz_I-a-8/mqdefault.jpg',
+                publishedAt: '2025-09-26T12:12:36Z',
+                channelTitle: 'Sagawa Media',
+                url: 'https://www.youtube.com/watch?v=W9XCz_I-a-8',
+                duration: 'PT21S',
+                isShorts: true
+              },
+              {
+                id: 'mIIpp6H4fdE',
+                title: 'DESAIN WARUNG NASI SELERA NUSANTARA CAB. MAMPANG By SAGAWA GROUP',
+                description: 'Desain interior dan eksterior Warung Nasi Selera Nusantara cabang Mampang yang modern dan menarik.',
+                thumbnail: 'https://i.ytimg.com/vi/mIIpp6H4fdE/mqdefault.jpg',
+                publishedAt: '2025-09-25T14:46:12Z',
+                channelTitle: 'Sagawa Media',
+                url: 'https://www.youtube.com/watch?v=mIIpp6H4fdE',
+                duration: 'PT37S',
+                isShorts: true
+              },
+              {
+                id: 'nS8iW3AYmkY',
+                title: 'KUNJUNGAN MITRA KE OUTLET | HUJAAAN',
+                description: 'Dokumentasi kunjungan mitra ke outlet dalam kondisi hujan deras, menunjukkan komitmen dan dedikasi tim.',
+                thumbnail: 'https://i.ytimg.com/vi/nS8iW3AYmkY/mqdefault.jpg',
+                publishedAt: '2025-09-24T15:21:56Z',
+                channelTitle: 'Sagawa Media',
+                url: 'https://www.youtube.com/watch?v=nS8iW3AYmkY',
+                duration: 'PT15S',
+                isShorts: true
+              }
+            ];
+            
+            youtubeVideos = mockVideos;
+            displayYouTubeVideos(youtubeVideos, false);
+            
+            // Show development notice
+            const devNotice = document.createElement('div');
+            devNotice.className = 'bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded-lg mb-4 text-sm';
+            devNotice.innerHTML = `
+              <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                Development Mode: Menampilkan data contoh karena YouTube API tidak tersedia.
+              </div>
+            `;
+            
+            const container = document.querySelector('#videos-container .grid');
+            if (container) {
+              container.insertBefore(devNotice, container.firstChild);
+            }
+          } else {
+            showErrorState(errorMessage);
+          }
         }
       }
     }

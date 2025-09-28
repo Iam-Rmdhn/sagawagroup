@@ -1,15 +1,13 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
-import * as dotenv from "dotenv";
+import { ENV } from "../env";
 
-dotenv.config();
+// AstraDB configuration using proper ENV
+const ASTRA_DB_APPLICATION_TOKEN = ENV.ASTRA_DB_APPLICATION_TOKEN;
+const ASTRA_DB_API_ENDPOINT = ENV.ASTRA_DB_API_ENDPOINT;
 
-// AstraDB configuration
-const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
-const ASTRA_DB_API_ENDPOINT = process.env.ASTRA_DB_API_ENDPOINT;
-
-if (!ASTRA_DB_APPLICATION_TOKEN || !ASTRA_DB_API_ENDPOINT) {
-  throw new Error("Database credentials not found in environment variables");
-}
+console.log("Initializing database with ENV configuration...");
+console.log("Environment:", ENV.NODE_ENV);
+console.log("Database endpoint configured:", !!ASTRA_DB_API_ENDPOINT);
 
 // Initialize DataStax Astra DB client
 const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
