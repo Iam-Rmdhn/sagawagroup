@@ -50,7 +50,7 @@ const { currentPage = "dashboard" } = Astro.props;
    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-orange-50/20 to-red-50/20 pointer-events-none"></div>
    
    <!-- Button group styling -->
-   <div class="relative h-full px-3 pb-4 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent">
+   <div class="relative h-full px-3 pb-4 pt-3 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent">
       <ul class="space-y-2 font-medium mt-2">
          <!-- Dashboard -->
       <li>
@@ -141,7 +141,7 @@ const { currentPage = "dashboard" } = Astro.props;
          <!-- Menu -->
       <li>
         <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'reports' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 text-gray-700 hover:text-orange-800 border border-gray-200 hover:border-orange-300'}`}
-          onclick="window.location.href='/admin/kelola-menu'">
+          onclick="window.location.href='/404'">
           <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'reports' ? 'bg-white/20' : 'bg-orange-100 group-hover:bg-orange-200'}`}>
             <svg class={`w-5 h-5 transition-colors ${currentPage === 'reports' ? 'text-white' : 'text-orange-600 group-hover:text-orange-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
@@ -156,7 +156,7 @@ const { currentPage = "dashboard" } = Astro.props;
          <!-- Settings -->
       <li>
         <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'settings' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-gray-700 hover:text-red-800 border border-gray-200 hover:border-red-300'}`}
-          onclick="window.location.href='/admin/kelola-aplikasi'">
+          onclick="window.location.href='/404'">
           <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'settings' ? 'bg-white/20' : 'bg-red-100 group-hover:bg-red-200'}`}>
             <svg class={`w-5 h-5 transition-colors ${currentPage === 'settings' ? 'text-white' : 'text-red-600 group-hover:text-red-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
               <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
@@ -169,8 +169,8 @@ const { currentPage = "dashboard" } = Astro.props;
    </div>
 </aside>
 
-<!-- Mobile overlay backdrop -->
-<div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300 md:hidden"></div>
+<!-- Mobile overlay backdrop - now used for all screen sizes -->
+<div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -198,13 +198,9 @@ const { currentPage = "dashboard" } = Astro.props;
           if (mutation.attributeName === 'class') {
             const sidebarVisible = !sidebar.classList.contains('-translate-x-full');
             
-            // Show/hide backdrop only on mobile
-            if (window.innerWidth < 768) {
-              if (sidebarVisible) {
-                backdrop.classList.remove('hidden');
-              } else {
-                backdrop.classList.add('hidden');
-              }
+            // Show/hide backdrop on all screen sizes for overlay effect
+            if (sidebarVisible) {
+              backdrop.classList.remove('hidden');
             } else {
               backdrop.classList.add('hidden');
             }

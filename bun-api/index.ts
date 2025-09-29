@@ -23,7 +23,7 @@ Bun.serve({
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers":
-        "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token",
+        "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token, Cache-Control, Pragma, Expires",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "86400",
       Vary: "Origin",

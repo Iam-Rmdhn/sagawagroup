@@ -489,7 +489,49 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 🔍 Monitoring & Support
+## � CI/CD & Automation
+
+### 🤖 GitHub Actions Pipeline
+Fully automated CI/CD pipeline with testing, building, and deployment:
+
+- ✅ **Continuous Integration**: Automated testing and build validation
+- 🚀 **Continuous Deployment**: Zero-downtime production deployment
+- 🔒 **Security Scanning**: Dependency vulnerability checks
+- 📊 **Health Monitoring**: Post-deployment verification
+- 💬 **Discord Notifications**: Real-time deployment status
+
+### 🔐 Secrets Setup for CI/CD
+Quick setup for GitHub Actions secrets:
+
+```bash
+# 🚀 Interactive setup wizard
+./quick-setup-secrets.sh
+
+# 🔍 Advanced validation & testing
+./validate-secrets.sh --setup
+./validate-secrets.sh --validate
+
+# 📋 View setup instructions
+cat SECRETS-SETUP-CICD.md
+```
+
+**Required Secrets:**
+- `HOST` - Production server IP
+- `USERNAME` - SSH username  
+- `SSH_KEY` - Private SSH key
+- `DOMAIN` - Main domain (sagawagroup.id)
+- `EMAIL` - SSL certificate email
+
+**Optional but Recommended:**
+- `DISCORD_WEBHOOK` - Deployment notifications
+- `JWT_SECRET` - API security
+- Database credentials (if using external DB)
+
+📖 **Complete Guide**: [SECRETS-SETUP-CICD.md](SECRETS-SETUP-CICD.md)
+
+---
+
+## �🔍 Monitoring & Support
 
 ### 🆘 Health Checks
 - **Website**: [www.sagawagroup.id](https://www.sagawagroup.id)
