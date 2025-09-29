@@ -389,41 +389,94 @@ import logoLogin from '../assets/img/sagawa_logo.svg';
           hideMessages();
 
           try {
-            const response = await fetch(`${API_URL}/api/auth/login`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: sanitizedEmail,
-                password: password
-              }),
-            });
+            let response;
+            let result;
+            
+            // Check if it's admin login with hardcoded credentials
+            if (sanitizedEmail === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
+              // Use admin login endpoint to get valid token
+              response = await fetch(`${API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: sanitizedEmail,
+                  password: password
+                }),
+              });
 
-            const result = await response.json();
+              result = await response.json();
 
-            if (response.ok && result.success) {
-              showSuccess('Login berhasil! Mengalihkan ke dashboard...');
-              
-              // Simpan data ke localStorage
-              localStorage.setItem('mitraToken', result.data.token);
-              localStorage.setItem('mitraUser', JSON.stringify(result.data.user));
-              
-              // Simpan credentials jika remember me dicentang
-              const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
-              const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
-              saveCredentials(sanitizedEmail, password, rememberMe);
-              
-              // Redirect ke dashboard setelah delay singkat
-              setTimeout(() => {
-                window.location.href = '/user/dashboard';
-              }, 1000);
-
+              if (response.ok) {
+                showSuccess('Login admin berhasil! Mengalihkan ke dashboard...');
+                
+                // Simpan data ke localStorage untuk admin
+                localStorage.setItem('adminToken', result.token);
+                localStorage.setItem('adminUser', JSON.stringify(result.user));
+                
+                // Simpan credentials jika remember me dicentang
+                const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+                const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
+                if (rememberMe) {
+                  localStorage.setItem('rememberedAdminEmail', sanitizedEmail);
+                  localStorage.setItem('rememberedAdminPassword', password);
+                  localStorage.setItem('rememberAdminMe', 'true');
+                } else {
+                  localStorage.removeItem('rememberedAdminEmail');
+                  localStorage.removeItem('rememberedAdminPassword');
+                  localStorage.removeItem('rememberAdminMe');
+                }
+                
+                // Redirect ke dashboard admin setelah delay singkat
+                setTimeout(() => {
+                  window.location.href = '/admin/dashboard';
+                }, 1000);
+              } else {
+                // Admin login gagal
+                showError(result.error || 'Login admin gagal. Periksa email dan password Anda.');
+              }
             } else {
-              // Login gagal
-              showError(result.error || 'Login gagal. Periksa email dan password Anda.');
-            }
+              // Use mitra login endpoint for all other users
+              response = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  email: sanitizedEmail,
+                  password: password
+                }),
+              });
 
+              result = await response.json();
+
+              if (response.ok && result.success) {
+                showSuccess('Login berhasil! Mengalihkan ke dashboard...');
+                
+                // Simpan data ke localStorage untuk mitra
+                localStorage.setItem('mitraToken', result.data.token);
+                localStorage.setItem('mitraUser', JSON.stringify(result.data.user));
+                
+                // Simpan credentials jika remember me dicentang
+                const rememberMeCheckbox = document.getElementById('remember-me') as HTMLInputElement;
+                const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
+                saveCredentials(sanitizedEmail, password, rememberMe);
+                
+                // Redirect ke dashboard mitra setelah delay singkat
+                setTimeout(() => {
+                  window.location.href = '/user/dashboard';
+                }, 1000);
+
+              } else {
+                // Login gagal - check if it's admin with wrong password
+                if (sanitizedEmail === 'admin@sagawagroup.id') {
+                  showError('Password admin salah. Gunakan password yang benar.');
+                } else {
+                  showError(result.error || 'Login gagal. Periksa email dan password Anda.');
+                }
+              }
+            }
           } catch (error) {
             console.error('Login error:', error);
             showError('Terjadi kesalahan saat login. Silakan coba lagi.');

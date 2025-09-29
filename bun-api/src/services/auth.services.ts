@@ -128,6 +128,30 @@ export async function getAllMitraLoginService() {
 }
 
 export async function adminLoginService(email: string, password: string) {
+  // Check for hardcoded admin credentials first
+  if (email === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
+    const token = generateToken({
+      id: 'admin-hardcoded',
+      email: email,
+      role: 'admin',
+    });
+
+    const hardcodedAdmin = {
+      _id: 'admin-hardcoded',
+      email: email,
+      nama: 'Administrator',
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    return {
+      user: hardcodedAdmin,
+      token,
+    };
+  }
+
+  // Check database admin for other credentials
   const admin = await AdminModel.findOne({ email });
   if (!admin) throw new Error("Admin tidak ditemukan");
 

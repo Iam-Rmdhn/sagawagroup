@@ -96,7 +96,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		if (typeof window !== 'undefined') {
 			const token = localStorage.getItem('adminToken');
 			const user = localStorage.getItem('adminUser');
-			if (!token || !user) window.location.href = '/admin/login';
+			if (!token || !user) window.location.href = '/login';
 		}
 	</script>
 	<AdminNavbar />
@@ -213,7 +213,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				// Biarkan credentials tersimpan untuk login berikutnya
 				
 				// Redirect ke login page
-				window.location.href = '/admin/login';
+				window.location.href = '/login';
 			}
 		});
 		async function loadPelunasanData(): Promise<void> {

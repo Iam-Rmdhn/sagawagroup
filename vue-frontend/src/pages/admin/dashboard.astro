@@ -482,13 +482,25 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
   <!-- Authentication Protection Script -->
   <script>
-    // Cek apakah user sudah login
+    // Cek apakah user sudah login dan apakah emailnya adalah admin@sagawagroup.id
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('adminToken');
       const user = localStorage.getItem('adminUser');
       
       if (!token || !user) {
-        window.location.href = '/admin/login';
+        window.location.href = '/login';
+      } else {
+        // Cek apakah user yang login memiliki email admin@sagawagroup.id
+        try {
+          const userData = JSON.parse(user);
+          if (userData.email !== 'admin@sagawagroup.id') {
+            // Jika bukan email admin yang sah, redirect ke user dashboard
+            window.location.href = '/user/dashboard';
+          }
+        } catch (e) {
+          console.error('Error parsing user data:', e);
+          window.location.href = '/login';
+        }
       }
     }
   </script>
@@ -846,8 +858,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       // Jangan hapus remembered credentials saat logout
       // Biarkan credentials tersimpan untuk login berikutnya
       
-      // Redirect ke login page
-      window.location.href = '/admin/login';
+      // Redirect ke login page utama
+      window.location.href = '/login';
     }
   });
 
@@ -1194,7 +1206,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const token = localStorage.getItem('adminToken');
 
     if (!token) {
-      window.location.href = '/admin/login';
+      window.location.href = '/login';
       return;
     }
 
@@ -1397,7 +1409,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const token = localStorage.getItem('adminToken');
 
     if (!token) {
-      window.location.href = '/admin/login';
+      window.location.href = '/login';
       return;
     }
 
@@ -1473,7 +1485,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const token = localStorage.getItem('adminToken');
 
     if (!token) {
-      window.location.href = '/admin/login';
+      window.location.href = '/login';
       return;
     }
 

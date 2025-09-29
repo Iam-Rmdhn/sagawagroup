@@ -51,6 +51,11 @@ async function validateAdminToken(req: Request): Promise<any> {
     throw new Error("Akses ditolak: bukan admin");
   }
 
+  // Additional check for hardcoded admin
+  if (decoded.id === 'admin-hardcoded' && decoded.email === 'admin@sagawagroup.id') {
+    return decoded;
+  }
+
   return decoded;
 }
 
