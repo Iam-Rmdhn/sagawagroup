@@ -48,7 +48,7 @@ export const sendMitraApprovalEmail = async (
           <div style="margin-bottom: 20px;">
             <img src="cid:sagawa-logo"
                  alt="Sagawa Group Logo"
-                 style="height: 60px; width: auto;">
+                 style="height: 60px; width: auto; invert: 100%; filter: brightness(0) saturate(100%); invert(100%);">
           </div>
           <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Selamat Bergabung!</h1>
           <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">PT SAGAWA PANGAN NUSANTARA</p>

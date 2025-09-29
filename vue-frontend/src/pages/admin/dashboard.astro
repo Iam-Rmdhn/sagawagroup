@@ -291,6 +291,190 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       margin: 0 auto;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
+
+    /* Modal Detail Mitra Responsive Styles */
+    .modal-detail {
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .modal-detail-content {
+      max-height: 90vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
+    }
+
+    .modal-detail-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .modal-detail-content::-webkit-scrollbar-track {
+      background: rgba(251, 191, 36, 0.1);
+      border-radius: 3px;
+    }
+
+    .modal-detail-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+      border-radius: 3px;
+    }
+
+    .info-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 191, 36, 0.03) 100%);
+      border: 1px solid rgba(251, 191, 36, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      border-color: rgba(251, 191, 36, 0.2);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.1);
+    }
+
+    .info-card h4 {
+      color: rgb(120 53 15);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .info-card h4::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, rgb(245 158 11), rgb(251 191 36));
+      border-radius: 1px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+    }
+
+    .image-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 2px solid rgba(251, 191, 36, 0.1);
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    }
+
+    .image-container:hover {
+      border-color: rgba(251, 191, 36, 0.3);
+      box-shadow: 0 8px 25px rgba(251, 191, 36, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .image-container img {
+      transition: all 0.3s ease;
+    }
+
+    .image-container:hover img {
+      transform: scale(1.05);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .image-container:hover .image-overlay {
+      opacity: 1;
+    }
+
+    /* Mobile responsive styles for modal */
+    @media (max-width: 640px) {
+      .modal-panel {
+        margin: 0.5rem;
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100vh - 1rem);
+      }
+
+      .modal-detail-content {
+        max-height: calc(100vh - 8rem);
+        padding: 1rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+      }
+
+      .image-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+      }
+
+      .modal-header {
+        padding: 1rem;
+      }
+
+      .modal-header h3 {
+        font-size: 1.125rem;
+      }
+
+      .modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .modal-footer button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .modal-panel {
+        margin: 0.25rem;
+        max-width: calc(100vw - 0.5rem);
+      }
+
+      .info-card {
+        padding: 0.75rem;
+      }
+
+      .info-card h4 {
+        font-size: 1rem;
+      }
+
+      .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+    }
+
+    /* Tablet responsive styles */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .modal-panel {
+        max-width: 90vw;
+      }
+
+      .info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+    }
   </style>
 
   <!-- Chart.js Library -->
@@ -313,10 +497,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
 <AdminSidebar currentPage="dashboard" />
 
-<div class="dashboard-bg min-h-screen p-4 sm:ml-72 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+<div class="dashboard-bg min-h-screen p-4 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
    <div class="p-6 mt-16" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <!-- Welcome Header -->
-      <div class="mb-8">
+      <div class="mb-8 pt-2 sm:mb-8">
          <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl">
             <div class="flex items-center space-x-4">
                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -580,32 +764,48 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 </div>
 
 <!-- Modal untuk Detail Mitra -->
-<div id="mitraDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
-  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+<div id="mitraDetailModal" class="modal-detail hidden fixed inset-0 z-50 overflow-y-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+  <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
     <!-- Background overlay -->
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="closeMitraDetailModal()" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;"></div>
+    <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity" onclick="closeMitraDetailModal()" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;"></div>
     
     <!-- Modal panel -->
-    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg leading-6 font-medium text-gray-900">Detail Mitra</h3>
-          <button onclick="closeMitraDetailModal()" class="text-gray-400 hover:text-gray-600">
+    <div class="modal-panel relative bg-white rounded-xl shadow-2xl transform transition-all max-w-6xl w-full mx-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+      <!-- Modal Header -->
+      <div class="modal-header bg-gradient-to-r from-amber-50 to-orange-50 px-4 sm:px-6 py-4 border-b border-orange-100 rounded-t-xl">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Detail Mitra</h3>
+              <p class="text-sm text-gray-600">Informasi lengkap data mitra</p>
+            </div>
+          </div>
+          <button onclick="closeMitraDetailModal()" class="text-gray-400 hover:text-gray-600 hover:bg-white hover:bg-opacity-20 p-2 rounded-full transition-all duration-200">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
+      </div>
         
-        <!-- Modal Content -->
-        <div id="mitraDetailContent" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+      <!-- Modal Content -->
+      <div class="modal-detail-content p-4 sm:p-6">
+        <div id="mitraDetailContent" class="info-grid grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6"></div>
+      </div>
         
-        <!-- Modal Footer -->
-        <div class="mt-6 flex justify-end space-x-3">
-          <button onclick="closeMitraDetailModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition">
-            Tutup
-          </button>
-        </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer bg-gray-50 px-4 sm:px-6 py-4 border-t border-gray-100 rounded-b-xl flex justify-end space-x-3">
+        <button onclick="closeMitraDetailModal()" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-medium rounded-lg hover:from-gray-600 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+          Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -631,7 +831,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
 <script>
   // API URL configuration
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
   
   // Listen for navbar actions
   document.addEventListener('adminNavbarAction', function(event: Event) {
@@ -706,71 +906,46 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     });
 
-    // Navbar interactions are now handled by AdminNavbar component
-
     // Handle refresh button
     const refreshBtn = document.getElementById('refresh-btn');
     if (refreshBtn) {
       refreshBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Get current active filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
       });
     }
-
-    // Sidebar toggle is now handled by AdminNavbar component
   });
 
   // Function to initialize sidebar state
   function initializeSidebarState() {
     const sidebar = document.getElementById('logo-sidebar');
-    const mainContent = document.querySelector('.dashboard-bg');
+    const backdrop = document.getElementById('sidebar-backdrop');
     
-    if (sidebar && mainContent) {
-      const sidebarVisible = localStorage.getItem('sidebarVisible');
-      const shouldBeVisible = sidebarVisible === 'true';
-      
-      // Apply sidebar state
-      if (shouldBeVisible) {
-        sidebar.classList.remove('-translate-x-full');
-      } else {
-        sidebar.classList.add('-translate-x-full');
-      }
-      
-      // Apply main content margin
-      updateMainContentMargin(shouldBeVisible);
+    if (sidebar) {
+      // Always start with sidebar hidden (overlay mode)
+      sidebar.classList.add('-translate-x-full');
+      localStorage.setItem('sidebarVisible', 'false');
       
       // Listen for sidebar toggle events from navbar
       window.addEventListener('sidebarToggle', function(e: Event) {
         const customEvent = e as CustomEvent;
         const visible = customEvent.detail?.visible;
-        if (typeof visible === 'boolean') {
-          updateMainContentMargin(visible);
+        
+        // Show/hide backdrop for overlay effect on all screen sizes
+        if (backdrop && typeof visible === 'boolean') {
+          if (visible) {
+            backdrop.classList.remove('hidden');
+          } else {
+            backdrop.classList.add('hidden');
+          }
         }
-      });
-      
-      // Handle window resize
-      window.addEventListener('resize', function() {
-        const currentVisible = !sidebar.classList.contains('-translate-x-full');
-        updateMainContentMargin(currentVisible);
       });
     }
   }
 
-  function updateMainContentMargin(sidebarVisible: boolean) {
-    const mainContent = document.querySelector('.dashboard-bg');
-    if (mainContent) {
-      mainContent.classList.remove('sm:ml-0', 'sm:ml-72');
-      
-      if (sidebarVisible && window.innerWidth >= 768) {
-        mainContent.classList.add('sm:ml-72');
-      } else {
-        mainContent.classList.add('sm:ml-0');
-      }
-    } else {
-    }
-  }
+  // updateMainContentMargin function removed - using overlay mode instead
+  
   function switchToUserStats() {
     const dashboardStats = document.querySelector('.dashboard-stats');
     const userStats = document.querySelector('.user-stats');
@@ -1442,112 +1617,230 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       });
     };
 
+    const getStatusBadgeClass = (status: string) => {
+      switch(status) {
+        case 'pending':
+          return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        case 'approved':
+          return 'bg-green-100 text-green-800 border-green-200';
+        case 'rejected':
+          return 'bg-red-100 text-red-800 border-red-200';
+        default:
+          return 'bg-gray-100 text-gray-800 border-gray-200';
+      }
+    };
+
     content.innerHTML = `
-
-
       <!-- Informasi Data Pribadi -->
-      <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Data Pribadi</h4>
-        <div class="space-y-2">
-          <div><strong>Nama Mitra:</strong> ${mitra.namaMitra || 'N/A'}</div>
-          <div><strong>Email:</strong> ${mitra.email || 'N/A'}</div>
-          <div><strong>No HP:</strong> ${mitra.noHp || 'N/A'}</div>
-          <div><strong>Alamat:</strong> ${mitra.alamatMitra || 'N/A'}</div>
-          <div><strong>Status:</strong> 
-            <span class="px-2 py-1 text-xs rounded-full ${mitra.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : mitra.status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-              ${mitra.status || 'pending'}
+      <div class="info-card p-4 sm:p-6 rounded-xl">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Informasi Data Pribadi</h4>
+        <div class="space-y-3">
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Nama Mitra:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.namaMitra || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Email:</span>
+            <span class="text-gray-900 sm:text-right break-all">${mitra.email || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">No HP:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.noHp || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Alamat:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.alamatMitra || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between sm:items-center">
+            <span class="font-medium text-gray-700">Status:</span>
+            <span class="status-badge border ${getStatusBadgeClass(mitra.status || 'pending')}">
+              ${(mitra.status || 'pending').toUpperCase()}
             </span>
           </div>
         </div>
       </div>
 
       <!-- Informasi Kemitraan -->
-      <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Kemitraan</h4>
-        <div class="space-y-2">
-          <div><strong>Sistem Kemitraan:</strong> ${mitra.sistemKemitraan || 'N/A'}</div>
-          <div><strong>Sales:</strong> ${mitra.sales || 'N/A'}</div>
-          <div><strong>Paket Usaha:</strong> ${mitra.paketUsaha || 'N/A'}</div>
-          ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ? `<div><strong>Sub Brand:</strong> ${mitra.rmNusantaraSubMenu}</div>` : ''}
+      <div class="info-card p-4 sm:p-6 rounded-xl">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Informasi Kemitraan</h4>
+        <div class="space-y-3">
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Sistem Kemitraan:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.sistemKemitraan || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Sales:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.sales || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Paket Usaha:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.paketUsaha || 'N/A'}</span>
+          </div>
+          ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ? `
+            <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+              <span class="font-medium text-gray-700">Sub Brand:</span>
+              <span class="text-gray-900 sm:text-right">${mitra.rmNusantaraSubMenu}</span>
+            </div>
+          ` : ''}
         </div>
       </div>
 
       <!-- Informasi Keuangan -->
-      <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Keuangan</h4>
-        <div class="space-y-2">
-          <div><strong>Nilai Paket:</strong> ${mitra.nilaiPaketUsaha || 'N/A'}</div>
-          <div><strong>Harga Paket:</strong> ${mitra.hargaPaket ? formatCurrency(mitra.hargaPaket) : 'N/A'}</div>
-          <div><strong>Nominal DP:</strong> ${mitra.nominalDP ? formatCurrency(mitra.nominalDP) : 'N/A'}</div>
-          <div><strong>Nominal Full:</strong> ${mitra.nominalFull ? formatCurrency(mitra.nominalFull) : 'N/A'}</div>
-          <div><strong>Yang Harus Dibayar:</strong> ${mitra.yangHarusDibayar ? formatCurrency(mitra.yangHarusDibayar) : 'N/A'}</div>
-          <div><strong>Kekurangan:</strong> ${mitra.kekurangan ? formatCurrency(mitra.kekurangan) : 'N/A'}</div>
+      <div class="info-card p-4 sm:p-6 rounded-xl">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Informasi Keuangan</h4>
+        <div class="space-y-3">
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Nilai Paket:</span>
+            <span class="text-gray-900 sm:text-right font-semibold">${mitra.nilaiPaketUsaha || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Harga Paket:</span>
+            <span class="text-gray-900 sm:text-right font-bold text-amber-600">${mitra.hargaPaket ? formatCurrency(mitra.hargaPaket) : 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Nominal DP:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.nominalDP ? formatCurrency(mitra.nominalDP) : 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Nominal Full:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.nominalFull ? formatCurrency(mitra.nominalFull) : 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Yang Harus Dibayar:</span>
+            <span class="text-gray-900 sm:text-right font-bold text-blue-600">${mitra.yangHarusDibayar ? formatCurrency(mitra.yangHarusDibayar) : 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Kekurangan:</span>
+            <span class="text-gray-900 sm:text-right ${mitra.kekurangan > 0 ? 'text-red-600 font-semibold' : 'text-green-600'}">${mitra.kekurangan ? formatCurrency(mitra.kekurangan) : 'N/A'}</span>
+          </div>
         </div>
       </div>
 
       <!-- Informasi Pembayaran -->
-      <div class="bg-gray-50 p-4 rounded-lg">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Pembayaran</h4>
-        <div class="space-y-2">
-          <div><strong>Metode Pembayaran:</strong> Transfer</div>
-          <div><strong>Bank Pengirim:</strong> ${mitra.bankPengirim || 'N/A'}</div>
-          <div><strong>No Rekening:</strong> ${mitra.noRekPengirim || 'N/A'}</div>
-          <div><strong>Nama Pengirim:</strong> ${mitra.namaPengirim || 'N/A'}</div>
+      <div class="info-card p-4 sm:p-6 rounded-xl">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Informasi Pembayaran</h4>
+        <div class="space-y-3">
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Metode Pembayaran:</span>
+            <span class="text-gray-900 sm:text-right">Transfer Bank</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Bank Pengirim:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.bankPengirim || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">No Rekening:</span>
+            <span class="text-gray-900 sm:text-right font-mono">${mitra.noRekPengirim || 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700">Nama Pengirim:</span>
+            <span class="text-gray-900 sm:text-right">${mitra.namaPengirim || 'N/A'}</span>
+          </div>
         </div>
       </div>
 
       <!-- File Dokumen -->
-      <div class="bg-gray-50 p-4 rounded-lg col-span-2">
-        <h4 class="font-semibold text-gray-900 mb-4">Dokumen & Foto</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="info-card p-4 sm:p-6 rounded-xl col-span-1 lg:col-span-2">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Dokumen & Foto</h4>
+        <div class="image-grid grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <!-- Foto KTP -->
-          <div class="space-y-2">
-            <strong>Foto KTP, NPWP & Foto Mitra:</strong>
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2">
+              <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-4 0v2m4-2v2"></path>
+              </svg>
+              <span class="font-medium text-gray-700">Foto KTP & Dokumen</span>
+            </div>
             ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
-              <div class="mt-2">
-                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
-                  <img src="${mitra.fotoKTP}" 
-                       alt="Foto KTP" 
-                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
-                       onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
-                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                  <div class="text-red-500 text-sm p-4 hidden text-center">
-                    <p>Gagal memuat gambar KTP</p>
+              <div class="image-container aspect-video relative">
+                <img src="${mitra.fotoKTP}" 
+                     alt="Foto KTP" 
+                     class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
+                     onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-overlay">
+                  <span>Klik untuk memperbesar</span>
+                </div>
+                <div class="hidden absolute inset-0 flex items-center justify-center bg-red-50 text-red-500">
+                  <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-sm">Gagal memuat gambar</p>
                   </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
               </div>
-            ` : '<span class="text-gray-500">Tidak ada foto KTP</span>'}
+            ` : `
+              <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                <div class="text-center">
+                  <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <p class="text-sm">Tidak ada foto KTP</p>
+                </div>
+              </div>
+            `}
           </div>
           
           <!-- Bukti Transfer -->
-          <div class="space-y-2">
-            <strong>Bukti Transfer:</strong>
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="font-medium text-gray-700">Bukti Transfer</span>
+            </div>
             ${mitra.buktiTransfer && mitra.buktiTransfer !== '' ? `
-              <div class="mt-2">
-                <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
-                  <img src="${mitra.buktiTransfer}" 
-                       alt="Bukti Transfer" 
-                       class="w-full h-48 object-contain bg-gray-50 cursor-pointer hover:bg-gray-100 transition-all"
-                       onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
-                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                  <div class="text-red-500 text-sm p-4 hidden text-center">
-                    <p>Gagal memuat bukti transfer</p>
+              <div class="image-container aspect-video relative">
+                <img src="${mitra.buktiTransfer}" 
+                     alt="Bukti Transfer" 
+                     class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
+                     onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="image-overlay">
+                  <span>Klik untuk memperbesar</span>
+                </div>
+                <div class="hidden absolute inset-0 flex items-center justify-center bg-red-50 text-red-500">
+                  <div class="text-center">
+                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-sm">Gagal memuat gambar</p>
                   </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-2 text-center">Klik untuk memperbesar</p>
               </div>
-            ` : '<span class="text-gray-500">Tidak ada bukti transfer</span>'}
+            ` : `
+              <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                <div class="text-center">
+                  <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <p class="text-sm">Tidak ada bukti transfer</p>
+                </div>
+              </div>
+            `}
           </div>
         </div>
       </div>
 
       <!-- Informasi Waktu -->
-      <div class="bg-gray-50 p-4 rounded-lg col-span-2">
-        <h4 class="font-semibold text-gray-900 mb-3">Informasi Waktu</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div><strong>Dibuat:</strong> ${mitra.createdAt ? formatDate(mitra.createdAt) : 'N/A'}</div>
-          <div><strong>Diupdate:</strong> ${mitra.updatedAt ? formatDate(mitra.updatedAt) : 'N/A'}</div>
+      <div class="info-card p-4 sm:p-6 rounded-xl col-span-1 lg:col-span-2">
+        <h4 class="text-lg font-semibold mb-4 pb-2">Informasi Waktu</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700 flex items-center">
+              <svg class="w-4 h-4 mr-2 text-blue-500"width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-plus-icon lucide-calendar-plus"><path d="M16 19h6"/><path d="M16 2v4"/><path d="M19 16v6"/><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"/><path d="M3 10h18"/><path d="M8 2v4"/></svg>
+              Tanggal Dibuat:
+            </span>
+            <span class="text-gray-900 sm:text-right">${mitra.createdAt ? formatDate(mitra.createdAt) : 'N/A'}</span>
+          </div>
+          <div class="info-item flex flex-col sm:flex-row sm:justify-between">
+            <span class="font-medium text-gray-700 flex items-center">
+              <svg class="w-4 h-4 mr-2 text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-sync-icon lucide-calendar-sync"><path d="M11 10v4h4"/><path d="m11 14 1.535-1.605a5 5 0 0 1 8 1.5"/><path d="M16 2v4"/><path d="m21 18-1.535 1.605a5 5 0 0 1-8-1.5"/><path d="M21 22v-4h-4"/><path d="M21 8.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4.3"/><path d="M3 10h4"/><path d="M8 2v4"/></svg>
+              Terakhir Diupdate:
+            </span>
+            <span class="text-gray-900 sm:text-right">${mitra.updatedAt ? formatDate(mitra.updatedAt) : 'N/A'}</span>
+          </div>
         </div>
       </div>
     `;

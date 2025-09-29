@@ -11,7 +11,7 @@ set -e  # Exit on any error
 PROJECT_NAME="sagawagroup"
 DOMAIN="sagawagroup.id"
 WWW_DOMAIN="www.sagawagroup.id"
-PROJECT_DIR="/root/sagawagroup"
+PROJECT_DIR="/home/ilham/sagawagroup"
 DEPLOY_DIR="/var/www/sagawagroup"
 API_PORT="5000"
 FRONTEND_PORT="4321"
@@ -79,16 +79,39 @@ check_root() {
     fi
 }
 
+# Function to validate project directory
+validate_project() {
+    print_status "Validating project directory..."
+    
+    if [ ! -d "$PROJECT_DIR" ]; then
+        print_error "Project directory not found: $PROJECT_DIR"
+        print_error "Please ensure the Sagawa Group project is cloned at $PROJECT_DIR"
+        exit 1
+    fi
+    
+    if [ ! -d "$PROJECT_DIR/vue-frontend" ]; then
+        print_error "Frontend directory not found: $PROJECT_DIR/vue-frontend"
+        exit 1
+    fi
+    
+    if [ ! -d "$PROJECT_DIR/bun-api" ]; then
+        print_error "API directory not found: $PROJECT_DIR/bun-api"
+        exit 1
+    fi
+    
+    print_success "Project directory validation passed"
+}
+
 # Function to backup current deployment if exists
 backup_current() {
     if [ -d "$DEPLOY_DIR" ]; then
         BACKUP_NAME="sagawagroup-backup-$(date +%Y%m%d_%H%M%S)"
         print_status "Backing up current deployment..."
-        mv "$DEPLOY_DIR" "/root/${BACKUP_NAME}"
-        print_success "Current deployment backed up to /root/${BACKUP_NAME}"
+        mv "$DEPLOY_DIR" "/var/backups/${BACKUP_NAME}"
+        print_success "Current deployment backed up to /var/backups/${BACKUP_NAME}"
         
         # Export backup name for potential rollback
-        export BACKUP_DIR="/root/${BACKUP_NAME}"
+        export BACKUP_DIR="/var/backups/${BACKUP_NAME}"
     else
         print_status "No existing deployment found, skipping backup"
     fi
@@ -125,6 +148,7 @@ create_directories() {
     mkdir -p "$DEPLOY_DIR/api"
     mkdir -p "$DEPLOY_DIR/uploads"
     mkdir -p "$DEPLOY_DIR/logs"
+    mkdir -p "/var/backups"  # Create backup directory
     print_success "Deployment directories created"
 }
 
@@ -191,7 +215,7 @@ build_frontend() {
     
     # Install dependencies
     print_status "Installing frontend dependencies..."
-    if ! bun install --frozen-lockfile; then
+    if ! sudo -u ilham bun install; then
         print_error "Frontend dependency installation failed"
         rollback_deployment
         exit 1
@@ -199,7 +223,7 @@ build_frontend() {
     
     # Build for production
     print_status "Building frontend..."
-    if ! bun run build; then
+    if ! sudo -u ilham bun run build; then
         print_error "Frontend build failed"
         rollback_deployment
         exit 1
@@ -243,12 +267,20 @@ deploy_api() {
     fi
     
     # Install API dependencies
-    log_message "Installing API dependencies with bun"
-    cd "$DEPLOY_DIR/api"
-    if ! bun install --production; then
+    log_message "Installing API dependencies with npm"
+    cd "$DEPLOY_DIR/api" || {
+        print_error "Failed to navigate to API directory: $DEPLOY_DIR/api"
+        return 1
+    }
+    log_message "Current directory: $(pwd)"
+    log_message "Package.json exists: $(ls -la package.json)"
+    # Install as root then fix ownership
+    if ! npm install --production --omit=dev; then
         print_error "API dependency installation failed"
         return 1
     fi
+    # Fix ownership of node_modules
+    chown -R ilham:ilham node_modules/
     
     print_success "API deployed successfully with dependencies"
 }
@@ -374,6 +406,143 @@ limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
 limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
 EOF
 
+    # Check if SSL certificates exist
+    if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+        print_status "SSL certificates found, creating HTTPS configuration..."
+        create_https_nginx_config
+    else
+        print_status "No SSL certificates found, creating HTTP-only configuration..."
+        create_http_nginx_config
+    fi
+    
+    print_success "Nginx configuration created"
+}
+
+# Function to create HTTP-only nginx configuration
+create_http_nginx_config() {
+    cat > "/etc/nginx/sites-available/sagawagroup" << 'EOF'
+# HTTP server
+server {
+    listen 80;
+    server_name __DOMAIN__ __WWW_DOMAIN__;
+    
+    # Document root
+    root __DEPLOY_DIR__/frontend;
+    index index.html;
+    
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_proxied expired no-cache no-store private auth;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript
+        application/xml+rss
+        application/json
+        image/svg+xml;
+    
+    # API proxy with rate limiting
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        proxy_pass http://localhost:__API_PORT__/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+    
+    # Login endpoint with stricter rate limiting
+    location /api/auth/login {
+        limit_req zone=login burst=3 nodelay;
+        proxy_pass http://localhost:__API_PORT__/api/auth/login;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Upload files proxy
+    location /uploads/ {
+        proxy_pass http://localhost:__API_PORT__/uploads/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # File upload limits
+        client_max_body_size 10M;
+    }
+    
+    # Static files with caching
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)(\?v=\d+)?$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable" always;
+        access_log off;
+        
+        # Optional: Enable CORS for fonts
+        location ~* \.(woff|woff2|ttf|eot)$ {
+            add_header Access-Control-Allow-Origin "*" always;
+        }
+    }
+    
+    # HTML files with no cache
+    location ~* \.html$ {
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+    
+    # Root files with no cache
+    location = / {
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+    }
+    
+    # Frontend routes (SPA fallback)
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    
+    # Hide Nginx version
+    server_tokens off;
+    
+    # Custom error pages
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+}
+EOF
+    
+    # Substitute placeholders
+    sed -i "s|__DOMAIN__|${DOMAIN}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__WWW_DOMAIN__|${WWW_DOMAIN}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__API_PORT__|${API_PORT}|g" "/etc/nginx/sites-available/sagawagroup"
+    sed -i "s|__DEPLOY_DIR__|${DEPLOY_DIR}|g" "/etc/nginx/sites-available/sagawagroup"
+}
+
+# Function to create HTTPS nginx configuration
+create_https_nginx_config() {
     # Create main site configuration
     # We use a template with placeholders and then substitute the variables
     # This prevents shell expansion of Nginx variables like $host, $remote_addr, etc.
@@ -531,8 +700,6 @@ EOF
     sed -i "s|__WWW_DOMAIN__|${WWW_DOMAIN}|g" "/etc/nginx/sites-available/sagawagroup"
     sed -i "s|__API_PORT__|${API_PORT}|g" "/etc/nginx/sites-available/sagawagroup"
     sed -i "s|__DEPLOY_DIR__|${DEPLOY_DIR}|g" "/etc/nginx/sites-available/sagawagroup"
-    
-    print_success "Nginx configuration created"
 }
 
 # Function to enable Nginx site
@@ -789,6 +956,7 @@ main() {
     
     # Pre-deployment checks
     check_root
+    validate_project
     
     # Skip confirmation for CI/CD mode
     if [ "$SKIP_CONFIRMATION" != true ]; then

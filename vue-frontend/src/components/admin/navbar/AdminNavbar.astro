@@ -1,5 +1,6 @@
 ---
 // Admin Navbar Component - Modern Redesign
+import sagawaLogo from '/src/assets/img/sagawa_logo.svg';
 ---
 
 <nav class="fixed top-0 z-50 w-full bg-white shadow-lg border-b-4 border-gradient-to-r from-amber-500 via-orange-500 to-red-500">
@@ -18,18 +19,9 @@
            </button>
           
           <!-- Logo and Brand -->
-          <a href="/admin/dashboard" class="flex items-center space-x-3 group">
+          <a href="/admin/dashboard" class="hidden sm:flex items-center space-x-3 group">
             <div class="relative">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 p-2 group-hover:from-orange-400 group-hover:to-red-500 transition-all duration-300 shadow-lg">
-                <img src="/src/assets/img/logo_s.svg" alt="Sagawa Logo" class="w-full h-full object-contain filter brightness-0 invert">
-              </div>
-              <div class="absolute -inset-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-            </div>
-            <div class="hidden sm:block">
-              <h1 class="text-2xl font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent group-hover:from-orange-600 group-hover:to-red-700 transition-all duration-300">
-                Sagawa Admin
-              </h1>
-              <p class="text-xs text-amber-500 font-medium">Dashboard Panel</p>
+              <img src={sagawaLogo.src} alt="Sagawa Group" class="h-10 w-auto object-contain">
             </div>
           </a>
         </div>
@@ -255,23 +247,12 @@
       const backdrop = document.getElementById('sidebar-backdrop');
       
       if (sidebarToggle && sidebar) {
-      // Initialize sidebar state
-      let sidebarVisible = localStorage.getItem('sidebarVisible');
+      // Initialize sidebar - always start hidden for overlay mode
+      let sidebarVisible = 'false'; // Always default to hidden
+      localStorage.setItem('sidebarVisible', sidebarVisible);
       
-      // If no preference stored, default to visible on desktop/tablet, hidden on mobile
-      if (sidebarVisible === null) {
-        sidebarVisible = window.innerWidth >= 768 ? 'true' : 'false';
-        localStorage.setItem('sidebarVisible', sidebarVisible);
-      }
-      
-      // Apply initial state
-      if (sidebarVisible === 'true') {
-        sidebar.classList.remove('-translate-x-full');
-        updateMainContentMargin(true);
-      } else {
-        sidebar.classList.add('-translate-x-full');
-        updateMainContentMargin(false);
-      }
+      // Apply initial state - always hidden
+      sidebar.classList.add('-translate-x-full');
       
       sidebarToggle.addEventListener('click', function(e) {
         e.preventDefault();
@@ -289,14 +270,13 @@
           sidebar.style.transform = '';
           localStorage.setItem('sidebarVisible', 'true');
           
-          // Show backdrop on mobile
-          if (backdrop && window.innerWidth < 768) {
+          // Show backdrop on all screen sizes for overlay effect
+          if (backdrop) {
             backdrop.classList.remove('hidden');
           }
           
-          // Update main content margin and dispatch event
+          // Dispatch event without margin update
           setTimeout(() => {
-            updateMainContentMargin(true);
             window.dispatchEvent(new CustomEvent('sidebarToggle', { 
               detail: { visible: true } 
             }));
@@ -313,9 +293,8 @@
             backdrop.classList.add('hidden');
           }
           
-          // Update main content margin and dispatch event
+          // Dispatch event without margin update
           setTimeout(() => {
-            updateMainContentMargin(false);
             window.dispatchEvent(new CustomEvent('sidebarToggle', { 
               detail: { visible: false } 
             }));
@@ -326,16 +305,7 @@
         setTimeout(() => {
         }, 100);
       });
-      
-      // Handle window resize
-      window.addEventListener('resize', function() {
-        const currentVisible = !sidebar.classList.contains('-translate-x-full');
-        updateMainContentMargin(currentVisible);
-      });
-      
-      // Initial margin setup
-      const initialVisible = !sidebar.classList.contains('-translate-x-full');
-      updateMainContentMargin(initialVisible);
+      // Remove window resize handler and initial margin setup since we don't need them in overlay mode
     } else {
       console.error('Sidebar toggle elements not found:', {
         sidebarToggle: !!sidebarToggle,
@@ -344,27 +314,7 @@
     }
     }, 100); // Small delay to ensure elements are loaded
     
-    // Function to update main content margin
-    function updateMainContentMargin(sidebarVisible: boolean) {
-      
-      const mainContent = document.querySelector('.dashboard-bg') || 
-                         document.querySelector('[class*="sm:ml-"]') ||
-                         document.querySelector('.p-4');
-      
-      if (mainContent) {
-        // Remove existing margin classes
-        mainContent.classList.remove('sm:ml-0', 'sm:ml-72');
-        
-        if (sidebarVisible && window.innerWidth >= 768) {
-          // Desktop/tablet with sidebar visible
-          mainContent.classList.add('sm:ml-72');
-        } else {
-          // Mobile or sidebar hidden
-          mainContent.classList.add('sm:ml-0');
-        }
-      } else {
-      }
-    }
+    // Function updateMainContentMargin removed - using overlay mode instead
 
     // Add scroll effect to navbar
     let lastScrollY = window.scrollY;

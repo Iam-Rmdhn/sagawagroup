@@ -199,7 +199,7 @@ import Footer from '../components/Footer.astro';
 									<button
 										type="button"
 										data-admin="2"
-										class="admin-btn admin-1-btn relative bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transform hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 overflow-hidden"
+										class="admin-btn admin-2-btn relative bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 text-white font-bold py-4 px-6 rounded-2xl transform hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-2 overflow-hidden"
 									>
 										<div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 hover-overlay transition-opacity duration-300"></div>
 										<svg class="w-5 h-5 relative z-10 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
@@ -306,27 +306,22 @@ import Footer from '../components/Footer.astro';
       lastSubmission: 0,
       MIN_INTERVAL: 5000, // 5 seconds between submissions
 
-      // Sanitize HTML and remove dangerous characters
+      // Sanitize HTML and remove dangerous characters but preserve spaces
       sanitizeHTML(input: string): string {
         if (!input) return '';
         
-        // First, completely remove < and > characters
+        // Only remove < and > characters and dangerous script patterns
         let sanitized = input.replace(/[<>]/g, '');
         
-        // Remove HTML tags and script content (additional safety)
+        // Remove only specific dangerous patterns but preserve normal text and spaces
         sanitized = sanitized
           .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-          .replace(/<[^>]+>/g, '')
           .replace(/javascript:/gi, '')
           .replace(/on\w+\s*=/gi, '')
-          .replace(/data:/gi, '')
+          .replace(/data:\s*text\/html/gi, '')
           .replace(/vbscript:/gi, '');
 
-        // Escape HTML entities
-        const div = document.createElement('div');
-        div.textContent = sanitized;
-        sanitized = div.innerHTML;
-
+        // Don't escape HTML entities for normal input - just return the cleaned text
         return sanitized.trim();
       },
 
@@ -374,7 +369,7 @@ import Footer from '../components/Footer.astro';
           return { valid: false, error: 'Nama minimal 2 karakter' };
         }
 
-        // Only allow letters, spaces, apostrophes, hyphens
+        // Only allow letters, spaces, apostrophes, hyphens - fixed regex for proper space support
         if (!/^[a-zA-Z\s\-'\.]+$/.test(sanitized)) {
           return { valid: false, error: 'Nama hanya boleh mengandung huruf, spasi, tanda hubung, dan apostrof' };
         }
@@ -550,18 +545,22 @@ import Footer from '../components/Footer.astro';
       [nameInput, domisiliInput, messageInput].forEach(input => {
         if (!input) return;
 
-        // Sanitize on input and block < > characters immediately
+        // Sanitize on input but preserve spaces and normal text
         input.addEventListener('input', (e) => {
           const target = e.target as HTMLInputElement | HTMLTextAreaElement;
           const originalValue = target.value;
           
-          // Immediately remove < and > characters
+          // Only remove < and > characters, preserve everything else including spaces
           let cleanValue = originalValue.replace(/[<>]/g, '');
           
-          // Apply full sanitization
-          const sanitizedValue = InputSanitizer.sanitizeHTML(cleanValue);
+          // Light sanitization - only remove dangerous patterns but keep spaces and normal text
+          const sanitizedValue = cleanValue
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+\s*=/gi, '')
+            .replace(/data:\s*text\/html/gi, '');
           
-          // Update value if it was sanitized
+          // Update value only if dangerous content was actually removed
           if (originalValue !== sanitizedValue) {
             target.value = sanitizedValue;
             
@@ -583,7 +582,7 @@ import Footer from '../components/Footer.astro';
           // Visual feedback for length limits
           const fieldName = target.name as keyof typeof InputSanitizer.MAX_LENGTHS;
           const maxLength = InputSanitizer.MAX_LENGTHS[fieldName] || 100;
-          const currentLength = sanitizedValue.length;
+          const currentLength = target.value.length; // Use actual current value length
           
           // Add character counter
           let counter = target.parentElement?.querySelector('.char-counter') as HTMLElement;
@@ -605,13 +604,13 @@ import Footer from '../components/Footer.astro';
           }
 
           // Remove error styling on valid input
-          if (currentLength <= maxLength && sanitizedValue.length > 0) {
+          if (currentLength <= maxLength && target.value.length > 0) {
             target.classList.remove('border-red-500', 'bg-red-50');
             target.classList.add('border-gray-200');
           }
         });
 
-        // Prevent dangerous key combinations and block < > characters
+        // Prevent dangerous key combinations but allow normal typing including spaces
         input.addEventListener('keydown', (e: any) => {
           // Block < and > characters directly
           if (e.key === '<' || e.key === '>' || e.key === 'Less' || e.key === 'Greater') {
@@ -630,7 +629,8 @@ import Footer from '../components/Footer.astro';
             return false;
           }
           
-          // Block common dangerous key combinations
+          // Allow all other keys including space, backspace, delete, etc.
+          // Only prevent dangerous combinations
           if ((e.ctrlKey || e.metaKey) && (e.key === 'v')) {
             // Allow paste but we'll sanitize it
             setTimeout(() => {
@@ -640,15 +640,21 @@ import Footer from '../components/Footer.astro';
           }
         });
 
-        // Sanitize pasted content and remove < > characters
+        // Sanitize pasted content but preserve spaces
         input.addEventListener('paste', (e) => {
           setTimeout(() => {
             const target = e.target as HTMLInputElement | HTMLTextAreaElement;
             const originalValue = target.value;
             
-            // Remove < and > first, then apply full sanitization
+            // Remove < and > first, then apply light sanitization preserving spaces
             let cleanValue = originalValue.replace(/[<>]/g, '');
-            target.value = InputSanitizer.sanitizeHTML(cleanValue);
+            const sanitizedValue = cleanValue
+              .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+              .replace(/javascript:/gi, '')
+              .replace(/on\w+\s*=/gi, '')
+              .replace(/data:\s*text\/html/gi, '');
+            
+            target.value = sanitizedValue;
             
             // Show warning if < or > were in pasted content
             if (/[<>]/.test(originalValue)) {

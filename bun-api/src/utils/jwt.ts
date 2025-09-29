@@ -1,6 +1,8 @@
 import * as jwt from "jsonwebtoken";
+import { ENV } from "../env";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+// Use secure ENV configuration - no fallback for production safety
+const JWT_SECRET = ENV.JWT_SECRET;
 
 export function generateToken(payload: object): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
