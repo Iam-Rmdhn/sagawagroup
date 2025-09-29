@@ -103,6 +103,20 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     100% { background-position: 200% 0; }
   }
 
+  /* Background pattern - consistent with dashboard */
+  .dashboard-bg {
+    background: linear-gradient(135deg, #fefefe 0%, #f8f9ff 25%, #fff8f1 50%, #f0f9ff 75%, #fefefe 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+    /* No margin-left needed - sidebar handles its own positioning */
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
   /* Mobile responsive improvements */
   @media (max-width: 640px) {
     .modern-card {
@@ -113,13 +127,46 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     .modern-card:hover {
       transform: translateY(-1px);
     }
+    
+    /* Dashboard bg adjustments for mobile */
+    .dashboard-bg {
+      padding: 0.5rem !important;
+    }
+    .dashboard-bg > div {
+      padding: 1rem !important;
+      margin-top: 4rem !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .dashboard-bg {
+      padding: 0.25rem !important;
+    }
+    .dashboard-bg > div {
+      padding: 0.75rem !important;
+      margin-top: 4rem !important;
+    }
+    /* Header adjustments */
+    .mb-4 {
+      margin-bottom: 1rem !important;
+    }
+    .bg-gradient-to-r {
+      padding: 1rem !important;
+    }
+    .text-2xl {
+      font-size: 1.25rem !important;
+    }
+    .w-12 {
+      width: 2.5rem !important;
+      height: 2.5rem !important;
+    }
   }
 </style>
   <MitraNavbar />
   <MitraSidebar currentPage="kewajiban" showKewajiban={true} />
   
-  <div class="p-2 sm:p-4 sm:ml-72 transition-all duration-300">
-    <div class="p-2 sm:p-6 mt-16">
+  <div class="dashboard-bg min-h-screen p-2 sm:p-4 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+    <div class="p-2 sm:p-6 mt-16" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <!-- Breadcrumb -->
       <nav class="flex mt-2 mb-4" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3 overflow-x-auto">
@@ -187,7 +234,27 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     }
   });
 
+  // Initialize dashboard for overlay mode
+  function initializeDashboardMargin() {
+    // In overlay mode, we don't need to manage margins
+    // Dashboard content stays fixed, sidebar appears as overlay
+    console.log('Kewajiban page initialized for overlay mode');
+  }
+
+  // Function to update dashboard for overlay mode (placeholder for compatibility)
+  function updateDashboardMargin(sidebarVisible) {
+    // In overlay mode, dashboard content doesn't move
+    // Sidebar appears/disappears as an overlay on top
+    console.log('Sidebar overlay state on kewajiban page:', sidebarVisible);
+  }
+
+  // Expose functions to global scope for sidebar integration
+  window.updateDashboardMargin = updateDashboardMargin;
+  window.initializeDashboardMargin = initializeDashboardMargin;
+
   document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize dashboard for overlay mode
+    initializeDashboardMargin();
     let API_URL = 'http://localhost:3000'; // Fixed port to 3000
     try {
       if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
@@ -802,5 +869,11 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         }
       }, 300);
     }, 4000);
+  }
+
+  // Ensure functions are available globally for sidebar integration
+  if (typeof window !== 'undefined') {
+    window.updateDashboardMargin = updateDashboardMargin;
+    window.initializeDashboardMargin = initializeDashboardMargin;
   }
 </script>

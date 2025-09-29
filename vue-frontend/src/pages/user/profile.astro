@@ -9,6 +9,14 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
 <!-- Modern Profile Edit Styles -->
 <style>
+  /* CSS Custom Properties for performance */
+  :root {
+    --primary-gradient: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
+    --primary-hover: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
+    --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 191, 36, 0.02) 100%);
+    --shadow-primary: 0 20px 25px -5px rgba(251, 191, 36, 0.1), 0 10px 10px -5px rgba(251, 191, 36, 0.04);
+  }
+  
   /* Global fixes for scroll stability */
   * {
     transform: translateZ(0);
@@ -28,7 +36,6 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     overflow-x: hidden;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    background-color: #fefefe;
   }
   
   /* Ensure logout button is always clickable */
@@ -77,13 +84,77 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
     0%, 100% { opacity: 1; }
     50% { opacity: 0.8; }
   }
+
+  /* Background pattern - consistent with dashboard */
+  .dashboard-bg {
+    background: linear-gradient(-45deg, #fef7ed, #fff7ed, #fef3c7, #fefce8);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Modern card styling - consistent with other pages */
+  .modern-card {
+    background: var(--card-gradient);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(251, 191, 36, 0.1);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Mobile responsive improvements */
+  @media (max-width: 640px) {
+    .dashboard-bg {
+      padding: 0.5rem !important;
+    }
+    .dashboard-bg > div {
+      padding: 1rem !important;
+      margin-top: 4rem !important;
+    }
+    .modern-card {
+      margin: 0.5rem 0;
+      border-radius: 1rem;
+    }
+    .modern-card .p-8 {
+      padding: 1.5rem !important;
+    }
+    .grid {
+      gap: 1rem !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .dashboard-bg {
+      padding: 0.25rem !important;
+    }
+    .dashboard-bg > div {
+      padding: 0.75rem !important;
+    }
+    .modern-card .p-8 {
+      padding: 1rem !important;
+    }
+    .text-2xl {
+      font-size: 1.25rem !important;
+    }
+    .text-3xl {
+      font-size: 1.5rem !important;
+    }
+  }
 </style>
 
 <MitraNavbar />
 <MitraSidebar currentPage="profile" />
 
-<div class="p-2 sm:p-4 sm:ml-72 transition-all duration-300">
-   <div class="p-2 sm:p-6 mt-16">
+<div class="dashboard-bg min-h-screen p-2 sm:p-4 transition-all duration-300" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
+   <div class="p-2 sm:p-6 mt-16" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <!-- Breadcrumb -->
       <nav class="flex mt-2 mb-4" aria-label="Breadcrumb">
          <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -345,6 +416,9 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 
       // Setup form submission
       setupFormSubmission();
+
+      // Initialize dashboard for overlay mode
+      initializeDashboardMargin();
 
       // Listen for navbar actions
       document.addEventListener('mitraNavbarAction', function(event: Event) {
@@ -616,5 +690,19 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       successMessage?.classList.add('hidden');
       errorMessage?.classList.add('hidden');
    }
+
+   // Function to initialize dashboard for overlay mode
+   function initializeDashboardMargin() {
+      // Dashboard uses overlay mode - no margin adjustments needed
+   }
+
+   // Function to update dashboard for overlay mode (placeholder for compatibility)
+   function updateDashboardMargin(sidebarVisible: boolean) {
+      // Dashboard uses overlay mode - no margin adjustments needed
+   }
+
+   // Expose functions to global scope for sidebar integration
+   (window as any).updateDashboardMargin = updateDashboardMargin;
+   (window as any).initializeDashboardMargin = initializeDashboardMargin;
 </script>
 </Layout>
