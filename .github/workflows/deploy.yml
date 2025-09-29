@@ -234,3 +234,10 @@ jobs:
           ls -t sagawagroup-deploy-*.log 2>/dev/null | tail -n +11 | xargs -r rm -f
           
           echo "Cleanup completed"
+
+    - name: Debug Secrets
+      run: |
+        echo "HOST: ${{ secrets.HOST }}"
+        echo "USERNAME: ${{ secrets.USERNAME }}"
+        echo "DOMAIN: ${{ secrets.DOMAIN }}"
+        echo "EMAIL: ${{ secrets.EMAIL }}"

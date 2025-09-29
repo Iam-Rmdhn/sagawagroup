@@ -310,11 +310,6 @@ const galleryImages = [
     let videosCache = null;
     let lastFetchTime = 0;
 
-    // Catatan: Backend dikonfigurasi untuk hanya mengambil 3 video terbaru
-    // Video lama akan otomatis digantikan dengan video baru yang diupload
-    // Pengurutan berdasarkan tanggal upload (terbaru ke terlama)
-
-    // Fungsi untuk mengecek dan menggunakan cache (tetap di frontend untuk UX yang lebih baik)
     function getCachedVideos() {
       try {
         const cached = localStorage.getItem('youtube_videos_cache');
@@ -504,7 +499,7 @@ const galleryImages = [
             devNotice.className = 'bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded-lg mb-4 text-sm';
             devNotice.innerHTML = `
               <div class="flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                 </svg>
                 Development Mode: Menampilkan data contoh karena YouTube API tidak tersedia.
@@ -694,15 +689,9 @@ const galleryImages = [
     }
 
     function openYouTubeVideo(videoId) {
-      // Data video dari backend sudah memiliki field 'url' yang lengkap
-      // Tapi untuk backward compatibility, kita tetap buat URL jika perlu
       const url = videoId.startsWith('http') ? videoId : `https://www.youtube.com/watch?v=${videoId}`;
       
-      // Option 1: Open in new tab
       window.open(url, '_blank');
-      
-      // Option 2: Embed in modal (uncomment if you prefer modal)
-      // showVideoModal(videoId);
     }
 
     function showVideoModal(videoId) {
