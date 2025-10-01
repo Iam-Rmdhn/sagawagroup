@@ -582,6 +582,31 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		// Chart instance
 		let pelunasanChart: any = null;
 		
+		// Handle token expiration
+		function handleTokenExpiration(): void {
+			console.log('Token expired, redirecting to login...');
+			localStorage.removeItem('adminToken');
+			localStorage.removeItem('adminUser');
+			
+			// Show notification before redirect
+			import('sweetalert2').then(Swal => {
+				Swal.default.fire({
+					title: "Sesi Berakhir",
+					text: "Sesi login Anda telah berakhir. Silakan login kembali.",
+					icon: "warning",
+					confirmButtonText: "Login",
+					allowOutsideClick: false,
+					allowEscapeKey: false
+				}).then(() => {
+					window.location.href = '/admin/login';
+				});
+			}).catch(() => {
+				// Fallback if sweetalert2 fails to load
+				alert('Sesi login Anda telah berakhir. Silakan login kembali.');
+				window.location.href = '/admin/login';
+			});
+		}
+		
 		// Listen for navbar actions
 		document.addEventListener('adminNavbarAction', function(event: Event) {
 			const customEvent = event as CustomEvent;
@@ -590,7 +615,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			if (action === 'logout') {
 				localStorage.removeItem('adminToken');
 				localStorage.removeItem('adminUser');
-				window.location.href = '/login';
+				window.location.href = '/admin/login';
 			}
 		});
 		async function loadPelunasanData(): Promise<void> {
@@ -627,6 +652,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				console.log('Response ok:', response.ok);
 				
 				if (!response.ok) {
+					// Handle authentication errors (token expired)
+					if (response.status === 401 || response.status === 403) {
+						console.error('Authentication failed - token expired');
+						handleTokenExpiration();
+						return;
+					}
+					
 					const errorText = await response.text();
 					console.error('Response error:', errorText);
 					throw new Error(`HTTP ${response.status}: ${errorText}`);
@@ -700,6 +732,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 					} catch (error) {
 						const err = error as any;
 						console.error('Load pelunasan data error:', err);
+						
+						// Check if error is related to token expiration
+						if (err.message && (err.message.includes('jwt expired') || err.message.includes('Invalid token'))) {
+							handleTokenExpiration();
+							return;
+						}
+						
 						tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-red-500">Error: ${err.message || err}</td></tr>`;
 					}
 		}
@@ -819,6 +858,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				modal.classList.remove('hidden');
 				content.innerHTML = '<div class="col-span-2 text-center">Loading...</div>';
 				const response = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, { method: 'GET', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+				
+				// Handle authentication errors
+				if (!response.ok && (response.status === 401 || response.status === 403)) {
+					modal.classList.add('hidden');
+					handleTokenExpiration();
+					return;
+				}
+				
 				const result = await response.json();
 				if (result.success && result.data) {
 					  const pelunasan = result.data.find((x: any) => x._id === id);
@@ -931,6 +978,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				}
 					} catch (error) {
 						const err = error as any;
+						
+						// Check if error is related to token expiration
+						if (err.message && (err.message.includes('jwt expired') || err.message.includes('Invalid token'))) {
+							modal.classList.add('hidden');
+							handleTokenExpiration();
+							return;
+						}
+						
 						content.innerHTML = `<div class="col-span-2 text-center text-red-500">Error: ${err.message || err}</div>`;
 					}
 		}
@@ -1077,6 +1132,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 					body: JSON.stringify({ namaMitra })
 				});
 				console.log('Approve response status:', response.status);
+				
+				// Handle authentication errors
+				if (!response.ok && (response.status === 401 || response.status === 403)) {
+					handleTokenExpiration();
+					return;
+				}
+				
 				const data = await response.json();
 				console.log('Approve response data:', data);
 				
@@ -1116,6 +1178,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				}
 			} catch (err) {
 				console.error('Approve pelunasan error:', err);
+				const error = err as any;
+				
+				// Check if error is related to token expiration
+				if (error.message && (error.message.includes('jwt expired') || error.message.includes('Invalid token'))) {
+					handleTokenExpiration();
+					return;
+				}
+				
 				await import('sweetalert2').then(Swal => {
 					Swal.default.fire({
 						title: "Error",
@@ -1160,6 +1230,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 					method: 'DELETE',
 					headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
 				});
+				
+				// Handle authentication errors
+				if (!response.ok && (response.status === 401 || response.status === 403)) {
+					handleTokenExpiration();
+					return;
+				}
+				
 				const data = await response.json();
 				if (response.ok && data.success) {
 					await import('sweetalert2').then(Swal => {
@@ -1180,6 +1257,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 					});
 				}
 			} catch (err) {
+				const error = err as any;
+				
+				// Check if error is related to token expiration
+				if (error.message && (error.message.includes('jwt expired') || error.message.includes('Invalid token'))) {
+					handleTokenExpiration();
+					return;
+				}
+				
 				await import('sweetalert2').then(Swal => {
 					Swal.default.fire({
 						title: "Error",
