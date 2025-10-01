@@ -62,38 +62,136 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			}
 		}
 
-		/* Mobile-specific enhancements - consistent with dashboard */
+		/* Mobile-specific enhancements - completely redesigned */
 		@media (max-width: 640px) {
-			.modern-table { margin: 0; border-radius: 1rem; }
-			.modern-table table { font-size: 0.75rem; }
-			.modern-table th, .modern-table td { padding: 0.5rem !important; }
+			.modern-table { 
+				margin: 0; 
+				border-radius: 1rem; 
+				overflow: hidden;
+			}
+			.modern-table .overflow-x-auto {
+				overflow-x: auto;
+				-webkit-overflow-scrolling: touch;
+			}
+			.modern-table table { 
+				font-size: 0.75rem;
+				min-width: 600px; /* Ensure table has minimum width to prevent header cutoff */
+				width: 100%;
+			}
+			.modern-table th, .modern-table td { 
+				padding: 0.5rem !important;
+				vertical-align: top;
+				word-wrap: break-word;
+				white-space: nowrap; /* Prevent text wrapping in headers */
+			}
 			
-			/* Hide less important columns on mobile */
-			.modern-table th:nth-child(2), 
+			/* Hide less important columns on mobile for better readability */
+			.modern-table th:nth-child(2), /* Email */
 			.modern-table td:nth-child(2),
-			.modern-table th:nth-child(3), 
-			.modern-table td:nth-child(3) { display: none; }
+			.modern-table th:nth-child(3), /* No HP */
+			.modern-table td:nth-child(3),
+			.modern-table th:nth-child(4), /* Paket Usaha */
+			.modern-table td:nth-child(4) { 
+				display: none; 
+			}
 			
-			/* Make action buttons stack */
-			.modern-table td:last-child { min-width: 120px; }
-			.modern-table button { margin-bottom: 0.25rem; width: 100%; font-size: 0.75rem; }
-			
-			/* Even more compact on very small screens */
-			.modern-table th:nth-child(4), 
-			.modern-table td:nth-child(4) { display: none; }
-			
-			/* Stack status and actions */
+			/* Adjust remaining column widths - fixed widths for proper header alignment */
+			.modern-table th:nth-child(1), /* Nama Mitra */
+			.modern-table td:nth-child(1) { 
+				width: 180px; 
+				min-width: 180px;
+			}
+			.modern-table th:nth-child(5), /* Nominal */
+			.modern-table td:nth-child(5) { 
+				width: 150px; 
+				min-width: 150px;
+				text-align: right;
+			}
+			.modern-table th:nth-child(6), /* Status */
 			.modern-table td:nth-child(6) { 
-				display: flex; 
-				flex-direction: column; 
-				gap: 0.25rem; 
+				width: 120px; 
+				min-width: 120px;
+				text-align: center;
+			}
+			.modern-table th:nth-child(7), /* Actions */
+			.modern-table td:nth-child(7) { 
+				width: 150px; 
+				min-width: 150px;
+				text-align: center;
+			}
+			
+			/* Action buttons - icon only on mobile */
+			.modern-table .btn-text {
+				display: none !important;
+			}
+			.modern-table button {
+				padding: 0.5rem !important;
+				margin: 0.125rem !important;
+				min-width: 32px !important;
+				width: auto !important;
+				height: 32px !important;
+				border-radius: 0.375rem !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+			}
+			.modern-table button svg {
+				width: 14px !important;
+				height: 14px !important;
+				margin: 0 !important;
+			}
+			
+			/* Status badge adjustments */
+			.modern-table .status-badge {
+				font-size: 0.625rem !important;
+				padding: 0.25rem 0.5rem !important;
+			}
+			
+			/* Ensure table header doesn't get cut off */
+			.modern-table thead {
+				position: sticky;
+				top: 0;
+				z-index: 10;
+			}
+			
+			/* Make sure table container has proper scrolling */
+			.modern-table .overflow-x-auto {
+				position: relative;
 			}
 		}
 		
-		@media (max-width: 768px) and (min-width: 641px) {
-			/* Tablet adjustments */
+		@media (max-width: 1024px) and (min-width: 641px) {
+			/* Tablet adjustments - show more columns but keep icon-only buttons */
+			.modern-table table { 
+				min-width: 800px; /* Ensure adequate width for tablet */
+			}
 			.modern-table th:nth-child(2), 
-			.modern-table td:nth-child(2) { display: table-cell; }
+			.modern-table td:nth-child(2),
+			.modern-table th:nth-child(3), 
+			.modern-table td:nth-child(3) { 
+				display: table-cell; 
+			}
+			
+			/* Action buttons - icon only on tablet too */
+			.modern-table .btn-text {
+				display: none !important;
+			}
+			.modern-table button {
+				padding: 0.5rem !important;
+				margin: 0.125rem !important;
+				min-width: 36px !important;
+				width: auto !important;
+				height: 36px !important;
+				border-radius: 0.5rem !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+			}
+			.modern-table button svg {
+				width: 16px !important;
+				height: 16px !important;
+				margin: 0 !important;
+			}
 		}
 		
 		/* Touch-friendly interactions */
@@ -220,41 +318,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			}
 		}
 		
-		@media (max-width: 640px) {
-			.stats-grid {
-				grid-template-columns: 1fr;
-				gap: 1rem;
-			}
-			.stats-card {
-				padding: 1.25rem;
-			}
-			.chart-container {
-				height: auto !important;
-				min-height: 300px !important;
-			}
-			/* Chart responsive behavior */
-			.chart-container .grid {
-				grid-template-columns: 1fr !important;
-				gap: 1rem !important;
-			}
-			.chart-container canvas {
-				max-width: 220px !important;
-				max-height: 220px !important;
-				width: 220px !important;
-				height: 220px !important;
-			}
-			/* Hide statistics on mobile - only show chart */
-			.mobile-stats {
-				display: none !important;
-			}
-			/* Center chart on mobile */
-			.chart-container .grid > div:first-child {
-				order: 1;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-		}
+		/* Consolidated with other mobile styles above - no duplication needed */
 		
 		@media (min-width: 641px) and (max-width: 1024px) {
 			/* Tablet layout - same as desktop but smaller sizes */
@@ -453,9 +517,9 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 								<th class="px-6 py-4 font-semibold">Email</th>
 								<th class="px-6 py-4 font-semibold">No HP</th>
 								<th class="px-6 py-4 font-semibold">Paket Usaha</th>
-								<th class="px-6 py-4 font-semibold">Nominal Pelunasan</th>
-								<th class="px-6 py-4 font-semibold">Status</th>
-								<th class="px-6 py-4 font-semibold">Actions</th>
+								<th class="px-6 py-4 font-semibold text-right">Nominal Pelunasan</th>
+								<th class="px-6 py-4 font-semibold text-center">Status</th>
+								<th class="px-6 py-4 font-semibold text-center">Actions</th>
 							</tr>
 						</thead>
 						<tbody id="pelunasan-table-body" class="divide-y divide-gray-100">
@@ -600,21 +664,21 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 								<td class="px-6 py-4 text-gray-700">${item.email || 'N/A'}</td>
 								<td class="px-6 py-4 text-gray-700">${item.noHp || 'N/A'}</td>
 								<td class="px-6 py-4">${item.paketUsaha || 'N/A'}</td>
-								<td class="px-6 py-4">${item.nominalPelunasan ? formatCurrency(item.nominalPelunasan) : 'N/A'}</td>
-								<td class="px-6 py-4"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${statusColor}">${item.statusPelunasan || 'belum'}</span></td>
-								<td class="px-6 py-4">
-								<button onclick="showPelunasanDetail('${item._id}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md mr-2">
-									<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Detail
+								<td class="px-6 py-4 text-right">${item.nominalPelunasan ? formatCurrency(item.nominalPelunasan) : 'N/A'}</td>
+								<td class="px-6 py-4 text-center"><span class="status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${statusColor}">${item.statusPelunasan || 'belum'}</span></td>
+								<td class="px-6 py-4 text-center">
+								<button onclick="showPelunasanDetail('${item._id}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md mr-2" title="Lihat Detail">
+									<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg><span class="btn-text">Detail</span>
 								</button>
 								${item.statusPelunasan === 'lunas' ? 
-									`<button disabled class="inline-flex items-center px-3 py-1.5 bg-gray-400 text-gray-200 text-xs font-medium rounded-lg cursor-not-allowed opacity-60 mr-2">
-										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Sudah Lunas
+									`<button disabled class="inline-flex items-center px-3 py-1.5 bg-gray-400 text-gray-200 text-xs font-medium rounded-lg cursor-not-allowed opacity-60 mr-2" title="Sudah Lunas">
+										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg><span class="btn-text">Sudah Lunas</span>
 									</button>
-									<button onclick="deletePelunasan('${item._id}', '${item.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md">
-										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>Hapus
+									<button onclick="deletePelunasan('${item._id}', '${item.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md" title="Hapus">
+										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg><span class="btn-text">Hapus</span>
 									</button>` :
-									`<button onclick="approvePelunasan('${item.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-medium rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md">
-										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Approved
+									`<button onclick="approvePelunasan('${item.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-medium rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md mr-2" title="Approve">
+										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg><span class="btn-text">Approve</span>
 									</button>`
 								}
 								</td>
