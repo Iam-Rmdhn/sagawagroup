@@ -536,6 +536,32 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                <div class="stats-card rounded-2xl p-6 shadow-lg">
                   <div class="flex items-center justify-between">
                      <div>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Visitor Online</p>
+                        <p class="stats-number text-3xl font-bold text-gray-900" id="active-visitors">
+                           <span class="loading-pulse">-</span>
+                        </p>
+                        <p class="text-xs text-green-600 mt-2">
+                           <span class="inline-flex items-center">
+                              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                              </svg>
+                              Pengunjung aktif real-time
+                           </span>
+                        </p>
+                     </div>
+                     <div class="stats-icon users w-14 h-14 rounded-xl flex items-center justify-center shadow-lg" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                           <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                        </svg>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="stats-card rounded-2xl p-6 shadow-lg">
+                  <div class="flex items-center justify-between">
+                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Total Pengguna</p>
                         <p class="stats-number text-3xl font-bold text-gray-900" id="total-users">
                            <span class="loading-pulse">-</span>
@@ -2172,15 +2198,80 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       maximumFractionDigits: 0
     }).format(amount);
   }
+
+  // Visitor Analytics Functions
+  let visitorUpdateInterval: NodeJS.Timeout | null = null;
+
+  async function updateVisitorStats() {
+    try {
+      const response = await fetch(`${API_URL}/api/analytics/stats`);
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Update active visitors count with smooth animation
+        const activeVisitorsEl = document.getElementById('active-visitors');
+        if (activeVisitorsEl) {
+          activeVisitorsEl.classList.remove('loading-pulse');
+          
+          const currentValue = parseInt(activeVisitorsEl.textContent || '0');
+          const newValue = data.activeVisitors || 0;
+          
+          if (currentValue !== newValue) {
+            // Animate the number change
+            const duration = 500;
+            const increment = (newValue - currentValue) / (duration / 16);
+            let current = currentValue;
+            
+            const animate = () => {
+              current += increment;
+              if ((increment > 0 && current >= newValue) || (increment < 0 && current <= newValue)) {
+                activeVisitorsEl.textContent = newValue.toString();
+              } else {
+                activeVisitorsEl.textContent = Math.floor(current).toString();
+                requestAnimationFrame(animate);
+              }
+            };
+            animate();
+          }
+        }
+        
+        console.log('[Analytics] Visitor stats updated:', data);
+      }
+    } catch (error) {
+      console.error('[Analytics] Error fetching visitor stats:', error);
+    }
+  }
+
+  function startVisitorTracking() {
+    // Initial update
+    updateVisitorStats();
+    
+    // Update every 10 seconds
+    visitorUpdateInterval = setInterval(updateVisitorStats, 10000);
+    
+    console.log('[Analytics] Started visitor tracking');
+  }
+
+  function stopVisitorTracking() {
+    if (visitorUpdateInterval) {
+      clearInterval(visitorUpdateInterval);
+      visitorUpdateInterval = null;
+      console.log('[Analytics] Stopped visitor tracking');
+    }
+  }
   
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initializePaymentChart, 100);
+    
+    // Start visitor tracking
+    setTimeout(startVisitorTracking, 500);
   });
 
   window.addEventListener('beforeunload', function() {
     if (chartUpdateInterval) {
       clearInterval(chartUpdateInterval);
     }
+    stopVisitorTracking();
   });
 </script>
 </Layout>

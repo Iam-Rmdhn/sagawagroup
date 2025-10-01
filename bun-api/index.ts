@@ -3,6 +3,7 @@ import { mitraRoute } from "./src/routes/mitra.route";
 import { sheetsRoute } from "./src/routes/sheets.route";
 import { agreementRoute } from "./src/routes/agreement.route";
 import { youtubeRoute } from "./src/routes/youtube.route";
+import { analyticsRoute } from "./src/routes/analytics.route";
 import "./src/lib/db"; // Initialize database connection
 import { ENV } from "./src/env";
 
@@ -124,6 +125,16 @@ Bun.serve({
         url.pathname === "/api/mitra/agreements"
       ) {
         const response = await agreementRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Analytics routes
+      if (url.pathname.startsWith("/api/analytics")) {
+        const response = await analyticsRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
           response.headers.set(key, value);
