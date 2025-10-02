@@ -1,0 +1,199 @@
+/* Admin Dashboard Performance Optimizations */
+
+/* 1. Reduce paint operations */
+* {
+  /* Remove universal will-change - only use on specific animated elements */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 2. Optimize scrolling */
+body, html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* Enable hardware acceleration for smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 3. Reduce shadow complexity - use lighter shadows */
+.shadow-2xl {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-xl {
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 6px 8px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 6px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 4. Optimize hover effects - only transform, avoid shadow changes */
+.hover-lift {
+  transition: transform 0.2s ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* 5. Use CSS containment for isolated components */
+.stats-card,
+.modern-table,
+.chart-container {
+  contain: layout style paint;
+}
+
+/* 6. Optimize animations - reduce to essential only */
+@keyframes pulse-light {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.loading-pulse {
+  animation: pulse-light 2s ease-in-out infinite;
+}
+
+/* 7. Simplify gradients - use solid colors with slight overlay */
+.bg-gradient-optimized {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-gradient-optimized::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%);
+  pointer-events: none;
+}
+
+/* 8. Optimize table rendering */
+.modern-table table {
+  table-layout: fixed; /* Faster rendering */
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.modern-table th,
+.modern-table td {
+  /* Prevent text selection for better scroll performance */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 9. Reduce transition complexity */
+.transition-optimized {
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+/* 10. GPU acceleration for specific elements only */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Remove will-change after animation */
+.gpu-accelerated:not(:hover):not(:active) {
+  will-change: auto;
+}
+
+/* 11. Optimize modal backdrop */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* 12. Prevent layout shift */
+.prevent-shift {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* 13. Optimize button interactions */
+button {
+  /* Remove tap delay on mobile */
+  touch-action: manipulation;
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 14. Simplify scrollbar - lighter styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(243, 244, 246, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.7);
+}
+
+/* 15. Reduce reflows for fixed/sticky elements */
+.fixed, .sticky {
+  will-change: transform;
+}
+
+/* 16. Optimize image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* 17. Debounce expensive operations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 18. Mobile optimizations */
+@media (max-width: 768px) {
+  /* Disable complex effects on mobile */
+  .shadow-2xl,
+  .shadow-xl,
+  .shadow-lg {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Simpler transitions on mobile */
+  * {
+    transition-duration: 0.1s !important;
+  }
+  
+  /* Remove blur effects on mobile for better performance */
+  .backdrop-blur,
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+  }
+}
+
+/* 19. Optimize stats cards */
+.stats-icon {
+  /* Simpler gradient */
+  background: rgb(245, 158, 11);
+}
+
+/* 20. Prevent unnecessary repaints */
+.no-repaint {
+  will-change: auto;
+  transform: translateZ(0);
+}
