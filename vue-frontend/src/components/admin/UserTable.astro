@@ -1,0 +1,66 @@
+---
+// Shared User Table Component
+// This component displays user/mitra data in a table format
+---
+
+<!-- Modern Data Table -->
+<div class="modern-table rounded-2xl shadow-2xl overflow-hidden">
+  <div class="bg-gradient-to-r from-white to-orange-50/30 px-6 py-5 border-b border-orange-200/50">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h3 id="table-title" class="text-xl font-bold text-gray-900">Mitra Management</h3>
+        <p id="table-description" class="text-sm text-gray-600 mt-1">Kelola data mitra dan persetujuan pendaftaran</p>
+      </div>
+      <button id="refresh-btn" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl hover:from-amber-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        Refresh Data
+      </button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs text-gray-700 uppercase bg-gradient-to-r from-orange-50 to-amber-50 border-b border-orange-200/50">
+        <tr>
+          <th scope="col" class="px-6 py-4 font-semibold">Nama Mitra</th>
+          <th scope="col" class="px-6 py-4 font-semibold">Email</th>
+          <th scope="col" class="px-6 py-4 font-semibold">No HP</th>
+          <th scope="col" class="px-6 py-4 font-semibold">Paket Usaha</th>
+          <th scope="col" class="px-6 py-4 font-semibold">Sub Brand</th>
+          <th scope="col" class="px-6 py-4 font-semibold">Status</th>
+          <th scope="col" class="px-6 py-4 font-semibold">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="mitra-table-body" class="divide-y divide-gray-100">
+        <tr>
+          <td colspan="7" class="px-6 py-8 text-center">
+            <div class="flex items-center justify-center">
+              <div class="loading-pulse">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Memuat data...
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .modern-table {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.05) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(251, 191, 36, 0.1);
+  }
+  
+  .loading-pulse {
+    display: flex;
+    align-items: center;
+    color: #6b7280;
+  }
+</style>

@@ -322,31 +322,24 @@ const { currentPage = "dashboard" } = Astro.props;
     if (showAllUsersBtn) {
       showAllUsersBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Dispatch custom event for parent page to handle
-        document.dispatchEvent(new CustomEvent('adminSidebarAction', {
-          detail: { action: 'showAllUsers' }
-        }));
-        updateActiveMenuItem(showAllUsersBtn, 'amber');
+        // Navigate to all users page
+        window.location.href = '/admin/users/all';
       });
     }
 
     if (showApprovedMitraBtn) {
       showApprovedMitraBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        document.dispatchEvent(new CustomEvent('adminSidebarAction', {
-          detail: { action: 'showApprovedMitra' }
-        }));
-        updateActiveMenuItem(showApprovedMitraBtn, 'green');
+        // Navigate to approved mitra page
+        window.location.href = '/admin/users/approved';
       });
     }
 
     if (showPendingMitraBtn) {
       showPendingMitraBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        document.dispatchEvent(new CustomEvent('adminSidebarAction', {
-          detail: { action: 'showPendingMitra' }
-        }));
-        updateActiveMenuItem(showPendingMitraBtn, 'yellow');
+        // Navigate to pending mitra page
+        window.location.href = '/admin/users/pending';
       });
     }
 
