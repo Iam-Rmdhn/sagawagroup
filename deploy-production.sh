@@ -245,6 +245,16 @@ build_frontend() {
     
     # Copy built files to deployment directory
     cp -r dist/* "$DEPLOY_DIR/frontend/"
+    
+    # Clear nginx cache to force fresh content
+    print_status "Clearing Nginx cache..."
+    if [ -d "/var/cache/nginx" ]; then
+        rm -rf /var/cache/nginx/*
+    fi
+    
+    # Add deployment timestamp to force cache invalidation
+    echo "<!-- Deployed at: $(date '+%Y-%m-%d %H:%M:%S') -->" >> "$DEPLOY_DIR/frontend/index.html"
+    
     print_success "Frontend built and deployed successfully"
 }
 
@@ -714,8 +724,17 @@ enable_nginx_site() {
     
     if [ $? -eq 0 ]; then
         print_success "Nginx configuration is valid"
+        
+        # Clear nginx cache before reload
+        print_status "Clearing Nginx cache..."
+        if [ -d "/var/cache/nginx" ]; then
+            rm -rf /var/cache/nginx/*
+            print_success "Nginx cache cleared"
+        fi
+        
+        # Reload nginx with cache purged
         systemctl reload nginx
-        print_success "Nginx reloaded"
+        print_success "Nginx reloaded with fresh cache"
     else
         print_error "Nginx configuration is invalid"
         exit 1

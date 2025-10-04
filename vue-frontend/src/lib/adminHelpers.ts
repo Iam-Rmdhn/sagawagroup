@@ -157,18 +157,26 @@ export async function approveMitra(mitraId: string): Promise<boolean> {
   }
 
   try {
-    const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}/approve`, {
-      method: 'PUT',
+    const response = await fetch(`${API_URL}/api/admin/mitra/approve`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ 
+        mitraId,
+        action: 'approve'
+      }),
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error('Failed to approve mitra:', errorData);
       throw new Error('Failed to approve mitra');
     }
 
+    const result = await response.json();
+    console.log('Mitra approved successfully:', result);
     return true;
   } catch (error) {
     console.error('Error approving mitra:', error);
@@ -185,6 +193,7 @@ export async function deleteMitra(mitraId: string): Promise<boolean> {
   }
 
   try {
+    // 1. Hapus data mitra utama
     const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
       method: 'DELETE',
       headers: {
@@ -195,6 +204,26 @@ export async function deleteMitra(mitraId: string): Promise<boolean> {
 
     if (!response.ok) {
       throw new Error('Failed to delete mitra');
+    }
+
+    // 2. Hapus data pelunasan terkait (jika ada)
+    try {
+      const pelunasanResponse = await fetch(`${API_URL}/api/admin/mitra_pelunasan/by-mitra/${mitraId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      // Log result tapi tidak block proses
+      if (pelunasanResponse.ok) {
+        const pelunasanData = await pelunasanResponse.json();
+        console.log('Pelunasan data deleted:', pelunasanData);
+      }
+    } catch (pelunasanError) {
+      console.warn('No pelunasan data to delete or error:', pelunasanError);
+      // Continue - pelunasan data mungkin tidak ada
     }
 
     return true;

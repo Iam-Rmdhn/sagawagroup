@@ -3,6 +3,7 @@ import { getCurrentTimestamp } from "../utils/date";
 
 export interface MitraPelunasan {
   _id?: string;
+  mitraId?: string; // ID dari mitra utama untuk relasi
   namaMitra: string;
   alamatMitra: string;
   noHp: string;
@@ -76,6 +77,11 @@ export class MitraPelunasanModel {
   static async deleteOne(filter: Partial<MitraPelunasan>): Promise<boolean> {
     const result = await mitraPelunasanCollection.deleteOne(filter);
     return result.deletedCount > 0;
+  }
+
+  static async deleteMany(filter: Partial<MitraPelunasan>): Promise<number> {
+    const result = await mitraPelunasanCollection.deleteMany(filter);
+    return result.deletedCount;
   }
 
   static async updateById(
