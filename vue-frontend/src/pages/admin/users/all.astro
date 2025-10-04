@@ -7,6 +7,7 @@ import UserTable from '../../../components/admin/UserTable.astro';
 ---
 
 <Layout title="Semua Pengguna - Admin Dashboard">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <style>
     /* Global fixes for scroll stability */
     * {
@@ -17,6 +18,70 @@ import UserTable from '../../../components/admin/UserTable.astro';
     body, html {
       overflow-x: hidden;
       scroll-behavior: smooth;
+    }
+    
+    /* Skeleton Loading Animations */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+    
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #e0e0e0 20%,
+        #f0f0f0 40%,
+        #f0f0f0 100%
+      );
+      background-size: 1000px 100%;
+      animation: shimmer 1.5s linear infinite;
+      border-radius: 4px;
+    }
+    
+    .skeleton-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .skeleton-text {
+      height: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skeleton-title {
+      height: 2.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .skeleton-table-row {
+      height: 4rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .content-hidden {
+      display: none;
+    }
+    
+    .skeleton-header {
+      background: linear-gradient(
+        90deg,
+        rgba(245, 158, 11, 0.3) 0%,
+        rgba(249, 115, 22, 0.3) 20%,
+        rgba(245, 158, 11, 0.3) 40%,
+        rgba(245, 158, 11, 0.3) 100%
+      );
+      background-size: 1000px 100%;
+      animation: shimmer 1.5s linear infinite;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
     }
   </style>
 
@@ -29,8 +94,19 @@ import UserTable from '../../../components/admin/UserTable.astro';
   <!-- Main Content -->
   <div class="p-4 sm:ml-0">
     <div class="p-4 mt-14">
+      <!-- Skeleton Header -->
+      <div id="skeleton-header" class="skeleton-header mt-2 mb-6">
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="skeleton skeleton-circle" style="width: 3rem; height: 3rem;"></div>
+          <div class="flex-1">
+            <div class="skeleton skeleton-title w-48 mb-2" style="background: rgba(255, 255, 255, 0.5);"></div>
+            <div class="skeleton skeleton-text w-64" style="background: rgba(255, 255, 255, 0.4);"></div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Page Header -->
-      <div class="mb-8 pt-2 sm:mb-8">
+      <div id="actual-header" class="mb-6 mt-2 sm:mb-6 content-hidden">
         <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl">
             <div class="flex items-center space-x-3 mb-2">
                 <div class="w-12 h-12 mr-3 ml-2 flex items-center justify-center">
@@ -56,7 +132,39 @@ import UserTable from '../../../components/admin/UserTable.astro';
         </div>
 
       <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-3 mb-8">
+      <div id="skeleton-stats" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-3 mb-8">
+        <!-- Skeleton Stats -->
+        <div class="skeleton-card">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="skeleton skeleton-text w-24 mb-2"></div>
+              <div class="skeleton skeleton-title w-16"></div>
+            </div>
+            <div class="skeleton" style="width: 4rem; height: 4rem; border-radius: 50%;"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="skeleton skeleton-text w-32 mb-2"></div>
+              <div class="skeleton skeleton-title w-16"></div>
+            </div>
+            <div class="skeleton" style="width: 4rem; height: 4rem; border-radius: 50%;"></div>
+          </div>
+        </div>
+        <div class="skeleton-card">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="skeleton skeleton-text w-24 mb-2"></div>
+              <div class="skeleton skeleton-title w-16"></div>
+            </div>
+            <div class="skeleton" style="width: 4rem; height: 4rem; border-radius: 50%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actual Stats Cards -->
+      <div id="actual-stats" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-3 mb-8 content-hidden">
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 shadow-lg border border-blue-200">
           <div class="flex items-center justify-between">
             <div>
@@ -140,7 +248,7 @@ import UserTable from '../../../components/admin/UserTable.astro';
 </Layout>
 
 <script>
-  import { loadMitraData, renderTableRows, approveMitra, deleteMitra, getMitraDetail, checkAdminAuth } from '../../../lib/adminHelpers';
+  import { loadMitraData, renderTableRows, approveMitra as approveMitraAPI, deleteMitra as deleteMitraAPI, getMitraDetail, checkAdminAuth } from '../../../lib/adminHelpers';
 
   // Check authentication
   if (!checkAdminAuth()) {
@@ -171,6 +279,17 @@ import UserTable from '../../../components/admin/UserTable.astro';
       // Load all mitra data
       const mitras = await loadMitraData('all');
 
+      // Hide skeleton and show actual content
+      const skeletonHeader = document.getElementById('skeleton-header');
+      const actualHeader = document.getElementById('actual-header');
+      const skeletonStats = document.getElementById('skeleton-stats');
+      const actualStats = document.getElementById('actual-stats');
+      
+      if (skeletonHeader) skeletonHeader.style.display = 'none';
+      if (actualHeader) actualHeader.classList.remove('content-hidden');
+      if (skeletonStats) skeletonStats.style.display = 'none';
+      if (actualStats) actualStats.classList.remove('content-hidden');
+
       // Update stats
       const totalUsers = mitras.length;
       const approvedCount = mitras.filter(m => m.status === 'approved').length;
@@ -200,30 +319,103 @@ import UserTable from '../../../components/admin/UserTable.astro';
   };
 
   (window as any).approveMitra = async (mitraId: string) => {
-    if (confirm('Apakah Anda yakin ingin menyetujui mitra ini?')) {
-      const success = await approveMitra(mitraId);
-      if (success) {
-        alert('Mitra berhasil disetujui');
-        await loadData();
-      } else {
-        alert('Gagal menyetujui mitra');
-      }
+    const result = await import('sweetalert2').then(Swal => {
+      return Swal.default.fire({
+        title: 'Setujui Mitra?',
+        text: 'Apakah Anda yakin ingin menyetujui mitra ini?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, Setujui',
+        cancelButtonText: 'Batal'
+      });
+    });
+
+    if (!result.isConfirmed) return;
+
+    const success = await approveMitraAPI(mitraId);
+    if (success) {
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: 'Berhasil!',
+          text: 'Mitra berhasil disetujui',
+          icon: 'success',
+          confirmButtonColor: '#10b981'
+        });
+      });
+      await loadData();
+    } else {
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: 'Gagal!',
+          text: 'Gagal menyetujui mitra',
+          icon: 'error',
+          confirmButtonColor: '#ef4444'
+        });
+      });
     }
   };
 
   (window as any).deleteMitra = async (mitraId: string) => {
-    if (confirm('Apakah Anda yakin ingin menghapus mitra ini?')) {
-      const success = await deleteMitra(mitraId);
-      if (success) {
-        alert('Mitra berhasil dihapus');
-        await loadData();
-      } else {
-        alert('Gagal menghapus mitra');
-      }
+    const result = await import('sweetalert2').then(Swal => {
+      return Swal.default.fire({
+        title: 'Hapus Mitra?',
+        html: `Apakah Anda yakin ingin menghapus mitra ini?<br><br>
+               <span class="text-red-600 font-medium">⚠️ Perhatian:</span><br>
+               Data akan dihapus dari:<br>
+               • Database Mitra<br>
+               • Data Pelunasan<br>
+               • Semua data terkait lainnya<br><br>
+               <span class="text-red-600">Data yang dihapus tidak dapat dikembalikan!</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, Hapus Semua',
+        cancelButtonText: 'Batal'
+      });
+    });
+
+    if (!result.isConfirmed) return;
+
+    // Show loading state
+    await import('sweetalert2').then(Swal => {
+      Swal.default.fire({
+        title: 'Menghapus data...',
+        html: 'Mohon tunggu, sedang menghapus data mitra dari semua database',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.default.showLoading();
+        }
+      });
+    });
+
+    const success = await deleteMitraAPI(mitraId);
+    if (success) {
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: 'Terhapus!',
+          text: 'Mitra berhasil dihapus dari semua database',
+          icon: 'success',
+          confirmButtonColor: '#10b981'
+        });
+      });
+      await loadData();
+    } else {
+      await import('sweetalert2').then(Swal => {
+        Swal.default.fire({
+          title: 'Gagal!',
+          text: 'Gagal menghapus mitra',
+          icon: 'error',
+          confirmButtonColor: '#ef4444'
+        });
+      });
     }
   };
 
-  function showMitraDetailModal(mitra: any) {
+  async function showMitraDetailModal(mitra: any) {
     const modal = document.getElementById('mitraDetailModal');
     const content = document.getElementById('mitraDetailContent');
     
@@ -237,6 +429,39 @@ import UserTable from '../../../components/admin/UserTable.astro';
         </span>`;
       }
       
+      // Check pelunasan status jika paket adalah DP
+      let pelunasanStatusHTML = '';
+      if (mitra.nilaiPaketUsaha === 'DP') {
+        try {
+          const token = localStorage.getItem('adminToken');
+          const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+          const pelunasanResponse = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (pelunasanResponse.ok) {
+            const pelunasanResult = await pelunasanResponse.json();
+            if (pelunasanResult.success && pelunasanResult.data) {
+              const pelunasan = pelunasanResult.data.find((p: any) => 
+                p.email === mitra.email || p.mitraId === mitra._id
+              );
+
+              if (pelunasan && pelunasan.statusPelunasan === 'lunas') {
+                pelunasanStatusHTML = `<div><strong>Status Pelunasan:</strong> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 border-2 border-green-300">✓ LUNAS</span></div>`;
+              } else {
+                pelunasanStatusHTML = `<div><strong>Status Pelunasan:</strong> <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800 border-2 border-red-300 animate-pulse">✗ BELUM LUNAS</span></div>`;
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error checking pelunasan status:', error);
+        }
+      }
+      
       content.innerHTML = `
         <div class="grid grid-cols-2 gap-4">
           <div><strong>Nama:</strong> ${mitra.namaMitra || mitra.nama || '-'}</div>
@@ -245,6 +470,7 @@ import UserTable from '../../../components/admin/UserTable.astro';
           <div><strong>Paket Brand:</strong> <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">${mitra.paketUsaha || '-'}</span></div>
           <div><strong>Sub Brand:</strong> ${subBrandDisplay}</div>
           <div><strong>Status:</strong> ${mitra.status || '-'}</div>
+          ${pelunasanStatusHTML}
         </div>
       `;
       modal.classList.remove('hidden');

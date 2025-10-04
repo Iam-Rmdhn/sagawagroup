@@ -102,20 +102,28 @@ import '../styles/global.css';
     }
     </script>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <!-- Favicon - Optimized for all browsers -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Additional Favicon Formats for Better Browser Support -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    
+    <!-- Theme Color for mobile browsers -->
+    <meta name="theme-color" content="#1f2937" />
+    <meta name="msapplication-TileColor" content="#1f2937" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
 
     <!-- Versioned CSS for Cache Busting -->
     <link rel="stylesheet" href="styles.css?v={new Date().getTime()}">
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3EKRGXR1J5"></script>
-    <script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -123,19 +131,8 @@ import '../styles/global.css';
       gtag('config', 'G-3EKRGXR1J5');
     </script>
     
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="/site.webmanifest" />
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#1f2937" />
-    
     <!-- Additional SEO Tags -->
     <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-TileColor" content="#1f2937" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
 
     <!-- Additional Google Site Verification -->
     <meta name="google-site-verification" content="t4IpNsSi4j_2l4kqi6hOLc9CfzMBFgNURMASGtuSF4U" />

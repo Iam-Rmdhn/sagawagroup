@@ -28,3 +28,27 @@ export async function deletePelunasanById(
     throw new Error("Gagal menghapus data pelunasan");
   }
 }
+
+export async function deletePelunasanByMitraId(
+  mitraId: string
+): Promise<{ success: boolean; message: string; deletedCount: number }> {
+  try {
+    const deletedCount = await MitraPelunasanModel.deleteMany({ mitraId });
+    if (deletedCount > 0) {
+      return { 
+        success: true, 
+        message: `${deletedCount} data pelunasan berhasil dihapus`,
+        deletedCount 
+      };
+    } else {
+      return { 
+        success: true, 
+        message: "Tidak ada data pelunasan yang ditemukan untuk mitra ini",
+        deletedCount: 0 
+      };
+    }
+  } catch (err) {
+    console.error("Error deleting pelunasan by mitra ID:", err);
+    throw new Error("Gagal menghapus data pelunasan berdasarkan mitra ID");
+  }
+}
