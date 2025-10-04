@@ -20,20 +20,22 @@ export interface YouTubeValidationResult {
 
 /**
  * Fungsi untuk menghitung tanggal publishedAfter
- * Jika nilai adalah "auto_7_days", akan return tanggal 7 hari yang lalu
+ * Jika nilai adalah "auto_X_days", akan return tanggal X hari yang lalu
  */
 export const getPublishedAfterDate = (
   publishedAfterConfig: string | null
 ): string | null => {
   if (!publishedAfterConfig) return null;
 
-  if (publishedAfterConfig === "auto_7_days") {
-    // Hitung 7 hari yang lalu
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  // Support auto_7_days, auto_30_days, auto_60_days, etc.
+  const autoMatch = publishedAfterConfig.match(/^auto_(\d+)_days$/);
+  if (autoMatch && autoMatch[1]) {
+    const daysAgo = parseInt(autoMatch[1], 10);
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
 
     // Return dalam format ISO string yang dibutuhkan YouTube API
-    return sevenDaysAgo.toISOString();
+    return date.toISOString();
   }
 
   // Jika bukan auto, return value asli (bisa berupa tanggal manual)

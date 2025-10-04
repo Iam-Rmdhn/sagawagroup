@@ -16,11 +16,47 @@ export const mitraRoute = (req: Request): Promise<Response> => {
     return approvePelunasanController(req);
   }
 
+  // DELETE /api/admin/mitra_pelunasan/by-mitra/:mitraId
+  if (
+    req.method === "DELETE" &&
+    url.pathname.startsWith("/api/admin/mitra_pelunasan/by-mitra/")
+  ) {
+    return (async () => {
+      const mitraId = url.pathname.split("/api/admin/mitra_pelunasan/by-mitra/")[1];
+      if (!mitraId) {
+        return new Response(JSON.stringify({ error: "Mitra ID wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { deletePelunasanByMitraId } = await import(
+          "../services/mitra-pelunasan.services"
+        );
+        const result = await deletePelunasanByMitraId(mitraId);
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        console.error("Error deleting pelunasan by mitra ID:", err);
+        return new Response(
+          JSON.stringify({
+            error: "Gagal menghapus data pelunasan berdasarkan mitra ID",
+            success: false,
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
   // DELETE /api/admin/mitra_pelunasan/:id
   if (
     req.method === "DELETE" &&
     url.pathname.startsWith("/api/admin/mitra_pelunasan/") &&
-    url.pathname !== "/api/admin/mitra_pelunasan/approve"
+    url.pathname !== "/api/admin/mitra_pelunasan/approve" &&
+    !url.pathname.startsWith("/api/admin/mitra_pelunasan/by-mitra/")
   ) {
     return (async () => {
       const id = url.pathname.split("/api/admin/mitra_pelunasan/")[1];

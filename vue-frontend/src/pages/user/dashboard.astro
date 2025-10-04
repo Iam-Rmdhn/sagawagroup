@@ -427,6 +427,53 @@ try {
       }
     }
 
+    /* Stats Card Animations */
+    .stats-card-animate {
+      animation: statsCardEnter 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes statsCardEnter {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Number Counter Animation */
+    .stats-number {
+      transition: all 0.3s ease;
+    }
+
+    .stats-number.updating {
+      animation: numberPulse 0.5s ease-in-out;
+    }
+
+    @keyframes numberPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+        color: rgb(249, 115, 22);
+      }
+    }
+
+    /* Glow Effect on Hover */
+    .stats-glow {
+      transition: all 0.3s ease;
+    }
+
+    .stats-glow:hover {
+      box-shadow: 0 0 20px rgba(251, 146, 60, 0.4),
+                  0 0 40px rgba(251, 146, 60, 0.2);
+      transform: translateY(-4px);
+    }
+
     .skeleton-text {
       height: 1rem;
       border-radius: 0.25rem;
@@ -673,7 +720,7 @@ try {
             <!-- Financial Summary Cards -->
             <div id="financial-summary-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                <!-- Omset Harian -->
-               <div class="modern-card rounded-2xl p-6 shadow-lg overflow-hidden relative">
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.1s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
                      <div class="flex items-center justify-between mb-4">
@@ -684,7 +731,7 @@ try {
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-hari-ini">{omsetHariIni.length > 0 ? `Rp ${omsetHariIni[omsetHariIni.length-1][0]}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-hari-ini" data-target="0">{omsetHariIni.length > 0 ? `Rp ${omsetHariIni[omsetHariIni.length-1][0]}` : '-'}</p>
                      <div class="flex items-center justify-between">
                         <p class="text-xs text-gray-600" id="omset-update-time">Dari Google Sheets</p>
                         <span class="text-xs font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full">Hari Ini</span>
@@ -693,7 +740,7 @@ try {
                </div>
 
                <!-- Omset Bulanan -->
-               <div class="modern-card rounded-2xl p-6 shadow-lg overflow-hidden relative">
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.2s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
                      <div class="flex items-center justify-between mb-4">
@@ -704,7 +751,7 @@ try {
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-bulanan">{omsetBulanIni ? `Rp ${omsetBulanIni}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-bulanan" data-target="0">{omsetBulanIni ? `Rp ${omsetBulanIni}` : '-'}</p>
                      <div class="flex items-center justify-between">
                         <p class="text-xs text-gray-600" id="omset-bulanan-periode">0 hari dari Sheets</p>
                         <span class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Bulan Ini</span>
@@ -713,7 +760,7 @@ try {
                </div>
 
                <!-- Belanja Harian -->
-               <div class="modern-card rounded-2xl p-6 shadow-lg overflow-hidden relative">
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.3s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
                      <div class="flex items-center justify-between mb-4">
@@ -724,7 +771,7 @@ try {
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="belanja-hari-ini">{belanjaHariIni.length > 0 ? `Rp ${belanjaHariIni[belanjaHariIni.length-1][0]}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="belanja-hari-ini" data-target="0">{belanjaHariIni.length > 0 ? `Rp ${belanjaHariIni[belanjaHariIni.length-1][0]}` : '-'}</p>
                      <div class="flex items-center justify-between">
                         <p class="text-xs text-gray-600" id="belanja-update-time">Dari Google Sheets</p>
                         <span class="text-xs font-medium px-2 py-1 bg-orange-100 text-orange-800 rounded-full">Hari Ini</span>
@@ -777,7 +824,7 @@ try {
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="text-sm font-medium text-blue-900">Panduan Cepat</span>
+                        <span class="text-sm font-medium text-blue-900">Panduan Penggunan</span>
                      </div>
                      <svg class="w-5 h-5 text-blue-600 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -860,7 +907,7 @@ try {
                         <!-- Section Header -->
                         <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-amber-500">
                            <div class="w-10 h-10 flex items-center justify-center">
-                              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="w-8 h-8 sm:w-5 sm:h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                               </svg>
                            </div>
@@ -966,7 +1013,7 @@ try {
                      <div class="modern-card rounded-xl p-6 shadow-lg">
                         <div class="flex items-center gap-3 mb-6">
                            <div class="w-10 h-10 flex items-center justify-center">
-                              <svg class="w-8 h-8 text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+                              <svg class="w-8 h-8 sm:w-5 sm:h-5 text-green-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
                            </div>
                            <div class="flex-1">
                               <h3 class="text-xl font-bold text-gray-900">Aktivitas Akun</h3>
@@ -1274,6 +1321,13 @@ try {
          return;
       }
 
+      // Record current login time for real-time display
+      const currentLoginTime = new Date().toISOString();
+      localStorage.setItem('currentLoginTime', currentLoginTime);
+      
+      // Update last login on backend
+      updateLastLoginOnBackend();
+
       // Initialize join date display
       const detailJoinDate = document.getElementById('detail-join-date');
       if (detailJoinDate) {
@@ -1291,7 +1345,21 @@ try {
 
       (window as any).checkAgreementStatus = function() {
          const status = localStorage.getItem(agreementStorageKey());
+         console.log('[AGREEMENT DEBUG] Current cache status:', status);
          return status;
+      };
+
+      // Helper untuk testing - clear agreement cache
+      (window as any).clearAgreementCache = function() {
+         localStorage.removeItem(agreementStorageKey());
+         console.log('[AGREEMENT DEBUG] Agreement cache cleared - reload page to check agreement again');
+      };
+
+      // Helper untuk force check agreement (untuk testing)
+      (window as any).forceCheckAgreement = async function() {
+         console.log('[AGREEMENT DEBUG] Force checking agreement...');
+         const mitraData = (window as any).currentMitraData || JSON.parse(localStorage.getItem('mitraUser') || '{}');
+         await checkAgreementStatusFromBackend(mitraData);
       };
 
       // Setup agreement modal for new users
@@ -1346,6 +1414,32 @@ try {
 
       // Set up real-time activity updates
       setupRealTimeActivityUpdates();
+
+      // Check URL parameter for auto-showing agreement modal
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('showAgreement') === 'true') {
+         console.log('[AGREEMENT] Auto-show request from URL parameter');
+         // Remove parameter from URL without reloading
+         const newUrl = window.location.pathname;
+         window.history.replaceState({}, document.title, newUrl);
+         
+         // Wait a bit for profile to load, then check if should show modal
+         setTimeout(() => {
+            const email = localStorage.getItem('mitraUserEmail');
+            if (email) {
+               // IMPORTANT: Check cache first before showing modal
+               const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
+               if (cachedAgreementStatus === 'true') {
+                  console.log('[AGREEMENT] ✅ Agreement sudah diterima (cached), skip auto-show modal');
+                  return;
+               }
+               
+               // Only show if not cached
+               console.log('[AGREEMENT] 📋 Showing modal (first time from kewajiban page)');
+               showAgreementModal();
+            }
+         }, 1000);
+      }
    });
 
    // Helper to fetch profile robustly: try `/api/mitra/profile` then fallback to `/api/mitra/by-email`
@@ -1471,15 +1565,38 @@ try {
       }
    }
 
+   // Function to update last login timestamp on backend
+   async function updateLastLoginOnBackend() {
+      try {
+         const token = localStorage.getItem('mitraToken');
+         if (!token) return;
+
+         // Update last login time on backend
+         await fetch(`${API_URL}/api/mitra/update-last-login`, {
+            method: 'POST',
+            headers: {
+               'Authorization': `Bearer ${token}`,
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+               lastLogin: new Date().toISOString()
+            })
+         });
+      } catch (error) {
+         // Silent fail - not critical if this fails
+         console.debug('Could not update last login on backend:', error);
+      }
+   }
+
    // Function to set up real-time activity updates
    function setupRealTimeActivityUpdates() {
-      // Update activity info every 30 seconds to show relative time changes
+      // Update activity info every 1 minute to show relative time changes in real-time
       setInterval(() => {
          const currentMitraData = (window as any).currentMitraData;
          if (currentMitraData) {
             updateActivityInfo(currentMitraData);
          }
-      }, 30000); // Update every 30 seconds
+      }, 60000); // Update every 1 minute for more real-time feel
 
       // Refresh profile data every 5 minutes to get latest server data
       setInterval(async () => {
@@ -1734,13 +1851,6 @@ try {
          const token = localStorage.getItem('mitraToken');
          if (!token) return;
 
-         // Check if we already have cached agreement status for this session
-         // Check if we already have cached agreement status for this session (per-user)
-         const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
-         if (cachedAgreementStatus === 'true') {
-            return;
-         }
-
          // Use provided profile when available to determine payment status
          let user = userProfile;
          if (!user) {
@@ -1753,7 +1863,11 @@ try {
          }
 
          // DEV DEBUG: inspect the profile used to decide payment status
-         console.debug('[DEBUG] checkAgreementStatusFromBackend - userProfile:', user);
+         console.log('[AGREEMENT DEBUG] Checking agreement for user:', {
+            email: user.email,
+            pelunasanApproved: user.pelunasanApproved,
+            statusPelunasan: user.statusPelunasan
+         });
 
          // Only run agreement checks for users who have completed payment
          // Use the same logic as in updateStatisticsCards to ensure consistency
@@ -1820,9 +1934,24 @@ try {
          );
 
          if (!userIsPaidOff) {
+            console.log('[AGREEMENT DEBUG] User belum lunas, skip agreement check');
             return;
          }
 
+         console.log('[AGREEMENT DEBUG] User sudah lunas, checking agreement...');
+
+         // CRITICAL FIX: Check cache FIRST to prevent modal from showing repeatedly
+         // If user already accepted in this browser/session, don't show again
+         const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
+         
+         if (cachedAgreementStatus === 'true') {
+            console.log('[AGREEMENT DEBUG] ✅ Agreement sudah diterima (cached), skip modal');
+            return;
+         }
+
+         console.log('[AGREEMENT DEBUG] No cache found, checking backend...');
+
+         // Only check backend if cache doesn't exist
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
             method: 'GET',
             headers: {
@@ -1836,27 +1965,41 @@ try {
          if (response.ok && result.success) {
             const { hasAccepted, agreementDetails } = result.data;
 
+            console.log('[AGREEMENT DEBUG] Backend response:', {
+               hasAccepted,
+               agreementDetails
+            });
+
             // Ensure the agreement (if present) belongs to this user
             let acceptedForThisUser = hasAccepted;
             try {
                const localUserId = user && (user._id || user.id || user.mitraId || user.mitra_id);
                const remoteMitraId = agreementDetails && (agreementDetails.mitraId || agreementDetails.mitra_id);
                if (hasAccepted && remoteMitraId && localUserId && String(remoteMitraId) !== String(localUserId)) {
-                  console.warn('Agreement record mitraId mismatch — ignoring remote acceptance for this session', { remoteMitraId, localUserId });
+                  console.warn('[AGREEMENT DEBUG] Agreement record mitraId mismatch', { remoteMitraId, localUserId });
                   acceptedForThisUser = false;
                }
             } catch (e) { /* ignore */ }
 
-            if (!acceptedForThisUser) {
-               // Agreement now only appears as modal
-               setTimeout(() => { showAgreementModal(); }, 300);
-            } else {
-               const agreedAt = agreementDetails?.acceptedAt;
-               // Persist per-user cache
+            if (acceptedForThisUser) {
+               // User sudah accept di backend, simpan ke cache untuk mencegah modal muncul lagi
+               console.log('[AGREEMENT DEBUG] ✅ User sudah accept agreement di backend, caching...');
                localStorage.setItem(agreementStorageKey(), 'true');
+            } else {
+               // User belum accept, tapi cek dulu apakah ada cache (double check)
+               // Ini safety check jika ada race condition
+               const doubleCheckCache = localStorage.getItem(agreementStorageKey());
+               if (doubleCheckCache === 'true') {
+                  console.log('[AGREEMENT DEBUG] Cache found on double-check, skip modal');
+                  return;
+               }
+
+               // Show agreement modal - user baru lunas dan belum accept agreement
+               console.log('[AGREEMENT DEBUG] 📋 Showing agreement modal (first time for this user)...');
+               setTimeout(() => { showAgreementModal(); }, 500);
             }
          } else {
-            console.error('Failed to check agreement status:', result.error);
+            console.error('[AGREEMENT DEBUG] Failed to check agreement status:', result.error);
             // If backend fails, don't show modal to avoid blocking user
          }
 
@@ -2227,6 +2370,16 @@ try {
          const shouldShowAgreement = isPaidOff || hasLunasStatus;
 
          // Debug logging
+         console.log('[PELUNASAN DEBUG] Status check:', {
+            isPaidOff,
+            hasLunasStatus,
+            shouldShowAgreement,
+            pelunasanApproved: data.pelunasanApproved,
+            statusPelunasan: data.statusPelunasan,
+            isPelunasanApproved,
+            isKekuranganZero,
+            paidByComparison
+         });
 
          if (shouldShowAgreement) {
             // Show explicitly as "Lunas" and keep element visible so user sees the status
@@ -2235,9 +2388,10 @@ try {
             pelunasanStatus.style.display = '';
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
             
-            // Agreement will now only appear as modal - no inline dashboard section
+            console.log('[PELUNASAN DEBUG] User LUNAS - akan check agreement modal...');
             
             // Check agreement status from backend and show modal if needed
+            // This will show modal if user hasn't accepted yet
             await checkAgreementStatusFromBackend(data);
          } else {
             pelunasanStatus.textContent = 'Belum Lunas';
@@ -2245,7 +2399,7 @@ try {
             pelunasanStatus.style.display = '';
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
             
-            // Agreement section removed from dashboard - no need to hide
+            console.log('[PELUNASAN DEBUG] User BELUM LUNAS - skip agreement check');
          }
       }
 
@@ -2466,16 +2620,35 @@ try {
       // Last login - handle multiple possible field names and show real-time info
       const lastLogin = document.getElementById('last-login');
       if (lastLogin) {
-         const lastLoginTime = data.lastLogin || data.lastLoginAt || data.last_login || data.updatedAt;
+         // Get current login time from localStorage (set when user logs in)
+         const currentLoginTime = localStorage.getItem('currentLoginTime');
+         
+         // Try multiple field names from backend
+         let lastLoginTime = data.lastLogin || data.lastLoginAt || data.last_login || data.lastAccessTime || data.updatedAt;
+         
+         // If backend has lastLogin and it's different from current session, use it
+         // Otherwise use current session time
+         if (currentLoginTime) {
+            const sessionTime = new Date(currentLoginTime);
+            const backendTime = lastLoginTime ? new Date(lastLoginTime) : null;
+            
+            // Use the most recent time (current session or backend)
+            if (!backendTime || sessionTime > backendTime) {
+               lastLoginTime = currentLoginTime;
+            }
+         }
          
          if (lastLoginTime) {
             const date = new Date(lastLoginTime);
             const now = new Date();
-            const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+            const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+            const diffInHours = Math.floor(diffInMinutes / 60);
             
             let displayText;
-            if (diffInHours < 1) {
+            if (diffInMinutes < 1) {
                displayText = 'Baru saja';
+            } else if (diffInMinutes < 60) {
+               displayText = `${diffInMinutes} menit yang lalu`;
             } else if (diffInHours < 24) {
                displayText = `${diffInHours} jam yang lalu`;
             } else if (diffInHours < 168) { // 7 days
@@ -2492,7 +2665,8 @@ try {
             }
             lastLogin.textContent = displayText;
          } else {
-            lastLogin.textContent = 'Belum pernah login';
+            // No login time available, show current session
+            lastLogin.textContent = 'Baru saja';
          }
       }
 
@@ -2718,10 +2892,18 @@ try {
          });
       }
       
-      // Sync Now button
+      // Sync Now button - Desktop
       const syncBtn = document.getElementById('sync-now-btn');
       if (syncBtn) {
          syncBtn.addEventListener('click', function() {
+            loadFinancialDataFromSheets();
+         });
+      }
+      
+      // Sync Now button - Mobile
+      const syncBtnMobile = document.getElementById('sync-now-btn-mobile');
+      if (syncBtnMobile) {
+         syncBtnMobile.addEventListener('click', function() {
             loadFinancialDataFromSheets();
          });
       }
@@ -2842,6 +3024,26 @@ try {
       }
    }
 
+   // Counter Animation Function
+   function animateCounter(element: HTMLElement, target: number, duration: number = 1500) {
+      const start = 0;
+      const increment = target / (duration / 16); // 60fps
+      let current = start;
+      
+      // Add updating class for animation
+      element.classList.add('updating');
+      
+      const timer = setInterval(() => {
+         current += increment;
+         if (current >= target) {
+            current = target;
+            clearInterval(timer);
+            element.classList.remove('updating');
+         }
+         element.textContent = formatRupiah(Math.floor(current));
+      }, 16);
+   }
+
    // Update display functions (now receives data from Google Sheets)
    function updateTodayFinancialDisplay(data: any) {
       const omsetElement = document.getElementById('omset-hari-ini');
@@ -2850,11 +3052,15 @@ try {
       const belanjaTimeElement = document.getElementById('belanja-update-time');
 
       if (omsetElement) {
-         omsetElement.textContent = formatRupiah(data.omset || 0);
+         // Use counter animation for omset
+         const targetValue = data.omset || 0;
+         animateCounter(omsetElement, targetValue);
       }
       
       if (belanjaElement) {
-         belanjaElement.textContent = formatRupiah(data.belanja || 0);
+         // Use counter animation for belanja
+         const targetValue = data.belanja || 0;
+         animateCounter(belanjaElement, targetValue);
       }
 
       if (omsetTimeElement) {
@@ -2871,7 +3077,9 @@ try {
       const periodeElement = document.getElementById('omset-bulanan-periode');
 
       if (omsetBulananElement) {
-         omsetBulananElement.textContent = formatRupiah(data.totalOmset || 0);
+         // Use counter animation for monthly omset
+         const targetValue = data.totalOmset || 0;
+         animateCounter(omsetBulananElement, targetValue, 2000); // Slower for bigger number
       }
 
       // Tampilkan hanya 'Dari Google Sheets' untuk periode
