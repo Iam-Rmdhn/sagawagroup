@@ -7,15 +7,21 @@ module.exports = {
     name: "sagawagroup-api",
     
     // Use bash to execute bun command directly
-    script: "/root/.bun/bin/bun",
+    // This path will be updated by deploy script to match system's bun location
+    script: "/snap/bin/bun",
     args: "run /var/www/sagawagroup/api/index.ts",
     cwd: "/var/www/sagawagroup/api",
     
     // Environment variables for production
+    env: {
+      NODE_ENV: "production",
+      PORT: 5000,
+      PATH: "/snap/bin:/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    },
     env_production: {
       NODE_ENV: "production",
       PORT: 5000,
-      PATH: "/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      PATH: "/snap/bin:/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
     },
     
     // Process management

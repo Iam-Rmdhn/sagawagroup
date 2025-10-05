@@ -264,21 +264,77 @@ deploy_api() {
     
     mkdir -p "$DEPLOY_DIR/api"
     
-    # Ensure bun is in PATH
-    export PATH="/root/.bun/bin:$PATH"
+    # Find or install bun for root
+    BUN_PATH=""
     
-    # Verify bun is available
-    if ! command -v bun &> /dev/null; then
-        print_error "Bun is not available. Installing Bun..."
-        curl -fsSL https://bun.sh/install | bash
+    # Priority 1: Root's bun installation (best for production)
+    if [ -f "/root/.bun/bin/bun" ]; then
+        BUN_PATH="/root/.bun/bin/bun"
         export PATH="/root/.bun/bin:$PATH"
+        print_status "Using root's Bun installation"
+    # Priority 2: System bun (but avoid snap due to confinement issues)
+    elif command -v bun &> /dev/null; then
+        BUN_CHECK=$(which bun)
+        if [[ "$BUN_CHECK" != *"snap"* ]]; then
+            BUN_PATH="$BUN_CHECK"
+            print_status "Using system Bun at: $BUN_PATH"
+        else
+            print_warning "Snap bun found but may have permission issues, installing native bun..."
+            curl -fsSL https://bun.sh/install | bash
+            BUN_PATH="/root/.bun/bin/bun"
+            export PATH="/root/.bun/bin:$PATH"
+        fi
+    # Priority 3: User's bun (fallback)
+    elif [ -f "/home/ilham/.bun/bin/bun" ]; then
+        BUN_PATH="/home/ilham/.bun/bin/bun"
+        print_warning "Using user's Bun installation"
+    # Install bun if not found
+    else
+        print_status "Bun not found, installing for root..."
+        # Ensure unzip is installed (required by bun installer)
+        if ! command -v unzip &> /dev/null; then
+            apt-get update && apt-get install -y unzip
+        fi
+        curl -fsSL https://bun.sh/install | bash
+        if [ -f "/root/.bun/bin/bun" ]; then
+            BUN_PATH="/root/.bun/bin/bun"
+            export PATH="/root/.bun/bin:$PATH"
+            print_success "Bun installed successfully"
+        else
+            print_error "Failed to install Bun"
+            return 1
+        fi
     fi
     
-    print_status "Using Bun version: $(bun --version)"
+    print_success "Using Bun: $BUN_PATH"
+    print_status "Bun version: $($BUN_PATH --version)"
     
     # Copy API files
     print_status "Copying API files to deployment directory..."
-    rsync -av --exclude=node_modules --exclude=.git "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"
+    
+    # Ensure target directory exists with correct permissions
+    mkdir -p "$DEPLOY_DIR/api"
+    
+    # Copy all files including package.json
+    print_status "Syncing API files..."
+    if ! rsync -av --delete --exclude=node_modules --exclude=.git --exclude=bun.lock "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"; then
+        print_error "Failed to copy API files"
+        return 1
+    fi
+    
+    # Verify critical files were copied
+    if [ ! -f "$DEPLOY_DIR/api/package.json" ]; then
+        print_error "package.json not found after copy!"
+        print_status "Trying direct copy..."
+        cp "$PROJECT_DIR/bun-api/package.json" "$DEPLOY_DIR/api/"
+    fi
+    
+    if [ ! -f "$DEPLOY_DIR/api/index.ts" ]; then
+        print_error "index.ts not found after copy!"
+        return 1
+    fi
+    
+    print_success "API files copied successfully"
     
     # Copy production environment file
     if [ -f "$PROJECT_DIR/bun-api/.env.production" ]; then
@@ -288,6 +344,10 @@ deploy_api() {
         print_warning "No .env.production file found"
     fi
     
+    # List critical files for debugging
+    print_status "Verifying copied files..."
+    ls -lh "$DEPLOY_DIR/api/" | grep -E "package.json|index.ts|.env"
+    
     # Install API dependencies with Bun
     print_status "Installing API dependencies with Bun..."
     cd "$DEPLOY_DIR/api" || {
@@ -295,10 +355,43 @@ deploy_api() {
         return 1
     }
     
-    if ! bun install; then
-        print_error "API dependency installation failed"
+    print_status "Current directory: $(pwd)"
+    print_status "Checking package.json..."
+    if [ -f "package.json" ]; then
+        print_success "package.json found"
+        cat package.json | head -10
+    else
+        print_error "package.json NOT FOUND!"
+        print_status "Directory contents:"
+        ls -la
         return 1
     fi
+    
+    if ! $BUN_PATH install; then
+        print_error "Bun install failed"
+        print_status "Attempting fallback with npm..."
+        if command -v npm &> /dev/null; then
+            if ! npm install --production; then
+                print_error "npm install also failed"
+                return 1
+            fi
+        else
+            print_error "Both bun and npm failed"
+            return 1
+        fi
+    fi
+    
+    # Fix ownership of API directory
+    print_status "Fixing API directory permissions..."
+    chown -R root:root "$DEPLOY_DIR/api"
+    chmod -R 755 "$DEPLOY_DIR/api"
+    
+    # Protect sensitive files
+    if [ -f "$DEPLOY_DIR/api/.env.production" ]; then
+        chmod 600 "$DEPLOY_DIR/api/.env.production"
+    fi
+    
+    print_success "API dependencies installed successfully"
     
     # Copy PM2 ecosystem config
     print_status "Setting up PM2 configuration..."
@@ -316,11 +409,22 @@ deploy_api() {
     # Start API with PM2
     print_status "Starting API with PM2..."
     cd "$DEPLOY_DIR"
+    
+    # Set environment variables for PM2
+    export NODE_ENV=production
+    export PORT=5000
+    
     if [ -f "ecosystem-bun.config.js" ]; then
+        # Update ecosystem config with correct bun path
+        sed -i "s|script: \".*bun\"|script: \"$BUN_PATH\"|g" ecosystem-bun.config.js
         pm2 start ecosystem-bun.config.js --env production
     else
-        # Fallback: start directly with bun
-        pm2 start "/root/.bun/bin/bun" --name sagawagroup-api -- run "$DEPLOY_DIR/api/index.ts"
+        # Fallback: start directly with bun with proper working directory
+        print_warning "ecosystem-bun.config.js not found, starting directly"
+        pm2 start "$BUN_PATH" \
+            --name sagawagroup-api \
+            --cwd "$DEPLOY_DIR/api" \
+            -- run index.ts
     fi
     
     # Save PM2 configuration
