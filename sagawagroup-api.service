@@ -1,0 +1,34 @@
+[Unit]
+Description=Sagawa Group API Server (Bun Runtime)
+Documentation=https://github.com/tsubametaa/sagawagroup
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/sagawagroup/api
+Environment="NODE_ENV=production"
+Environment="PORT=5000"
+Environment="PATH=/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Start command
+ExecStart=/root/.bun/bin/bun run index.ts
+
+# Restart behavior
+Restart=always
+RestartSec=10s
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=append:/var/log/sagawagroup-api.log
+StandardError=append:/var/log/sagawagroup-api-error.log
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
