@@ -221,9 +221,17 @@ build_frontend() {
         exit 1
     fi
     
-    # Build for production
-    print_status "Building frontend..."
-    if ! sudo -u ilham bun run build; then
+    # Copy .env.production to .env for build process
+    if [ -f ".env.production" ]; then
+        print_status "Using production environment configuration..."
+        sudo -u ilham cp .env.production .env
+    else
+        print_warning "No .env.production found, using existing .env"
+    fi
+    
+    # Build for production with NODE_ENV
+    print_status "Building frontend with production configuration..."
+    if ! sudo -u ilham NODE_ENV=production bun run build; then
         print_error "Frontend build failed"
         rollback_deployment
         exit 1
