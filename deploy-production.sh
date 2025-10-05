@@ -259,40 +259,92 @@ build_frontend() {
 }
 
 # Function to deploy API
-# Function to deploy API
 deploy_api() {
-    print_header "Deploying API"
+    print_header "Deploying Backend API"
     
     mkdir -p "$DEPLOY_DIR/api"
     
-    # Copy API files
-    log_message "Copying API files to deployment directory"
-    rsync -av --exclude=node_modules --exclude=.git "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"
+    # Ensure bun is in PATH
+    export PATH="/root/.bun/bin:$PATH"
     
-    # Copy environment file if it exists
-    if [ -f "$PROJECT_DIR/bun-api/.env.production" ]; then
-        cp "$PROJECT_DIR/bun-api/.env.production" "$DEPLOY_DIR/api/.env"
-    elif [ -f "$PROJECT_DIR/bun-api/.env" ]; then
-        cp "$PROJECT_DIR/bun-api/.env" "$DEPLOY_DIR/api/"
+    # Verify bun is available
+    if ! command -v bun &> /dev/null; then
+        print_error "Bun is not available. Installing Bun..."
+        curl -fsSL https://bun.sh/install | bash
+        export PATH="/root/.bun/bin:$PATH"
     fi
     
-    # Install API dependencies
-    log_message "Installing API dependencies with npm"
+    print_status "Using Bun version: $(bun --version)"
+    
+    # Copy API files
+    print_status "Copying API files to deployment directory..."
+    rsync -av --exclude=node_modules --exclude=.git "$PROJECT_DIR/bun-api/" "$DEPLOY_DIR/api/"
+    
+    # Copy production environment file
+    if [ -f "$PROJECT_DIR/bun-api/.env.production" ]; then
+        cp "$PROJECT_DIR/bun-api/.env.production" "$DEPLOY_DIR/api/.env.production"
+        print_success "Production environment file copied"
+    else
+        print_warning "No .env.production file found"
+    fi
+    
+    # Install API dependencies with Bun
+    print_status "Installing API dependencies with Bun..."
     cd "$DEPLOY_DIR/api" || {
         print_error "Failed to navigate to API directory: $DEPLOY_DIR/api"
         return 1
     }
-    log_message "Current directory: $(pwd)"
-    log_message "Package.json exists: $(ls -la package.json)"
-    # Install as root then fix ownership
-    if ! npm install --production --omit=dev; then
+    
+    if ! bun install; then
         print_error "API dependency installation failed"
         return 1
     fi
-    # Fix ownership of node_modules
-    chown -R ilham:ilham node_modules/
     
-    print_success "API deployed successfully with dependencies"
+    # Copy PM2 ecosystem config
+    print_status "Setting up PM2 configuration..."
+    if [ -f "$PROJECT_DIR/ecosystem-bun.config.js" ]; then
+        cp "$PROJECT_DIR/ecosystem-bun.config.js" "$DEPLOY_DIR/"
+        print_success "PM2 ecosystem config copied"
+    else
+        print_warning "No ecosystem-bun.config.js found, using default"
+    fi
+    
+    # Stop old PM2 process if exists
+    print_status "Stopping old API process..."
+    pm2 delete sagawagroup-api 2>/dev/null || true
+    
+    # Start API with PM2
+    print_status "Starting API with PM2..."
+    cd "$DEPLOY_DIR"
+    if [ -f "ecosystem-bun.config.js" ]; then
+        pm2 start ecosystem-bun.config.js --env production
+    else
+        # Fallback: start directly with bun
+        pm2 start "/root/.bun/bin/bun" --name sagawagroup-api -- run "$DEPLOY_DIR/api/index.ts"
+    fi
+    
+    # Save PM2 configuration
+    pm2 save
+    
+    # Wait for API to start
+    sleep 3
+    
+    # Check if API is running
+    if pm2 list | grep -q "sagawagroup-api.*online"; then
+        print_success "API deployed and running successfully"
+        
+        # Test API health
+        if curl -f http://localhost:5000/api/health 2>/dev/null; then
+            print_success "API health check passed"
+        else
+            print_warning "API is running but health check failed"
+        fi
+    else
+        print_error "API failed to start"
+        print_status "Checking logs..."
+        pm2 logs sagawagroup-api --lines 20 --nostream
+        return 1
+    fi
 }
 
 rollback() {

@@ -2,9 +2,9 @@ module.exports = {
   apps: [
     {
       name: "sagawagroup-api",
-      script: "bun-api/index.ts",
+      script: "api/start-production.sh",
       cwd: "/var/www/sagawagroup",
-      interpreter: "bun",
+      interpreter: "/bin/bash",
       env: {
         NODE_ENV: "development",
         PORT: 3000,
