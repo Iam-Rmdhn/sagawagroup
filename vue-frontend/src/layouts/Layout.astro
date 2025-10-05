@@ -123,9 +123,6 @@ import '../styles/global.css';
     <meta name="msapplication-TileColor" content="#1f2937" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
 
-    <!-- Versioned CSS for Cache Busting -->
-    <link rel="stylesheet" href="styles.css?v={new Date().getTime()}">
-
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3EKRGXR1J5"></script>
     <script is:inline>
@@ -165,9 +162,9 @@ import '../styles/global.css';
         <slot />
     </main>
     <!-- Visitor Analytics Tracking -->
-    <script>
+    <script define:vars={{ apiUrl: import.meta.env.PUBLIC_API_URL }}>
         (function() {
-            const API_URL = 'https://api.sagawagroup.id';
+            const API_URL = apiUrl || 'https://www.sagawagroup.id/api';
             let sessionId = localStorage.getItem('visitor_session_id');
             let heartbeatInterval = null;
             
