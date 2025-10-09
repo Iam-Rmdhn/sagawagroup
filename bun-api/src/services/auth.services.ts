@@ -133,11 +133,11 @@ export async function adminLoginService(email: string, password: string) {
   console.log('[Admin Login] Expected email:', JSON.stringify('admin@sagawagroup.id'));
   console.log('[Admin Login] Email match:', email === 'admin@sagawagroup.id');
   console.log('[Admin Login] Received password length:', password.length);
-  console.log('[Admin Login] Expected password length:', '@sagwagroup222!'.length);
-  console.log('[Admin Login] Password match:', password === '@sagwagroup222!');
+  console.log('[Admin Login] Expected password length:', '@sagawagrup222!'.length);
+  console.log('[Admin Login] Password match:', password === '@sagawagrup222!');
   
   // Check for hardcoded admin credentials first
-  if (email === 'admin@sagawagroup.id' && password === '@sagwagroup222!') {
+  if (email === 'admin@sagawagroup.id' && password === '@sagawagrup222!') {
     console.log('[Admin Login] ✅ Hardcoded admin match!');
     const token = generateToken({
       id: 'admin-hardcoded',
