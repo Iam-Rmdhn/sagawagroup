@@ -128,8 +128,17 @@ export async function getAllMitraLoginService() {
 }
 
 export async function adminLoginService(email: string, password: string) {
+  // Debug logging
+  console.log('[Admin Login] Received email:', JSON.stringify(email));
+  console.log('[Admin Login] Expected email:', JSON.stringify('admin@sagawagroup.id'));
+  console.log('[Admin Login] Email match:', email === 'admin@sagawagroup.id');
+  console.log('[Admin Login] Received password length:', password.length);
+  console.log('[Admin Login] Expected password length:', '@sagawagrup222!'.length);
+  console.log('[Admin Login] Password match:', password === '@sagawagrup222!');
+  
   // Check for hardcoded admin credentials first
-  if (email === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
+  if (email === 'admin@sagawagroup.id' && password === '@sagawagrup222!') {
+    console.log('[Admin Login] ✅ Hardcoded admin match!');
     const token = generateToken({
       id: 'admin-hardcoded',
       email: email,
