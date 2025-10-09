@@ -255,16 +255,11 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
   document.addEventListener('DOMContentLoaded', async () => {
     // Initialize dashboard for overlay mode
     initializeDashboardMargin();
-    let API_URL = 'http://localhost:3000'; // Fixed port to 3000
-    try {
-      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
-        if (import.meta.env.PUBLIC_API_URL && import.meta.env.PUBLIC_API_URL.startsWith('http')) {
-          API_URL = import.meta.env.PUBLIC_API_URL;
-        }
-      }
-    } catch (e) { 
-      console.warn('Environment variable error, using fallback API_URL:', API_URL);
-    }
+    
+    // Get API URL from meta tag injected by Astro
+    const apiUrlMeta = document.querySelector('meta[name="api-url"]');
+    let API_URL = apiUrlMeta ? apiUrlMeta.getAttribute('content') : 'http://localhost:3000';
+    console.log('📡 Using API URL:', API_URL);
     
     // Cache session data to avoid repeated localStorage access
     const sessionData = {
@@ -286,7 +281,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         try {
           console.log('🔍 Fetching mitra data for email:', sessionData.email);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
+          const timeoutId = setTimeout(() => controller.abort(), 15000); // Increase timeout to 15s
           
           mitraRes = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(sessionData.email)}`, {
             method: 'GET',
@@ -352,7 +347,7 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         try {
           console.log('💰 Checking if user has submitted pelunasan form for email:', sessionData.email);
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 6000);
+          const timeoutId = setTimeout(() => controller.abort(), 12000); // Increase timeout to 12s
           
           // Use the correct endpoint to check if user has submitted pelunasan form
           pelunasanRes = await fetch(`${API_URL}/api/mitra/pelunasan-exists?email=${encodeURIComponent(sessionData.email)}`, {
@@ -435,22 +430,28 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       console.warn('No mitra data found. Email:', sessionData.email);
       container.innerHTML = `
         <div class="modern-card rounded-xl p-4 sm:p-8 text-center max-w-md mx-auto">
-          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500 mx-auto mb-3 sm:mb-4">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mx-auto mb-3 sm:mb-4">
             <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
-          <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">Data Tidak Ditemukan</h3>
-          <p class="text-red-600 mb-3 sm:mb-4 text-sm sm:text-base">
-            Data mitra tidak ditemukan untuk email: <br>
-            <code class="text-xs bg-gray-100 px-2 py-1 rounded">${sessionData.email || 'Tidak ada email'}</code>
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">Tidak Dapat Memuat Data</h3>
+          <p class="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
+            Mohon periksa koneksi internet Anda atau coba lagi nanti.<br>
+            <small class="text-xs text-gray-500 mt-2 block">Email: ${sessionData.email || 'Tidak ada email'}</small>
           </p>
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4">
-            <button onclick="window.location.reload()" class="btn-primary px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto">
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
+            <button onclick="window.location.reload()" class="bg-gradient-to-r from-amber-500 to-orange-500 px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto hover:shadow-xl transition-all">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
               Muat Ulang
             </button>
-            <a href="/login" class="btn-success inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto justify-center">
-              Login Ulang
+            <a href="/user/dashboard" class="bg-gradient-to-r from-green-500 to-emerald-500 inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 text-white font-semibold rounded-xl shadow-lg text-sm sm:text-base w-full sm:w-auto hover:shadow-xl transition-all">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              </svg>
+              Ke Dashboard
             </a>
           </div>
         </div>

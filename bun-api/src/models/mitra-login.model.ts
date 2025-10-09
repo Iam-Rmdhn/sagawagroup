@@ -1,5 +1,6 @@
 import { mitraLoginCollection } from "../lib/db";
 import { getCurrentTimestamp } from "../utils/date";
+import validator from "validator";
 
 export interface MitraLogin {
   _id?: string;
@@ -22,12 +23,8 @@ export class MitraLoginModel {
     const now = getCurrentTimestamp();
     // Pastikan email dinormalisasi sebelum simpan
     let normalizedEmail = loginData.email.trim().toLowerCase();
-    try {
-      // Gunakan validator jika tersedia
-      const validator = await import("validator");
-      normalizedEmail =
-        validator.default.normalizeEmail(normalizedEmail) || normalizedEmail;
-    } catch {}
+    normalizedEmail = validator.normalizeEmail(normalizedEmail) || normalizedEmail;
+    
     const newLogin: Omit<MitraLogin, "_id"> = {
       ...loginData,
       email: normalizedEmail,
@@ -40,30 +37,22 @@ export class MitraLoginModel {
   }
 
   static async findByEmail(email: string): Promise<MitraLogin | null> {
-    // Validasi dan normalisasi email (termasuk titik) dengan regex standar dan validator
+    // Validasi dan normalisasi email dengan regex standar
     const emailRegex = /^[\w.!#$%&'*+/=?^_`{|}~-]+@[\w-]+(\.[\w-]+)+$/;
     let cleanEmail = email.trim().toLowerCase();
-    try {
-      const validator = await import("validator");
-      cleanEmail = validator.default.normalizeEmail(cleanEmail) || cleanEmail;
-    } catch {}
+    cleanEmail = validator.normalizeEmail(cleanEmail) || cleanEmail;
+    
     if (!emailRegex.test(cleanEmail)) {
       throw new Error("Format email tidak valid");
     }
-    // Ambil user dengan email sama persis (case-insensitive, tanpa $regex)
-    const result = await mitraLoginCollection.findOne({ email: cleanEmail });
-    if (result) return result as MitraLogin;
-    // Jika tidak ketemu, fallback: cari semua dan bandingkan manual (untuk data lama)
-    const all = await mitraLoginCollection.find({}).toArray();
-    const found = all.find((u: any) => {
-      let uEmail = (u.email || "").trim().toLowerCase();
-      try {
-        const validator = require("validator");
-        uEmail = validator.normalizeEmail(uEmail) || uEmail;
-      } catch {}
-      return uEmail === cleanEmail;
+    
+    // Query langsung dengan email yang sudah dinormalisasi
+    // Database query sudah case-insensitive di MongoDB dengan collation
+    const result = await mitraLoginCollection.findOne({ 
+      email: cleanEmail 
     });
-    return found ? (found as MitraLogin) : null;
+    
+    return result ? (result as MitraLogin) : null;
   }
 
   static async findById(id: string): Promise<MitraLogin | null> {
@@ -100,10 +89,8 @@ export class MitraLoginModel {
   static async updateLastLogin(email: string): Promise<void> {
     const now = getCurrentTimestamp();
     let cleanEmail = email.trim().toLowerCase();
-    try {
-      const validator = await import("validator");
-      cleanEmail = validator.default.normalizeEmail(cleanEmail) || cleanEmail;
-    } catch {}
+    cleanEmail = validator.normalizeEmail(cleanEmail) || cleanEmail;
+    
     await mitraLoginCollection.updateOne(
       { email: cleanEmail },
       { $set: { lastLogin: now, updatedAt: now } }

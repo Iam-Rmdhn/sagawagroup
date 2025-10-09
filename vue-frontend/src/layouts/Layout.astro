@@ -13,11 +13,14 @@ const {
     url = "https://www.sagawagroup.id"
 } = Astro.props;
 
+import '../styles/global.css';
+
 const baseURL = "https://www.sagawagroup.id";
 const canonicalURL = baseURL + Astro.url.pathname;
 const imageURL = baseURL + image;
 
-import '../styles/global.css';
+// Get API URL from environment
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
 ---
 
 <!DOCTYPE html>
@@ -26,10 +29,8 @@ import '../styles/global.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Cache Control - Force fresh content on every visit -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <!-- API Configuration for client-side scripts -->
+    <meta name="api-url" content={API_URL} />
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -138,6 +139,9 @@ import '../styles/global.css';
 
     <!-- Additional Google Site Verification -->
     <meta name="google-site-verification" content="t4IpNsSi4j_2l4kqi6hOLc9CfzMBFgNURMASGtuSF4U" />
+    
+    <!-- Service Worker Cleanup & Cache Busting -->
+    <script src="/sw-cleanup.js" defer></script>
     
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -978,10 +978,26 @@ show_status() {
     curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" "http://localhost:${API_PORT}/api/health" || echo "API not responding"
     echo ""
     
+    # Clear cache setelah deployment
+    print_status "Clearing cache to force fresh content..."
+    if [ -f "$PROJECT_DIR/clear-cache.sh" ]; then
+        bash "$PROJECT_DIR/clear-cache.sh" || print_warning "Cache clear script failed (non-critical)"
+    else
+        print_warning "clear-cache.sh not found, skipping cache clear"
+        # Manual cache clear as fallback
+        rm -rf /var/cache/nginx/* 2>/dev/null || true
+        nginx -s reload 2>/dev/null || systemctl reload nginx
+    fi
+    
     print_success "Deployment completed successfully!"
     print_status "Your application should now be accessible at:"
     echo -e "  ${GREEN}https://${DOMAIN}${NC}"
     echo -e "  ${GREEN}https://${WWW_DOMAIN}${NC}"
+    echo ""
+    print_warning "📝 IMPORTANT: If you still see old content:"
+    echo "   1. Hard refresh: Ctrl+Shift+R (or Cmd+Shift+R on Mac)"
+    echo "   2. Clear browser cache"
+    echo "   3. Or test in incognito/private mode"
 }
 
 # Function to create health check endpoint
