@@ -26,12 +26,39 @@ setInterval(() => {
 export async function analyticsRoute(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const path = url.pathname;
+  const origin = req.headers.get("origin") || "";
+
+  // Define allowed origins for production
+  const allowedOrigins = [
+    "https://sagawagroup.id",
+    "https://www.sagawagroup.id",
+    "https://admin.sagawagroup.id",
+    "https://tes.bun.tams.my.id"  // Test domain
+  ];
+
+  // Determine the appropriate CORS origin
+  let allowedOrigin = "*";
+
+  if (process.env.NODE_ENV === "development") {
+    // In development, allow any origin
+    allowedOrigin = origin || "*";
+  } else {
+    // In production, only allow specific origins
+    if (origin && allowedOrigins.includes(origin)) {
+      allowedOrigin = origin;
+    } else {
+      // Default to the main domain if no valid origin is provided
+      allowedOrigin = "https://www.sagawagroup.id";
+    }
+  }
 
   // CORS headers
   const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept, Origin",
+    "Access-Control-Allow-Credentials": "true",
+    "Vary": "Origin",
   };
 
   // Handle preflight
