@@ -788,10 +788,9 @@ server {
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
         
-        # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://__DOMAIN__, https://__WWW_DOMAIN__' always;
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
-        add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization' always;
+        # CORS headers - Let the backend handle CORS to avoid duplicate headers
+        # The Bun API server will handle CORS properly based on the origin
+        # Remove nginx CORS headers to prevent conflicts
     }
     
     # Login endpoint with stricter rate limiting
