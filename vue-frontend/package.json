@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:prod": "NODE_ENV=production astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test:api": "node test-api.mjs",
