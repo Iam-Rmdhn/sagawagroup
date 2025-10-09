@@ -167,7 +167,7 @@ import '../styles/global.css';
     <!-- Visitor Analytics Tracking -->
     <script>
         (function() {
-            const API_URL = 'https://api.sagawagroup.id';
+            const API_URL = import.meta.env.PUBLIC_API_URL || 'https://www.sagawagroup.id';
             let sessionId = localStorage.getItem('visitor_session_id');
             let heartbeatInterval = null;
             
