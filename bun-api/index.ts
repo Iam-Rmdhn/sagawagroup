@@ -12,7 +12,7 @@ const PORT = ENV.PORT;
 
 Bun.serve({
   port: PORT,
-  hostname: "0.0.0.0", // Allow access from any IP address
+  hostname: "0.0.0.0",
   async fetch(req) {
     const url = new URL(req.url);
     const host = req.headers.get("host") || "";
