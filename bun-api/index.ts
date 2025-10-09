@@ -19,28 +19,43 @@ Bun.serve({
     const origin = req.headers.get("origin") || "";
     const isAdminSubdomain = host.includes("admin.sagawagroup.id");
 
+    // Define allowed origins for production
+    const allowedOrigins = [
+      "https://sagawagroup.id",
+      "https://www.sagawagroup.id",
+      "https://admin.sagawagroup.id",
+      "https://tes.bun.tams.my.id"  // Test domain
+    ];
+
     // Add comprehensive CORS headers to handle Chrome's stricter policies
     const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers":
         "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token, Cache-Control, Pragma, Expires",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "86400",
-      Vary: "Origin",
+      "Vary": "Origin",
     };
 
-    // Enhanced CORS for admin subdomain or when origin is specified
-    if (isAdminSubdomain || origin) {
-      // For development, allow localhost origins
-      if (ENV.NODE_ENV === "development") {
-        corsHeaders["Access-Control-Allow-Origin"] = origin || "*";
+    // Determine the appropriate CORS origin
+    let allowedOrigin = "*";
+
+    if (ENV.NODE_ENV === "development") {
+      // In development, allow any origin
+      allowedOrigin = origin || "*";
+    } else {
+      // In production, only allow specific origins
+      if (origin && allowedOrigins.includes(origin)) {
+        allowedOrigin = origin;
+      } else if (isAdminSubdomain) {
+        allowedOrigin = "https://admin.sagawagroup.id";
       } else {
-        corsHeaders["Access-Control-Allow-Origin"] =
-          origin || `https://${host}`;
+        // Default to the main domain if no valid origin is provided
+        allowedOrigin = "https://www.sagawagroup.id";
       }
-      corsHeaders["Vary"] = "Origin";
     }
+
+    corsHeaders["Access-Control-Allow-Origin"] = allowedOrigin;
 
     // Handle preflight requests
     if (req.method === "OPTIONS") {
