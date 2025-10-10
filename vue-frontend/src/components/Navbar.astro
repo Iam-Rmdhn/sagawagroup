@@ -30,7 +30,7 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
             Beranda
           </a>
           
-          <div class="relative">
+          <div class="relative" id="mitra-dropdown-wrapper">
             <a href="/mitra" class="nav-link flex items-center text-gray-600 px-2 py-2 text-sm font-medium transition-colors duration-200 relative">
               <svg class="w-4 h-4 mr-1 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                 <path d="m11 17 2 2a1 1 0 1 0 3-3"/>
@@ -46,58 +46,53 @@ import independantBrandImg from '../assets/img/gerobak/indepandent_brand.jpg?url
                 </svg>
               </button>
             </a>
-            <div id="desktop-mitra-menu" class="absolute z-10 opacity-0 invisible transform -translate-y-2 bg-white shadow-xl border border-gray-200 rounded-lg mt-2 min-w-full whitespace-nowrap transition-all duration-300 ease-linear w-96">
-              <div class="p-4">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3 border-b border-gray-100 pb-2">Pilih Produk Kemitraan</h3>
-                <div class="space-y-2">
-                  <a href="/mitra/kagawa-ricebowl" class="group flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200">
-                    <div class="flex-shrink-0 mr-3">
-                      <img src={kagawaRicebowlImg} alt="Kagawa Ricebowl" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+            <div id="desktop-mitra-menu" class="fixed left-0 right-0 z-10 opacity-0 invisible -translate-y-2 bg-white bg-opacity-50 shadow-2xl border-t border-gray-200 transition-all duration-300 ease-linear" style="top: 64px;">
+              <div class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <h3 class="text-base font-bold text-gray-900 mb-5 pb-3 border-b-2 border-gray-200">Pilih Produk Kemitraan</h3>
+                <div class="grid grid-cols-5 gap-6">
+                  <!-- Kagawa Ricebowl -->
+                  <a href="/mitra/kagawa-ricebowl" class="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-amber-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-orange-200 hover:border-opacity-90">
+                    <div class="w-20 h-20 mb-3 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                      <img src={kagawaRicebowlImg} alt="Kagawa Ricebowl" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 group-hover:text-amber-600 transition-colors duration-200">Kagawa Ricebowl</p>
-                      <p class="text-xs text-gray-500 line-clamp-2 font-normal leading-relaxed">Konsep rice bowl premium dengan cita rasa Jepang yang autentik dan berkualitas tinggi</p>
-                    </div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">Kagawa Ricebowl</p>
+                    <p class="text-xs text-gray-500 leading-tight line-clamp-2">Premium rice bowl dengan cita rasa Jepang</p>
                   </a>
                   
-                  <a href="/mitra/kagawa-coffee-corner" class="group flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200">
-                    <div class="flex-shrink-0 mr-3">
-                      <img src={kagawaCoffeeCornerImg} alt="Kagawa Coffee Corner" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+                  <!-- Kagawa Coffee Corner -->
+                  <a href="/mitra/kagawa-coffee-corner" class="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-amber-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-orange-200">
+                    <div class="w-20 h-20 mb-3 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                      <img src={kagawaCoffeeCornerImg} alt="Kagawa Coffee Corner" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 group-hover:text-amber-600 transition-colors duration-200">Kagawa Coffee Corner</p>
-                      <p class="text-xs text-gray-500 line-clamp-2 font-normal leading-relaxed">Kedai kopi modern dengan menu specialty coffee dan light meals yang berkualitas</p>
-                    </div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">Kagawa Coffee Corner</p>
+                    <p class="text-xs text-gray-500 leading-tight line-clamp-2">Kedai kopi modern specialty coffee</p>
                   </a>
                   
-                  <a href="/mitra/kagawa-coffee-ricebowl" class="group flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200">
-                    <div class="flex-shrink-0 mr-3">
-                      <img src={kagawaCoffeeRicebowlImg} alt="Kagawa Coffee & Ricebowl" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+                  <!-- Kagawa Coffee & Ricebowl -->
+                  <a href="/mitra/kagawa-coffee-ricebowl" class="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-amber-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-orange-200">
+                    <div class="w-20 h-20 mb-3 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                      <img src={kagawaCoffeeRicebowlImg} alt="Kagawa Coffee & Ricebowl" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 group-hover:text-amber-600 transition-colors duration-200">Kagawa Coffee & Ricebowl</p>
-                      <p class="text-xs text-gray-500 line-clamp-2 font-normal leading-relaxed">Kombinasi sempurna coffee corner dan ricebowl dalam satu gerobak yang praktis</p>
-                    </div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">Coffee & Ricebowl</p>
+                    <p class="text-xs text-gray-500 leading-tight line-clamp-2">Kombinasi coffee dan ricebowl</p>
                   </a>
                   
-                  <a href="/mitra/rm-nusantara" class="group flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200">
-                    <div class="flex-shrink-0 mr-3">
-                      <img src={rmNusantaraImg} alt="RM Nusantara" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+                  <!-- RM Nusantara -->
+                  <a href="/mitra/rm-nusantara" class="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-amber-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-orange-200">
+                    <div class="w-20 h-20 mb-3 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                      <img src={rmNusantaraImg} alt="RM Nusantara" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 group-hover:text-amber-600 transition-colors duration-200">RM Nusantara</p>
-                      <p class="text-xs text-gray-500 line-clamp-2 font-normal leading-relaxed">Rumah makan dengan menu masakan nusantara yang lezat, terjangkau dan autentik</p>
-                    </div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">RM Nusantara</p>
+                    <p class="text-xs text-gray-500 leading-tight line-clamp-2">Masakan nusantara lezat dan autentik</p>
                   </a>
                   
-                  <a href="/mitra/indepandant-brand" class="group flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200">
-                    <div class="flex-shrink-0 mr-3">
-                      <img src={independantBrandImg} alt="Independent Brand" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+                  <!-- Independent Brand -->
+                  <a href="/mitra/indepandant-brand" class="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-amber-50 transition-all duration-300 hover:shadow-md border border-transparent hover:border-orange-200">
+                    <div class="w-20 h-20 mb-3 overflow-hidden rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
+                      <img src={independantBrandImg} alt="Independent Brand" class="w-full h-full object-cover">
                     </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900 group-hover:text-amber-600 transition-colors duration-200">Independent Brand</p>
-                      <p class="text-xs text-gray-500 line-clamp-2 font-normal leading-relaxed">Kembangkan brand Anda sendiri dengan dukungan penuh dari Sagawa Group</p>
-                    </div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">Independent Brand</p>
+                    <p class="text-xs text-gray-500 leading-tight line-clamp-2">Brand sendiri dengan dukungan penuh</p>
                   </a>
                 </div>
               </div>

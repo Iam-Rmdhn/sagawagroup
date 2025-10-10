@@ -10,15 +10,6 @@ import Footer from '../components/Footer.astro';
 		<main class="flex-1">
 			<!-- Hero Section -->
 			<section class="hero-section relative pt-24 pb-32 md:pt-24 md:pb-36 px-4 text-center text-white bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 overflow-hidden">
-                <!-- Background decorative elements with updated colors matching contact page -->
-                <div class="absolute inset-0 opacity-10">
-                    <div class="animate-float absolute top-20 left-10 w-16 h-16 bg-gradient-to-br from-white to-amber-100 rounded-full"></div>
-                    <div class="animate-float delay-700 absolute top-40 right-20 w-12 h-12 bg-gradient-to-br from-amber-200 to-amber-300 rounded-full"></div>
-                    <div class="animate-float delay-500 absolute bottom-32 left-1/4 w-8 h-8 bg-gradient-to-br from-orange-200 to-orange-300 rounded-full"></div>
-                    <div class="animate-float delay-300 absolute bottom-20 right-1/3 w-20 h-20 bg-gradient-to-br from-red-200 to-red-300 rounded-full"></div>
-                    <div class="animate-float delay-200 absolute top-1/2 left-1/3 w-10 h-10 bg-gradient-to-br from-yellow-200 to-amber-200 rounded-full"></div>
-                </div>
-                
                 <div class="container mx-auto max-w-4xl relative z-30">
                     <h5 class="text-sm sm:text-base text-amber-200 font-semibold uppercase tracking-wider mb-3 animate-fade-in-up">
                         Tentang Kami
@@ -45,7 +36,7 @@ import Footer from '../components/Footer.astro';
             </section>
 
 			<!-- Company Info Section -->
-			<section class="pt-12 pb-12 sm:py-16 lg:py-20 bg-white relative mt-[-1px]">
+			<section class="pt-12 pb-6 sm:py-16 lg:py-20 bg-white relative mt-[-1px]">
 				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 						<div class="animate-fade-in-left scroll-animate opacity-0 transform translate-x-[-50px]">
@@ -102,15 +93,10 @@ import Footer from '../components/Footer.astro';
 			</section>
 
 			<!-- Vision & Mission Section -->
-			<section class="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-amber-100 to-orange-100 relative overflow-hidden">
-				<!-- Animated background elements -->
-				<div class="absolute inset-0 opacity-5">
-					<div class="animate-float absolute top-20 right-10 w-32 h-32 bg-amber-300 rounded-full"></div>
-					<div class="animate-float delay-1000 absolute bottom-20 left-10 w-24 h-24 bg-orange-300 rounded-full"></div>
-				</div>
+			<section class="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
 				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 					<div class="text-center mb-8 sm:mb-12 lg:mb-16 scroll-animate opacity-0 transform translate-y-[30px]">
-						<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 hover:text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">Visi & Misi</h2>
+						<h2 class="text-3xl sm:text-4xl font-bold text-amber-600 transition-all duration-500 animate-fade-in-up hover:scale-105">Visi & Misi</h2>
 						<p class="text-gray-600 animate-fade-in-up animation-delay-200">Komitmen kami untuk masa depan yang lebih baik</p>
 					</div>
 					
@@ -177,7 +163,7 @@ import Footer from '../components/Footer.astro';
 				<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 						<div class="animate-fade-in-left">
-							<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 hover:text-amber-600 transition-colors duration-300">Target Pasar</h2>
+							<h2 class="text-3xl sm:text-4xl font-bold text-amber-600 transition-colors duration-300">Target Pasar</h2>
 							<div class="space-y-4 sm:space-y-6">
 								<div class="flex items-start space-x-4 group hover:translate-x-2 transition-all duration-300">
 									<div class="flex-shrink-0 w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-amber-600 transition-all duration-300">
@@ -327,9 +313,13 @@ import Footer from '../components/Footer.astro';
 									<p class="text-sm opacity-80">Kantor Pusat</p>
 								</div>
 							</div>
-							<p class="text-sm leading-relaxed group-hover:text-amber-100 transition-colors duration-300">
+							<p class="text-sm leading-relaxed group-hover:text-amber-100 transition-colors duration-300 mb-4">
 								Jl. Sawo No. 156, RT: 04/01 Cipedak-Jagakarsa, Jakarta Selatan 12630
 							</p>
+							<a href="https://maps.google.com/?q=Jl.+Sawo+No.+156,+RT:+04/01+Cipedak-Jagakarsa,+Jakarta+Selatan+12630" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg text-sm font-medium hover:bg-white/30 hover:border-white/50 transition-all duration-300 group-hover:scale-105">
+								<svg class="w-4 h-4 mr-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pinned-icon lucide-map-pinned"><path d="M18 8c0 3.613-3.869 7.429-5.393 8.795a1 1 0 0 1-1.214 0C9.87 15.429 6 11.613 6 8a6 6 0 0 1 12 0"/><circle cx="12" cy="8" r="2"/><path d="M8.714 14h-3.71a1 1 0 0 0-.948.683l-2.004 6A1 1 0 0 0 3 22h18a1 1 0 0 0 .948-1.316l-2-6a1 1 0 0 0-.949-.684h-3.712"/></svg>
+								Lihat di Google Maps
+							</a>
 						</div>
 						
 						<!-- Social Media -->
@@ -346,25 +336,25 @@ import Footer from '../components/Footer.astro';
 								</div>
 							</div>
 							<div class="space-y-2 text-sm group-hover:text-amber-200 transition-colors duration-300">
-								<a href="https://www.instagram.com/sagawagroup?igsh=MW1scmxocXZvd3B1bg==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-white transition-colors duration-300 cursor-pointer">
+								<a href="https://www.instagram.com/sagawagroup?igsh=MW1scmxocXZvd3B1bg==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-red-500 transition-colors duration-300 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
 									</svg>
 									<span>sagawagroup</span>
 								</a>
-								<a href="https://www.instagram.com/kagawacoffeecorner.id?igsh=M2V6bDk4c2tlMjRp" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-white transition-colors duration-300 cursor-pointer">
+								<a href="https://www.instagram.com/kagawacoffeecorner.id?igsh=M2V6bDk4c2tlMjRp" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-red-500 transition-colors duration-300 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
 									</svg>
 									<span>kagawacoffeecorner.id</span>
 								</a>
-								<a href="https://www.instagram.com/kagawaricebowl.id?igsh=MTg2YjNrNHpxeWZ6OQ==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-white transition-colors duration-300 cursor-pointer">
+								<a href="https://www.instagram.com/kagawaricebowl.id?igsh=MTg2YjNrNHpxeWZ6OQ==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-red-500 transition-colors duration-300 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
 									</svg>
 									<span>kagawaricebowl.id</span>
 								</a>
-								<a href="https://www.instagram.com/rm.nusantara_bysagawagroup?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-white transition-colors duration-300 cursor-pointer">
+								<a href="https://www.instagram.com/rm.nusantara_bysagawagroup?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-red-500 transition-colors duration-300 cursor-pointer">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
 									</svg>
@@ -448,14 +438,6 @@ import Footer from '../components/Footer.astro';
 		}
 	}
 
-	.animate-float {
-		animation: float 3s ease-in-out infinite;
-	}
-
-	.animate-float-slow {
-		animation: float-slow 4s ease-in-out infinite;
-	}
-
 	.animate-fade-in-up {
 		animation: fade-in-up 0.8s ease-out;
 	}
@@ -501,7 +483,6 @@ import Footer from '../components/Footer.astro';
 
 	/* Performance optimizations for smooth scrolling */
 	.scroll-animate,
-	.animate-float,
 	.animate-fade-in-up,
 	.animate-fade-in-left,
 	.animate-fade-in-right {
