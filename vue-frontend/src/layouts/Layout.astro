@@ -166,8 +166,9 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
         <slot />
     </main>
     <!-- Visitor Analytics Tracking -->
-    <script define:vars={{ apiUrl: import.meta.env.PUBLIC_API_URL }}>
+    <script>
         (function() {
+            // Get API URL from environment or use production URL as fallback
             const API_URL = import.meta.env.PUBLIC_API_URL || 'https://www.sagawagroup.id';
             let sessionId = localStorage.getItem('visitor_session_id');
             let heartbeatInterval = null;
