@@ -129,7 +129,7 @@ export async function getAllMitraLoginService() {
 
 export async function adminLoginService(email: string, password: string) {
   // Check for hardcoded admin credentials first
-  if (email === 'admin@sagawagroup.id' && password === '@sagawagrup222!') {
+  if (email === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
     const token = generateToken({
       id: 'admin-hardcoded',
       email: email,
@@ -245,8 +245,11 @@ export async function getMitraByIdService(mitraId: string) {
     ): Promise<string | undefined> => {
       if (!filename || filename === "") return undefined;
 
+      console.log(`🔍 Processing image: ${filename.substring(0, 50)}...`);
+
       // If it's already base64 data URL, return it directly
       if (filename.startsWith("data:")) {
+        console.log('  ✓ Already data URL format');
         return filename;
       }
 
@@ -256,11 +259,59 @@ export async function getMitraByIdService(mitraId: string) {
         !filename.includes(".") &&
         !filename.includes("/")
       ) {
+        console.log('  ✓ Detected base64 string, adding data URL prefix');
         // Assume it's base64 data, add data URL prefix
         return `data:image/jpeg;base64,${filename}`;
       }
 
-      // For any other case, try to return it as is (might be a filename or URL)
+      // If it's a file path, try to read and convert to base64
+      if (filename.includes("/") || filename.includes(".")) {
+        try {
+          const fs = await import("fs/promises");
+          const path = await import("path");
+          
+          // Construct full file path
+          let fullPath = filename;
+          if (!filename.startsWith("/")) {
+            // Relative path, assume it's in uploads folder
+            fullPath = path.join(process.cwd(), "uploads", filename);
+          } else if (filename.startsWith("/uploads/")) {
+            // Absolute path from root, construct from cwd
+            fullPath = path.join(process.cwd(), filename.substring(1));
+          }
+          
+          console.log(`  📂 Trying to read file: ${fullPath}`);
+          
+          // Check if file exists
+          try {
+            await fs.access(fullPath);
+            const fileBuffer = await fs.readFile(fullPath);
+            const base64Data = fileBuffer.toString('base64');
+            
+            // Detect image type from extension
+            const ext = path.extname(fullPath).toLowerCase();
+            let mimeType = 'image/jpeg';
+            if (ext === '.png') mimeType = 'image/png';
+            else if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
+            else if (ext === '.gif') mimeType = 'image/gif';
+            else if (ext === '.webp') mimeType = 'image/webp';
+            
+            console.log(`  ✅ File read successfully, type: ${mimeType}`);
+            return `data:${mimeType};base64,${base64Data}`;
+          } catch (fileError) {
+            console.log(`  ⚠️  File not found: ${fullPath}`);
+            // File doesn't exist, return path as is for URL-based loading
+            return filename.startsWith('/') ? filename : `/uploads/${filename}`;
+          }
+        } catch (error) {
+          console.error('  ❌ Error reading file:', error);
+          // Return path as is for URL-based loading
+          return filename.startsWith('/') ? filename : `/uploads/${filename}`;
+        }
+      }
+
+      // For any other case, return as is
+      console.log('  ↪ Returning as is');
       return filename;
     };
 

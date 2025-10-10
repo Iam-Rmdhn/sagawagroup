@@ -393,7 +393,7 @@ import logoLogin from '../assets/img/sagawa_logo.svg';
             let result;
             
             // Check if it's admin login with hardcoded credentials
-            if (sanitizedEmail === 'admin@sagawagroup.id' && password === '@sagawagrup222!') {
+            if (sanitizedEmail === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
               // Use admin login endpoint to get valid token
               response = await fetch(`${API_URL}/api/admin/login`, {
                 method: 'POST',

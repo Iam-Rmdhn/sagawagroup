@@ -1,6 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import sagawaLogo from '../../assets/img/logo_s.svg?url';
+
+// Get API URL from environment
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
 ---
 
 <Layout title="Form Pelunasan Kewajiban">
@@ -97,16 +100,9 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
   </style>
 
   <div id="formPelunasanContainer">
-    <script type="module">
+    <script is:inline define:vars={{ apiUrl: API_URL }}>
       document.addEventListener('DOMContentLoaded', async () => {
-        let API_URL = 'http://localhost:3000';
-        try {
-          if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL) {
-            if (import.meta.env.PUBLIC_API_URL && import.meta.env.PUBLIC_API_URL.startsWith('http')) {
-              API_URL = import.meta.env.PUBLIC_API_URL;
-            }
-          }
-        } catch (e) { /* fallback to localhost */ }
+        const API_URL = apiUrl || 'http://localhost:3000';
         const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
         if (email) {
           try {
@@ -323,7 +319,7 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
   </div>
 </Layout>
 
-<script type="module">
+<script is:inline define:vars={{ apiUrl: API_URL }}>
   // Input Sanitizer Class
   class InputSanitizer {
     /**
@@ -447,21 +443,32 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
 
     setupInputSanitization();
 
-    const API_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PUBLIC_API_URL)
-      ? import.meta.env.PUBLIC_API_URL
-      : 'http://localhost:3000';
+    const API_URL = apiUrl || 'http://localhost:3000';
     const email = localStorage.getItem('mitraUserEmail') || localStorage.getItem('email');
     const msg = document.getElementById('formPelunasanMsg');
+    
+    console.log('Form Pelunasan - API_URL:', API_URL);
+    console.log('Form Pelunasan - Email:', email);
+    
     if (!email) {
       msg.textContent = 'Email login tidak ditemukan. Silakan login ulang.';
       msg.className = 'text-red-600 mt-4 text-center';
       return;
     }
     try {
-      const res = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`);
+      const fetchUrl = `${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`;
+      console.log('Form Pelunasan - Fetching from:', fetchUrl);
+      
+      const res = await fetch(fetchUrl);
+      console.log('Form Pelunasan - Response status:', res.status);
+      
       const data = await res.json();
+      console.log('Form Pelunasan - Response data:', data);
+      
       if (!res.ok || data.error) {
-        msg.textContent = 'Data mitra tidak ditemukan. Silakan login ulang.';
+        const errorMsg = data.error || 'Data mitra tidak ditemukan';
+        console.error('Form Pelunasan - Error:', errorMsg);
+        msg.textContent = `${errorMsg}. Silakan login ulang.`;
         msg.className = 'text-red-600 mt-4 text-center';
         return;
       }
@@ -480,7 +487,8 @@ import sagawaLogo from '../../assets/img/logo_s.svg?url';
         nominalPelunasan.readOnly = false;
       }
     } catch (e) {
-      msg.textContent = 'Gagal mengambil data mitra.';
+      console.error('Form Pelunasan - Fetch error:', e);
+      msg.textContent = `Gagal mengambil data mitra: ${e.message}`;
       msg.className = 'text-red-600 mt-4 text-center';
       return;
     }

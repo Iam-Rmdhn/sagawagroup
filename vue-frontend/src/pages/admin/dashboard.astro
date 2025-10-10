@@ -2078,6 +2078,33 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     };
 
+    // Helper function to process image data for display
+    const processImageData = (imageData: string | undefined): string => {
+      if (!imageData || imageData === '') return '';
+      
+      // If already a data URL, return as is
+      if (imageData.startsWith('data:')) return imageData;
+      
+      // If it's a URL, return as is
+      if (imageData.startsWith('http://') || imageData.startsWith('https://')) return imageData;
+      
+      // If it's a file path
+      if (imageData.startsWith('/uploads/')) return `${API_URL}${imageData}`;
+      
+      // If it looks like base64 (long string without dots or slashes)
+      if (imageData.length > 100 && !imageData.includes('.') && !imageData.includes('/')) {
+        return `data:image/jpeg;base64,${imageData}`;
+      }
+      
+      // Default: treat as filename in uploads folder
+      return `${API_URL}/uploads/${imageData}`;
+    };
+
+    // Log image data for debugging
+    console.log('📸 Image data in mitra object:');
+    console.log('  fotoKTP:', mitra.fotoKTP ? mitra.fotoKTP.substring(0, 50) + '...' : 'not available');
+    console.log('  buktiTransfer:', mitra.buktiTransfer ? mitra.buktiTransfer.substring(0, 50) + '...' : 'not available');
+
     // Check pelunasan status jika paket adalah DP
     let pelunasanStatusHTML = '';
     if (mitra.nilaiPaketUsaha === 'DP') {
@@ -2253,10 +2280,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             </div>
             ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
               <div class="image-container aspect-video relative">
-                <img src="${mitra.fotoKTP}" 
+                <img src="${processImageData(mitra.fotoKTP)}" 
                      alt="Foto KTP" 
                      class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${mitra.fotoKTP}', 'Foto KTP - ${mitra.namaMitra}')"
+                     onclick="openImageModal('${mitra.fotoKTP.replace(/'/g, "\\'")}', 'Foto KTP - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="image-overlay">
                   <span>Klik untuk memperbesar</span>
@@ -2292,10 +2319,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             </div>
             ${mitra.buktiTransfer && mitra.buktiTransfer !== '' ? `
               <div class="image-container aspect-video relative">
-                <img src="${mitra.buktiTransfer}" 
+                <img src="${processImageData(mitra.buktiTransfer)}" 
                      alt="Bukti Transfer" 
                      class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${mitra.buktiTransfer}', 'Bukti Transfer - ${mitra.namaMitra}')"
+                     onclick="openImageModal('${mitra.buktiTransfer.replace(/'/g, "\\'")}', 'Bukti Transfer - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="image-overlay">
                   <span>Klik untuk memperbesar</span>
@@ -2369,34 +2396,77 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const titleElement = document.getElementById('modalImageTitle');
     
     if (modal && image && titleElement) {
+      console.log('Opening image modal for:', title);
+      console.log('Image data format:', imageData ? imageData.substring(0, 50) + '...' : 'empty');
+      
       // Show modal first
       modal.classList.remove('hidden');
       
       // Handle different image data formats
       let imageSrc = '';
-      if (imageData.startsWith('data:')) {
-        // Already a data URL
+      
+      if (!imageData || imageData === '') {
+        console.error('No image data provided');
+        imageSrc = '';
+      } else if (imageData.startsWith('data:')) {
+        // Already a complete data URL
         imageSrc = imageData;
+        console.log('✓ Using existing data URL');
+      } else if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+        // It's a URL
+        imageSrc = imageData;
+        console.log('✓ Using HTTP URL');
+      } else if (imageData.startsWith('/uploads/')) {
+        // It's a file path, construct URL
+        imageSrc = `${API_URL}${imageData}`;
+        console.log('✓ Constructed URL from path:', imageSrc);
+      } else if (imageData.length > 100 && !imageData.includes('.') && !imageData.includes('/')) {
+        // Likely base64 without prefix
+        // Try to detect image type from first bytes
+        if (imageData.startsWith('/9j/') || imageData.startsWith('iVBOR')) {
+          imageSrc = `data:image/jpeg;base64,${imageData}`;
+          console.log('✓ Added JPEG data URL prefix to base64');
+        } else {
+          imageSrc = `data:image/jpeg;base64,${imageData}`;
+          console.log('✓ Added default data URL prefix to base64');
+        }
       } else {
-        // Assume base64 data, add data URL prefix
-        imageSrc = `${imageData}`;
+        // Unknown format, try as filename in uploads folder
+        imageSrc = `${API_URL}/uploads/${imageData}`;
+        console.log('⚠ Unknown format, trying as filename:', imageSrc);
       }
       
       image.src = imageSrc;
       image.alt = title;
       titleElement.textContent = title;
       
+      // Clear any previous error messages
+      const existingError = image.parentElement?.querySelector('.error-message');
+      if (existingError) existingError.remove();
+      image.style.display = 'block';
+      
+      image.onload = function() {
+        console.log('✅ Image loaded successfully');
+      };
+      
       image.onerror = function() {
-        console.error('Failed to load image:', imageSrc.substring(0, 100));
+        console.error('❌ Failed to load image');
+        console.error('   Image src:', imageSrc.substring(0, 100));
+        console.error('   Original data:', imageData.substring(0, 100));
+        
         titleElement.textContent = title + ' (Gagal memuat gambar)';
-        // Show a placeholder message
         image.style.display = 'none';
+        
         const errorMsg = document.createElement('div');
-        errorMsg.className = 'text-white text-center p-8';
+        errorMsg.className = 'error-message text-white text-center p-8';
         errorMsg.innerHTML = `
           <div class="text-red-500 bg-white p-4 rounded">
-            <p class="text-lg">Gagal memuat gambar</p>
-            <p class="text-sm mt-2">Data gambar mungkin rusak</p>
+            <svg class="w-12 h-12 mx-auto mb-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-lg font-semibold">Gagal memuat gambar</p>
+            <p class="text-sm mt-2 text-gray-600">Format gambar tidak didukung atau data rusak</p>
+            <p class="text-xs mt-2 text-gray-500">Format: ${imageData.substring(0, 30)}...</p>
           </div>
         `;
         image.parentElement?.appendChild(errorMsg);

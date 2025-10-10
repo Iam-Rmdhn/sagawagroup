@@ -3,6 +3,11 @@
 .env.production
 .env.development
 
+# Sensitive files
+ADMIN-PASSWORD-UPDATE.md
+*-PASSWORD-*.md
+secrets.config
+
 # Node.js dependencies
 node_modules/
 
