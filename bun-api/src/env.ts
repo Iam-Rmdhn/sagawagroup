@@ -6,20 +6,20 @@ import path from "path";
 const nodeEnv = process.env.NODE_ENV || "development";
 
 // Determine which environment file to load
-const envFile = 
-  nodeEnv === "production" 
-    ? ".env.production" 
-    : ".env.development";
+const envFile =
+  nodeEnv === "production" ? ".env.production" : ".env.development";
 
 // Try multiple paths for the environment file
 const possiblePaths = [
   path.resolve(process.cwd(), envFile),
-  path.resolve(process.cwd(), '..', envFile),
-  path.resolve(process.cwd(), '.env'),
-  path.resolve(process.cwd(), '..', '.env')
+  path.resolve(process.cwd(), "..", envFile),
+  path.resolve(process.cwd(), ".env"),
+  path.resolve(process.cwd(), "..", ".env"),
 ];
 
-let result: dotenv.DotenvConfigOutput = { error: new Error("No environment file found") };
+let result: dotenv.DotenvConfigOutput = {
+  error: new Error("No environment file found"),
+};
 for (const envPath of possiblePaths) {
   result = dotenv.config({ path: envPath });
   if (!result.error) {
@@ -30,7 +30,9 @@ for (const envPath of possiblePaths) {
 
 // Check if the environment file was loaded successfully
 if (result.error) {
-  console.warn(`Warning: Could not load ${envFile} or .env from common locations, using default environment variables`);
+  console.warn(
+    `Warning: Could not load ${envFile} or .env from common locations, using default environment variables`
+  );
 }
 
 // Function to get required environment variables
@@ -50,11 +52,17 @@ function getEnvVar(name: string, defaultValue: string): string {
 // Function to parse comma-separated values
 function parseArray(value: string | undefined): string[] {
   if (!value) return [];
-  return value.split(",").map(item => item.trim()).filter(item => item.length > 0);
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
 }
 
 // Function to parse boolean values
-function parseBoolean(value: string | undefined, defaultValue: boolean): boolean {
+function parseBoolean(
+  value: string | undefined,
+  defaultValue: boolean
+): boolean {
   if (value === undefined) return defaultValue;
   return value.toLowerCase() === "true" || value === "1";
 }
@@ -76,14 +84,27 @@ if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
 export const ENV = {
   NODE_ENV: nodeEnv,
   PORT: portNum,
-  BASE_URL: getEnvVar("BASE_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:3000"),
+  BASE_URL: getEnvVar(
+    "BASE_URL",
+    nodeEnv === "production"
+      ? "https://www.sagawagroup.id"
+      : "http://localhost:3000"
+  ),
   CORS_ORIGIN: parseArray(process.env.CORS_ORIGIN),
   CORS_CREDENTIALS: parseBoolean(process.env.CORS_CREDENTIALS, false),
   JWT_SECRET: getRequiredEnvVar("JWT_SECRET"),
   ASTRA_DB_APPLICATION_TOKEN: getRequiredEnvVar("ASTRA_DB_APPLICATION_TOKEN"),
   ASTRA_DB_API_ENDPOINT: getRequiredEnvVar("ASTRA_DB_API_ENDPOINT"),
-  PUBLIC_API_URL: getEnvVar("PUBLIC_API_URL", nodeEnv === "production" ? "https://www.sagawagroup.id" : "http://localhost:3000"),
-  LOG_LEVEL: getEnvVar("LOG_LEVEL", nodeEnv === "production" ? "info" : "debug"),
+  PUBLIC_API_URL: getEnvVar(
+    "PUBLIC_API_URL",
+    nodeEnv === "production"
+      ? "https://www.sagawagroup.id"
+      : "http://localhost:3000"
+  ),
+  LOG_LEVEL: getEnvVar(
+    "LOG_LEVEL",
+    nodeEnv === "production" ? "info" : "debug"
+  ),
 };
 
 // Log environment info in development

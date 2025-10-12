@@ -16,21 +16,21 @@ export async function getOmsetData(req: Request): Promise<Response> {
     );
   }
   try {
-    // Omset hari ini (DR!H8:H38)
-    const omsetHariIniRes = await fetch(
+    // Profit bulan ini (K40)
+    const profitBulanIniRes = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!H8:H38?key=${API_KEY}`
     );
-    const omsetHariIniJson = await omsetHariIniRes.json();
-    const omsetHariIniArr =
-      omsetHariIniJson &&
-      typeof omsetHariIniJson === "object" &&
-      "values" in omsetHariIniJson
-        ? omsetHariIniJson.values
+    const profitBulanIniJson = await profitBulanIniRes.json();
+    const profitBulanIniArr =
+      profitBulanIniJson &&
+      typeof profitBulanIniJson === "object" &&
+      "values" in profitBulanIniJson
+        ? profitBulanIniJson.values
         : [];
-    const omsetHariIni =
-      Array.isArray(omsetHariIniArr) && omsetHariIniArr.length > 0
+    const profitBulanIni =
+      Array.isArray(profitBulanIniArr) && profitBulanIniArr.length > 0
         ? parseFloat(
-            (omsetHariIniArr[omsetHariIniArr.length - 1][0] || "0")
+            (profitBulanIniArr[profitBulanIniArr.length - 1][0] || "0")
               .replace(/Rp|\.|\s/g, "")
               .replace(",", ".")
           )
@@ -54,21 +54,21 @@ export async function getOmsetData(req: Request): Promise<Response> {
           )
         : 0;
 
-    // Belanja hari ini (DR!I8:I38)
-    const belanjaHariIniRes = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!I8:I38?key=${API_KEY}`
+    // Belanja Bulan ini
+    const belanjaBulanIniRes = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!I40?key=${API_KEY}`
     );
-    const belanjaHariIniJson = await belanjaHariIniRes.json();
-    const belanjaHariIniArr =
-      belanjaHariIniJson &&
-      typeof belanjaHariIniJson === "object" &&
-      "values" in belanjaHariIniJson
-        ? belanjaHariIniJson.values
+    const belanjaBulanIniJson = await belanjaBulanIniRes.json();
+    const belanjaBulanIniArr =
+      belanjaBulanIniJson &&
+      typeof belanjaBulanIniJson === "object" &&
+      "values" in belanjaBulanIniJson
+        ? belanjaBulanIniJson.values
         : [];
-    const belanjaHariIni =
-      Array.isArray(belanjaHariIniArr) && belanjaHariIniArr.length > 0
+    const belanjaBulanIni =
+      Array.isArray(belanjaBulanIniArr) && belanjaBulanIniArr.length > 0
         ? parseFloat(
-            (belanjaHariIniArr[belanjaHariIniArr.length - 1][0] || "0")
+            (belanjaBulanIniArr[belanjaBulanIniArr.length - 1][0] || "0")
               .replace(/Rp|\.|\s/g, "")
               .replace(",", ".")
           )
@@ -76,9 +76,9 @@ export async function getOmsetData(req: Request): Promise<Response> {
 
     return new Response(
       JSON.stringify({
-        omsetHariIni,
+        profitBulanIni,
         omsetBulanIni,
-        belanjaHariIni,
+        belanjaBulanIni,
       }),
       {
         status: 200,

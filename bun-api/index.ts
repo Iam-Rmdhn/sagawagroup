@@ -24,7 +24,7 @@ Bun.serve({
       "https://sagawagroup.id",
       "https://www.sagawagroup.id",
       "https://admin.sagawagroup.id",
-      "https://tes.bun.tams.my.id"  // Test domain
+      "https://tes.bun.tams.my.id", // Test domain
     ];
 
     // Add comprehensive CORS headers to handle Chrome's stricter policies
@@ -34,7 +34,7 @@ Bun.serve({
         "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token, Cache-Control, Pragma, Expires",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Max-Age": "86400",
-      "Vary": "Origin",
+      Vary: "Origin",
     };
 
     // Determine the appropriate CORS origin
