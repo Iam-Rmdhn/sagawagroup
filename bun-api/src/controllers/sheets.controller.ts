@@ -27,12 +27,21 @@ export async function getOmsetData(req: Request): Promise<Response> {
       "values" in profitBulanIniJson
         ? profitBulanIniJson.values
         : [];
+    // Debug: lihat raw value
+    const profitRawValue = Array.isArray(profitBulanIniArr) && profitBulanIniArr.length > 0
+      ? profitBulanIniArr[profitBulanIniArr.length - 1][0]
+      : "0";
+    console.log("🔍 Profit Raw Value dari Sheets:", profitRawValue, typeof profitRawValue);
+    
     const profitBulanIni =
       Array.isArray(profitBulanIniArr) && profitBulanIniArr.length > 0
         ? parseFloat(
             (profitBulanIniArr[profitBulanIniArr.length - 1][0] || "0")
-              .replace(/Rp|\.|\s/g, "")
-              .replace(",", ".")
+              .toString()
+              .replace(/Rp\s*/g, "")      // Hapus "Rp" dan spasi
+              .replace(/\./g, "")          // Hapus titik pemisah ribuan (format Indonesia)
+              .replace(/,/g, "")           // Hapus koma pemisah ribuan (format Amerika/Sheets)
+              .trim()
           )
         : 0;
 
@@ -41,6 +50,10 @@ export async function getOmsetData(req: Request): Promise<Response> {
       `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/DR!H40?key=${API_KEY}`
     );
     const omsetBulanIniJson = await omsetBulanIniRes.json();
+    // Debug: lihat raw value
+    const omsetRawValue = (omsetBulanIniJson as any)?.values?.[0]?.[0] || "0";
+    console.log("🔍 Omset Raw Value dari Sheets:", omsetRawValue, typeof omsetRawValue);
+    
     const omsetBulanIni =
       omsetBulanIniJson &&
       typeof omsetBulanIniJson === "object" &&
@@ -49,8 +62,11 @@ export async function getOmsetData(req: Request): Promise<Response> {
       omsetBulanIniJson.values[0]
         ? parseFloat(
             (omsetBulanIniJson.values[0][0] || "0")
-              .replace(/Rp|\.|\s/g, "")
-              .replace(",", ".")
+              .toString()
+              .replace(/Rp\s*/g, "")      // Hapus "Rp" dan spasi
+              .replace(/\./g, "")          // Hapus titik pemisah ribuan (format Indonesia)
+              .replace(/,/g, "")           // Hapus koma pemisah ribuan (format Amerika/Sheets)
+              .trim()
           )
         : 0;
 
@@ -65,14 +81,29 @@ export async function getOmsetData(req: Request): Promise<Response> {
       "values" in belanjaBulanIniJson
         ? belanjaBulanIniJson.values
         : [];
+    // Debug: lihat raw value
+    const belanjaRawValue = Array.isArray(belanjaBulanIniArr) && belanjaBulanIniArr.length > 0
+      ? belanjaBulanIniArr[belanjaBulanIniArr.length - 1][0]
+      : "0";
+    console.log("🔍 Belanja Raw Value dari Sheets:", belanjaRawValue, typeof belanjaRawValue);
+    
     const belanjaBulanIni =
       Array.isArray(belanjaBulanIniArr) && belanjaBulanIniArr.length > 0
         ? parseFloat(
             (belanjaBulanIniArr[belanjaBulanIniArr.length - 1][0] || "0")
-              .replace(/Rp|\.|\s/g, "")
-              .replace(",", ".")
+              .toString()
+              .replace(/Rp\s*/g, "")      // Hapus "Rp" dan spasi
+              .replace(/\./g, "")          // Hapus titik pemisah ribuan (format Indonesia)
+              .replace(/,/g, "")           // Hapus koma pemisah ribuan (format Amerika/Sheets)
+              .trim()
           )
         : 0;
+
+    // Log untuk debugging
+    console.log("📊 Data Omset dari Google Sheets:");
+    console.log("  Profit Bulan Ini:", profitBulanIni);
+    console.log("  Omset Bulan Ini:", omsetBulanIni);
+    console.log("  Belanja Bulan Ini:", belanjaBulanIni);
 
     return new Response(
       JSON.stringify({

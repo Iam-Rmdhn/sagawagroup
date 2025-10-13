@@ -184,9 +184,9 @@ export class SheetsService {
 
     const sanitized = value
       .toString()
-      .replace(/Rp|\s/g, "")
-      .replace(/\./g, "")
-      .replace(/,/g, ".");
+      .replace(/Rp\s*/g, "")      // Hapus "Rp" dan spasi
+      .replace(/\./g, "")          // Hapus titik pemisah ribuan (ID: 1.000.000)
+      .replace(/,/g, "");          // Hapus koma pemisah ribuan (US: 1,000,000)
 
     const parsed = Number.parseFloat(sanitized);
     return Number.isFinite(parsed) ? parsed : 0;

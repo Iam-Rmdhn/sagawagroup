@@ -4,19 +4,17 @@ import MitraSidebar from '../../components/mitra/sidebar/MitraSidebar.astro';
 import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
 // User Dashboard
 
-// Fetch data omset/belanja dari backend (SSR)
-let omsetHariIni = [];
-let omsetBulanIni = 0;
-let belanjaHariIni = [];
-try {
-   const res = await fetch("http://localhost:3000/api/sheets/omset");
-   if (res.ok) {
-      const data = await res.json();
-      omsetHariIni = data.omsetHariIni || [];
-      omsetBulanIni = data.omsetBulanIni || 0;
-      belanjaHariIni = data.belanjaHariIni || [];
-   }
-} catch (e) {}
+// Fungsi untuk format rupiah dengan pemisah titik
+function formatRupiah(amount: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+// Data akan di-load dengan animasi saat halaman dibuka
 ---
 
 <Layout title="Dashboard Mitra">
@@ -703,7 +701,7 @@ try {
                </div>
             </div>
          </div>
-
+         
          <!-- Nilai Paket Card - Mobile Only -->
          <div class="mb-6 sm:mb-8 lg:hidden">
             <div class="modern-card rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl">
@@ -719,27 +717,27 @@ try {
 
             <!-- Financial Summary Cards -->
             <div id="financial-summary-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-               <!-- Omset Harian -->
+               <!-- Card 1: Omset Harian -->
                <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.1s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
                      <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Profit Bulan Ini</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">Omset Harian</h3>
                         <div class="w-10 h-10 flex items-center justify-center">
                            <svg class="w-10 h-10 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"></path>
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-hari-ini" data-target="0">{omsetHariIni.length > 0 ? `Rp ${omsetHariIni[omsetHariIni.length-1][0]}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="profit-bulan-ini" data-target="0">Rp 0</p>
                      <div class="flex items-center justify-between">
-                        <p class="text-xs text-gray-600" id="omset-update-time">Dari Google Sheets</p>
+                        <p class="text-xs text-gray-600" id="profit-update-time">Memuat...</p>
                         <span class="text-xs font-medium px-2 py-1 bg-green-100 text-green-800 rounded-full">Hari Ini</span>
                      </div>
                   </div>
                </div>
 
-               <!-- Omset Bulanan -->
+               <!-- Card 2: Omset Bulan Ini -->
                <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.2s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
@@ -751,29 +749,29 @@ try {
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-bulanan" data-target="0">{omsetBulanIni ? `Rp ${omsetBulanIni}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="omset-bulanan" data-target="0">Rp 0</p>
                      <div class="flex items-center justify-between">
-                        <p class="text-xs text-gray-600" id="omset-bulanan-periode">0 hari dari Sheets</p>
+                        <p class="text-xs text-gray-600" id="omset-bulanan-periode">Memuat...</p>
                         <span class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Bulan Ini</span>
                      </div>
                   </div>
                </div>
 
-               <!-- Belanja Harian -->
+               <!-- Card 3: Pengeluaran Operasional Harian -->
                <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.3s">
                   <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-gradient-to-br from-amber-300/20 to-orange-400/20 rounded-full"></div>
                   <div class="relative z-10">
                      <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Operasional Bulan Ini</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">Pengeluaran Operasional Harian</h3>
                         <div class="w-10 h-10 flex items-center justify-center">
                            <svg class="w-10 h-10 text-orange-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                            </svg>
                         </div>
                      </div>
-                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="belanja-hari-ini" data-target="0">{belanjaHariIni.length > 0 ? `Rp ${belanjaHariIni[belanjaHariIni.length-1][0]}` : '-'}</p>
+                     <p class="stats-number text-3xl font-bold text-gray-900 mb-2" id="belanja-bulan-ini" data-target="0">Rp 0</p>
                      <div class="flex items-center justify-between">
-                        <p class="text-xs text-gray-600" id="belanja-update-time">Dari Google Sheets</p>
+                        <p class="text-xs text-gray-600" id="belanja-update-time">Memuat...</p>
                         <span class="text-xs font-medium px-2 py-1 bg-orange-100 text-orange-800 rounded-full">Hari Ini</span>
                      </div>
                   </div>
@@ -2438,7 +2436,7 @@ try {
       
       if (financialSection && (sistemKemitraanText.includes('autopilot') || sistemKemitraanText.includes('semi'))) {
          financialSection.classList.remove('hidden');
-         updateFinancialSummary(data);
+         // Data sudah di-render dari SSR, jadi tidak perlu load ulang
          initializeFinancialSection();
       } else if (financialSection) {
          financialSection.classList.add('hidden');
@@ -2452,32 +2450,6 @@ try {
             financialSummaryCards.classList.remove('hidden');
          }
       }
-   }
-
-   function updateFinancialSummary(data: any) {
-      // Mock data untuk demo - nanti bisa diambil dari API yang sesuai
-      const omsetHarian = Math.random() * 5000000; // Simulasi omset harian
-      const omsetBulanan = Math.random() * 100000000; // Simulasi omset bulanan
-      const belanjaHarian = Math.random() * 2000000; // Simulasi belanja harian
-
-      // Update Omset Harian
-      const omsetHarianElement = document.getElementById('omset-harian');
-      if (omsetHarianElement) {
-         omsetHarianElement.textContent = omsetHarian.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-      }
-
-      // Update Omset Bulanan
-      const omsetBulananElement = document.getElementById('omset-bulanan');
-      if (omsetBulananElement) {
-         omsetBulananElement.textContent = omsetBulanan.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-      }
-
-      // Update Belanja Harian
-      const belanjaHarianElement = document.getElementById('belanja-harian');
-      if (belanjaHarianElement) {
-         belanjaHarianElement.textContent = belanjaHarian.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-      }
-
    }
 
    function updateDetailedInfo(data: any) {
@@ -2745,11 +2717,20 @@ try {
    }
 
    // Financial Section Functions - Google Sheets Integration
+   
    function initializeFinancialSection() {
       loadUserSheetsUrl();
       setupSheetsEventListeners();
-      loadFinancialDataFromSheets();
-      setInterval(loadFinancialDataFromSheets, 5 * 60 * 1000);
+      
+      // Load data dengan animasi saat pertama kali buka
+      setTimeout(() => {
+         loadFinancialDataFromSheets();
+      }, 500); // Delay 500ms untuk smooth transition
+      
+      // Auto refresh setiap 5 menit
+      setInterval(() => {
+         loadFinancialDataFromSheets();
+      }, 5 * 60 * 1000);
    }
 
    async function saveUserSheetsUrl(url: string) {
@@ -3046,25 +3027,25 @@ try {
 
    // Update display functions (now receives data from Google Sheets)
    function updateTodayFinancialDisplay(data: any) {
-      const omsetElement = document.getElementById('omset-hari-ini');
-      const belanjaElement = document.getElementById('belanja-hari-ini');
-      const omsetTimeElement = document.getElementById('omset-update-time');
+      const profitElement = document.getElementById('profit-bulan-ini');
+      const belanjaElement = document.getElementById('belanja-bulan-ini');
+      const profitTimeElement = document.getElementById('profit-update-time');
       const belanjaTimeElement = document.getElementById('belanja-update-time');
 
-      if (omsetElement) {
-         // Use counter animation for omset
+      if (profitElement) {
+         // Use counter animation for profit (omset hari ini)
          const targetValue = data.omset || 0;
-         animateCounter(omsetElement, targetValue);
+         animateCounter(profitElement, targetValue, 1500);
       }
       
       if (belanjaElement) {
-         // Use counter animation for belanja
+         // Use counter animation for belanja (belanja hari ini)
          const targetValue = data.belanja || 0;
-         animateCounter(belanjaElement, targetValue);
+         animateCounter(belanjaElement, targetValue, 1500);
       }
 
-      if (omsetTimeElement) {
-         omsetTimeElement.textContent = 'Dari Google Sheets';
+      if (profitTimeElement) {
+         profitTimeElement.textContent = 'Dari Google Sheets';
       }
       
       if (belanjaTimeElement) {
