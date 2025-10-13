@@ -199,7 +199,6 @@ bower_components/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-bun.lock
 
 # Build outputs and generated files
 dist/
@@ -241,7 +240,6 @@ dev-server.log
 .#*
 
 # Lock files dari package managers
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 composer.lock
