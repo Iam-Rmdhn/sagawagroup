@@ -2957,12 +2957,25 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }).format(amount);
   }
 
-  // Visitor Analytics Functions
+  // Visitor Analytics Functions with AstraDB Integration
   let visitorUpdateInterval: NodeJS.Timeout | null = null;
 
   async function updateVisitorStats() {
     try {
-      const response = await fetch(`${API_URL}/api/analytics/stats`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // Silently skip if no token (user not logged in as admin)
+        console.debug('[Visitor] No admin token, skipping stats update');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/api/visitor/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (response.ok) {
         const data = await response.json();
         
@@ -2980,32 +2993,37 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             const animate = () => {
               current += increment;
               if ((increment > 0 && current >= newValue) || (increment < 0 && current <= newValue)) {
-                element.textContent = newValue.toString();
+                element.textContent = newValue.toLocaleString('id-ID');
               } else {
-                element.textContent = Math.floor(current).toString();
+                element.textContent = Math.floor(current).toLocaleString('id-ID');
                 requestAnimationFrame(animate);
               }
             };
             animate();
+          } else {
+            element.textContent = newValue.toLocaleString('id-ID');
           }
         };
         
         // Update today visitors
         const visitorsTodayEl = document.getElementById('visitors-today');
-        animateNumber(visitorsTodayEl, data.visitorsToday || 0);
+        animateNumber(visitorsTodayEl, data.today || 0);
         
         // Update week visitors
         const visitorsWeekEl = document.getElementById('visitors-week');
-        animateNumber(visitorsWeekEl, data.visitorsWeek || 0);
+        animateNumber(visitorsWeekEl, data.thisWeek || 0);
         
         // Update month visitors
         const visitorsMonthEl = document.getElementById('visitors-month');
-        animateNumber(visitorsMonthEl, data.visitorsMonth || 0);
+        animateNumber(visitorsMonthEl, data.thisMonth || 0);
         
-        console.log('[Analytics] Visitor stats updated:', data);
+        console.log('[Visitor] Stats updated from AstraDB:', data);
+      } else if (response.status === 401 || response.status === 403) {
+        console.log('[Visitor] Unauthorized, clearing token');
+        // Don't clear token here, just skip update
       }
     } catch (error) {
-      console.error('[Analytics] Error fetching visitor stats:', error);
+      console.error('[Visitor] Error fetching visitor stats:', error);
       // Set default values if API fails
       const visitorsTodayEl = document.getElementById('visitors-today');
       const visitorsWeekEl = document.getElementById('visitors-week');
@@ -3027,20 +3045,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   }
 
   function startVisitorTracking() {
+    // Check if user is logged in before starting
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.debug('[Visitor] No admin token found, visitor stats disabled');
+      return;
+    }
+    
     // Initial update
     updateVisitorStats();
     
     // Update every 10 seconds
     visitorUpdateInterval = setInterval(updateVisitorStats, 10000);
     
-    console.log('[Analytics] Started visitor tracking');
+    console.log('[Visitor] ✅ Started visitor stats tracking (updates every 10s)');
   }
 
   function stopVisitorTracking() {
     if (visitorUpdateInterval) {
       clearInterval(visitorUpdateInterval);
       visitorUpdateInterval = null;
-      console.log('[Analytics] Stopped visitor tracking');
+      console.log('[Visitor] Stopped visitor tracking');
     }
   }
   
@@ -3133,24 +3158,47 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }, 1000);
   }
   
+  // Check if we're on admin dashboard before starting visitor tracking
+  const currentPath = window.location.pathname;
+  const isAdminDashboard = currentPath === '/admin/dashboard';
+  
+  console.log('[Dashboard] Current path:', currentPath);
+  console.log('[Dashboard] Is admin dashboard:', isAdminDashboard);
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       console.log('📄 DOM loaded, initializing chart...');
       setTimeout(startChartInitialization, 100);
-      setTimeout(startVisitorTracking, 700);
+      
+      // Only start visitor tracking on admin dashboard
+      if (isAdminDashboard) {
+        console.log('📊 Admin dashboard detected, will start visitor tracking...');
+        setTimeout(startVisitorTracking, 700);
+      } else {
+        console.log('📊 Not admin dashboard, skipping visitor tracking');
+      }
     });
   } else {
     // DOM is already loaded
     console.log('📄 DOM already loaded, initializing chart now...');
     setTimeout(startChartInitialization, 100);
-    setTimeout(startVisitorTracking, 700);
+    
+    // Only start visitor tracking on admin dashboard
+    if (isAdminDashboard) {
+      console.log('📊 Admin dashboard detected, will start visitor tracking...');
+      setTimeout(startVisitorTracking, 700);
+    } else {
+      console.log('📊 Not admin dashboard, skipping visitor tracking');
+    }
   }
 
   window.addEventListener('beforeunload', function() {
     if (chartUpdateInterval) {
       clearInterval(chartUpdateInterval);
     }
-    stopVisitorTracking();
+    if (isAdminDashboard) {
+      stopVisitorTracking();
+    }
   });
 </script>
 </Layout>
