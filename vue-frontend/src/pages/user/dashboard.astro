@@ -1330,8 +1330,6 @@ function formatRupiah(amount: number): string {
       const detailJoinDate = document.getElementById('detail-join-date');
       if (detailJoinDate) {
          detailJoinDate.textContent = 'Memuat...';
-      } else {
-         console.warn('[DEBUG] detail-join-date element not found during initialization');
       }
       (window as any).resetAgreement = function() {
          localStorage.removeItem(agreementStorageKey());
@@ -1358,6 +1356,14 @@ function formatRupiah(amount: number): string {
          console.log('[AGREEMENT DEBUG] Force checking agreement...');
          const mitraData = (window as any).currentMitraData || JSON.parse(localStorage.getItem('mitraUser') || '{}');
          await checkAgreementStatusFromBackend(mitraData);
+      };
+
+      // CRITICAL FIX: Force show agreement modal (bypass all checks)
+      // Used when redirected from kewajiban page with ?showAgreement=true
+      (window as any).forceShowAgreement = function() {
+         console.log('[AGREEMENT] 🎯 Force show agreement (bypass cache check)');
+         updateAgreementModalWithCurrentData();
+         showAgreementModal();
       };
 
       // Setup agreement modal for new users
@@ -1416,25 +1422,65 @@ function formatRupiah(amount: number): string {
       // Check URL parameter for auto-showing agreement modal
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('showAgreement') === 'true') {
-         console.log('[AGREEMENT] Auto-show request from URL parameter');
+         console.log('[AGREEMENT] 🔔 Auto-show request from URL parameter');
          // Remove parameter from URL without reloading
          const newUrl = window.location.pathname;
          window.history.replaceState({}, document.title, newUrl);
          
-         // Wait a bit for profile to load, then check if should show modal
-         setTimeout(() => {
+         // BUSINESS RULE: Only show agreement if user is already paid and approved
+         // Check payment status before showing modal
+         setTimeout(async () => {
             const email = localStorage.getItem('mitraUserEmail');
-            if (email) {
-               // IMPORTANT: Check cache first before showing modal
-               const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
-               if (cachedAgreementStatus === 'true') {
-                  console.log('[AGREEMENT] ✅ Agreement sudah diterima (cached), skip auto-show modal');
-                  return;
-               }
+            const token = localStorage.getItem('mitraToken');
+            
+            if (!email) {
+               console.warn('[AGREEMENT] ⚠️ No email found, cannot show agreement');
+               return;
+            }
+            
+            // Fetch user data to check if paid off
+            try {
+               const userResponse = await fetch(`${API_URL}/api/mitra/by-email?email=${encodeURIComponent(email)}`, {
+                  method: 'GET',
+                  headers: {
+                     'Content-Type': 'application/json',
+                     'Authorization': token ? `Bearer ${token}` : ''
+                  }
+               });
                
-               // Only show if not cached
-               console.log('[AGREEMENT] 📋 Showing modal (first time from kewajiban page)');
-               showAgreementModal();
+               if (userResponse.ok) {
+                  const userData = await userResponse.json();
+                  
+                  // Check if user is paid off (same logic as checkAgreementStatusFromBackend)
+                  const isPaidOff = (
+                     userData?.nilaiPaketUsaha === 'Full Payment' ||
+                     userData?.isFullPayment === true ||
+                     userData?.isPaidOff === true ||
+                     userData?.pelunasanApproved === true ||
+                     String(userData?.statusPelunasan).toLowerCase() === 'lunas' ||
+                     String(userData?.statusPelunasan).toLowerCase() === 'approved'
+                  );
+                  
+                  if (isPaidOff) {
+                     console.log('[AGREEMENT] ✅ User sudah lunas, showing agreement modal');
+                     
+                     // Check cache before showing
+                     const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
+                     if (cachedAgreementStatus === 'true') {
+                        console.log('[AGREEMENT] Agreement sudah diterima sebelumnya (cached)');
+                        return;
+                     }
+                     
+                     // Update modal data and show
+                     updateAgreementModalWithCurrentData();
+                     showAgreementModal();
+                  } else {
+                     console.log('[AGREEMENT] ⚠️ User belum lunas, tidak menampilkan agreement');
+                     console.log('[AGREEMENT] Agreement hanya untuk mitra yang sudah melunasi dan di-approve admin');
+                  }
+               }
+            } catch (error) {
+               console.error('[AGREEMENT] Error fetching user data:', error);
             }
          }, 1000);
       }
@@ -1486,16 +1532,15 @@ function formatRupiah(amount: number): string {
                   const byEmailResult = await byEmailRes.json();
                   // the by-email route returns the mitra object directly
                   data = byEmailResult;
-               } else {
-                  console.warn('[WARN] /api/mitra/by-email failed, trying /api/mitra/profile');
+                  console.log('[Dashboard] ✅ Data loaded from /api/mitra/by-email');
                }
             } catch (e) {
-               console.warn('[WARN] Error fetching /api/mitra/by-email, trying /api/mitra/profile', e);
+               // Silently continue to fallback
             }
          }
 
          // Fallback to profile endpoint if by-email failed
-         if (!data) {
+         if (!data && token) {
             try {
                const response = await fetch(`${API_URL}/api/mitra/profile`, {
                   method: 'GET',
@@ -1504,15 +1549,16 @@ function formatRupiah(amount: number): string {
                      'Content-Type': 'application/json'
                   }
                });
-               const result = await response.json();
-
-               if (response.ok && result && result.success && result.data) {
-                  data = result.data;
-               } else {
-                  console.warn('[WARN] /api/mitra/profile did not return expected shape');
+               
+               if (response.ok) {
+                  const result = await response.json();
+                  if (result && result.success && result.data) {
+                     data = result.data;
+                     console.log('[Dashboard] ✅ Data loaded from /api/mitra/profile');
+                  }
                }
             } catch (e) {
-               console.warn('[WARN] Error fetching /api/mitra/profile', e);
+               // Silently continue - will throw error below if no data
             }
          }
 
@@ -1546,11 +1592,11 @@ function formatRupiah(amount: number): string {
             // No need for separate call here to avoid duplication
 
          } else {
-            throw new Error('Gagal memuat data profil');
+            throw new Error('Gagal memuat data profil - tidak ada data dari backend');
          }
 
       } catch (error) {
-         console.error('Error loading mitra profile:', error);
+         console.error('[Dashboard] ❌ Error loading mitra profile:', error);
          
          // Show error state
          loadingState?.classList.add('hidden');
@@ -1565,25 +1611,13 @@ function formatRupiah(amount: number): string {
 
    // Function to update last login timestamp on backend
    async function updateLastLoginOnBackend() {
-      try {
-         const token = localStorage.getItem('mitraToken');
-         if (!token) return;
-
-         // Update last login time on backend
-         await fetch(`${API_URL}/api/mitra/update-last-login`, {
-            method: 'POST',
-            headers: {
-               'Authorization': `Bearer ${token}`,
-               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-               lastLogin: new Date().toISOString()
-            })
-         });
-      } catch (error) {
-         // Silent fail - not critical if this fails
-         console.debug('Could not update last login on backend:', error);
-      }
+      // NOTE: Endpoint /api/mitra/update-last-login belum tersedia di backend
+      // Last login tracking dilakukan melalui auth login endpoint
+      // Fungsi ini di-disable untuk menghindari 404 error di console
+      
+      // Store current login time in localStorage for display purposes
+      const currentTime = new Date().toISOString();
+      localStorage.setItem('currentLoginTime', currentTime);
    }
 
    // Function to set up real-time activity updates
@@ -1820,25 +1854,6 @@ function formatRupiah(amount: number): string {
             paidByComparison
          );
 
-         // Debug: show which check matched in the current environment with parsed numeric values
-         try {
-            console.debug('[DEBUG] isUserPaidOff check', {
-               rawKekurangan,
-               kekuranganNum,
-               totalPaid,
-               packagePrice,
-               paidByComparison,
-               nilaiPaketUsaha: user?.nilaiPaketUsaha,
-               isFullPayment: user?.isFullPayment,
-               isPaidOffField: user?.isPaidOff,
-               pelunasanApproved: user?.pelunasanApproved,
-               statusPelunasan: user?.statusPelunasan,
-               pelunasanStatuses,
-               isKekuranganZero,
-               result: Boolean(isPaidOff)
-            });
-         } catch (e) { /* ignore */ }
-
          return Boolean(isPaidOff);
    }
 
@@ -1931,16 +1946,22 @@ function formatRupiah(amount: number): string {
             paidByComparison
          );
 
+         // BUSINESS RULE: Agreement ONLY shown after mitra has paid and been approved by admin
+         // Self Managed DP users (not yet paid off) will NOT see agreement
+         // Agreement is only for fully paid and approved mitra
          if (!userIsPaidOff) {
-            console.log('[AGREEMENT DEBUG] User belum lunas, skip agreement check');
+            console.log('[AGREEMENT DEBUG] User belum lunas/belum di-ACC admin, skip agreement check');
+            console.log('[AGREEMENT DEBUG] Agreement hanya untuk mitra yang sudah melunasi dan di-approve');
             return;
          }
 
-         console.log('[AGREEMENT DEBUG] User sudah lunas, checking agreement...');
+         console.log('[AGREEMENT DEBUG] User sudah lunas dan di-ACC, checking agreement...');
+         console.log('[AGREEMENT DEBUG] Storage key will be:', agreementStorageKey());
 
          // CRITICAL FIX: Check cache FIRST to prevent modal from showing repeatedly
          // If user already accepted in this browser/session, don't show again
          const cachedAgreementStatus = localStorage.getItem(agreementStorageKey());
+         console.log('[AGREEMENT DEBUG] Cache check result:', cachedAgreementStatus);
          
          if (cachedAgreementStatus === 'true') {
             console.log('[AGREEMENT DEBUG] ✅ Agreement sudah diterima (cached), skip modal');
@@ -1948,6 +1969,7 @@ function formatRupiah(amount: number): string {
          }
 
          console.log('[AGREEMENT DEBUG] No cache found, checking backend...');
+         console.log('[AGREEMENT DEBUG] Fetching from:', `${API_URL}/api/mitra/agreement-status`);
 
          // Only check backend if cache doesn't exist
          const response = await fetch(`${API_URL}/api/mitra/agreement-status`, {
@@ -1958,14 +1980,16 @@ function formatRupiah(amount: number): string {
             }
          });
 
+         console.log('[AGREEMENT DEBUG] Backend response status:', response.status);
          const result = await response.json();
+         console.log('[AGREEMENT DEBUG] Backend response data:', result);
 
          if (response.ok && result.success) {
             const { hasAccepted, agreementDetails } = result.data;
 
             console.log('[AGREEMENT DEBUG] Backend response:', {
                hasAccepted,
-               agreementDetails
+               agreementDetails: agreementDetails ? 'Present' : 'Missing'
             });
 
             // Ensure the agreement (if present) belongs to this user
@@ -1994,7 +2018,32 @@ function formatRupiah(amount: number): string {
 
                // Show agreement modal - user baru lunas dan belum accept agreement
                console.log('[AGREEMENT DEBUG] 📋 Showing agreement modal (first time for this user)...');
-               setTimeout(() => { showAgreementModal(); }, 500);
+               console.log('[AGREEMENT DEBUG] Will show modal after 800ms delay');
+               
+               // Update modal data first
+               updateAgreementModalWithCurrentData();
+               
+               // Show modal with delay to ensure DOM is ready
+               setTimeout(() => {
+                  console.log('[AGREEMENT DEBUG] 🎯 Executing showAgreementModal() now...');
+                  showAgreementModal();
+                  
+                  // Double check modal visibility after showing
+                  setTimeout(() => {
+                     const modal = document.getElementById('agreement-modal');
+                     if (modal) {
+                        const isVisible = !modal.classList.contains('hidden') && modal.style.display !== 'none';
+                        console.log('[AGREEMENT DEBUG] Modal visibility check:', isVisible);
+                        if (!isVisible) {
+                           console.warn('[AGREEMENT DEBUG] ⚠️ Modal not visible, forcing display...');
+                           modal.classList.remove('hidden');
+                           modal.style.display = 'block';
+                        }
+                     } else {
+                        console.error('[AGREEMENT DEBUG] ❌ Modal element not found in DOM!');
+                     }
+                  }, 100);
+               }, 800);
             }
          } else {
             console.error('[AGREEMENT DEBUG] Failed to check agreement status:', result.error);
@@ -2386,11 +2435,24 @@ function formatRupiah(amount: number): string {
             pelunasanStatus.style.display = '';
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
             
-            console.log('[PELUNASAN DEBUG] User LUNAS - akan check agreement modal...');
+            console.log('[PELUNASAN DEBUG] ✅ User LUNAS - akan check agreement modal...');
+            console.log('[PELUNASAN DEBUG] Data yang akan digunakan untuk check agreement:', {
+               email: data?.email,
+               nama: data?.nama || data?.namaMitra,
+               pelunasanApproved: data?.pelunasanApproved,
+               statusPelunasan: data?.statusPelunasan,
+               isPaidOff,
+               hasLunasStatus
+            });
             
-            // Check agreement status from backend and show modal if needed
+            // CRITICAL: Check agreement status from backend and show modal if needed
             // This will show modal if user hasn't accepted yet
-            await checkAgreementStatusFromBackend(data);
+            try {
+               await checkAgreementStatusFromBackend(data);
+               console.log('[PELUNASAN DEBUG] ✅ Agreement check completed');
+            } catch (error) {
+               console.error('[PELUNASAN DEBUG] ❌ Error checking agreement:', error);
+            }
          } else {
             pelunasanStatus.textContent = 'Belum Lunas';
             pelunasanStatus.className = 'text-red-600 font-bold';
@@ -2426,29 +2488,20 @@ function formatRupiah(amount: number): string {
          if (nilaiPaketHeader) nilaiPaketHeader.textContent = formattedHarga;
       }
 
-      // Show financial section only for Autopilot & Semi Autopilot
+      // Show financial section for all mitra types (Autopilot, Semi Autopilot, and Self Managed)
       const financialSection = document.getElementById('financial-section');
       const financialSummaryCards = document.getElementById('financial-summary-cards');
-      const sistemKemitraanText = data.sistemKemitraan?.toLowerCase() || '';
       
-      // Check if user is self-managed (hide financial reports)
-      const isSelfManaged = sistemKemitraanText.includes('self') || sistemKemitraanText.includes('managed');
-      
-      if (financialSection && (sistemKemitraanText.includes('autopilot') || sistemKemitraanText.includes('semi'))) {
+      // Show financial features for all partnership types
+      if (financialSection) {
          financialSection.classList.remove('hidden');
-         // Data sudah di-render dari SSR, jadi tidak perlu load ulang
+         // Initialize financial section with Google Sheets integration
          initializeFinancialSection();
-      } else if (financialSection) {
-         financialSection.classList.add('hidden');
       }
       
-      // Hide financial summary cards for self-managed mitra
+      // Show financial summary cards for all mitra types
       if (financialSummaryCards) {
-         if (isSelfManaged) {
-            financialSummaryCards.classList.add('hidden');
-         } else {
-            financialSummaryCards.classList.remove('hidden');
-         }
+         financialSummaryCards.classList.remove('hidden');
       }
    }
 
@@ -2583,8 +2636,6 @@ function formatRupiah(amount: number): string {
                day: 'numeric'
             });
          }
-      } else {
-         console.warn('[DEBUG] detail-join-date element not found');
       }
    }
 
@@ -2773,6 +2824,12 @@ function formatRupiah(amount: number): string {
    async function loadUserSheetsUrl() {
       try {
          const token = localStorage.getItem('mitraToken');
+         if (!token) {
+            console.log('[Dashboard] No token, skipping sheets URL load');
+            updateConnectionStatus('none', 'Belum tersambung');
+            return;
+         }
+         
          const response = await fetch(`${API_URL}/api/mitra/sheets-url`, {
             method: 'GET',
             headers: {
@@ -2799,14 +2856,16 @@ function formatRupiah(amount: number): string {
                updateConnectionStatus('none', 'Belum tersambung');
             }
          } else {
-            await createUserGoogleSheets();
+            // Silently handle - normal for new users
+            console.log('[Dashboard] No sheets URL configured yet');
+            updateConnectionStatus('none', 'Belum tersambung');
          }
 
       } catch (error) {
-         console.error('Error loading sheets URL:', error);
-         updateConnectionStatus('error', 'Gagal memuat koneksi');
+         // Silently handle error - not critical for dashboard
+         console.log('[Dashboard] Could not load sheets URL:', error);
+         updateConnectionStatus('none', 'Belum tersambung');
          
-         // Use demo/template URL for development
          const sheetsInput = document.getElementById('sheets-url-input') as HTMLInputElement;
          const openBtn = document.getElementById('open-sheets-btn') as HTMLButtonElement;
          if (sheetsInput) {
@@ -2905,6 +2964,12 @@ function formatRupiah(amount: number): string {
    async function loadFinancialDataFromSheets() {
       try {
          const token = localStorage.getItem('mitraToken');
+         if (!token) {
+            console.log('[Dashboard] No token, skipping sheets data load');
+            useMockFinancialData();
+            return;
+         }
+         
          updateConnectionStatus('syncing', 'Sinkronisasi data...');
          
          const response = await fetch(`${API_URL}/api/mitra/sheets-data`, {
@@ -2940,11 +3005,18 @@ function formatRupiah(amount: number): string {
             updateLastSyncTime();
             
          } else {
-            throw new Error(result.error || 'Gagal memuat data dari Sheets');
+            // If no sheets URL configured, silently use mock data
+            if (result.error?.includes('tidak ditemukan') || result.error?.includes('belum')) {
+               console.log('[Dashboard] No sheets URL configured, using mock data');
+               updateConnectionStatus('none', 'Belum tersambung');
+               useMockFinancialData();
+            } else {
+               throw new Error(result.error || 'Gagal memuat data dari Sheets');
+            }
          }
 
       } catch (error) {
-         console.error('Error loading sheets data:', error);
+         console.error('[Dashboard] Error loading sheets data:', error);
          updateConnectionStatus('error', 'Gagal sync data');
          
          // Use mock data for development

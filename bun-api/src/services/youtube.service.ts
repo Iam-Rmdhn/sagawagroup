@@ -63,15 +63,60 @@ export class YouTubeService {
 
       // Fetch semua video (termasuk shorts) dari channel
       const apiUrl = buildYouTubeApiUrl(this.config, "all");
-      console.log("Fetching from YouTube API:", apiUrl);
+      console.log(
+        "Fetching from YouTube API:",
+        apiUrl.replace(/([?&]key=)[^&]+/, "$1***")
+      );
 
-      const response = await fetch(apiUrl);
+      let response = await fetch(apiUrl);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const data = (await response.json()) as YouTubeApiResponse;
+  let data = (await response.json()) as YouTubeApiResponse;
+
+      // Fallback: jika tidak ada item (mungkin karena publishedAfter terlalu ketat),
+      // coba ulang tanpa filter publishedAfter agar tetap menampilkan video terbaru
+      if ((!data.items || data.items.length === 0) && this.config.publishedAfter) {
+        console.warn(
+          "YouTube API returned no items with publishedAfter filter. Retrying without publishedAfter..."
+        );
+
+        const noFilterConfig: YouTubeConfig = { ...this.config, publishedAfter: null };
+        const fallbackUrl = buildYouTubeApiUrl(noFilterConfig, "all");
+        console.log(
+          "Fetching from YouTube API (fallback):",
+          fallbackUrl.replace(/([?&]key=)[^&]+/, "$1***")
+        );
+
+        response = await fetch(fallbackUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        data = (await response.json()) as YouTubeApiResponse;
+      }
+
+      // Jika masih tidak ada item, lakukan fallback kedua:
+      // gunakan uploads playlist (UU...) dari channel untuk ambil video terbaru
+      if ((!data.items || data.items.length === 0) && this.config.channelId) {
+        const uploadsPlaylistId = this.getUploadsPlaylistId(this.config.channelId);
+        if (uploadsPlaylistId) {
+          const uploadsUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=${this.config.maxResults}&key=${this.config.apiKey}`;
+          console.warn(
+            "No items from search API. Falling back to uploads playlist:",
+            uploadsUrl.replace(/([?&]key=)[^&]+/, "$1***")
+          );
+
+          const uploadsResp = await fetch(uploadsUrl);
+          if (uploadsResp.ok) {
+            const uploadsData = (await uploadsResp.json()) as YouTubeApiResponse;
+            if (uploadsData.items && uploadsData.items.length > 0) {
+              data = uploadsData;
+            }
+          }
+        }
+      }
 
       if (!data.items) {
         throw new Error("No items found in YouTube API response");
@@ -111,6 +156,17 @@ export class YouTubeService {
           error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
+  }
+
+  /**
+   * Utility: derive uploads playlist ID (UU...) from channelId (UC...)
+   */
+  private getUploadsPlaylistId(channelId: string): string | null {
+    if (!channelId) return null;
+    if (channelId.startsWith("UC") && channelId.length > 2) {
+      return "UU" + channelId.slice(2);
+    }
+    return null;
   }
 
   /**

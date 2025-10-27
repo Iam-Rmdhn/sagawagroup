@@ -2105,9 +2105,60 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     console.log('  fotoKTP:', mitra.fotoKTP ? mitra.fotoKTP.substring(0, 50) + '...' : 'not available');
     console.log('  buktiTransfer:', mitra.buktiTransfer ? mitra.buktiTransfer.substring(0, 50) + '...' : 'not available');
 
-    // Check pelunasan status jika paket adalah DP
+    // ENHANCED: Determine payment/pelunasan status with comprehensive logic
     let pelunasanStatusHTML = '';
-    if (mitra.nilaiPaketUsaha === 'DP') {
+    
+    // Helper function to parse numeric values
+    const parseNumeric = (value: any): number => {
+      if (value === null || value === undefined || value === '') return 0;
+      if (typeof value === 'number') return value;
+      if (typeof value === 'string') {
+        const cleaned = value.replace(/\./g, '').replace(',', '.');
+        const parsed = parseFloat(cleaned);
+        return isNaN(parsed) ? 0 : parsed;
+      }
+      return 0;
+    };
+
+    const kekurangan = parseNumeric(mitra.kekurangan);
+    const hargaPaket = parseNumeric(mitra.hargaPaket);
+    const totalPaid = parseNumeric(mitra.totalPaid || mitra.yangHarusDibayar || 0);
+    
+    console.log('[PELUNASAN DEBUG] Payment analysis:', {
+      email: mitra.email,
+      nilaiPaketUsaha: mitra.nilaiPaketUsaha,
+      kekurangan,
+      hargaPaket,
+      totalPaid,
+      pelunasanApproved: mitra.pelunasanApproved,
+      statusPelunasan: mitra.statusPelunasan
+    });
+
+    // FIXED: Determine payment status with correct priority order
+    // Priority: DP package MUST check database first, then other validations
+    let isPaidOff = false;
+    let statusReason = '';
+
+    console.log('[PELUNASAN DEBUG] Starting payment status check for:', {
+      email: mitra.email,
+      nilaiPaketUsaha: mitra.nilaiPaketUsaha,
+      kekurangan,
+      hargaPaket,
+      pelunasanApproved: mitra.pelunasanApproved
+    });
+
+    // Check 1: Full Payment package = automatically lunas
+    if (mitra.nilaiPaketUsaha === 'Full Payment' || 
+        String(mitra.nilaiPaketUsaha || '').toLowerCase().includes('full')) {
+      isPaidOff = true;
+      statusReason = 'Full Payment package';
+      console.log('[PELUNASAN DEBUG] ✅ Check 1: Full Payment package');
+    }
+    // Check 2: DP Package - MUST check pelunasan database FIRST
+    // This is CRITICAL: DP users must submit pelunasan form to be considered LUNAS
+    else if (mitra.nilaiPaketUsaha === 'DP') {
+      console.log('[PELUNASAN DEBUG] 🔍 Check 2: DP package - checking database...');
+      
       try {
         const token = localStorage.getItem('adminToken');
         const pelunasanResponse = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, {
@@ -2121,39 +2172,129 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         if (pelunasanResponse.ok) {
           const pelunasanResult = await pelunasanResponse.json();
           if (pelunasanResult.success && pelunasanResult.data) {
-            // Cari pelunasan berdasarkan email atau mitraId
+            // Find pelunasan by email or mitraId
             const pelunasan = pelunasanResult.data.find((p: any) => 
               p.email === mitra.email || p.mitraId === mitra._id
             );
 
-            if (pelunasan && pelunasan.statusPelunasan === 'lunas') {
-              pelunasanStatusHTML = `
-                <div class="info-item flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                  <span class="font-medium text-gray-700">Status Pelunasan:</span>
-                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-800 border-2 border-green-300 shadow-sm">
-                    <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    LUNAS
-                  </span>
-                </div>`;
+            if (pelunasan) {
+              console.log('[PELUNASAN DEBUG] Found pelunasan record:', {
+                email: pelunasan.email,
+                statusPelunasan: pelunasan.statusPelunasan,
+                approved: pelunasan.approved,
+                pelunasanApproved: pelunasan.pelunasanApproved,
+                nominalPelunasan: pelunasan.nominalPelunasan
+              });
+              
+              // CRITICAL FIX: Check if admin has approved the pelunasan
+              // Backend sets statusPelunasan='lunas' when admin approves via /api/admin/approve-pelunasan
+              // Also check for alternative approved flags
+              const isApprovedByAdmin = (
+                pelunasan.statusPelunasan === 'lunas' ||      // Set by admin approval
+                pelunasan.statusPelunasan === 'approved' ||   // Alternative status
+                pelunasan.approved === true ||                // Direct flag
+                pelunasan.pelunasanApproved === true ||       // Alternative flag
+                pelunasan.isApproved === true                 // Alternative flag
+              );
+              
+              // Additional validation: Check if there's actual payment data
+              const hasPaymentData = (
+                pelunasan.nominalPelunasan > 0 ||
+                pelunasan.jumlahPelunasan > 0 ||
+                pelunasan.buktiTransfer
+              );
+              
+              if (isApprovedByAdmin && hasPaymentData) {
+                isPaidOff = true;
+                statusReason = 'Pelunasan approved by admin';
+                console.log('[PELUNASAN DEBUG] ✅ DP: Pelunasan approved with payment data');
+              } else if (isApprovedByAdmin && !hasPaymentData) {
+                // Approved but no payment data - suspicious, mark as BELUM LUNAS
+                isPaidOff = false;
+                statusReason = 'Pelunasan approved but no payment data';
+                console.log('[PELUNASAN DEBUG] ⚠️ DP: Approved but no payment data - marking as BELUM LUNAS');
+              } else {
+                isPaidOff = false;
+                statusReason = `Pelunasan ${pelunasan.statusPelunasan || 'pending'} - waiting approval`;
+                console.log('[PELUNASAN DEBUG] ❌ DP: Pelunasan submitted but not approved');
+              }
             } else {
-              pelunasanStatusHTML = `
-                <div class="info-item flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                  <span class="font-medium text-gray-700">Status Pelunasan:</span>
-                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-red-100 text-red-800 border-2 border-red-300 shadow-sm animate-pulse">
-                    <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                    </svg>
-                    BELUM LUNAS
-                  </span>
-                </div>`;
+              // No pelunasan record found - definitely BELUM LUNAS
+              isPaidOff = false;
+              statusReason = 'Belum submit pelunasan';
+              console.log('[PELUNASAN DEBUG] ❌ DP: No pelunasan record found');
             }
           }
+        } else {
+          // API error - default to BELUM LUNAS for safety
+          isPaidOff = false;
+          statusReason = 'Error checking pelunasan';
+          console.error('[PELUNASAN DEBUG] ❌ API error:', pelunasanResponse.status);
         }
       } catch (error) {
-        console.error('Error checking pelunasan status:', error);
+        console.error('[PELUNASAN DEBUG] ❌ Error checking pelunasan:', error);
+        // On error, default to BELUM LUNAS for DP package (safer)
+        isPaidOff = false;
+        statusReason = 'Error checking pelunasan';
       }
+    }
+    // Check 3: Pelunasan explicitly approved in mitra record
+    else if (mitra.pelunasanApproved === true || 
+             mitra.statusPelunasan === 'lunas' ||
+             mitra.statusPelunasan === 'approved') {
+      isPaidOff = true;
+      statusReason = 'Pelunasan approved in record';
+      console.log('[PELUNASAN DEBUG] ✅ Check 3: Pelunasan approved flag');
+    }
+    // Check 4: Kekurangan is zero AND harga paket exists
+    // Only check this for non-DP packages
+    else if (kekurangan <= 0 && hargaPaket > 0) {
+      isPaidOff = true;
+      statusReason = 'Kekurangan = 0';
+      console.log('[PELUNASAN DEBUG] ✅ Check 4: Kekurangan is zero');
+    }
+    // Check 5: Total paid >= package price
+    else if (totalPaid >= hargaPaket && hargaPaket > 0) {
+      isPaidOff = true;
+      statusReason = 'Total paid >= harga paket';
+      console.log('[PELUNASAN DEBUG] ✅ Check 5: Total paid sufficient');
+    }
+    // Default: BELUM LUNAS
+    else {
+      isPaidOff = false;
+      statusReason = 'Pembayaran belum lengkap';
+      console.log('[PELUNASAN DEBUG] ❌ Default: Not paid off');
+    }
+
+    console.log('[PELUNASAN DEBUG] 🎯 Final status:', { 
+      isPaidOff, 
+      statusReason,
+      nilaiPaketUsaha: mitra.nilaiPaketUsaha
+    });
+
+    // Generate status HTML based on isPaidOff
+    if (isPaidOff) {
+      pelunasanStatusHTML = `
+        <div class="info-item flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <span class="font-medium text-gray-700">Status Pelunasan:</span>
+          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-800 border-2 border-green-300 shadow-sm">
+            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            LUNAS
+          </span>
+        </div>`;
+    } else {
+      pelunasanStatusHTML = `
+        <div class="info-item flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <span class="font-medium text-gray-700">Status Pelunasan:</span>
+          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-red-100 text-red-800 border-2 border-red-300 shadow-sm animate-pulse">
+            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            BELUM LUNAS
+          </span>
+        </div>`;
     }
 
     content.innerHTML = `
@@ -2957,12 +3098,25 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }).format(amount);
   }
 
-  // Visitor Analytics Functions
+  // Visitor Analytics Functions with AstraDB Integration
   let visitorUpdateInterval: NodeJS.Timeout | null = null;
 
   async function updateVisitorStats() {
     try {
-      const response = await fetch(`${API_URL}/api/analytics/stats`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // Silently skip if no token (user not logged in as admin)
+        console.debug('[Visitor] No admin token, skipping stats update');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/api/visitor/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (response.ok) {
         const data = await response.json();
         
@@ -2980,32 +3134,37 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             const animate = () => {
               current += increment;
               if ((increment > 0 && current >= newValue) || (increment < 0 && current <= newValue)) {
-                element.textContent = newValue.toString();
+                element.textContent = newValue.toLocaleString('id-ID');
               } else {
-                element.textContent = Math.floor(current).toString();
+                element.textContent = Math.floor(current).toLocaleString('id-ID');
                 requestAnimationFrame(animate);
               }
             };
             animate();
+          } else {
+            element.textContent = newValue.toLocaleString('id-ID');
           }
         };
         
         // Update today visitors
         const visitorsTodayEl = document.getElementById('visitors-today');
-        animateNumber(visitorsTodayEl, data.visitorsToday || 0);
+        animateNumber(visitorsTodayEl, data.today || 0);
         
         // Update week visitors
         const visitorsWeekEl = document.getElementById('visitors-week');
-        animateNumber(visitorsWeekEl, data.visitorsWeek || 0);
+        animateNumber(visitorsWeekEl, data.thisWeek || 0);
         
         // Update month visitors
         const visitorsMonthEl = document.getElementById('visitors-month');
-        animateNumber(visitorsMonthEl, data.visitorsMonth || 0);
+        animateNumber(visitorsMonthEl, data.thisMonth || 0);
         
-        console.log('[Analytics] Visitor stats updated:', data);
+        console.log('[Visitor] Stats updated from AstraDB:', data);
+      } else if (response.status === 401 || response.status === 403) {
+        console.log('[Visitor] Unauthorized, clearing token');
+        // Don't clear token here, just skip update
       }
     } catch (error) {
-      console.error('[Analytics] Error fetching visitor stats:', error);
+      console.error('[Visitor] Error fetching visitor stats:', error);
       // Set default values if API fails
       const visitorsTodayEl = document.getElementById('visitors-today');
       const visitorsWeekEl = document.getElementById('visitors-week');
@@ -3027,20 +3186,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   }
 
   function startVisitorTracking() {
+    // Check if user is logged in before starting
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.debug('[Visitor] No admin token found, visitor stats disabled');
+      return;
+    }
+    
     // Initial update
     updateVisitorStats();
     
     // Update every 10 seconds
     visitorUpdateInterval = setInterval(updateVisitorStats, 10000);
     
-    console.log('[Analytics] Started visitor tracking');
+    console.log('[Visitor] ✅ Started visitor stats tracking (updates every 10s)');
   }
 
   function stopVisitorTracking() {
     if (visitorUpdateInterval) {
       clearInterval(visitorUpdateInterval);
       visitorUpdateInterval = null;
-      console.log('[Analytics] Stopped visitor tracking');
+      console.log('[Visitor] Stopped visitor tracking');
     }
   }
   
@@ -3133,24 +3299,47 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }, 1000);
   }
   
+  // Check if we're on admin dashboard before starting visitor tracking
+  const currentPath = window.location.pathname;
+  const isAdminDashboard = currentPath === '/admin/dashboard';
+  
+  console.log('[Dashboard] Current path:', currentPath);
+  console.log('[Dashboard] Is admin dashboard:', isAdminDashboard);
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       console.log('📄 DOM loaded, initializing chart...');
       setTimeout(startChartInitialization, 100);
-      setTimeout(startVisitorTracking, 700);
+      
+      // Only start visitor tracking on admin dashboard
+      if (isAdminDashboard) {
+        console.log('📊 Admin dashboard detected, will start visitor tracking...');
+        setTimeout(startVisitorTracking, 700);
+      } else {
+        console.log('📊 Not admin dashboard, skipping visitor tracking');
+      }
     });
   } else {
     // DOM is already loaded
     console.log('📄 DOM already loaded, initializing chart now...');
     setTimeout(startChartInitialization, 100);
-    setTimeout(startVisitorTracking, 700);
+    
+    // Only start visitor tracking on admin dashboard
+    if (isAdminDashboard) {
+      console.log('📊 Admin dashboard detected, will start visitor tracking...');
+      setTimeout(startVisitorTracking, 700);
+    } else {
+      console.log('📊 Not admin dashboard, skipping visitor tracking');
+    }
   }
 
   window.addEventListener('beforeunload', function() {
     if (chartUpdateInterval) {
       clearInterval(chartUpdateInterval);
     }
-    stopVisitorTracking();
+    if (isAdminDashboard) {
+      stopVisitorTracking();
+    }
   });
 </script>
 </Layout>
