@@ -27,8 +27,20 @@ Bun.serve({
       "https://tes.bun.tams.my.id", // Test domain
     ];
 
+    // Allow additional origins from environment (CORS_ORIGIN can be a comma-separated list)
+    // ENV.CORS_ORIGIN is populated from src/env.ts
+    if (
+      ENV.CORS_ORIGIN &&
+      Array.isArray(ENV.CORS_ORIGIN) &&
+      ENV.CORS_ORIGIN.length
+    ) {
+      ENV.CORS_ORIGIN.forEach((o) => {
+        if (o && !allowedOrigins.includes(o)) allowedOrigins.push(o);
+      });
+    }
+
     // Add comprehensive CORS headers to handle Chrome's stricter policies
-    const corsHeaders = {
+    const corsHeaders: Record<string, string> = {
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers":
         "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Api-Key, X-Auth-Token, Cache-Control, Pragma, Expires",
@@ -41,10 +53,12 @@ Bun.serve({
     let allowedOrigin = "*";
 
     if (ENV.NODE_ENV === "development") {
-      // In development, allow any origin
+      // In development, allow the incoming origin (so tools running on localhost like
+      // the frontend dev server can successfully preflight). Fallback to '*'.
       allowedOrigin = origin || "*";
     } else {
       // In production, only allow specific origins
+      // Allow if the origin exactly matches one of the configured allowed origins
       if (origin && allowedOrigins.includes(origin)) {
         allowedOrigin = origin;
       } else if (isAdminSubdomain) {
