@@ -11,7 +11,9 @@ set -e  # Exit on any error
 PROJECT_NAME="sagawagroup"
 DOMAIN="sagawagroup.id"
 WWW_DOMAIN="www.sagawagroup.id"
-PROJECT_DIR="/home/ilham/sagawagroup"
+# Resolve project dir dynamically based on this script's location
+# This makes the script portable across servers/users
+PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DEPLOY_DIR="/var/www/sagawagroup"
 API_PORT="5000"
 FRONTEND_PORT="4321"
@@ -176,6 +178,29 @@ install_dependencies() {
         print_status "Installing PM2..."
         npm install -g pm2
     fi
+
+    # Ensure Node.js meets Astro minimum requirement (>= 18.20.8)
+    MIN_NODE="18.20.8"
+    NEED_NODE_INSTALL=false
+    if ! command -v node &> /dev/null; then
+        print_status "Node.js not found. Will install Node.js 20.x (meets Astro requirement)"
+        NEED_NODE_INSTALL=true
+    else
+        CURRENT_NODE=$(node -v | sed 's/^v//')
+        # compare versions using sort -V
+        if [ "$(printf '%s\n' "$MIN_NODE" "$CURRENT_NODE" | sort -V | head -n1)" != "$MIN_NODE" ]; then
+            : # current >= min
+        else
+            print_status "Node.js $CURRENT_NODE < $MIN_NODE. Will install Node.js 20.x"
+            NEED_NODE_INSTALL=true
+        fi
+    fi
+
+    if [ "$NEED_NODE_INSTALL" = true ]; then
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt-get install -y nodejs
+        print_success "Node.js installed: $(node -v)"
+    fi
     
     # Ensure bun is available - install if not found
     if ! command -v bun &> /dev/null; then
@@ -215,7 +240,7 @@ build_frontend() {
     
     # Install dependencies
     print_status "Installing frontend dependencies..."
-    if ! sudo -u ilham bun install; then
+    if ! bun install; then
         print_error "Frontend dependency installation failed"
         rollback_deployment
         exit 1
@@ -224,14 +249,14 @@ build_frontend() {
     # Copy .env.production to .env for build process
     if [ -f ".env.production" ]; then
         print_status "Using production environment configuration..."
-        sudo -u ilham cp .env.production .env
+        cp .env.production .env
     else
         print_warning "No .env.production found, using existing .env"
     fi
     
-    # Build for production with NODE_ENV
+    # Build for production with NODE_ENV (use Node/npm to satisfy Astro's Node requirement)
     print_status "Building frontend with production configuration..."
-    if ! sudo -u ilham NODE_ENV=production bun run build; then
+    if ! NODE_ENV=production npm run build; then
         print_error "Frontend build failed"
         rollback_deployment
         exit 1
@@ -288,14 +313,17 @@ deploy_api() {
             print_status "Using system Bun at: $BUN_PATH"
         else
             print_warning "Snap bun found but may have permission issues, installing native bun..."
+            # Ensure unzip is available for bun installer
+            if ! command -v unzip &> /dev/null; then
+                print_status "Installing unzip (required by Bun installer)..."
+                apt-get update && apt-get install -y unzip
+            fi
             curl -fsSL https://bun.sh/install | bash
             BUN_PATH="/root/.bun/bin/bun"
             export PATH="/root/.bun/bin:$PATH"
         fi
     # Priority 3: User's bun (fallback)
-    elif [ -f "/home/ilham/.bun/bin/bun" ]; then
-        BUN_PATH="/home/ilham/.bun/bin/bun"
-        print_warning "Using user's Bun installation"
+    # Note: do not hardcode other users' bun paths; rely on root/system bun only
     # Install bun if not found
     else
         print_status "Bun not found, installing for root..."
@@ -906,36 +934,123 @@ enable_nginx_site() {
 
 # Function to setup SSL with Let's Encrypt
 setup_ssl() {
-    print_status "Setting up SSL certificate with Let's Encrypt..."
-    
-    # Create webroot directory for challenge
+    print_status "Setting up SSL certificate with Let's Encrypt (webroot method)..."
+
+    # Helper: DNS alignment check (A/AAAA should route to this server)
+    dns_alignment_ok=true
+    if command -v dig >/dev/null 2>&1; then
+        PUBLIC_IPV4=$(curl -4 -s https://api.ipify.org || true)
+        PUBLIC_IPV6=$(curl -6 -s https://api64.ipify.org || true)
+        DNS_A=$(dig +short ${DOMAIN} A @8.8.8.8 2>/dev/null | tail -n1)
+        DNS_AAAA=$(dig +short ${DOMAIN} AAAA @8.8.8.8 2>/dev/null | tail -n1)
+        print_status "Public IPv4: ${PUBLIC_IPV4:-unknown} | DNS A: ${DNS_A:-none}"
+        print_status "Public IPv6: ${PUBLIC_IPV6:-unknown} | DNS AAAA: ${DNS_AAAA:-none}"
+        if [ -n "$DNS_A" ] && [ -n "$PUBLIC_IPV4" ] && [ "$DNS_A" != "$PUBLIC_IPV4" ]; then
+            print_error "DNS A (${DNS_A}) does not match this server IPv4 (${PUBLIC_IPV4})."
+            dns_alignment_ok=false
+        fi
+        if [ -n "$DNS_AAAA" ]; then
+            if [ -z "$PUBLIC_IPV6" ] || [ "$DNS_AAAA" != "$PUBLIC_IPV6" ]; then
+                print_error "DNS AAAA (${DNS_AAAA}) does not route to this server (public IPv6: ${PUBLIC_IPV6:-none})."
+                dns_alignment_ok=false
+            fi
+        fi
+    else
+        print_warning "'dig' not available; skipping DNS alignment check."
+    fi
+
+    if [ "$dns_alignment_ok" != true ]; then
+        print_error "DNS is not aligned to this server. ACME HTTP-01 will fail. Fix A/AAAA records (or remove AAAA temporarily) and re-run."
+        print_warning "Continuing deployment without SSL. You can run setup-ssl.sh later after fixing DNS."
+        return 0
+    fi
+
+    # Create webroot directory for challenge and set safe perms
     mkdir -p /var/www/certbot
+    chown -R www-data:www-data /var/www/certbot
+    chmod -R 755 /var/www/certbot
+
+    # Temporarily disable existing site to avoid server_name conflicts
+    if [ -L "/etc/nginx/sites-enabled/sagawagroup" ]; then
+        rm -f /etc/nginx/sites-enabled/sagawagroup
+        print_status "Temporarily disabled existing sagawagroup site"
+    fi
+
+    # Create a minimal default_server for ACME on port 80 (IPv4/IPv6)
+    cat > "/etc/nginx/sites-available/temp-sagawagroup" << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        default_type "text/plain";
+        try_files $uri =404;
+        allow all;
+    }
+
+    location / { return 404; }
+}
+EOF
+    ln -sf /etc/nginx/sites-available/temp-sagawagroup /etc/nginx/sites-enabled/
+    rm -f /etc/nginx/sites-enabled/default
     
-    # Check if certificate already exists
+    # Test and reload Nginx
+    if nginx -t; then
+        systemctl reload nginx
+        print_success "Temporary ACME Nginx site enabled"
+    else
+        print_error "Nginx config test failed while enabling ACME site"
+        print_warning "Continuing without SSL."
+        rm -f /etc/nginx/sites-enabled/temp-sagawagroup /etc/nginx/sites-available/temp-sagawagroup || true
+        return 0
+    fi
+
+    # Obtain or expand certificate using webroot
     if certbot certificates 2>/dev/null | grep -q "${DOMAIN}"; then
-        print_warning "Existing SSL certificate found for ${DOMAIN}"
-        print_status "Expanding existing certificate to include ${WWW_DOMAIN}..."
-        
-        # Expand existing certificate
-        certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --email ${EMAIL} --agree-tos --non-interactive --expand --redirect
+        print_status "Expanding existing certificate for ${DOMAIN} to include ${WWW_DOMAIN}..."
+        certbot certonly --webroot -w /var/www/certbot \
+            --email ${EMAIL} --agree-tos --non-interactive --expand \
+            -d ${DOMAIN} -d ${WWW_DOMAIN}
     else
         print_status "Obtaining new SSL certificate for ${DOMAIN} and ${WWW_DOMAIN}..."
-        # Obtain new certificate
-        certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --email ${EMAIL} --agree-tos --non-interactive --redirect
+        certbot certonly --webroot -w /var/www/certbot \
+            --email ${EMAIL} --agree-tos --non-interactive \
+            -d ${DOMAIN} -d ${WWW_DOMAIN}
     fi
-    
+
     if [ $? -eq 0 ]; then
-        print_success "SSL certificate obtained and configured"
+        print_success "SSL certificate obtained"
         
-        # Setup auto-renewal
+        # Remove temp ACME site and re-enable main site
+        rm -f /etc/nginx/sites-enabled/temp-sagawagroup
+        rm -f /etc/nginx/sites-available/temp-sagawagroup
+        ln -sf /etc/nginx/sites-available/sagawagroup /etc/nginx/sites-enabled/sagawagroup
+        
+        # Reload nginx to pick up HTTPS config
+        if nginx -t; then
+            systemctl reload nginx
+            print_success "Nginx reloaded with HTTPS configuration"
+        else
+            print_warning "Nginx config test failed post-SSL; please review configuration."
+        fi
+        
+        # Setup auto-renewal via cron
         print_status "Setting up SSL certificate auto-renewal..."
-        (crontab -l 2>/dev/null; echo "0 12 * * * /usr/bin/certbot renew --quiet") | crontab -
+        (crontab -l 2>/dev/null | grep -v "certbot renew"; echo "0 12 * * * /usr/bin/certbot renew --quiet && systemctl reload nginx") | crontab -
         print_success "SSL auto-renewal configured"
     else
         print_error "Failed to obtain SSL certificate"
-        print_warning "Continuing without SSL. You can run 'certbot --nginx -d ${DOMAIN} -d ${WWW_DOMAIN} --expand' manually later"
+        print_warning "Continuing without SSL. You can run setup-ssl.sh later after fixing DNS/HTTP access."
+        # Cleanup temp site and re-enable main site
+        rm -f /etc/nginx/sites-enabled/temp-sagawagroup
+        rm -f /etc/nginx/sites-available/temp-sagawagroup
+        ln -sf /etc/nginx/sites-available/sagawagroup /etc/nginx/sites-enabled/sagawagroup
+        nginx -t && systemctl reload nginx || true
     fi
 }
+
 
 # Function to start services (SINGLE VERSION)
 start_services() {
@@ -945,10 +1060,8 @@ start_services() {
     cd "$DEPLOY_DIR"
     pm2 start ecosystem.config.cjs --env production
     pm2 save
-    pm2 startup
-    
-    # Enable PM2 startup
-    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u root --hp /root
+    # Setup PM2 to start on boot using detected pm2 path
+    pm2 startup systemd -u root --hp /root || true
     
     print_success "Services started"
 }

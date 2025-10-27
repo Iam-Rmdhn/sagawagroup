@@ -712,6 +712,34 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		// Chart instance
 		let pelunasanChart: any = null;
 		
+		// Helper function to process image URL
+		function processImageUrl(imageData: string | null | undefined): string {
+			if (!imageData) return '';
+			
+			// If it's already a full URL (http/https), return as is
+			if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+				return imageData;
+			}
+			
+			// If it's a base64 data URL, return as is
+			if (imageData.startsWith('data:image/')) {
+				return imageData;
+			}
+			
+			// If it starts with /uploads/, prepend API_URL
+			if (imageData.startsWith('/uploads/')) {
+				return `${API_URL}${imageData}`;
+			}
+			
+			// If it's just a filename, assume it's in uploads folder
+			if (!imageData.startsWith('/')) {
+				return `${API_URL}/uploads/${imageData}`;
+			}
+			
+			// Fallback: prepend API_URL
+			return `${API_URL}${imageData}`;
+		}
+		
 		// Handle token expiration
 		function handleTokenExpiration(): void {
 			console.log('Token expired, redirecting to login...');
@@ -829,11 +857,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 								<td class="px-6 py-4 text-right">${item.nominalPelunasan ? formatCurrency(item.nominalPelunasan) : 'N/A'}</td>
 								<td class="px-6 py-4 text-center"><span class="status-badge inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${statusColor}">${item.statusPelunasan || 'belum'}</span></td>
 								<td class="px-6 py-4 text-center">
-								<button onclick="showPelunasanDetail('${item._id}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md mr-2" title="Lihat Detail">
+								<button onclick="showPelunasanDetail('${item._id}')" class="inline-flex items-center px-3 mb-1 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md mr-2" title="Lihat Detail">
 									<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg><span class="btn-text">Detail</span>
 								</button>
 								${item.statusPelunasan === 'lunas' ? 
-									`<button disabled class="inline-flex items-center px-3 py-1.5 bg-gray-400 text-gray-200 text-xs font-medium rounded-lg cursor-not-allowed opacity-60 mr-2" title="Sudah Lunas">
+									`<button disabled class="inline-flex items-center px-3 mb-1 py-1.5 bg-green-200 text-green-900 text-xs font-medium rounded-lg cursor-not-allowed mr-2" title="Sudah Lunas">
 										<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg><span class="btn-text">Sudah Lunas</span>
 									</button>
 									<button onclick="deletePelunasan('${item._id}', '${item.namaMitra}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium rounded-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md" title="Hapus">
@@ -1035,8 +1063,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 				
 				const result = await response.json();
 				if (result.success && result.data) {
-					  const pelunasan = result.data.find((x: any) => x._id === id);
-					if (!pelunasan) { content.innerHTML = '<div class="col-span-2 text-center text-red-500">Data tidak ditemukan</div>'; return; }
+					const pelunasan = result.data.find((x: any) => x._id === id);
+					if (!pelunasan) { 
+						content.innerHTML = '<div class="col-span-2 text-center text-red-500">Data tidak ditemukan</div>'; 
+						return; 
+					}
+					
+					// Debug logging for image
+					console.log('[Pelunasan Detail] Bukti Transfer raw:', pelunasan.buktiTransfer);
+					const processedImageUrl = processImageUrl(pelunasan.buktiTransfer);
+					console.log('[Pelunasan Detail] Processed image URL:', processedImageUrl);
+					
 					content.innerHTML = `
 						<div class="bg-gradient-to-r from-orange-50 to-amber-50 p-3 sm:p-4 rounded-lg border border-orange-200/50">
 							<h4 class="font-semibold text-gray-900 mb-3 text-base sm:text-lg flex items-center">
@@ -1106,13 +1143,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 								Bukti Transfer
 							</h4>
 							<div class="bg-white rounded-lg p-2 border border-gray-200">
-								${pelunasan.buktiTransfer ? 
+								${processedImageUrl ? 
 									`<div class="relative">
-										<img src="${pelunasan.buktiTransfer}" alt="Bukti Transfer" 
+										<img src="${processedImageUrl}" alt="Bukti Transfer" 
 											class="w-full max-w-md mx-auto h-auto max-h-64 sm:max-h-80 object-contain bg-gray-50 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-											onclick="openImageModal('${pelunasan.buktiTransfer}')">
+											onclick="openImageModal('${processedImageUrl}')"
+											onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'text-center py-8\\'><span class=\\'text-red-500 text-sm\\'>Gagal memuat gambar<br><small>${processedImageUrl}</small></span></div>';">
 										<div class="mt-2 text-center">
-											<button onclick="openImageModal('${pelunasan.buktiTransfer}')" 
+											<button onclick="openImageModal('${processedImageUrl}')" 
 												class="text-xs sm:text-sm text-blue-600 hover:text-blue-800 underline">
 												Klik untuk memperbesar
 											</button>

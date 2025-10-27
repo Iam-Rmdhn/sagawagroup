@@ -42,6 +42,46 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Check public DNS records match this server
+check_dns_alignment() {
+    print_status "Checking DNS records for ${DOMAIN}..."
+
+    if ! command -v dig >/dev/null 2>&1; then
+        print_warning "'dig' not found. Skipping DNS check. Install 'dnsutils' to enable."
+        return 0
+    fi
+
+    # Get public IPs of this server
+    PUBLIC_IPV4=$(curl -4 -s https://api.ipify.org || true)
+    PUBLIC_IPV6=$(curl -6 -s https://api64.ipify.org || true)
+
+    DNS_A=$(dig +short ${DOMAIN} A @8.8.8.8 | tail -n1)
+    DNS_AAAA=$(dig +short ${DOMAIN} AAAA @8.8.8.8 | tail -n1)
+
+    print_status "Public IPv4: ${PUBLIC_IPV4:-unknown} | DNS A: ${DNS_A:-none}"
+    print_status "Public IPv6: ${PUBLIC_IPV6:-unknown} | DNS AAAA: ${DNS_AAAA:-none}"
+
+    DNS_OK=true
+    if [ -n "$DNS_A" ] && [ -n "$PUBLIC_IPV4" ] && [ "$DNS_A" != "$PUBLIC_IPV4" ]; then
+        print_error "DNS A record (${DNS_A}) does not match this server's IPv4 (${PUBLIC_IPV4}). Update DNS before proceeding."
+        DNS_OK=false
+    fi
+    # If AAAA exists but doesn't match our IPv6 (or we don't have IPv6), it's a problem for HTTP-01
+    if [ -n "$DNS_AAAA" ]; then
+        if [ -z "$PUBLIC_IPV6" ] || [ "$DNS_AAAA" != "$PUBLIC_IPV6" ]; then
+            print_error "DNS AAAA record (${DNS_AAAA}) does not route to this server. Either update it to ${PUBLIC_IPV6:-your IPv6} or remove the AAAA record temporarily."
+            DNS_OK=false
+        fi
+    fi
+
+    if [ "$DNS_OK" != true ]; then
+        print_error "DNS is not aligned with this server. ACME HTTP-01 validation will fail. Fix DNS and re-run."
+        exit 1
+    fi
+
+    print_success "DNS records appear aligned. Continuing..."
+}
+
 # Check if running as root
 check_root() {
     if [ "$EUID" -ne 0 ]; then
@@ -74,33 +114,41 @@ setup_webroot() {
 # Create temporary Nginx config for domain verification
 create_temp_nginx_config() {
     print_status "Creating temporary Nginx configuration for domain verification..."
-    
+
+    # Temporarily disable existing site to avoid server_name conflicts
+    if [ -L "/etc/nginx/sites-enabled/sagawagroup" ]; then
+        rm -f /etc/nginx/sites-enabled/sagawagroup
+        print_status "Temporarily disabled existing sagawagroup site"
+    fi
+
     cat > "/etc/nginx/sites-available/temp-sagawagroup" << EOF
 # Temporary configuration for SSL certificate generation
 server {
-    listen 80;
-    server_name ${DOMAIN} ${WWW_DOMAIN};
-    
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
     # Let's Encrypt ACME challenge
-    location /.well-known/acme-challenge/ {
+    location ^~ /.well-known/acme-challenge/ {
         root ${WEBROOT};
+        default_type "text/plain";
+        try_files \$uri =404;
         allow all;
     }
-    
-    # Temporary root for verification
+
+    # Deny everything else explicitly
     location / {
-        root /var/www/html;
-        index index.html index.htm;
+        return 404;
     }
 }
 EOF
-    
+
     # Enable temporary config
     ln -sf /etc/nginx/sites-available/temp-sagawagroup /etc/nginx/sites-enabled/
-    
+
     # Disable default if exists
     rm -f /etc/nginx/sites-enabled/default
-    
+
     # Test and reload Nginx
     nginx -t && systemctl reload nginx
     print_success "Temporary Nginx configuration created and loaded"
@@ -244,6 +292,12 @@ cleanup_temp_config() {
     print_status "Cleaning up temporary configuration..."
     rm -f /etc/nginx/sites-enabled/temp-sagawagroup
     rm -f /etc/nginx/sites-available/temp-sagawagroup
+    # Re-enable main site configuration
+    if [ -f "/etc/nginx/sites-available/sagawagroup" ]; then
+        ln -sf /etc/nginx/sites-available/sagawagroup /etc/nginx/sites-enabled/sagawagroup
+        nginx -t && systemctl reload nginx || true
+        print_status "Main Nginx site re-enabled"
+    fi
     print_success "Temporary configuration cleaned up"
 }
 
@@ -310,6 +364,7 @@ main() {
     
     # Execute setup steps
     check_root
+    check_dns_alignment
     install_certbot
     setup_webroot
     create_temp_nginx_config

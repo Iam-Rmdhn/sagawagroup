@@ -320,9 +320,12 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         }
 
         // 2. Get agreement status (optional)
-        let agreementAccepted = true; // Default to true
+        // CRITICAL FIX: Default to FALSE so button shows if API fails
+        // If user hasn't signed, we MUST show the button
+        let agreementAccepted = false; // Default to false - safer default
         if (sessionData.token) {
           try {
+            console.log('[KEWAJIBAN DEBUG] Fetching agreement status from:', `${API_URL}/api/mitra/agreement-status`);
             agreementRes = await fetch(`${API_URL}/api/mitra/agreement-status`, {
               method: 'GET',
               headers: {
@@ -330,16 +333,28 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
                 'Content-Type': 'application/json'
               }
             });
+            console.log('[KEWAJIBAN DEBUG] Agreement API response status:', agreementRes.status);
+            
             if (agreementRes.ok) {
               agreementData = await agreementRes.json();
+              console.log('[KEWAJIBAN DEBUG] Agreement API response data:', agreementData);
+              
               if (agreementData.success) {
                 agreementAccepted = !!agreementData.data.hasAccepted;
+                console.log('[KEWAJIBAN DEBUG] ✅ Agreement status from backend:', agreementAccepted);
+              } else {
+                console.log('[KEWAJIBAN DEBUG] ⚠️ API returned success=false, keeping default false');
               }
+            } else {
+              console.log('[KEWAJIBAN DEBUG] ❌ API request failed with status:', agreementRes.status);
             }
           } catch (e) {
-            console.error('Agreement API Error:', e);
-            // Keep default agreementAccepted = true
+            console.error('[KEWAJIBAN DEBUG] ❌ Agreement API Error:', e);
+            // Keep default agreementAccepted = false to show button
+            console.log('[KEWAJIBAN DEBUG] Keeping default agreementAccepted = false due to error');
           }
+        } else {
+          console.log('[KEWAJIBAN DEBUG] No token available, keeping default agreementAccepted = false');
         }
 
         // 3. Get actual pelunasan data (payment history) - this determines UI
@@ -406,9 +421,10 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
         console.error('❌ General API Error:', e);
         // CRITICAL: For payment status, always default to safe state (show pay button)
         // Do NOT use localStorage fallback as it may give false positive verification status
+        // CRITICAL FIX: agreementAccepted should be FALSE so button shows!
         console.log('⚠️ API failed - defaulting to safe state: user will see PAY button');
         window.kewajibanData = { 
-          agreementAccepted: true, // Assume agreement is OK to avoid blocking user
+          agreementAccepted: false, // FIXED: Show agreement button when API fails
           pelunasanExists: false   // Always show pay button when API fails
         };
       }
@@ -567,8 +583,15 @@ import MitraNavbar from '../../components/mitra/navbar/MitraNavbar.astro';
       });
 
       if (!shouldShowPaymentUI && isPaidOff) {
-        // Use cached agreement data
-        const agreementAccepted = window.kewajibanData?.agreementAccepted !== false;
+        // CRITICAL FIX: Check agreement status - default to FALSE so button shows if check fails
+        // This ensures "Tandatangani Agreement" button appears when user is paid but hasn't signed
+        const agreementAccepted = window.kewajibanData?.agreementAccepted === true;
+        
+        console.log('[KEWAJIBAN DEBUG] User is paid off, checking agreement:', {
+          agreementAccepted,
+          kewajibanData: window.kewajibanData,
+          willShowButton: !agreementAccepted
+        });
         
         const extraAction = agreementAccepted ? '' : `
           <div class="mt-4 sm:mt-6 p-3 sm:p-4 content-center bg-white border-l-4 border-red-500 rounded-xl shadow-md">
