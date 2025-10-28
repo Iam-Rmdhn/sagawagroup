@@ -1,0 +1,455 @@
+---
+// Admin Delete Page
+import Layout from '../../layouts/Layout.astro';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebar.astro';
+import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
+---
+
+<Layout title="Admin - Delete Data">
+  <!-- Modern Delete Page Styles -->
+  <style>
+    /* Global fixes for scroll stability */
+    * {
+      transform: translateZ(0);
+      will-change: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
+    }
+
+    body, html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom Amber Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(251, 191, 36, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgb(251 191 36), rgb(252 211 77));
+      transform: scale(1.1);
+    }
+
+    /* Firefox scrollbar styling */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
+    }
+
+    /* Delete form styling */
+    .delete-form {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.05) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(251, 191, 36, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .delete-form:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: translateY(-2px);
+    }
+
+    /* Warning styling */
+    .warning-box {
+      background: linear-gradient(135deg, rgba(254, 202, 202, 0.1) 0%, rgba(252, 165, 165, 0.05) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* Data preview styling */
+    .data-preview {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(156, 163, 175, 0.05) 100%);
+      border: 1px solid rgba(156, 163, 175, 0.2);
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Success/Error messages */
+    .message-success {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .message-error {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+  </style>
+
+  <!-- Main Content -->
+  <div class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+    <AdminSidebar />
+    <AdminNavbar />
+
+    <!-- Main Content Area -->
+    <div class="ml-64 pt-16">
+      <div class="p-8">
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Hapus Data</h1>
+          <p class="text-gray-600">Halaman untuk menghapus data dari database. Gunakan dengan hati-hati.</p>
+        </div>
+
+        <!-- Delete Form -->
+        <div class="delete-form rounded-xl p-8 mb-8">
+          <div class="warning-box rounded-lg p-4 mb-6">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+              <div>
+                <h3 class="text-lg font-semibold text-red-800 mb-1">Peringatan Penting</h3>
+                <p class="text-red-700 text-sm">
+                  Tindakan penghapusan data bersifat permanen dan tidak dapat dibatalkan.
+                  Pastikan Anda memiliki backup data sebelum melanjutkan.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <form id="deleteForm" class="space-y-6">
+            <!-- Collection Selection -->
+            <div>
+              <label for="collection" class="block text-sm font-medium text-gray-700 mb-2">
+                Pilih Koleksi Data
+              </label>
+              <select id="collection" name="collection" required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors">
+                <option value="">-- Pilih Koleksi --</option>
+                <option value="mitra">Mitra</option>
+                <option value="mitra_pelunasan">Pelunasan Mitra</option>
+                <option value="users">Users</option>
+                <option value="admin_login">Admin Login</option>
+                <option value="visitor">Visitor</option>
+              </select>
+            </div>
+
+            <!-- ID Input -->
+            <div>
+              <label for="dataId" class="block text-sm font-medium text-gray-700 mb-2">
+                ID Data yang Akan Dihapus
+              </label>
+              <input type="text" id="dataId" name="dataId" required
+                placeholder="Masukkan ID data yang akan dihapus"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors">
+              <p class="text-xs text-gray-500 mt-1">
+                ID dapat ditemukan di halaman dashboard atau detail data
+              </p>
+            </div>
+
+            <!-- Preview Button -->
+            <div class="flex space-x-4">
+              <button type="button" id="previewBtn"
+                class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                Preview Data
+              </button>
+
+              <button type="submit" id="deleteBtn"
+                class="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Hapus Data
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Data Preview Section -->
+        <div id="previewSection" class="data-preview rounded-xl p-6 hidden">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Preview Data</h3>
+          <div id="previewContent" class="space-y-3">
+            <!-- Data will be populated here -->
+          </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div id="messages" class="space-y-4">
+          <!-- Success/Error messages will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // API URL configuration
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+
+  // Check authentication on page load
+  function checkAuth() {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      window.location.href = '/login';
+      return false;
+    }
+    return true;
+  }
+
+  // Show message function
+  function showMessage(message: string, type: 'success' | 'error') {
+    const messagesDiv = document.getElementById('messages')!;
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message-${type} rounded-lg p-4`;
+    messageDiv.innerHTML = `
+      <div class="flex items-start">
+        <svg class="w-5 h-5 ${type === 'success' ? 'text-green-500' : 'text-red-500'} mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M5 13l4 4L19 7' : 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'}"></path>
+        </svg>
+        <p class="${type === 'success' ? 'text-green-800' : 'text-red-800'}">${message}</p>
+      </div>
+    `;
+
+    messagesDiv.appendChild(messageDiv);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      messageDiv.remove();
+    }, 5000);
+  }
+
+  // Preview data function
+  async function previewData(collection: string, id: string) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      showMessage('Token autentikasi tidak ditemukan', 'error');
+      return;
+    }
+
+    const previewBtn = document.getElementById('previewBtn') as HTMLButtonElement;
+    const originalText = previewBtn.innerHTML;
+    previewBtn.innerHTML = '<div class="loading-spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>Loading...';
+    previewBtn.disabled = true;
+
+    try {
+      let endpoint = '';
+      switch (collection) {
+        case 'mitra':
+          endpoint = `/api/admin/mitra/${id}`;
+          break;
+        case 'mitra_pelunasan':
+          endpoint = `/api/admin/mitra_pelunasan`; // We'll filter by ID in frontend
+          break;
+        case 'users':
+          endpoint = `/api/admin/users/${id}`; // Assuming this endpoint exists
+          break;
+        case 'admin_login':
+          endpoint = `/api/admin/admins/${id}`; // Assuming this endpoint exists
+          break;
+        case 'visitor':
+          endpoint = `/api/visitor/stats`; // Get all visitor data
+          break;
+        default:
+          throw new Error('Koleksi tidak valid');
+      }
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data untuk preview');
+      }
+
+      const result = await response.json();
+      let data = result.data;
+
+      // Special handling for different collections
+      if (collection === 'mitra_pelunasan') {
+        data = result.data.find((item: any) => item._id === id);
+      } else if (collection === 'visitor') {
+        // For visitor, we can't get specific ID, show general stats
+        data = { message: 'Data visitor tidak dapat di-preview per ID. Menampilkan statistik umum.', ...result };
+      }
+
+      if (!data) {
+        throw new Error('Data tidak ditemukan');
+      }
+
+      displayPreview(data, collection);
+      document.getElementById('previewSection')!.classList.remove('hidden');
+
+    } catch (error) {
+      console.error('Error previewing data:', error);
+      showMessage(error instanceof Error ? error.message : 'Gagal memuat preview data', 'error');
+    } finally {
+      previewBtn.innerHTML = originalText;
+      previewBtn.disabled = false;
+    }
+  }
+
+  // Display preview data
+  function displayPreview(data: any, collection: string) {
+    const previewContent = document.getElementById('previewContent')!;
+    let html = '';
+
+    if (collection === 'visitor') {
+      html = `
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="font-semibold text-gray-900 mb-2">Statistik Visitor</h4>
+          <p class="text-sm text-gray-600">${data.message}</p>
+          <div class="grid grid-cols-2 gap-4 mt-3">
+            <div>
+              <span class="text-sm font-medium text-gray-700">Total Visitors:</span>
+              <span class="text-lg font-bold text-blue-600 ml-2">${data.totalVisitors || 0}</span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-700">Active Visitors:</span>
+              <span class="text-lg font-bold text-green-600 ml-2">${data.activeVisitors || 0}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      // Generic data display
+      html = '<div class="bg-gray-50 rounded-lg p-4"><pre class="text-sm text-gray-800 whitespace-pre-wrap">' + JSON.stringify(data, null, 2) + '</pre></div>';
+    }
+
+    previewContent.innerHTML = html;
+  }
+
+  // Delete data function
+  async function deleteData(collection: string, id: string) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      showMessage('Token autentikasi tidak ditemukan', 'error');
+      return;
+    }
+
+    // Confirm deletion
+    if (!confirm(`Apakah Anda yakin ingin menghapus data ini dari koleksi ${collection}? Tindakan ini tidak dapat dibatalkan.`)) {
+      return;
+    }
+
+    const deleteBtn = document.getElementById('deleteBtn') as HTMLButtonElement;
+    const originalText = deleteBtn.innerHTML;
+    deleteBtn.innerHTML = '<div class="loading-spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>Menghapus...';
+    deleteBtn.disabled = true;
+
+    try {
+      let endpoint = '';
+      let method = 'DELETE';
+
+      switch (collection) {
+        case 'mitra':
+          endpoint = `/api/admin/mitra/${id}`;
+          break;
+        case 'mitra_pelunasan':
+          endpoint = `/api/admin/mitra_pelunasan/${id}`;
+          break;
+        case 'users':
+          endpoint = `/api/admin/users/${id}`; // Assuming this endpoint exists
+          break;
+        case 'admin_login':
+          endpoint = `/api/admin/admins/${id}`; // Assuming this endpoint exists
+          break;
+        case 'visitor':
+          showMessage('Penghapusan data visitor belum diimplementasikan', 'error');
+          return;
+        default:
+          throw new Error('Koleksi tidak valid');
+      }
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Gagal menghapus data');
+      }
+
+      const result = await response.json();
+      showMessage(`Data berhasil dihapus dari koleksi ${collection}`, 'success');
+
+      // Clear form and preview
+      (document.getElementById('deleteForm') as HTMLFormElement).reset();
+      document.getElementById('previewSection')!.classList.add('hidden');
+
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      showMessage(error instanceof Error ? error.message : 'Gagal menghapus data', 'error');
+    } finally {
+      deleteBtn.innerHTML = originalText;
+      deleteBtn.disabled = false;
+    }
+  }
+
+  // Initialize page
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!checkAuth()) return;
+
+    // Preview button handler
+    document.getElementById('previewBtn')!.addEventListener('click', function() {
+      const collection = (document.getElementById('collection') as HTMLSelectElement).value;
+      const dataId = (document.getElementById('dataId') as HTMLInputElement).value.trim();
+
+      if (!collection || !dataId) {
+        showMessage('Silakan pilih koleksi dan masukkan ID data', 'error');
+        return;
+      }
+
+      previewData(collection, dataId);
+    });
+
+    // Form submit handler
+    document.getElementById('deleteForm')!.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const collection = (document.getElementById('collection') as HTMLSelectElement).value;
+      const dataId = (document.getElementById('dataId') as HTMLInputElement).value.trim();
+
+      if (!collection || !dataId) {
+        showMessage('Silakan pilih koleksi dan masukkan ID data', 'error');
+        return;
+      }
+
+      deleteData(collection, dataId);
+    });
+  });
+</script>

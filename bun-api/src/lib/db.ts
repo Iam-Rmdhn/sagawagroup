@@ -48,6 +48,13 @@ export const initializeCollections = async () => {
       await database.createCollection("visitor");
       console.log("Created 'visitor' collection");
     }
+
+    // Create crew collection
+    if (!collections.some((col) => col.name === "crew")) {
+      await database.createCollection("crew");
+      console.log("Created 'crew' collection");
+    }
+
     console.log("Database initialized successfully");
   } catch (error) {
     console.error("Error initializing database:", error);
@@ -62,6 +69,7 @@ export const adminCollection = database.collection("admin_login");
 export const mitraLoginCollection = database.collection("mitra_login");
 export const mitraPelunasanCollection = database.collection("mitra_pelunasan");
 export const visitorCollection = database.collection("visitor");
+export const crewCollection = database.collection("crew");
 
 // Initialize on startup
 (async () => {

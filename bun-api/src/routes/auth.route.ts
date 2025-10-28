@@ -11,6 +11,10 @@ import {
   updateMitraImages,
   getMitraProfile,
   updateMitraProfile,
+  getAllUsers,
+  getUserById,
+  getAllAdmins,
+  getAdminById,
 } from "../controllers/auth.controller";
 
 export const authRoute = async (req: Request): Promise<Response> => {
@@ -131,6 +135,128 @@ export const authRoute = async (req: Request): Promise<Response> => {
 
   if (req.method === "PUT" && pathname === "/api/mitra/profile/update") {
     return await updateMitraProfile(req);
+  }
+
+  // Delete user
+  if (
+    req.method === "DELETE" &&
+    pathname.startsWith("/api/admin/users/") &&
+    pathname !== "/api/admin/users/approve"
+  ) {
+    return (async () => {
+      const id = pathname.split("/api/admin/users/")[1];
+      if (!id) {
+        return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { UserModel } = await import("../models/user.model");
+        const deleted = await UserModel.deleteOne({ _id: id });
+        if (!deleted) {
+          return new Response(
+            JSON.stringify({ error: "User tidak ditemukan" }),
+            {
+              status: 404,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "User berhasil dihapus",
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      } catch (err) {
+        console.error("Error deleting user:", err);
+        return new Response(
+          JSON.stringify({
+            error: "Gagal menghapus user",
+            success: false,
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
+  // Delete admin
+  if (
+    req.method === "DELETE" &&
+    pathname.startsWith("/api/admin/admins/") &&
+    pathname !== "/api/admin/admins/approve"
+  ) {
+    return (async () => {
+      const id = pathname.split("/api/admin/admins/")[1];
+      if (!id) {
+        return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { AdminModel } = await import("../models/admin.model");
+        const deleted = await AdminModel.deleteOne({ _id: id });
+        if (!deleted) {
+          return new Response(
+            JSON.stringify({ error: "Admin tidak ditemukan" }),
+            {
+              status: 404,
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+        }
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Admin berhasil dihapus",
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      } catch (err) {
+        console.error("Error deleting admin:", err);
+        return new Response(
+          JSON.stringify({
+            error: "Gagal menghapus admin",
+            success: false,
+          }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
+  if (req.method === "GET" && pathname === "/api/admin/users") {
+    return await getAllUsers(req);
+  }
+
+  if (
+    req.method === "GET" &&
+    pathname.startsWith("/api/admin/users/") &&
+    pathname !== "/api/admin/users/approve"
+  ) {
+    return await getUserById(req);
+  }
+
+  if (req.method === "GET" && pathname === "/api/admin/admins") {
+    return await getAllAdmins(req);
+  }
+
+  if (
+    req.method === "GET" &&
+    pathname.startsWith("/api/admin/admins/") &&
+    pathname !== "/api/admin/admins/approve"
+  ) {
+    return await getAdminById(req);
   }
 
   return new Response("Not Found", { status: 404 });

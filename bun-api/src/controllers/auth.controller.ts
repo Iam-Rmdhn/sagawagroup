@@ -52,7 +52,10 @@ async function validateAdminToken(req: Request): Promise<any> {
   }
 
   // Additional check for hardcoded admin
-  if (decoded.id === 'admin-hardcoded' && decoded.email === 'admin@sagawagroup.id') {
+  if (
+    decoded.id === "admin-hardcoded" &&
+    decoded.email === "admin@sagawagroup.id"
+  ) {
     return decoded;
   }
 
@@ -470,6 +473,136 @@ export const updateMitraProfile = async (req: Request): Promise<Response> => {
     });
   } catch (err: any) {
     console.error("Error updating mitra profile:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Get all users (admin only)
+export const getAllUsers = async (req: Request): Promise<Response> => {
+  try {
+    await validateAdminToken(req);
+
+    const { UserModel } = await import("../models/user.model");
+    const users = await UserModel.find({});
+
+    return new Response(JSON.stringify({ success: true, data: users }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting all users:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Get user by ID (admin only)
+export const getUserById = async (req: Request): Promise<Response> => {
+  try {
+    await validateAdminToken(req);
+
+    const url = new URL(req.url);
+    const id = url.pathname.split("/api/admin/users/")[1];
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const { UserModel } = await import("../models/user.model");
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: "User tidak ditemukan" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ success: true, data: user }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting user by ID:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Get all admins (admin only)
+export const getAllAdmins = async (req: Request): Promise<Response> => {
+  try {
+    await validateAdminToken(req);
+
+    const { AdminModel } = await import("../models/admin.model");
+    const admins = await AdminModel.find({});
+
+    return new Response(JSON.stringify({ success: true, data: admins }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting all admins:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+};
+
+// Get admin by ID (admin only)
+export const getAdminById = async (req: Request): Promise<Response> => {
+  try {
+    await validateAdminToken(req);
+
+    const url = new URL(req.url);
+    const id = url.pathname.split("/api/admin/admins/")[1];
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: "ID wajib diisi" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const { AdminModel } = await import("../models/admin.model");
+    const admin = await AdminModel.findById(id);
+
+    if (!admin) {
+      return new Response(JSON.stringify({ error: "Admin tidak ditemukan" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ success: true, data: admin }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error getting admin by ID:", err);
     return new Response(
       JSON.stringify({ error: err.message || "Internal server error" }),
       {

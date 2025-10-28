@@ -1,0 +1,1403 @@
+---
+// Admin Kelola Crew Page
+import Layout from '../../layouts/Layout.astro';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebar.astro';
+import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
+---
+
+<Layout title="Admin - Kelola Crew">
+  <!-- Modern Crew Management Page Styles -->
+  <style>
+    /* Global fixes for scroll stability */
+    * {
+      transform: translateZ(0);
+      will-change: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
+    }
+
+    body, html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom Blue Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgb(59 130 246), rgb(37 99 235));
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgb(37 99 235), rgb(29 78 216));
+      transform: scale(1.1);
+    }
+
+    /* Firefox scrollbar styling */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgb(59 130 246) rgba(59, 130, 246, 0.1);
+    }
+
+    /* Crew card styling */
+    .crew-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(59, 130, 246, 0.05) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crew-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
+      transition: left 0.6s ease;
+      z-index: 0;
+    }
+
+    .crew-card:hover::before {
+      left: 100%;
+    }
+
+    .crew-card:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: translateY(-2px);
+    }
+
+    /* Status badges */
+    .status-active {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.05) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .status-inactive {
+      background: linear-gradient(135deg, rgba(156, 163, 175, 0.1) 0%, rgba(107, 114, 128, 0.05) 100%);
+      border: 1px solid rgba(156, 163, 175, 0.2);
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Action buttons */
+    .action-btn {
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(59, 130, 246, 0.02) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+      padding-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #111827;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+    }
+
+    .close-btn:hover {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #1f2937;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: rgb(59, 130, 246);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+
+      .modal-header h2 {
+        font-size: 1.25rem;
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-cancel {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      background-color: #f9fafb;
+      color: #1f2937;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .btn-cancel:hover {
+      background-color: #f3f4f6;
+      border-color: #d1d5db;
+    }
+
+    .btn-submit {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(37, 99, 235) 100%);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Password input container */
+    .password-input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-group input {
+      width: 100%;
+      padding-right: 2.5rem;
+    }
+
+    .password-toggle-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      transition: color 0.2s ease;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle-btn:hover {
+      color: rgb(59, 130, 246);
+    }
+
+    .password-toggle-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  </style>
+
+  <!-- Main Content -->
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-cyan-50">
+    <AdminSidebar currentPage="crew" />
+    <AdminNavbar />
+
+    <!-- Main Content Area -->
+    <div class="ml-64 pt-16">
+      <div class="p-8">
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Crew</h1>
+          <p class="text-gray-600">Kelola anggota crew dan tim kerja</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="crew-card rounded-xl p-6">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Total Crew</p>
+                <p class="text-2xl font-bold text-gray-900" id="totalCrew">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="crew-card rounded-xl p-6">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Crew Aktif</p>
+                <p class="text-2xl font-bold text-gray-900" id="activeCrew">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="crew-card rounded-xl p-6">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-600">Crew Non-Aktif</p>
+                <p class="text-2xl font-bold text-gray-900" id="inactiveCrew">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 mb-8">
+          <button id="addCrewBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Tambah Crew
+          </button>
+
+          <button id="refreshBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        <!-- Crew Table -->
+        <div class="crew-card rounded-xl p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-900">Daftar Crew</h2>
+            <div class="flex space-x-2">
+              <input type="text" id="searchInput" placeholder="Cari crew..."
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="all">Semua Status</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Non-Aktif</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Nama</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Email</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Divisi</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Kemitraan</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Sub Brand</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Status</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-900">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="crewTableBody">
+                <!-- Crew data will be populated here -->
+                <tr>
+                  <td colspan="7" class="text-center py-12">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                      <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                      </svg>
+                      <div>
+                        <p class="text-lg font-semibold text-gray-600">Belum ada data crew</p>
+                        <p class="text-sm text-gray-500 mt-1">Tambah crew pertama untuk memulai</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Crew Modal -->
+  <div id="addCrewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tambah Crew Baru</h2>
+        <button class="close-btn" onclick="closeAddCrewModal()">&times;</button>
+      </div>
+
+      <form id="addCrewForm">
+        <!-- Nama -->
+        <div class="form-group">
+          <label for="crewNama">Nama</label>
+          <input 
+            type="text" 
+            id="crewNama" 
+            name="nama" 
+            placeholder="Masukkan nama crew"
+            required
+          />
+        </div>
+
+        <!-- Divisi -->
+        <div class="form-group">
+          <label for="crewDivisi">Divisi</label>
+          <select 
+            id="crewDivisi" 
+            name="divisi"
+            required
+          >
+            <option value="">Pilih Divisi</option>
+            <option value="IT & Digital">IT & Digital</option>
+            <option value="Finance">Finance</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Produksi">Produksi</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Crew">Crew</option>
+          </select>
+        </div>
+
+        <!-- Email dan Nomor HP -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="crewEmail">Email</label>
+            <input 
+              type="email" 
+              id="crewEmail" 
+              name="email" 
+              placeholder="Masukkan email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="crewPhone">Nomor HP</label>
+            <input 
+              type="tel" 
+              id="crewPhone" 
+              name="nomorHP" 
+              placeholder="Masukkan nomor HP"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="crewPassword">Password</label>
+          <div class="password-input-group">
+            <input 
+              type="password" 
+              id="crewPassword" 
+              name="password" 
+              placeholder="Masukkan password (min. 6 karakter)"
+              minlength="6"
+              required
+            />
+            <button 
+              type="button" 
+              class="password-toggle-btn" 
+              onclick="togglePasswordVisibility()"
+              title="Tampilkan/Sembunyikan password"
+            >
+              <svg id="eyeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kemitraan (shown only when Crew or Sdupervisor is selected) -->
+        <div class="form-group" id="kemitraanGroup" style="display: none;">
+          <label for="crewKemitraan">Kemitraan</label>
+          <select 
+            id="crewKemitraan" 
+            name="kemitraan"
+          >
+            <option value="">Pilih Kemitraan</option>
+            <option value="Kagawa Ricebowl">Kagawa Ricebowl</option>
+            <option value="Kagawa Coffee Corner">Kagawa Coffee Corner</option>
+            <option value="Kagawa Coffe Ricebowl Corner">Kagawa Coffe Ricebowl Corner</option>
+            <option value="RM Nusantara">RM Nusantara</option>
+            <option value="Independent Brand">Independent Brand</option>
+          </select>
+        </div>
+
+        <!-- Sub Brand (shown only when RM Nusantara is selected) -->
+        <div class="form-group" id="subBrandGroup" style="display: none;">
+          <label for="crewSubBrand">Sub Brand</label>
+          <select 
+            id="crewSubBrand" 
+            name="subBrand"
+          >
+            <option value="">Pilih Sub Brand</option>
+            <option value="WarNas Selera Nusantara">WarNas Selera Nusantara</option>
+            <option value="Mas Gaw">Mas Gaw</option>
+            <option value="Masakan Mas Gawa">Masakan Mas Gawa</option>
+          </select>
+        </div>
+
+        <!-- Outlet (shown only when Crew or Supervisor is selected) -->
+        <div class="form-group" id="outletGroup" style="display: none;">
+          <label for="crewOutlet">Outlet</label>
+          <input 
+            type="text" 
+            id="crewOutlet" 
+            name="outlet" 
+            placeholder="Masukkan outlet"
+          />
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeAddCrewModal()">
+            Batal
+          </button>
+          <button type="submit" class="btn-submit">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Tambah Crew
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Crew Modal -->
+  <div id="editCrewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Crew</h2>
+        <button class="close-btn" onclick="closeEditCrewModal()">&times;</button>
+      </div>
+
+      <form id="editCrewForm">
+        <!-- Hidden field for crew ID -->
+        <input type="hidden" id="editCrewId" name="crewId" />
+
+        <!-- Nama -->
+        <div class="form-group">
+          <label for="editCrewNama">Nama</label>
+          <input
+            type="text"
+            id="editCrewNama"
+            name="nama"
+            placeholder="Masukkan nama crew"
+            required
+          />
+        </div>
+
+        <!-- Divisi -->
+        <div class="form-group">
+          <label for="editCrewDivisi">Divisi</label>
+          <select
+            id="editCrewDivisi"
+            name="divisi"
+            required
+          >
+            <option value="">Pilih Divisi</option>
+            <option value="IT & Digital">IT & Digital</option>
+            <option value="Finance">Finance</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Produksi">Produksi</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Crew">Crew</option>
+          </select>
+        </div>
+
+        <!-- Email dan Nomor HP -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editCrewEmail">Email</label>
+            <input
+              type="email"
+              id="editCrewEmail"
+              name="email"
+              placeholder="Masukkan email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editCrewPhone">Nomor HP</label>
+            <input
+              type="tel"
+              id="editCrewPhone"
+              name="nomorHP"
+              placeholder="Masukkan nomor HP"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Password (optional for edit) -->
+        <div class="form-group">
+          <label for="editCrewPassword">Password Baru <span class="text-sm text-gray-500">(kosongkan jika tidak ingin mengubah)</span></label>
+          <div class="password-input-group">
+            <input
+              type="password"
+              id="editCrewPassword"
+              name="password"
+              placeholder="Masukkan password baru (min. 6 karakter)"
+              minlength="6"
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              onclick="toggleEditPasswordVisibility()"
+              title="Tampilkan/Sembunyikan password"
+            >
+              <svg id="editEyeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kemitraan (shown only when Crew or Supervisor is selected) -->
+        <div class="form-group" id="editKemitraanGroup" style="display: none;">
+          <label for="editCrewKemitraan">Kemitraan</label>
+          <select
+            id="editCrewKemitraan"
+            name="kemitraan"
+          >
+            <option value="">Pilih Kemitraan</option>
+            <option value="Kagawa Ricebowl">Kagawa Ricebowl</option>
+            <option value="Kagawa Coffee Corner">Kagawa Coffee Corner</option>
+            <option value="Kagawa Coffe Ricebowl Corner">Kagawa Coffe Ricebowl Corner</option>
+            <option value="RM Nusantara">RM Nusantara</option>
+            <option value="Independent Brand">Independent Brand</option>
+          </select>
+        </div>
+
+        <!-- Sub Brand (shown only when RM Nusantara is selected) -->
+        <div class="form-group" id="editSubBrandGroup" style="display: none;">
+          <label for="editCrewSubBrand">Sub Brand</label>
+          <select
+            id="editCrewSubBrand"
+            name="subBrand"
+          >
+            <option value="">Pilih Sub Brand</option>
+            <option value="WarNas Selera Nusantara">WarNas Selera Nusantara</option>
+            <option value="Mas Gaw">Mas Gaw</option>
+            <option value="Masakan Mas Gawa">Masakan Mas Gawa</option>
+          </select>
+        </div>
+
+        <!-- Outlet (shown only when Crew or Supervisor is selected) -->
+        <div class="form-group" id="editOutletGroup" style="display: none;">
+          <label for="editCrewOutlet">Outlet</label>
+          <input
+            type="text"
+            id="editCrewOutlet"
+            name="outlet"
+            placeholder="Masukkan outlet"
+          />
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeEditCrewModal()">
+            Batal
+          </button>
+          <button type="submit" class="btn-submit">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Update Crew
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // API URL configuration
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+
+  // Check authentication on page load
+  function checkAuth() {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      window.location.href = '/login';
+      return false;
+    }
+    return true;
+  }
+
+  // Store for crew data
+  let crewData: Array<any> = [];
+
+  // Render crew table
+  function renderCrewTable(crewList: any[]) {
+    const tbody = document.getElementById('crewTableBody')!;
+    const searchTerm = (document.getElementById('searchInput') as HTMLInputElement)?.value.toLowerCase() || '';
+    const statusFilter = (document.getElementById('statusFilter') as HTMLSelectElement)?.value || 'all';
+
+    // Filter data
+    const filteredData = crewList.filter(crew => {
+      const matchesSearch = crew.nama.toLowerCase().includes(searchTerm) ||
+                           crew.email.toLowerCase().includes(searchTerm) ||
+                           crew.divisi.toLowerCase().includes(searchTerm);
+      const matchesStatus = statusFilter === 'all' || crew.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+
+    if (filteredData.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="text-center py-12">
+            <div class="flex flex-col items-center justify-center space-y-4">
+              <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <div>
+                <p class="text-lg font-semibold text-gray-600">Tidak ada data yang sesuai</p>
+                <p class="text-sm text-gray-500 mt-1">Coba ubah filter pencarian</p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+      tbody.innerHTML = filteredData.map(crew => `
+      <tr class="hover:bg-blue-50/30 transition-colors">
+        <td class="py-4 px-4">
+          <div class="font-medium text-gray-900">${crew.nama}</div>
+        </td>
+        <td class="py-4 px-4 text-gray-700">${crew.email}</td>
+        <td class="py-4 px-4 text-gray-700">${crew.divisi || '-'}</td>
+        <td class="py-4 px-4 text-gray-700">${crew.kemitraan || '-'}</td>
+        <td class="py-4 px-4 text-gray-700">${crew.subBrand || '-'}</td>
+        <td class="py-4 px-4">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            crew.status === 'active' ? 'status-active text-green-800' : 'status-inactive text-gray-800'
+          }">
+            ${crew.status === 'active' ? 'Aktif' : 'Non-Aktif'}
+          </span>
+        </td>
+        <td class="py-4 px-4">
+          <div class="flex items-center space-x-2">
+            <button onclick="editCrew('${crew._id}')" class="action-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+              Edit
+            </button>
+            <button onclick="toggleCrewStatus('${crew._id}')" class="action-btn ${
+              crew.status === 'active' ? 'bg-gray-500 hover:bg-gray-600' : 'bg-green-500 hover:bg-green-600'
+            } text-white px-3 py-1 rounded text-sm">
+              ${crew.status === 'active' ? 'Non-Aktifkan' : 'Aktifkan'}
+            </button>
+            <button onclick="deleteCrew('${crew._id}')" class="action-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+              Hapus
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Update stats
+  function updateStats(crewList: any[]) {
+    const total = crewList.length;
+    const active = crewList.filter(c => c.status === 'active').length;
+    const inactive = total - active;
+
+    document.getElementById('totalCrew')!.textContent = total.toString();
+    document.getElementById('activeCrew')!.textContent = active.toString();
+    document.getElementById('inactiveCrew')!.textContent = inactive.toString();
+  }
+
+  // Load crew data from API
+  async function loadCrewData() {
+    try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/api/admin/crew`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      crewData = result.data || [];
+      renderCrewTable(crewData);
+      updateStats(crewData);
+    } catch (error) {
+      console.error('Error loading crew data:', error);
+      alert('Gagal memuat data crew');
+    }
+  }
+
+  // Toggle password visibility
+  function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('crewPassword') as HTMLInputElement;
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      // Change icon to eye-off
+      eyeIcon!.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>';
+    } else {
+      passwordInput.type = 'password';
+      // Change icon back to eye
+      eyeIcon!.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+    }
+  }
+
+  // Modal functions
+  function openAddCrewModal() {
+    const modal = document.getElementById('addCrewModal');
+    if (modal) {
+      modal.classList.add('active');
+      // Reset form
+      (document.getElementById('addCrewForm') as HTMLFormElement).reset();
+      // Hide conditional fields initially
+      document.getElementById('kemitraanGroup')!.style.display = 'none';
+      document.getElementById('subBrandGroup')!.style.display = 'none';
+      document.getElementById('outletGroup')!.style.display = 'none';
+    }
+  }
+
+  function closeAddCrewModal() {
+    const modal = document.getElementById('addCrewModal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+  }
+
+  // Edit Crew Modal functions
+  function openEditCrewModal() {
+    const modal = document.getElementById('editCrewModal');
+    if (modal) {
+      modal.classList.add('active');
+    }
+  }
+
+  function closeEditCrewModal() {
+    const modal = document.getElementById('editCrewModal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+  }
+
+  // Toggle password visibility for edit form
+  function toggleEditPasswordVisibility() {
+    const passwordInput = document.getElementById('editCrewPassword') as HTMLInputElement;
+    const eyeIcon = document.getElementById('editEyeIcon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      // Change icon to eye-off
+      eyeIcon!.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>';
+    } else {
+      passwordInput.type = 'password';
+      // Change icon back to eye
+      eyeIcon!.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
+    }
+  }
+
+  // Handle edit form submission
+  async function handleEditCrewSubmit() {
+    const form = document.getElementById('editCrewForm') as HTMLFormElement;
+    const formData = new FormData(form);
+
+    // Helper function to safely get string values from FormData
+    const getStringValue = (key: string): string => {
+      const value = formData.get(key);
+      return value ? String(value).trim() : '';
+    };
+
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Token tidak ditemukan. Silakan login kembali.');
+      return;
+    }
+
+    const crewId = getStringValue('crewId');
+    if (!crewId) {
+      alert('ID crew tidak ditemukan');
+      return;
+    }
+
+    const crewPayload: any = {
+      nama: getStringValue('nama'),
+      email: getStringValue('email'),
+      divisi: getStringValue('divisi'),
+      kemitraan: getStringValue('kemitraan') || null,
+      subBrand: getStringValue('subBrand') || null,
+      outlet: getStringValue('outlet') || null,
+      nomorHP: getStringValue('nomorHP'),
+    };
+
+    // Only include password if it's provided
+    const password = getStringValue('password');
+    if (password) {
+      crewPayload.password = password;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/crew/${crewId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(crewPayload),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Gagal memperbarui crew');
+      }
+
+      const result = await response.json();
+
+      // Close modal and reload data
+      closeEditCrewModal();
+      loadCrewData();
+
+      // Show success message
+      alert(`Crew ${result.data.nama} berhasil diperbarui!`);
+    } catch (error) {
+      console.error('Error updating crew:', error);
+      alert(error instanceof Error ? error.message : 'Gagal memperbarui crew');
+    }
+  }
+
+  // Handle form submission
+  async function handleAddCrewSubmit() {
+    const form = document.getElementById('addCrewForm') as HTMLFormElement;
+    const formData = new FormData(form);
+
+    // Helper function to safely get string values from FormData
+    const getStringValue = (key: string): string => {
+      const value = formData.get(key);
+      return value ? String(value).trim() : '';
+    };
+
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Token tidak ditemukan. Silakan login kembali.');
+      return;
+    }
+
+    const crewPayload = {
+      nama: getStringValue('nama'),
+      email: getStringValue('email'),
+      password: getStringValue('password'),
+      divisi: getStringValue('divisi'),
+      kemitraan: getStringValue('kemitraan') || null,
+      subBrand: getStringValue('subBrand') || null,
+      outlet: getStringValue('outlet') || null,
+      nomorHP: getStringValue('nomorHP'),
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/crew/create`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(crewPayload),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Gagal menambahkan crew');
+      }
+
+      const result = await response.json();
+      
+      // Close modal and reload data
+      closeAddCrewModal();
+      loadCrewData();
+
+      // Show success message
+      alert(`Crew ${result.data.nama} berhasil ditambahkan!`);
+    } catch (error) {
+      console.error('Error adding crew:', error);
+      alert(error instanceof Error ? error.message : 'Gagal menambahkan crew');
+    }
+  }
+
+  // Global functions for table actions
+  async function editCrew(crewId: string) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Token tidak ditemukan. Silakan login kembali.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/crew/${crewId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Gagal mengambil data crew');
+      }
+
+      const result = await response.json();
+      const crew = result.data;
+
+      // Fill the edit form with crew data
+      (document.getElementById('editCrewId') as HTMLInputElement).value = crew._id;
+      (document.getElementById('editCrewNama') as HTMLInputElement).value = crew.nama || '';
+      (document.getElementById('editCrewEmail') as HTMLInputElement).value = crew.email || '';
+      (document.getElementById('editCrewPhone') as HTMLInputElement).value = crew.nomorHP || '';
+      (document.getElementById('editCrewDivisi') as HTMLSelectElement).value = crew.divisi || '';
+      (document.getElementById('editCrewPassword') as HTMLInputElement).value = ''; // Always empty for security
+
+      // Handle conditional fields
+      const divisiSelect = document.getElementById('editCrewDivisi') as HTMLSelectElement;
+      const kemitraanGroup = document.getElementById('editKemitraanGroup')!;
+      const outletGroup = document.getElementById('editOutletGroup')!;
+      const kemitraanSelect = document.getElementById('editCrewKemitraan') as HTMLSelectElement;
+      const outletInput = document.getElementById('editCrewOutlet') as HTMLInputElement;
+
+      // Set kemitraan and outlet values first
+      kemitraanSelect.value = crew.kemitraan || '';
+      outletInput.value = crew.outlet || '';
+
+      // Show/hide conditional fields based on divisi
+      if (crew.divisi === 'Crew' || crew.divisi === 'Supervisor') {
+        kemitraanGroup.style.display = 'block';
+        outletGroup.style.display = 'block';
+        kemitraanSelect.required = true;
+        outletInput.required = true;
+      } else {
+        kemitraanGroup.style.display = 'none';
+        outletGroup.style.display = 'none';
+        kemitraanSelect.required = false;
+        outletInput.required = false;
+      }
+
+      // Handle sub-brand visibility
+      const subBrandGroup = document.getElementById('editSubBrandGroup')!;
+      const subBrandSelect = document.getElementById('editCrewSubBrand') as HTMLSelectElement;
+      subBrandSelect.value = crew.subBrand || '';
+
+      if (crew.kemitraan === 'RM Nusantara') {
+        subBrandGroup.style.display = 'block';
+        subBrandSelect.required = true;
+      } else {
+        subBrandGroup.style.display = 'none';
+        subBrandSelect.required = false;
+      }
+
+      // Show the modal
+      openEditCrewModal();
+    } catch (error) {
+      console.error('Error loading crew data for edit:', error);
+      alert(error instanceof Error ? error.message : 'Gagal memuat data crew untuk edit');
+    }
+  }
+
+  async function toggleCrewStatus(crewId: string) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Token tidak ditemukan. Silakan login kembali.');
+      return;
+    }
+
+    // Find current crew and toggle status
+    const crew = crewData.find(c => c._id === crewId);
+    if (!crew) {
+      alert('Crew tidak ditemukan');
+      return;
+    }
+
+    const newStatus = crew.status === 'active' ? 'inactive' : 'active';
+    
+    try {
+      const response = await fetch(`${API_URL}/api/admin/crew/${crewId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Gagal mengubah status crew');
+      }
+
+      loadCrewData();
+      alert(`Status crew berhasil diubah menjadi ${newStatus === 'active' ? 'Aktif' : 'Non-Aktif'}`);
+    } catch (error) {
+      console.error('Error toggling crew status:', error);
+      alert(error instanceof Error ? error.message : 'Gagal mengubah status crew');
+    }
+  }
+
+  async function deleteCrew(crewId: string) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      alert('Token tidak ditemukan. Silakan login kembali.');
+      return;
+    }
+
+    if (!confirm('Apakah Anda yakin ingin menghapus crew ini?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/admin/crew/${crewId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Gagal menghapus crew');
+      }
+
+      loadCrewData();
+      alert('Crew berhasil dihapus');
+    } catch (error) {
+      console.error('Error deleting crew:', error);
+      alert(error instanceof Error ? error.message : 'Gagal menghapus crew');
+    }
+  }
+
+  // Initialize page
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!checkAuth()) return;
+
+    // Load initial data
+    loadCrewData();
+
+    // Add event listeners
+    document.getElementById('addCrewBtn')!.addEventListener('click', function() {
+      openAddCrewModal();
+    });
+
+    document.getElementById('refreshBtn')!.addEventListener('click', function() {
+      loadCrewData();
+    });
+
+    document.getElementById('searchInput')!.addEventListener('input', function() {
+      renderCrewTable(crewData);
+    });
+
+    document.getElementById('statusFilter')!.addEventListener('change', function() {
+      renderCrewTable(crewData);
+    });
+
+    // Form submission
+    document.getElementById('addCrewForm')!.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleAddCrewSubmit();
+    });
+
+    // Edit form submission
+    document.getElementById('editCrewForm')!.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleEditCrewSubmit();
+    });
+
+    // Divisi change handler for conditional fields
+    document.getElementById('crewDivisi')!.addEventListener('change', function(e) {
+      const selectedDivisi = (e.target as HTMLSelectElement).value;
+      const kemitraanGroup = document.getElementById('kemitraanGroup')!;
+      const outletGroup = document.getElementById('outletGroup')!;
+      const kemitraanSelect = document.getElementById('crewKemitraan') as HTMLSelectElement;
+      const outletInput = document.getElementById('crewOutlet') as HTMLInputElement;
+
+      if (selectedDivisi === 'Crew' || selectedDivisi === 'Supervisor') {
+        kemitraanGroup.style.display = 'block';
+        outletGroup.style.display = 'block';
+        kemitraanSelect.required = true;
+        outletInput.required = true;
+      } else {
+        kemitraanGroup.style.display = 'none';
+        outletGroup.style.display = 'none';
+        kemitraanSelect.required = false;
+        outletInput.required = false;
+        kemitraanSelect.value = '';
+        outletInput.value = '';
+        // Also hide sub-brand if it was visible
+        document.getElementById('subBrandGroup')!.style.display = 'none';
+        (document.getElementById('crewSubBrand') as HTMLSelectElement).required = false;
+        (document.getElementById('crewSubBrand') as HTMLSelectElement).value = '';
+      }
+    });
+
+    // Kemitraan change handler for sub-brand visibility
+    document.getElementById('crewKemitraan')!.addEventListener('change', function(e) {
+      const selectedValue = (e.target as HTMLSelectElement).value;
+      const subBrandGroup = document.getElementById('subBrandGroup')!;
+      const subBrandSelect = document.getElementById('crewSubBrand') as HTMLSelectElement;
+
+      if (selectedValue === 'RM Nusantara') {
+        subBrandGroup.style.display = 'block';
+        subBrandSelect.required = true;
+      } else {
+        subBrandGroup.style.display = 'none';
+        subBrandSelect.required = false;
+        subBrandSelect.value = '';
+      }
+    });
+
+    // Edit form divisi change handler for conditional fields
+    document.getElementById('editCrewDivisi')!.addEventListener('change', function(e) {
+      const selectedDivisi = (e.target as HTMLSelectElement).value;
+      const kemitraanGroup = document.getElementById('editKemitraanGroup')!;
+      const outletGroup = document.getElementById('editOutletGroup')!;
+      const kemitraanSelect = document.getElementById('editCrewKemitraan') as HTMLSelectElement;
+      const outletInput = document.getElementById('editCrewOutlet') as HTMLInputElement;
+
+      if (selectedDivisi === 'Crew' || selectedDivisi === 'Supervisor') {
+        kemitraanGroup.style.display = 'block';
+        outletGroup.style.display = 'block';
+        kemitraanSelect.required = true;
+        outletInput.required = true;
+      } else {
+        kemitraanGroup.style.display = 'none';
+        outletGroup.style.display = 'none';
+        kemitraanSelect.required = false;
+        outletInput.required = false;
+        kemitraanSelect.value = '';
+        outletInput.value = '';
+        // Also hide sub-brand if it was visible
+        document.getElementById('editSubBrandGroup')!.style.display = 'none';
+        (document.getElementById('editCrewSubBrand') as HTMLSelectElement).required = false;
+        (document.getElementById('editCrewSubBrand') as HTMLSelectElement).value = '';
+      }
+    });
+
+    // Edit form kemitraan change handler for sub-brand visibility
+    document.getElementById('editCrewKemitraan')!.addEventListener('change', function(e) {
+      const selectedValue = (e.target as HTMLSelectElement).value;
+      const subBrandGroup = document.getElementById('editSubBrandGroup')!;
+      const subBrandSelect = document.getElementById('editCrewSubBrand') as HTMLSelectElement;
+
+      if (selectedValue === 'RM Nusantara') {
+        subBrandGroup.style.display = 'block';
+        subBrandSelect.required = true;
+      } else {
+        subBrandGroup.style.display = 'none';
+        subBrandSelect.required = false;
+        subBrandSelect.value = '';
+      }
+    });
+  });
+
+  // Close modal when clicking outside
+  window.addEventListener('click', function(event) {
+    const addModal = document.getElementById('addCrewModal');
+    const editModal = document.getElementById('editCrewModal');
+    if (event.target === addModal) {
+      closeAddCrewModal();
+    }
+    if (event.target === editModal) {
+      closeEditCrewModal();
+    }
+  });
+
+  // Attach to window for onclick handlers
+  (window as any).openAddCrewModal = openAddCrewModal;
+  (window as any).closeAddCrewModal = closeAddCrewModal;
+  (window as any).closeEditCrewModal = closeEditCrewModal;
+  (window as any).handleAddCrewSubmit = handleAddCrewSubmit;
+  (window as any).handleEditCrewSubmit = handleEditCrewSubmit;
+  (window as any).editCrew = editCrew;
+  (window as any).toggleCrewStatus = toggleCrewStatus;
+  (window as any).deleteCrew = deleteCrew;
+  (window as any).togglePasswordVisibility = togglePasswordVisibility;
+  (window as any).toggleEditPasswordVisibility = toggleEditPasswordVisibility;
+</script>

@@ -5,6 +5,7 @@ import { agreementRoute } from "./src/routes/agreement.route";
 import { youtubeRoute } from "./src/routes/youtube.route";
 import { analyticsRoute } from "./src/routes/analytics.route";
 import { visitorRoute } from "./src/routes/visitor.route";
+import { crewRoute } from "./src/routes/crew.route";
 import "./src/lib/db"; // Initialize database connection
 import { ENV } from "./src/env";
 
@@ -110,6 +111,19 @@ Bun.serve({
         url.pathname !== "/api/admin/mitra_pelunasan/approve"
       ) {
         const response = await mitraRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Crew routes
+      if (
+        url.pathname.startsWith("/api/admin/crew") ||
+        url.pathname.startsWith("/api/crew")
+      ) {
+        const response = await crewRoute(req);
         // Add CORS headers to response
         Object.entries(corsHeaders).forEach(([key, value]) => {
           response.headers.set(key, value);

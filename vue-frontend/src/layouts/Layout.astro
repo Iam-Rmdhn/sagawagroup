@@ -168,10 +168,16 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
     <!-- Visitor Analytics Tracking -->
     <script>
         (function() {
-            // Get API URL from environment or use production URL as fallback
-            const API_URL = import.meta.env.PUBLIC_API_URL || 'https://www.sagawagroup.id';
+            // Get API URL from meta tag (more reliable than import.meta.env in client scripts)
+            const API_URL = document.querySelector('meta[name="api-url"]')?.getAttribute('content') || 'http://localhost:3000';
             let sessionId = localStorage.getItem('visitor_session_id');
             let heartbeatInterval = null;
+            
+            // Don't track admin pages
+            if (window.location.pathname.startsWith('/admin')) {
+                console.log('[Analytics] Skipping tracking for admin page:', window.location.pathname);
+                return;
+            }
             
             // Generate or retrieve session ID
             if (!sessionId) {
@@ -182,6 +188,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
             // Track page view
             async function trackPageView() {
                 try {
+                    console.log('[Analytics] Tracking page view to:', API_URL);
                     const response = await fetch(`${API_URL}/api/analytics/track`, {
                         method: 'POST',
                         headers: {
@@ -197,7 +204,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
                     
                     if (response.ok) {
                         const data = await response.json();
-                        console.log('[Analytics] Page view tracked:', data);
+                        console.log('[Analytics] ✅ Page view tracked:', data);
                         
                         // Update session ID if new one was assigned
                         if (data.sessionId && data.sessionId !== sessionId) {
@@ -206,9 +213,11 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
                                 localStorage.setItem('visitor_session_id', sessionId);
                             }
                         }
+                    } else {
+                        console.warn('[Analytics] ⚠️ Failed to track page view:', response.status, response.statusText);
                     }
                 } catch (error) {
-                    console.error('[Analytics] Failed to track page view:', error);
+                    console.error('[Analytics] ❌ Tracking error:', error);
                 }
             }
             
@@ -230,11 +239,8 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
             }
             
             // Track page view when page loads
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', trackPageView);
-            } else {
-                trackPageView();
-            }
+            console.log('[Analytics] Will track page view in 1 second...');
+            setTimeout(trackPageView, 1000);
             
             // Send heartbeat every 2 minutes to keep session alive
             heartbeatInterval = setInterval(sendHeartbeat, 2 * 60 * 1000);
@@ -248,7 +254,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
         })();
     </script>
     
-    <!-- Visitor Tracking -->
+    <!-- Visitor Tracking
     <script>
         (function() {
             const API_URL = document.querySelector('meta[name="api-url"]')?.getAttribute('content') || 'http://localhost:3000';
@@ -291,7 +297,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
             console.log('[Visitor] Will track in 1 second...');
             setTimeout(trackVisitor, 1000);
         })();
-    </script>
+    </script> -->
 
     <!-- Service Worker Registration -->
     <script>

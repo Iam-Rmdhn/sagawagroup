@@ -53,6 +53,11 @@ export class UserModel {
     return result.modifiedCount > 0;
   }
 
+  static async deleteOne(filter: Partial<User>): Promise<boolean> {
+    const result = await usersCollection.deleteOne(filter);
+    return result.deletedCount > 0;
+  }
+
   static async countDocuments(filter: Partial<User> = {}): Promise<number> {
     return await usersCollection.estimatedDocumentCount();
   }
@@ -64,5 +69,11 @@ export class UserModel {
     } else {
       return await this.create(user);
     }
+  }
+
+  static async find(filter: Partial<User> = {}): Promise<User[]> {
+    const cursor = usersCollection.find(filter);
+    const result = await cursor.toArray();
+    return result as User[];
   }
 }
