@@ -28,7 +28,7 @@ export async function registerMitra(mitraData: any) {
     console.log("Registering mitra with data:", {
       sistemKemitraan: mitraData.sistemKemitraan,
       sales: mitraData.sales,
-      jenisUsaha: mitraData.jenisUsaha, // For debugging mapping
+      jenisUsaha: mitraData.jenisUsaha,
       paketUsaha: mitraData.paketUsaha,
       email: mitraData.email,
       hargaPaket: mitraData.hargaPaket,
@@ -42,6 +42,14 @@ export async function registerMitra(mitraData: any) {
     }
 
     console.log("Creating mitra record...");
+    console.log("Image URLs to be saved:");
+    console.log("  - fotoKTP (legacy):", mitraData.fotoKTP || "EMPTY");
+    console.log(
+      "  - buktiTransfer (stored):",
+      mitraData.buktiTransfer || "EMPTY"
+    );
+    console.log("  - upload_ktp:", mitraData.upload_ktp || "EMPTY");
+    console.log("  - upload_tf:", mitraData.upload_tf || "EMPTY");
 
     // Create new mitra record
     const newMitra = await MitraModel.create({
@@ -53,7 +61,9 @@ export async function registerMitra(mitraData: any) {
       alamatMitra: mitraData.alamatMitra,
       noHp: mitraData.noHp,
       email: mitraData.email,
-      fotoKTP: mitraData.fotoKTP || "",
+      fotoKTP: mitraData.fotoKTP || "", // Legacy field
+      upload_ktp: mitraData.upload_ktp || "", // NEW: Normalized uploads path (relative)
+      upload_tf: mitraData.upload_tf || "", // NEW: Normalized uploads path (relative)
       nilaiPaketUsaha: mitraData.nilaiPaket,
       hargaPaket: parseInt(mitraData.hargaPaket) || 0,
       nominalDP: parseInt(mitraData.nominalDP) || 0,
@@ -61,7 +71,7 @@ export async function registerMitra(mitraData: any) {
       kekurangan: parseInt(mitraData.kekurangan) || 0,
       diskonHarian: parseInt(mitraData.diskonHarian) || 0,
       yangHarusDibayar: parseInt(mitraData.yangHarusDibayar) || 0,
-      buktiTransfer: mitraData.buktiTransfer || "",
+      buktiTransfer: mitraData.buktiTransfer || "", // Legacy field
       namaPengirim: mitraData.namaPengirim,
       noRekPengirim: mitraData.noRekPengirim,
       bankPengirim: mitraData.bankPengirim,
@@ -70,6 +80,14 @@ export async function registerMitra(mitraData: any) {
     });
 
     console.log("Mitra record created successfully:", newMitra._id);
+    console.log("Saved with images:");
+    console.log("  - fotoKTP (legacy):", newMitra.fotoKTP || "EMPTY");
+    console.log(
+      "  - buktiTransfer (stored):",
+      newMitra.buktiTransfer || "EMPTY"
+    );
+    console.log("  - upload_ktp:", newMitra.upload_ktp || "EMPTY");
+    console.log("  - upload_tf:", newMitra.upload_tf || "EMPTY");
 
     return {
       success: true,

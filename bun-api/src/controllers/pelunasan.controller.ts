@@ -1,11 +1,19 @@
+import { mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import { MitraPelunasanModel } from "../models/mitra-pelunasan.model";
 import { validateBankInput } from "../utils/bankvalidator";
+import {
+  normalizeUploadsPath,
+  resolveBaseUrlFromRequest,
+} from "../utils/url.utils";
 
 export const pelunasanMitraController = async (
   req: Request
 ): Promise<Response> => {
   try {
     const formData = await req.formData();
+    const baseUploadsUrl = resolveBaseUrlFromRequest(req);
+    console.log(`[PELUNASAN UPLOAD] Using base URL: ${baseUploadsUrl}`);
     const pelunasanData: any = {};
     for (const [key, value] of formData.entries()) {
       if (key !== "buktiTransfer") pelunasanData[key] = value;
@@ -29,11 +37,18 @@ export const pelunasanMitraController = async (
       const timestamp = Date.now();
       const originalName = buktiTransfer.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const fileName = `${timestamp}_${originalName}`;
-      const filePath = `uploads/${fileName}`;
+      const uploadsDir = join(process.cwd(), "uploads");
+      await mkdir(uploadsDir, { recursive: true });
+
+      const filePath = join(uploadsDir, fileName);
       await Bun.write(filePath, buktiTransfer);
-      const baseUrl =
-        process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
-      pelunasanData.buktiTransfer = `${baseUrl}/uploads/${fileName}`;
+
+      const relativePath = normalizeUploadsPath(`/uploads/${fileName}`);
+      pelunasanData.buktiTransfer = relativePath;
+      pelunasanData.buktiTransferPath = relativePath;
+      console.log(
+        `[PELUNASAN UPLOAD] File saved with path: ${relativePath} (absolute preview: ${baseUploadsUrl}${relativePath})`
+      );
     } else {
       return new Response(
         JSON.stringify({ error: "Bukti transfer wajib diupload" }),

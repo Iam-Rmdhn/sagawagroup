@@ -470,6 +470,35 @@ const { currentPage = "dashboard" } = Astro.props;
       });
     }
 
+    // Handle Users submenu clicks with navigation
+    const showAllUsersBtn = document.getElementById('show-all-users');
+    const showApprovedMitraBtn = document.getElementById('show-approved-mitra');
+    const showPendingMitraBtn = document.getElementById('show-pending-mitra');
+
+    if (showAllUsersBtn) {
+      showAllUsersBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Navigate to all users page
+        window.location.href = '/admin/users/all';
+      });
+    }
+
+    if (showApprovedMitraBtn) {
+      showApprovedMitraBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Navigate to approved users page
+        window.location.href = '/admin/users/approved';
+      });
+    }
+
+    if (showPendingMitraBtn) {
+      showPendingMitraBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Navigate to pending users page
+        window.location.href = '/admin/users/pending';
+      });
+    }
+
   // Remove custom event and allow default navigation for Dashboard
 
     // Enhanced function to update active menu item with color themes

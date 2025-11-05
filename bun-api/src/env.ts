@@ -17,9 +17,7 @@ const possiblePaths = [
   path.resolve(process.cwd(), "..", ".env"),
 ];
 
-let result: dotenv.DotenvConfigOutput = {
-  error: new Error("No environment file found"),
-};
+let result: dotenv.DotenvConfigOutput = {};
 for (const envPath of possiblePaths) {
   result = dotenv.config({ path: envPath });
   if (!result.error) {

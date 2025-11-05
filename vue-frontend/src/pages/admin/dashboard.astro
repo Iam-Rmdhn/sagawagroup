@@ -1191,6 +1191,42 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   // API URL configuration
   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
   
+  // Robust loader for SweetAlert2: try native dynamic import first, fall back to CDN.
+  async function loadSweetAlert(): Promise<any> {
+    if (typeof window === 'undefined') return null;
+    // If already loaded globally, return it
+    if ((window as any).Swal) return (window as any).Swal;
+
+    try {
+      const mod = await import('sweetalert2');
+      const Swal = (mod && mod.default) ? mod.default : mod;
+      (window as any).Swal = Swal;
+      return Swal;
+    } catch (err) {
+      // Dynamic import failed (dev server issue). Fallback to CDN script.
+      return new Promise((resolve, reject) => {
+        if ((window as any).Swal) return resolve((window as any).Swal);
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js';
+        script.async = true;
+        script.onload = () => {
+          // sweetalert2 exposes Swal globally
+          const Swal = (window as any).Swal || (window as any).swal || (window as any).Sweetalert2;
+          if (Swal) {
+            (window as any).Swal = Swal;
+            resolve(Swal);
+          } else {
+            // As a last resort try default export-like name
+            resolve((window as any).Swal);
+          }
+        };
+        script.onerror = () => reject(new Error('Failed to load SweetAlert2 from CDN'));
+        document.head.appendChild(script);
+      });
+    }
+  }
+  
   // Listen for navbar actions
   document.addEventListener('adminNavbarAction', function(event: Event) {
     const customEvent = event as CustomEvent;
@@ -1809,17 +1845,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
     const actionText = action === 'approve' ? 'menyetujui' : 'menolak';
     
-    const result = await import('sweetalert2').then(Swal => {
-      return Swal.default.fire({
-        title: `Apakah anda ${actionText} Mitra?`,
-        text: `Apakah anda yakin untuk ${actionText} mitra ini?`,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak"
-      });
+    const Swal = await loadSweetAlert();
+    const result = await Swal.fire({
+      title: `Apakah anda ${actionText} Mitra?`,
+      text: `Apakah anda yakin untuk ${actionText} mitra ini?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya",
+      cancelButtonText: "Tidak"
     });
 
     if (!result.isConfirmed) {
@@ -1842,35 +1877,53 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       const data = await response.json();
 
       if (response.ok && data.success) {
-        await import('sweetalert2').then(Swal => {
-          Swal.default.fire({
+        // If backend reports email sending status, surface it to admin
+        const emailSent = data?.data?.emailSent;
+        const emailError = data?.data?.emailError;
+
+        if (action === 'approve' && emailSent === false) {
+          const Swal = await loadSweetAlert();
+          await Swal.fire({
+            title: "Akun dibuat, tetapi email gagal dikirim",
+            html: `Akun mitra telah dibuat, namun email kredensial gagal dikirim ke <strong>${data?.data?.email || 'N/A'}</strong>.<br><br>
+                   Error: <code>${emailError || 'Tidak diketahui'}</code><br><br>
+                   Silakan kirim ulang email secara manual atau periksa konfigurasi email server.`,
+            icon: "warning",
+            confirmButtonText: 'OK'
+          });
+        } else {
+          const Swal = await loadSweetAlert();
+          await Swal.fire({
             title: action === 'approve' ? "Approved!" : "Rejected!",
             text: action === 'approve' ? "Mitra disetujui" : "Mitra ditolak",
             icon: "success"
           });
-        });
+        }
+
         // Reload mitra data with current filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
       } else {
-        await import('sweetalert2').then(Swal => {
-          Swal.default.fire({
+        {
+          const Swal = await loadSweetAlert();
+          Swal.fire({
             title: "Error",
             text: data.error || 'Gagal memproses permintaan',
             icon: "error"
           });
-        });
+        }
       }
     } catch (error: unknown) {
       console.error('Error approving mitra:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
+      {
+        const Swal = await loadSweetAlert();
+        Swal.fire({
           title: "Error",
           text: `Terjadi kesalahan saat memproses permintaan: ${errorMessage}`,
           icon: "error"
         });
-      });
+      }
     }
   }
 
@@ -1883,23 +1936,22 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       return;
     }
 
-    const result = await import('sweetalert2').then(Swal => {
-      return Swal.default.fire({
-        title: "Hapus Mitra?",
-        html: `Apakah anda yakin ingin menghapus mitra <strong>${namaMitra}</strong>?<br><br>
+    const Swal = await loadSweetAlert();
+    const result = await Swal.fire({
+      title: "Hapus Mitra?",
+      html: `Apakah anda yakin ingin menghapus mitra <strong>${namaMitra}</strong>?<br><br>
                <span class="text-red-600 font-medium">⚠️ Perhatian:</span><br>
                Data akan dihapus dari:<br>
                • Database Mitra<br>
                • Data Pelunasan<br>
                • Semua data terkait lainnya<br><br>
                <span class="text-red-600">Data yang dihapus tidak dapat dikembalikan!</span>`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Ya, Hapus Semua",
-        cancelButtonText: "Batal"
-      });
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus Semua",
+      cancelButtonText: "Batal"
     });
 
     if (!result.isConfirmed) {
@@ -1908,17 +1960,18 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
     try {
       // Show loading state
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
+      {
+        const Swal = await loadSweetAlert();
+        Swal.fire({
           title: 'Menghapus data...',
           html: 'Mohon tunggu, sedang menghapus data mitra dari semua database',
           allowOutsideClick: false,
           allowEscapeKey: false,
           didOpen: () => {
-            Swal.default.showLoading();
+            Swal.showLoading();
           }
         });
-      });
+      }
 
       // 1. Hapus data mitra utama
       const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
@@ -1952,37 +2005,40 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
           // Continue execution - pelunasan data mungkin tidak ada
         }
 
-        await import('sweetalert2').then(Swal => {
-          Swal.default.fire({
+        {
+          const Swal = await loadSweetAlert();
+          Swal.fire({
             title: "Terhapus!",
             html: `Data mitra <strong>${namaMitra}</strong> telah dihapus dari semua database`,
             icon: "success",
             confirmButtonColor: "#10b981"
           });
-        });
+        }
         
         // Reload mitra data with current filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
       } else {
-        await import('sweetalert2').then(Swal => {
-          Swal.default.fire({
+        {
+          const Swal = await loadSweetAlert();
+          Swal.fire({
             title: "Error",
             text: data.message || 'Gagal menghapus data mitra',
             icon: "error"
           });
-        });
+        }
       }
     } catch (error: unknown) {
       console.error('Error deleting mitra:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
+      {
+        const Swal = await loadSweetAlert();
+        Swal.fire({
           title: "Error",
           text: `Terjadi kesalahan saat menghapus data mitra: ${errorMessage}`,
           icon: "error"
         });
-      });
+      }
     }
   }
 
@@ -2085,8 +2141,18 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       // If already a data URL, return as is
       if (imageData.startsWith('data:')) return imageData;
       
-      // If it's a URL, return as is
-      if (imageData.startsWith('http://') || imageData.startsWith('https://')) return imageData;
+      // If it's a URL, normalize uploads domain to current API_URL
+      if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+        try {
+          const parsed = new URL(imageData);
+          if (parsed.pathname.startsWith('/uploads/')) {
+            return `${API_URL}${parsed.pathname}`;
+          }
+        } catch (error) {
+          console.warn('[Dashboard] Failed to normalize image URL', error);
+        }
+        return imageData;
+      }
       
       // If it's a file path
       if (imageData.startsWith('/uploads/')) return `${API_URL}${imageData}`;
@@ -2100,10 +2166,20 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       return `${API_URL}/uploads/${imageData}`;
     };
 
+    // PRIORITY: Use new upload_ktp and upload_tf fields first, fallback to legacy fields
+    const ktpImage = mitra.upload_ktp || mitra.fotoKTP;
+    const tfImage = mitra.upload_tf || mitra.buktiTransfer;
+
     // Log image data for debugging
-    console.log('📸 Image data in mitra object:');
-    console.log('  fotoKTP:', mitra.fotoKTP ? mitra.fotoKTP.substring(0, 50) + '...' : 'not available');
-    console.log('  buktiTransfer:', mitra.buktiTransfer ? mitra.buktiTransfer.substring(0, 50) + '...' : 'not available');
+    console.log('Image data in mitra object:');
+    console.log('upload_ktp (NEW):', mitra.upload_ktp || 'NOT SET');
+    console.log('upload_tf (NEW):', mitra.upload_tf || 'NOT SET');
+    console.log('fotoKTP (legacy):', mitra.fotoKTP || 'EMPTY');
+    console.log('buktiTransfer (legacy):', mitra.buktiTransfer || 'EMPTY');
+    console.log('Using KTP:', ktpImage || 'NONE');
+    console.log('Using TF:', tfImage || 'NONE');
+    console.log('KTP (processed):', processImageData(ktpImage));
+    console.log('TF (processed):', processImageData(tfImage));
 
     // ENHANCED: Determine payment/pelunasan status with comprehensive logic
     let pelunasanStatusHTML = '';
@@ -2419,12 +2495,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               </svg>
               <span class="font-medium text-gray-700">Foto KTP & Dokumen</span>
             </div>
-            ${mitra.fotoKTP && mitra.fotoKTP !== '' ? `
+            ${ktpImage && ktpImage !== '' ? `
               <div class="image-container aspect-video relative">
-                <img src="${processImageData(mitra.fotoKTP)}" 
+                <img src="${processImageData(ktpImage)}" 
                      alt="Foto KTP" 
                      class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${mitra.fotoKTP.replace(/'/g, "\\'")}', 'Foto KTP - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
+                     onclick="openImageModal('${processImageData(ktpImage).replace(/'/g, "\\'")}', 'Foto KTP - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="image-overlay">
                   <span>Klik untuk memperbesar</span>
@@ -2458,12 +2534,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               </svg>
               <span class="font-medium text-gray-700">Bukti Transfer</span>
             </div>
-            ${mitra.buktiTransfer && mitra.buktiTransfer !== '' ? `
+            ${tfImage && tfImage !== '' ? `
               <div class="image-container aspect-video relative">
-                <img src="${processImageData(mitra.buktiTransfer)}" 
+                <img src="${processImageData(tfImage)}" 
                      alt="Bukti Transfer" 
                      class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${mitra.buktiTransfer.replace(/'/g, "\\'")}', 'Bukti Transfer - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
+                     onclick="openImageModal('${processImageData(tfImage).replace(/'/g, "\\'")}', 'Bukti Transfer - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="image-overlay">
                   <span>Klik untuk memperbesar</span>

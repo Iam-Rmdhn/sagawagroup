@@ -716,8 +716,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 		function processImageUrl(imageData: string | null | undefined): string {
 			if (!imageData) return '';
 			
-			// If it's already a full URL (http/https), return as is
+			// If it's already a full URL (http/https), normalize uploads domain
 			if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+				try {
+					const parsed = new URL(imageData);
+					if (parsed.pathname.startsWith('/uploads/')) {
+						return `${API_URL}${parsed.pathname}`;
+					}
+				} catch (error) {
+					console.warn('[Pelunasan] Failed to normalize image URL', error);
+				}
 				return imageData;
 			}
 			

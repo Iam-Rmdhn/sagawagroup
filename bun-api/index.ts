@@ -59,12 +59,26 @@ Bun.serve({
       // the frontend dev server can successfully preflight). Fallback to '*'.
       allowedOrigin = origin || "*";
     } else {
-      // In production, only allow specific origins
-      // Allow if the origin exactly matches one of the configured allowed origins
-      if (origin && allowedOrigins.includes(origin)) {
+      // In production, check if request is from local network for presentation/demo mode
+      const isLocalNetwork =
+        origin?.includes("localhost") ||
+        origin?.includes("127.0.0.1") ||
+        origin?.includes("192.168.") ||
+        origin?.includes("10.0.") ||
+        origin?.includes("172.16.") ||
+        origin?.match(/^https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/);
+
+      if (isLocalNetwork) {
+        // Allow local network access for presentations/demos
+        allowedOrigin = origin;
+      } else if (origin && allowedOrigins.includes(origin)) {
+        // Allow if the origin exactly matches one of the configured allowed origins
         allowedOrigin = origin;
       } else if (isAdminSubdomain) {
         allowedOrigin = "https://admin.sagawagroup.id";
+      } else if (origin) {
+        // In production, reflect the origin if it exists (for same-domain requests)
+        allowedOrigin = origin;
       } else {
         // Default to the main domain if no valid origin is provided
         allowedOrigin = "https://www.sagawagroup.id";

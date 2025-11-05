@@ -1,4 +1,10 @@
+import { mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import { approveMitra, registerMitra } from "../services/mitra.services";
+import {
+  normalizeUploadsPath,
+  resolveBaseUrlFromRequest,
+} from "../utils/url.utils";
 
 interface ApproveMitraBody {
   userId: string;
@@ -32,6 +38,9 @@ export const registerMitraController = async (
   try {
     const formData = await req.formData();
 
+    const baseUploadsUrl = resolveBaseUrlFromRequest(req);
+    console.log(`[IMAGE UPLOAD] Using base URL: ${baseUploadsUrl}`);
+
     // Extract form fields
     const mitraData: any = {};
     for (const [key, value] of formData.entries()) {
@@ -53,7 +62,9 @@ export const registerMitraController = async (
     const buktiTransfer = formData.get("buktiTransfer") as unknown as File;
 
     // Helper function to validate and save file and return URL
-    const saveFileAndGetUrl = async (file: File): Promise<string> => {
+    const saveFileAndGetUrl = async (
+      file: File
+    ): Promise<{ absoluteUrl: string; relativePath: string }> => {
       console.log(`Saving file: ${file.name}, size: ${file.size} bytes`);
 
       // Validate file type - only allow JPG/PNG
@@ -76,33 +87,76 @@ export const registerMitraController = async (
       const fileName = `${timestamp}_${originalName}`;
 
       // Save file to uploads directory
-      const filePath = `uploads/${fileName}`;
+      const uploadsDir = join(process.cwd(), "uploads");
+      await mkdir(uploadsDir, { recursive: true });
+
+      const filePath = join(uploadsDir, fileName);
       await Bun.write(filePath, file);
 
-      // Return URL - use environment variable or fallback to localhost
-      const baseUrl =
-        process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`;
-      const url = `${baseUrl}/uploads/${fileName}`;
-      console.log(`File saved successfully: ${url}`);
-      return url;
+      const relativePath = normalizeUploadsPath(`/uploads/${fileName}`);
+      const absoluteUrl = `${baseUploadsUrl}${relativePath}`;
+      console.log(
+        `File saved successfully: ${absoluteUrl} (relative: ${relativePath})`
+      );
+      return { absoluteUrl, relativePath };
     };
 
     // Save and get URLs for document files
+    console.log(`[IMAGE UPLOAD] Number of document files: ${documents.length}`);
     if (documents.length > 0) {
       if (documents[0] && documents[0].size > 0) {
         console.log(
-          `Processing KTP file: ${documents[0].name}, size: ${documents[0].size} bytes`
+          `[IMAGE UPLOAD] Processing KTP file: ${documents[0].name}, size: ${documents[0].size} bytes`
         );
-        mitraData.fotoKTP = await saveFileAndGetUrl(documents[0]);
+        const savedKTP = await saveFileAndGetUrl(documents[0]);
+        const normalizedKTPPath = normalizeUploadsPath(savedKTP.relativePath);
+        mitraData.fotoKTP = normalizedKTPPath; // Store relative path
+        mitraData.upload_ktp = normalizedKTPPath;
+        console.log(
+          `[IMAGE UPLOAD] Foto KTP saved with path: ${mitraData.fotoKTP} (absolute preview: ${savedKTP.absoluteUrl})`
+        );
+      } else {
+        console.log(`[IMAGE UPLOAD] KTP file is empty or invalid`);
       }
+    } else {
+      console.log(`[IMAGE UPLOAD] No document files received`);
     }
 
     // Save and get URL for bukti transfer
+    console.log(
+      `[IMAGE UPLOAD] Bukti transfer file: ${
+        buktiTransfer ? "exists" : "not found"
+      }, size: ${buktiTransfer?.size || 0}`
+    );
     if (buktiTransfer && buktiTransfer.size > 0) {
       console.log(
-        `Processing bukti transfer file: ${buktiTransfer.name}, size: ${buktiTransfer.size} bytes`
+        `[IMAGE UPLOAD] Processing bukti transfer file: ${buktiTransfer.name}, size: ${buktiTransfer.size} bytes`
       );
-      mitraData.buktiTransfer = await saveFileAndGetUrl(buktiTransfer);
+      const savedTransfer = await saveFileAndGetUrl(buktiTransfer);
+      const normalizedTransferPath = normalizeUploadsPath(
+        savedTransfer.relativePath
+      );
+      mitraData.buktiTransfer = normalizedTransferPath; // Store relative path
+      mitraData.upload_tf = normalizedTransferPath;
+      console.log(
+        `[IMAGE UPLOAD] Bukti Transfer saved with path: ${mitraData.buktiTransfer} (absolute preview: ${savedTransfer.absoluteUrl})`
+      );
+    } else {
+      console.log(
+        `[IMAGE UPLOAD] Bukti transfer file is empty or not received`
+      );
+    }
+
+    // Ensure new fields are populated when legacy data exists
+    if (!mitraData.upload_ktp && mitraData.fotoKTP) {
+      const normalized = normalizeUploadsPath(mitraData.fotoKTP);
+      mitraData.upload_ktp = normalized;
+      mitraData.fotoKTP = normalized;
+    }
+    if (!mitraData.upload_tf && mitraData.buktiTransfer) {
+      const normalized = normalizeUploadsPath(mitraData.buktiTransfer);
+      mitraData.upload_tf = normalized;
+      mitraData.buktiTransfer = normalized;
     }
 
     // Validate required fields
@@ -147,6 +201,17 @@ export const registerMitraController = async (
         }
       );
     }
+
+    // Log final mitraData before saving to database
+    console.log(`[IMAGE UPLOAD] 📦 Final mitraData before DB save:`);
+    console.log(`  - namaMitra: ${mitraData.namaMitra}`);
+    console.log(`  - email: ${mitraData.email}`);
+    console.log(`  - fotoKTP (stored): ${mitraData.fotoKTP || "EMPTY"}`);
+    console.log(
+      `  - buktiTransfer (stored): ${mitraData.buktiTransfer || "EMPTY"}`
+    );
+    console.log(`  - upload_ktp (NEW): ${mitraData.upload_ktp || "EMPTY"}`);
+    console.log(`  - upload_tf (NEW): ${mitraData.upload_tf || "EMPTY"}`);
 
     const result = await registerMitra(mitraData);
 

@@ -312,5 +312,37 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
             });
         }
     </script>
+        <!-- Global SweetAlert2 loader (tries dynamic import, falls back to CDN) -->
+        <script is:inline>
+            (function () {
+                        if (typeof window === 'undefined') return;
+                        if (window['loadSweetAlert']) return; // already defined
+
+                        window['loadSweetAlert'] = async function() {
+                            if (window['Swal']) return window['Swal'];
+
+                            try {
+                                // Try to dynamic-import --- bundlers may handle this in production
+                                const mod = await import('sweetalert2');
+                                const Swal = (mod && mod.default) ? mod.default : mod;
+                                window['Swal'] = Swal;
+                                return Swal;
+                            } catch (err) {
+                                // Fallback: inject CDN script
+                                return new Promise(function(resolve, reject) {
+                                    if (window['Swal']) return resolve(window['Swal']);
+                                    var script = document.createElement('script');
+                                    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js';
+                                    script.async = true;
+                                    script.onload = function() {
+                                        resolve(window['Swal'] || window['swal'] || null);
+                                    };
+                                    script.onerror = function() { reject(new Error('Failed to load SweetAlert2 from CDN')); };
+                                    document.head.appendChild(script);
+                                });
+                            }
+                        };
+            })();
+        </script>
 </body>
 </html>

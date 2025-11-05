@@ -321,98 +321,91 @@ import UserTable from '../../../components/admin/UserTable.astro';
   };
 
   (window as any).approveMitra = async (mitraId: string) => {
-    const result = await import('sweetalert2').then(Swal => {
-      return Swal.default.fire({
-        title: 'Setujui Mitra?',
-        text: 'Apakah Anda yakin ingin menyetujui mitra ini?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#10b981',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, Setujui',
-        cancelButtonText: 'Batal'
-      });
+  const Swal = await (window as any).loadSweetAlert();
+    const result = await Swal.fire({
+      title: 'Setujui Mitra?',
+      text: 'Apakah Anda yakin ingin menyetujui mitra ini?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#10b981',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Ya, Setujui',
+      cancelButtonText: 'Batal'
     });
 
     if (!result.isConfirmed) return;
 
     const success = await approveMitraAPI(mitraId);
     if (success) {
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
-          title: 'Berhasil!',
-          text: 'Mitra berhasil disetujui',
-          icon: 'success',
-          confirmButtonColor: '#10b981'
-        });
+  const Swal2 = await (window as any).loadSweetAlert();
+  await Swal2.fire({
+        title: 'Berhasil!',
+        text: 'Mitra berhasil disetujui',
+        icon: 'success',
+        confirmButtonColor: '#10b981'
       });
       await loadData();
     } else {
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
-          title: 'Gagal!',
-          text: 'Gagal menyetujui mitra',
-          icon: 'error',
-          confirmButtonColor: '#ef4444'
-        });
+  const Swal2 = await (window as any).loadSweetAlert();
+  await Swal2.fire({
+        title: 'Gagal!',
+        text: 'Gagal menyetujui mitra',
+        icon: 'error',
+        confirmButtonColor: '#ef4444'
       });
     }
   };
 
   (window as any).deleteMitra = async (mitraId: string) => {
-    const result = await import('sweetalert2').then(Swal => {
-      return Swal.default.fire({
-        title: 'Hapus Mitra?',
-        html: `Apakah Anda yakin ingin menghapus mitra ini?<br><br>
+  const Swal = await (window as any).loadSweetAlert();
+  const result = await Swal.fire({
+      title: 'Hapus Mitra?',
+      html: `Apakah Anda yakin ingin menghapus mitra ini?<br><br>
                <span class="text-red-600 font-medium">⚠️ Perhatian:</span><br>
                Data akan dihapus dari:<br>
                • Database Mitra<br>
                • Data Pelunasan<br>
                • Semua data terkait lainnya<br><br>
                <span class="text-red-600">Data yang dihapus tidak dapat dikembalikan!</span>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, Hapus Semua',
-        cancelButtonText: 'Batal'
-      });
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Ya, Hapus Semua',
+      cancelButtonText: 'Batal'
     });
 
     if (!result.isConfirmed) return;
 
     // Show loading state
-    await import('sweetalert2').then(Swal => {
-      Swal.default.fire({
-        title: 'Menghapus data...',
-        html: 'Mohon tunggu, sedang menghapus data mitra dari semua database',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.default.showLoading();
-        }
-      });
+  const SwalLoading = await (window as any).loadSweetAlert();
+  SwalLoading.fire({
+      title: 'Menghapus data...',
+      html: 'Mohon tunggu, sedang menghapus data mitra dari semua database',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        SwalLoading.showLoading();
+      }
     });
 
     const success = await deleteMitraAPI(mitraId);
     if (success) {
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
-          title: 'Terhapus!',
-          text: 'Mitra berhasil dihapus dari semua database',
-          icon: 'success',
-          confirmButtonColor: '#10b981'
-        });
+  const Swal2 = await (window as any).loadSweetAlert();
+  await Swal2.fire({
+        title: 'Terhapus!',
+        text: 'Mitra berhasil dihapus dari semua database',
+        icon: 'success',
+        confirmButtonColor: '#10b981'
       });
       await loadData();
     } else {
-      await import('sweetalert2').then(Swal => {
-        Swal.default.fire({
-          title: 'Gagal!',
-          text: 'Gagal menghapus mitra',
-          icon: 'error',
-          confirmButtonColor: '#ef4444'
-        });
+  const Swal2 = await (window as any).loadSweetAlert();
+  await Swal2.fire({
+        title: 'Gagal!',
+        text: 'Gagal menghapus mitra',
+        icon: 'error',
+        confirmButtonColor: '#ef4444'
       });
     }
   };

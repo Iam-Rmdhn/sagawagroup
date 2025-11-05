@@ -1,5 +1,6 @@
 import * as nodemailer from "nodemailer";
 import * as path from "path";
+import { existsSync } from "fs";
 
 // Konfigurasi transporter dengan setting yang lebih lengkap
 const transporter = nodemailer.createTransport({
@@ -41,12 +42,40 @@ export const sendMitraApprovalEmail = async (
     );
   }
 
+  const baseUrl = (
+    process.env.BASE_URL || "https://www.sagawagroup.id"
+  ).replace(/\/$/, "");
+
+  const logoPathCandidates = [
+    path.join(
+      process.cwd(),
+      "../vue-frontend/public/assets/email-logo/sagawa-email.png"
+    ),
+    path.join(process.cwd(), "../frontend/assets/email-logo/sagawa-email.png"),
+    path.join(process.cwd(), "public/assets/email-logo/sagawa-email.png"),
+    path.join(process.cwd(), "assets/email-logo/sagawa-email.png"),
+  ];
+
+  const logoPath = logoPathCandidates.find((candidate) =>
+    existsSync(candidate)
+  );
+
+  if (!logoPath) {
+    console.warn(
+      "Email logo not found in expected locations. Email will be sent without embedded logo."
+    );
+  }
+
+  const logoSrc = logoPath
+    ? "cid:sagawa-logo"
+    : `${baseUrl}/assets/email-logo/sagawa-email.png`;
+
   const htmlContent = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         <!-- Header dengan Logo -->
         <div style="background: linear-gradient(135deg, #ffc107 0%, #f57c00 100%); padding: 30px 20px; text-align: center; border-radius: 12px 12px 0 0;">
           <div style="margin-bottom: 20px;">
-            <img src="cid:sagawa-logo"
+            <img src="${logoSrc}"
                  alt="Sagawa Group Logo"
                  style="height: 60px; width: auto; invert: 100%; filter: brightness(0) saturate(100%); invert(100%);">
           </div>
@@ -104,23 +133,20 @@ export const sendMitraApprovalEmail = async (
       </div>
       `;
 
-  const logoPath = path.join(
-    process.cwd(),
-    "../vue-frontend/public/assets/email-logo/sagawa-email.png"
-  );
-
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Registrasi Akun Berhasil",
     html: htmlContent,
-    attachments: [
-      {
-        filename: "sagawa-email.png",
-        path: logoPath,
-        cid: "sagawa-logo", // Content ID untuk referensi dalam HTML
-      },
-    ],
+    attachments: logoPath
+      ? [
+          {
+            filename: "sagawa-email.png",
+            path: logoPath,
+            cid: "sagawa-logo", // Content ID untuk referensi dalam HTML
+          },
+        ]
+      : [],
   };
 
   try {

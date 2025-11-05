@@ -5,6 +5,39 @@ import { MitraModel, type Mitra } from "../models/mitra.model";
 import { MitraLoginModel, type MitraLogin } from "../models/mitra-login.model";
 import { generateToken } from "../utils/jwt";
 import { sendMitraApprovalEmail } from "../utils/email";
+import {
+  extractFilenameFromUploadsUrl,
+  normalizeUploadsPath,
+} from "../utils/url.utils";
+
+async function deleteUploadFiles(
+  ...paths: Array<string | undefined | null>
+): Promise<void> {
+  const seen = new Set<string>();
+
+  for (const value of paths) {
+    if (!value) continue;
+
+    const normalized = normalizeUploadsPath(value);
+    if (!normalized) continue;
+
+    const filename = extractFilenameFromUploadsUrl(normalized);
+    if (!filename || seen.has(filename)) continue;
+
+    seen.add(filename);
+    const filePath = `./uploads/${filename}`;
+
+    try {
+      const file = Bun.file(filePath);
+      if (await file.exists()) {
+        await Bun.write(filePath, new Uint8Array(0));
+        console.log(`Deleted upload file: ${filePath}`);
+      }
+    } catch (error) {
+      console.warn(`Could not delete upload file: ${filePath}`, error);
+    }
+  }
+}
 
 // Login service untuk mitra menggunakan collection mitra_login
 export async function mitraLoginService(email: string, password: string) {
@@ -129,18 +162,18 @@ export async function getAllMitraLoginService() {
 
 export async function adminLoginService(email: string, password: string) {
   // Check for hardcoded admin credentials first
-  if (email === 'admin@sagawagroup.id' && password === '@sagawagroup222!') {
+  if (email === "admin@sagawagroup.id" && password === "@sagawagroup222!") {
     const token = generateToken({
-      id: 'admin-hardcoded',
+      id: "admin-hardcoded",
       email: email,
-      role: 'admin',
+      role: "admin",
     });
 
     const hardcodedAdmin = {
-      _id: 'admin-hardcoded',
+      _id: "admin-hardcoded",
       email: email,
-      nama: 'Administrator',
-      role: 'admin',
+      nama: "Administrator",
+      role: "admin",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -249,7 +282,7 @@ export async function getMitraByIdService(mitraId: string) {
 
       // If it's already base64 data URL, return it directly
       if (filename.startsWith("data:")) {
-        console.log('  ✓ Already data URL format');
+        console.log("  ✓ Already data URL format");
         return filename;
       }
 
@@ -259,7 +292,7 @@ export async function getMitraByIdService(mitraId: string) {
         !filename.includes(".") &&
         !filename.includes("/")
       ) {
-        console.log('  ✓ Detected base64 string, adding data URL prefix');
+        console.log("  ✓ Detected base64 string, adding data URL prefix");
         // Assume it's base64 data, add data URL prefix
         return `data:image/jpeg;base64,${filename}`;
       }
@@ -269,7 +302,7 @@ export async function getMitraByIdService(mitraId: string) {
         try {
           const fs = await import("fs/promises");
           const path = await import("path");
-          
+
           // Construct full file path
           let fullPath = filename;
           if (!filename.startsWith("/")) {
@@ -279,39 +312,39 @@ export async function getMitraByIdService(mitraId: string) {
             // Absolute path from root, construct from cwd
             fullPath = path.join(process.cwd(), filename.substring(1));
           }
-          
+
           console.log(`  📂 Trying to read file: ${fullPath}`);
-          
+
           // Check if file exists
           try {
             await fs.access(fullPath);
             const fileBuffer = await fs.readFile(fullPath);
-            const base64Data = fileBuffer.toString('base64');
-            
+            const base64Data = fileBuffer.toString("base64");
+
             // Detect image type from extension
             const ext = path.extname(fullPath).toLowerCase();
-            let mimeType = 'image/jpeg';
-            if (ext === '.png') mimeType = 'image/png';
-            else if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
-            else if (ext === '.gif') mimeType = 'image/gif';
-            else if (ext === '.webp') mimeType = 'image/webp';
-            
+            let mimeType = "image/jpeg";
+            if (ext === ".png") mimeType = "image/png";
+            else if (ext === ".jpg" || ext === ".jpeg") mimeType = "image/jpeg";
+            else if (ext === ".gif") mimeType = "image/gif";
+            else if (ext === ".webp") mimeType = "image/webp";
+
             console.log(`  ✅ File read successfully, type: ${mimeType}`);
             return `data:${mimeType};base64,${base64Data}`;
           } catch (fileError) {
             console.log(`  ⚠️  File not found: ${fullPath}`);
             // File doesn't exist, return path as is for URL-based loading
-            return filename.startsWith('/') ? filename : `/uploads/${filename}`;
+            return filename.startsWith("/") ? filename : `/uploads/${filename}`;
           }
         } catch (error) {
-          console.error('  ❌ Error reading file:', error);
+          console.error("  ❌ Error reading file:", error);
           // Return path as is for URL-based loading
-          return filename.startsWith('/') ? filename : `/uploads/${filename}`;
+          return filename.startsWith("/") ? filename : `/uploads/${filename}`;
         }
       }
 
       // For any other case, return as is
-      console.log('  ↪ Returning as is');
+      console.log("  ↪ Returning as is");
       return filename;
     };
 
@@ -388,16 +421,21 @@ export async function approveMitraService(
         }
       );
 
-      // Send approval email
+      // Send approval email (capture status so we can inform admin)
+      let emailSent = false;
+      let emailErrorMsg = "";
       try {
         await sendMitraApprovalEmail(
           mitra.email,
           mitra.namaMitra,
           defaultPassword
         );
+        emailSent = true;
         console.log(`Email approval berhasil dikirim ke: ${mitra.email}`);
       } catch (emailError) {
-        console.error("Error sending email:", emailError);
+        emailErrorMsg =
+          emailError instanceof Error ? emailError.message : String(emailError);
+        console.error("Error sending email:", emailErrorMsg);
         // Don't throw error here, user account is already created
       }
 
@@ -408,6 +446,8 @@ export async function approveMitraService(
           mitraId,
           loginId: newMitraLogin._id,
           email: mitra.email,
+          emailSent,
+          emailError: emailErrorMsg,
         },
       };
     } else {
@@ -416,47 +456,12 @@ export async function approveMitraService(
       // Delete associated files if they exist
       try {
         // Get base URL from environment
-        const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
-          ? 'https://www.sagawagroup.id' 
-          : `http://localhost:${process.env.PORT || '3000'}`);
-        const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
-        
-        if (
-          mitra.fotoKTP &&
-          mitra.fotoKTP.startsWith(UPLOADS_PREFIX)
-        ) {
-          const fileName = mitra.fotoKTP.split("/uploads/")[1];
-          const filePath = `./uploads/${fileName}`;
-          try {
-            const file = Bun.file(filePath);
-            if (await file.exists()) {
-              await Bun.write(filePath, new Uint8Array(0)); // Clear file content
-              console.log(`Deleted file: ${filePath}`);
-            }
-          } catch (fileError) {
-            console.warn(`Could not delete KTP file: ${filePath}`, fileError);
-          }
-        }
-
-        if (
-          mitra.buktiTransfer &&
-          mitra.buktiTransfer.startsWith(UPLOADS_PREFIX)
-        ) {
-          const fileName = mitra.buktiTransfer.split("/uploads/")[1];
-          const filePath = `./uploads/${fileName}`;
-          try {
-            const file = Bun.file(filePath);
-            if (await file.exists()) {
-              await Bun.write(filePath, new Uint8Array(0)); // Clear file content
-              console.log(`Deleted file: ${filePath}`);
-            }
-          } catch (fileError) {
-            console.warn(
-              `Could not delete transfer file: ${filePath}`,
-              fileError
-            );
-          }
-        }
+        await deleteUploadFiles(
+          mitra.upload_ktp,
+          mitra.fotoKTP,
+          mitra.upload_tf,
+          mitra.buktiTransfer
+        );
       } catch (cleanupError) {
         console.warn("File cleanup error (non-critical):", cleanupError);
         // Don't throw error, continue with database deletion
@@ -553,47 +558,12 @@ export async function deleteMitraService(mitraId: string) {
     // Delete associated files if they exist
     try {
       // Get base URL from environment
-      const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === 'production' 
-        ? 'https://www.sagawagroup.id' 
-        : `http://localhost:${process.env.PORT || '3000'}`);
-      const UPLOADS_PREFIX = `${BASE_URL}/uploads/`;
-      
-      if (
-        mitra.fotoKTP &&
-        mitra.fotoKTP.startsWith(UPLOADS_PREFIX)
-      ) {
-        const fileName = mitra.fotoKTP.split("/uploads/")[1];
-        const filePath = `./uploads/${fileName}`;
-        try {
-          const file = Bun.file(filePath);
-          if (await file.exists()) {
-            await Bun.write(filePath, new Uint8Array(0)); // Clear file content
-            console.log(`Deleted KTP file: ${filePath}`);
-          }
-        } catch (fileError) {
-          console.warn(`Could not delete KTP file: ${filePath}`, fileError);
-        }
-      }
-
-      if (
-        mitra.buktiTransfer &&
-        mitra.buktiTransfer.startsWith(UPLOADS_PREFIX)
-      ) {
-        const fileName = mitra.buktiTransfer.split("/uploads/")[1];
-        const filePath = `./uploads/${fileName}`;
-        try {
-          const file = Bun.file(filePath);
-          if (await file.exists()) {
-            await Bun.write(filePath, new Uint8Array(0)); // Clear file content
-            console.log(`Deleted transfer file: ${filePath}`);
-          }
-        } catch (fileError) {
-          console.warn(
-            `Could not delete transfer file: ${filePath}`,
-            fileError
-          );
-        }
-      }
+      await deleteUploadFiles(
+        mitra.upload_ktp,
+        mitra.fotoKTP,
+        mitra.upload_tf,
+        mitra.buktiTransfer
+      );
     } catch (cleanupError) {
       console.warn("File cleanup error (non-critical):", cleanupError);
       // Don't throw error, continue with database deletion

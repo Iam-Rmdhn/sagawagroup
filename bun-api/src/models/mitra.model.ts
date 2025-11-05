@@ -15,8 +15,12 @@ export interface Mitra {
   noHp: string;
   email: string;
 
-  // File uploads
+  // File uploads (legacy fields - keep for backward compatibility)
   fotoKTP: string;
+
+  // New upload fields with clearer names
+  upload_ktp?: string; 
+  upload_tf?: string; 
 
   // Nilai Paket Usaha
   nilaiPaketUsaha: "DP" | "Full Payment";
