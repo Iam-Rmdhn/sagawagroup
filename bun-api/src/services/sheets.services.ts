@@ -23,9 +23,10 @@ export class SheetsService {
   createMitraSpreadsheet(mitraId: any, mitraName: string): string {
     // Kembalikan URL dummy Google Sheets (atau bisa generate sesuai kebutuhan)
     // Untuk demo, gunakan template URL berikut:
-    return `https://docs.google.com/spreadsheets/d/1Rid6jTNeTNKLemue_lUoiwxSGtyxxdOCxUBuLqL5tDQ/edit?usp=sharing`;
+    return ``;
   }
 
+  
   /**
    * Read financial data from a Google Spreadsheet
    */
@@ -184,9 +185,9 @@ export class SheetsService {
 
     const sanitized = value
       .toString()
-      .replace(/Rp\s*/g, "")      // Hapus "Rp" dan spasi
-      .replace(/\./g, "")          // Hapus titik pemisah ribuan (ID: 1.000.000)
-      .replace(/,/g, "");          // Hapus koma pemisah ribuan (US: 1,000,000)
+      .replace(/Rp\s*/g, "") // Hapus "Rp" dan spasi
+      .replace(/\./g, "") // Hapus titik pemisah ribuan (ID: 1.000.000)
+      .replace(/,/g, ""); // Hapus koma pemisah ribuan (US: 1,000,000)
 
     const parsed = Number.parseFloat(sanitized);
     return Number.isFinite(parsed) ? parsed : 0;
