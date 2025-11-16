@@ -17,6 +17,8 @@ export interface Crew {
   subBrand?: string | null;
   outlet?: string | null;
   nomorHP: string;
+  nomorRekening?: string | null;
+  bank?: string | null;
   status: "active" | "inactive";
   createdAt: string;
   updatedAt: string;
@@ -33,6 +35,8 @@ export class CrewModel {
       kemitraan: crewData.kemitraan || null,
       subBrand: crewData.subBrand || null,
       outlet: crewData.outlet || null,
+      nomorRekening: crewData.nomorRekening || null,
+      bank: crewData.bank || null,
       createdAt: now,
       updatedAt: now,
     };

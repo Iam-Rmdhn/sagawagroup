@@ -1,6 +1,7 @@
 import { CrewModel } from "../models/crew.model";
 import type { Crew } from "../models/crew.model";
 import { verifyToken } from "../utils/jwt";
+import { validateBankInput } from "../utils/bankvalidator";
 import * as bcrypt from "bcryptjs";
 import {
   crewLoginService,
@@ -17,6 +18,8 @@ interface CreateCrewRequest {
   kemitraan?: string | null;
   subBrand?: string | null;
   outlet?: string | null;
+  nomorRekening?: string;
+  bank?: string;
 }
 
 // Helper: Validate admin token from Authorization header
@@ -83,6 +86,34 @@ export const createCrewController = async (req: Request): Promise<Response> => {
       );
     }
 
+    const sanitizedAccountNumber =
+      typeof body.nomorRekening === "string"
+        ? body.nomorRekening.replace(/[^0-9]/g, "")
+        : "";
+
+    if (!sanitizedAccountNumber) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Nomor rekening harus diisi",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const bankInput = typeof body.bank === "string" ? body.bank.trim() : "";
+    const normalizedBank = bankInput ? validateBankInput(bankInput) : null;
+
+    if (!normalizedBank) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Bank tidak valid atau tidak ditemukan",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     // Hash password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(body.password, saltRounds);
@@ -115,6 +146,8 @@ export const createCrewController = async (req: Request): Promise<Response> => {
       subBrand: body.subBrand || null,
       outlet: body.outlet || null,
       nomorHP: body.nomorHP,
+      nomorRekening: sanitizedAccountNumber,
+      bank: normalizedBank,
       status: "active",
     };
 
@@ -296,6 +329,52 @@ export const updateCrewController = async (req: Request): Promise<Response> => {
       }
     }
 
+    let sanitizedAccountNumber: string | undefined;
+    if (body.nomorRekening !== undefined) {
+      sanitizedAccountNumber =
+        typeof body.nomorRekening === "string"
+          ? body.nomorRekening.replace(/[^0-9]/g, "")
+          : "";
+
+      if (!sanitizedAccountNumber) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: "Nomor rekening tidak valid",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    }
+
+    let normalizedBank: string | undefined;
+    if (body.bank !== undefined) {
+      const bankInput = typeof body.bank === "string" ? body.bank.trim() : "";
+
+      if (!bankInput) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: "Bank harus diisi",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      const validatedBank = validateBankInput(bankInput);
+      if (!validatedBank) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: "Bank tidak valid atau tidak ditemukan",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      normalizedBank = validatedBank;
+    }
+
     const updateData: Partial<Omit<Crew, "_id" | "createdAt">> = {
       nama: body.nama,
       email: body.email,
@@ -314,6 +393,8 @@ export const updateCrewController = async (req: Request): Promise<Response> => {
       subBrand: body.subBrand || null,
       outlet: body.outlet || null,
       nomorHP: body.nomorHP,
+      nomorRekening: sanitizedAccountNumber,
+      bank: normalizedBank,
       status: "active",
     };
 

@@ -20,6 +20,7 @@
     "update-images:prod": "NODE_ENV=production bun run update-images-url.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.932.0",
     "@datastax/astra-db-ts": "^2.0.2",
     "@types/jsonwebtoken": "9.0.10",
     "@types/ms": "2.1.0",

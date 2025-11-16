@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🏢 Sagawa Group
+
 ### Modern Company Profile Website
 
 <img src="vue-frontend/src/assets/img/sagawa_logo.svg" alt="Sagawa Group Logo" width="200" height="120"/>
@@ -13,7 +14,7 @@
 
 **Modern full-stack web application built with cutting-edge technologies**
 
-*Featuring Astro frontend, Bun backend, and AstraDB with production-grade deployment*
+_Featuring Astro frontend, Bun backend, and AstraDB with production-grade deployment_
 
 [![Astro](https://img.shields.io/badge/Astro-BC52EE?style=flat&logo=astro&logoColor=fff)](https://astro.build/)
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh/)
@@ -32,6 +33,7 @@
 <td width="50%">
 
 ### 🚀 **Performance**
+
 - ⚡ **Lightning Fast** - Astro Static Site Generation
 - 🔄 **Zero Downtime** - PM2 with reload strategy
 - 📦 **Optimized Bundle** - Tree shaking & code splitting
@@ -41,6 +43,7 @@
 <td width="50%">
 
 ### 🔒 **Security**
+
 - 🛡️ **SSL/TLS 1.3** - Auto-renewal with Let's Encrypt
 - 🔐 **JWT Auth** - Secure token-based authentication
 - 🚫 **Rate Limiting** - DDoS protection
@@ -52,6 +55,7 @@
 <td width="50%">
 
 ### 🎨 **Modern UI/UX**
+
 - 📱 **Responsive Design** - Mobile-first approach
 - 🎯 **Component-Based** - Reusable Astro components
 - 🖼️ **Lazy Loading** - Optimized image loading
@@ -61,6 +65,7 @@
 <td width="50%">
 
 ### 🔧 **Developer Experience**
+
 - 🏗️ **TypeScript** - Type-safe development
 - 🎛️ **One-Click Deploy** - Automated production scripts
 - 📊 **Google Sheets** - Data synchronization
@@ -168,21 +173,25 @@ sagawagroup/
 <div align="center">
 
 ### Frontend Stack
+
 [![Astro](https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=fff)](https://astro.build/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Lucide](https://img.shields.io/badge/Lucide-Icons-blue?style=for-the-badge)](https://lucide.dev/)
 
 ### Backend Stack
+
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
 [![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)](https://jwt.io/)
 
 ### Database & Services
+
 [![AstraDB](https://img.shields.io/badge/AstraDB-Serverless-orange?style=for-the-badge)](https://astra.datastax.com/)
 [![Google Sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=google-sheets&logoColor=white)](https://sheets.google.com/)
 
 ### DevOps & Deployment
+
 [![Nginx](https://img.shields.io/badge/Nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
 [![PM2](https://img.shields.io/badge/PM2-2B037A?style=for-the-badge&logo=pm2&logoColor=white)](https://pm2.keymetrics.io/)
 [![Let's Encrypt](https://img.shields.io/badge/Let's%20Encrypt-003A70?style=for-the-badge&logo=letsencrypt&logoColor=white)](https://letsencrypt.org/)
@@ -255,36 +264,36 @@ DDoS protection
 
 ### 🔐 Authentication
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+| Method | Endpoint             | Description       |
+| ------ | -------------------- | ----------------- |
 | `POST` | `/api/auth/register` | User registration |
-| `POST` | `/api/auth/login` | User login |
-| `GET` | `/api/auth/profile` | Get user profile |
-| `PUT` | `/api/auth/profile` | Update profile |
+| `POST` | `/api/auth/login`    | User login        |
+| `GET`  | `/api/auth/profile`  | Get user profile  |
+| `PUT`  | `/api/auth/profile`  | Update profile    |
 
 ### 👥 Mitra Management
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/mitra` | Get all partners |
-| `POST` | `/api/mitra` | Create new partner |
-| `POST` | `/api/mitra/login` | Mitra login |
-| `PUT` | `/api/mitra/:id` | Update partner |
+| Method | Endpoint           | Description        |
+| ------ | ------------------ | ------------------ |
+| `GET`  | `/api/mitra`       | Get all partners   |
+| `POST` | `/api/mitra`       | Create new partner |
+| `POST` | `/api/mitra/login` | Mitra login        |
+| `PUT`  | `/api/mitra/:id`   | Update partner     |
 
 ### 📋 Agreements
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/agreements` | Get all agreements |
-| `POST` | `/api/agreements` | Create agreement |
-| `PUT` | `/api/agreements/:id` | Update agreement |
+| Method | Endpoint              | Description        |
+| ------ | --------------------- | ------------------ |
+| `GET`  | `/api/agreements`     | Get all agreements |
+| `POST` | `/api/agreements`     | Create agreement   |
+| `PUT`  | `/api/agreements/:id` | Update agreement   |
 
 ### 📊 Google Sheets Integration
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+| Method | Endpoint           | Description      |
+| ------ | ------------------ | ---------------- |
 | `POST` | `/api/sheets/sync` | Sync with sheets |
-| `GET` | `/api/sheets/data` | Get sheet data |
+| `GET`  | `/api/sheets/data` | Get sheet data   |
 
 ---
 
@@ -297,6 +306,7 @@ DDoS protection
 <td width="50%">
 
 **Backend Commands**
+
 ```bash
 # Development
 bun run dev
@@ -313,6 +323,7 @@ bun test
 <td width="50%">
 
 **Frontend Commands**
+
 ```bash
 # Development
 npm run dev
@@ -353,6 +364,7 @@ pm2 restart sagawagroup-api
 <summary><strong>📋 Click to view database tables</strong></summary>
 
 ### Users Table
+
 ```sql
 CREATE TABLE users (
   id UUID PRIMARY KEY,
@@ -366,6 +378,7 @@ CREATE TABLE users (
 ```
 
 ### Mitra Table
+
 ```sql
 CREATE TABLE mitra (
   id UUID PRIMARY KEY,
@@ -381,6 +394,7 @@ CREATE TABLE mitra (
 ```
 
 ### Agreements Table
+
 ```sql
 CREATE TABLE agreements (
   id UUID PRIMARY KEY,
@@ -394,6 +408,7 @@ CREATE TABLE agreements (
 ```
 
 ### Admin Table
+
 ```sql
 CREATE TABLE admin (
   id UUID PRIMARY KEY,
@@ -433,6 +448,15 @@ EMAIL_FROM=noreply@sagawagroup.com
 PORT=3000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:4321
+
+# Supabase Storage (optional but recommended for mitra photos)
+SUPABASE_STORAGE_ENABLED=false
+SUPABASE_STORAGE_ENDPOINT=https://rnrxmpmvoqxcdpazikwe.storage.supabase.co/storage/v1/s3
+SUPABASE_STORAGE_PUBLIC_URL=https://rnrxmpmvoqxcdpazikwe.supabase.co/storage/v1/object/public
+SUPABASE_STORAGE_BUCKET=mitraPhotos
+SUPABASE_STORAGE_REGION=us-east-1
+SUPABASE_STORAGE_ACCESS_KEY=your_supabase_access_key
+SUPABASE_STORAGE_SECRET_KEY=your_supabase_secret_key
 ```
 
 </details>
@@ -458,12 +482,12 @@ PUBLIC_SITE_NAME=SagawaGroup
 
 <div align="center">
 
-| Metric | Development | Production |
-|--------|-------------|------------|
-| **First Load** | < 1s | < 2s |
-| **API Response** | < 50ms | < 200ms |
-| **SSL Handshake** | N/A | < 100ms |
-| **Bundle Size** | N/A | 70% compressed |
+| Metric            | Development | Production     |
+| ----------------- | ----------- | -------------- |
+| **First Load**    | < 1s        | < 2s           |
+| **API Response**  | < 50ms      | < 200ms        |
+| **SSL Handshake** | N/A         | < 100ms        |
+| **Bundle Size**   | N/A         | 70% compressed |
 
 </div>
 
@@ -492,6 +516,7 @@ We welcome contributions! Please follow these steps:
 ## � CI/CD & Automation
 
 ### 🤖 GitHub Actions Pipeline
+
 Fully automated CI/CD pipeline with testing, building, and deployment:
 
 - ✅ **Continuous Integration**: Automated testing and build validation
@@ -501,6 +526,7 @@ Fully automated CI/CD pipeline with testing, building, and deployment:
 - 💬 **Discord Notifications**: Real-time deployment status
 
 ### 🔐 Secrets Setup for CI/CD
+
 Quick setup for GitHub Actions secrets:
 
 ```bash
@@ -516,13 +542,15 @@ cat SECRETS-SETUP-CICD.md
 ```
 
 **Required Secrets:**
+
 - `HOST` - Production server IP
-- `USERNAME` - SSH username  
+- `USERNAME` - SSH username
 - `SSH_KEY` - Private SSH key
 - `DOMAIN` - Main domain (sagawagroup.id)
 - `EMAIL` - SSL certificate email
 
 **Optional but Recommended:**
+
 - `DISCORD_WEBHOOK` - Deployment notifications
 - `JWT_SECRET` - API security
 - Database credentials (if using external DB)
@@ -534,11 +562,13 @@ cat SECRETS-SETUP-CICD.md
 ## �🔍 Monitoring & Support
 
 ### 🆘 Health Checks
+
 - **Website**: [www.sagawagroup.id](https://www.sagawagroup.id)
 - **API Health**: [www.sagawagroup.id/api/health](https://www.sagawagroup.id/api/health)
 - **SSL Status**: Use SSL Labs test
 
 ### 📞 Support Channels
+
 - 📧 **Email**: support@sagawagroup.com
 - 🐛 **Issues**: [GitHub Issues](https://github.com/tsubametaa/sagawagroup/issues)
 - 📖 **Documentation**: [docs.sagawagroup.com](https://docs.sagawagroup.com)
@@ -549,11 +579,11 @@ cat SECRETS-SETUP-CICD.md
 
 <div align="center">
 
-| Role | Developer | GitHub |
-|------|-----------|--------|
+| Role             | Developer    | GitHub                                       |
+| ---------------- | ------------ | -------------------------------------------- |
 | **Backend Lead** | Tsubame/Utaa | [@tsubametaa](https://github.com/tsubametaa) |
-| **Frontend Dev** | Ilham | [@Iam-Rmdhn](https://github.com/Iam-Rmdhn) |
-| **Frontend Dev** | Farhan | [@Rasen22](https://github.com/Rasen22) |
+| **Frontend Dev** | Ilham        | [@Iam-Rmdhn](https://github.com/Iam-Rmdhn)   |
+| **Frontend Dev** | Farhan       | [@Rasen22](https://github.com/Rasen22)       |
 
 </div>
 
@@ -573,6 +603,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 [![Website](https://img.shields.io/badge/Visit-www.sagawagroup.id-blue?style=for-the-badge&logo=safari)](https://www.sagawagroup.id)
 
-*Last Updated: 2025*
+_Last Updated: 2025_
 
 </div>

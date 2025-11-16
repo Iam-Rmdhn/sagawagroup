@@ -47,6 +47,15 @@ function getEnvVar(name: string, defaultValue: string): string {
   return process.env[name] ?? defaultValue;
 }
 
+function getOptionalEnvVar(name: string): string | undefined {
+  const value = process.env[name];
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? undefined : trimmed;
+}
+
 // Function to parse comma-separated values
 function parseArray(value: string | undefined): string[] {
   if (!value) return [];
@@ -78,6 +87,40 @@ if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
   throw new Error("PORT must be a valid number between 1 and 65535");
 }
 
+// Supabase storage configuration
+const supabaseStorageEnabled = parseBoolean(
+  process.env.SUPABASE_STORAGE_ENABLED,
+  false
+);
+
+const supabaseEndpoint = getOptionalEnvVar("SUPABASE_STORAGE_ENDPOINT") ?? "";
+const supabasePublicUrl =
+  getOptionalEnvVar("SUPABASE_STORAGE_PUBLIC_URL") ?? "";
+const supabaseBucket =
+  getOptionalEnvVar("SUPABASE_STORAGE_BUCKET") ?? "mitraPhotos";
+const supabaseRegion =
+  getOptionalEnvVar("SUPABASE_STORAGE_REGION") ?? "us-east-1";
+const supabaseAccessKey = getOptionalEnvVar("SUPABASE_STORAGE_ACCESS_KEY");
+const supabaseSecretKey = getOptionalEnvVar("SUPABASE_STORAGE_SECRET_KEY");
+
+if (supabaseStorageEnabled) {
+  const missing: string[] = [];
+  if (!supabaseEndpoint) missing.push("SUPABASE_STORAGE_ENDPOINT");
+  if (!supabasePublicUrl) missing.push("SUPABASE_STORAGE_PUBLIC_URL");
+  if (!supabaseBucket) missing.push("SUPABASE_STORAGE_BUCKET");
+  if (!supabaseRegion) missing.push("SUPABASE_STORAGE_REGION");
+  if (!supabaseAccessKey) missing.push("SUPABASE_STORAGE_ACCESS_KEY");
+  if (!supabaseSecretKey) missing.push("SUPABASE_STORAGE_SECRET_KEY");
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Supabase storage enabled but missing required env vars: ${missing.join(
+        ", "
+      )}`
+    );
+  }
+}
+
 // Export the environment configuration
 export const ENV = {
   NODE_ENV: nodeEnv,
@@ -103,6 +146,13 @@ export const ENV = {
     "LOG_LEVEL",
     nodeEnv === "production" ? "info" : "debug"
   ),
+  SUPABASE_STORAGE_ENABLED: supabaseStorageEnabled,
+  SUPABASE_STORAGE_ENDPOINT: supabaseEndpoint,
+  SUPABASE_STORAGE_PUBLIC_URL: supabasePublicUrl,
+  SUPABASE_STORAGE_BUCKET: supabaseBucket,
+  SUPABASE_STORAGE_REGION: supabaseRegion,
+  SUPABASE_STORAGE_ACCESS_KEY: supabaseAccessKey,
+  SUPABASE_STORAGE_SECRET_KEY: supabaseSecretKey,
 };
 
 // Log environment info in development

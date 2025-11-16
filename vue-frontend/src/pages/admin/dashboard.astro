@@ -12,7 +12,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       transform: translateZ(0);
       will-change: auto;
     }
-    
+
     *,
     *::before,
     *::after {
@@ -21,54 +21,54 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       -webkit-perspective: 1000px;
       perspective: 1000px;
     }
-    
+
     body, html {
       overflow-x: hidden;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Custom Amber Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
       background: rgba(251, 191, 36, 0.1);
       border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
       border-radius: 4px;
       transition: all 0.3s ease;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(135deg, rgb(251 191 36), rgb(252 211 77));
       transform: scale(1.1);
     }
-    
+
     /* Firefox scrollbar styling */
     * {
       scrollbar-width: thin;
       scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
     }
-    
+
     /* Prevent layout shifts */
     img, video, iframe {
       height: auto;
       max-width: 100%;
     }
-    
+
     /* Fix for fixed/sticky elements */
     .fixed, .sticky {
       transform: translate3d(0, 0, 0);
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
     }
-    
+
     /* Modern gradient backgrounds */
     .stats-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.05) 100%);
@@ -81,7 +81,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       position: relative;
       overflow: hidden;
     }
-    
+
     .stats-card::before {
       content: '';
       position: absolute;
@@ -93,22 +93,22 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       transition: left 0.6s ease;
       z-index: 0;
     }
-    
+
     .stats-card:hover::before {
       left: 100%;
     }
-    
+
     .stats-card:hover {
       transform: translate3d(0, -6px, 0) scale(1.02);
       box-shadow: 0 20px 30px -5px rgba(251, 191, 36, 0.2), 0 10px 15px -5px rgba(251, 191, 36, 0.1), 0 0 0 1px rgba(251, 191, 36, 0.15);
       border-color: rgba(251, 191, 36, 0.3);
     }
-    
+
     .stats-card > * {
       position: relative;
       z-index: 1;
     }
-    
+
     /* Icon containers without background - just colors */
     .stats-icon {
       transform: translate3d(0, 0, 0);
@@ -116,38 +116,38 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       backface-visibility: hidden;
       transition: all 0.3s ease;
     }
-    
+
     .stats-icon.users {
       color: rgb(245 158 11);
     }
-    
+
     .stats-icon.dp {
       color: rgb(249 115 22);
     }
-    
+
     .stats-icon.fp {
       color: rgb(239 68 68);
     }
-    
+
     .stats-icon.pending {
       color: rgb(251 191 36);
     }
-    
+
     .stats-icon.visitors {
       color: rgb(34 197 94);
     }
-    
+
     .stats-card:hover .stats-icon {
       filter: brightness(1.15) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     }
-    
+
     /* Stats number animation */
     .stats-number {
       font-feature-settings: "tnum";
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-block;
     }
-        
+
     /* Modern table styling */
     .modern-table {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(251, 191, 36, 0.02) 100%);
@@ -158,17 +158,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       backface-visibility: hidden;
       position: relative;
     }
-    
+
     /* Loading animation */
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
-    
+
     .loading-pulse {
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-    
+
     /* Skeleton Loading Animations */
     @keyframes shimmer {
       0% {
@@ -178,7 +178,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         background-position: 1000px 0;
       }
     }
-    
+
     .skeleton {
       background: linear-gradient(
         90deg,
@@ -191,7 +191,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       animation: shimmer 1.5s linear infinite;
       border-radius: 4px;
     }
-    
+
     .skeleton-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.05) 100%);
       backdrop-filter: blur(10px);
@@ -200,27 +200,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       padding: 1.25rem;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-    
+
     .skeleton-circle {
       border-radius: 50%;
     }
-    
+
     .skeleton-text {
       height: 0.875rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .skeleton-title {
       height: 1.5rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .skeleton-number {
       height: 2.25rem;
       width: 60%;
       margin-bottom: 0.5rem;
     }
-    
+
     .skeleton-chart {
       height: 350px;
       background: linear-gradient(
@@ -234,15 +234,15 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       animation: shimmer 1.5s linear infinite;
       border-radius: 0.5rem;
     }
-    
+
     .content-hidden {
       display: none;
     }
-    
+
     .content-visible {
       display: block;
     }
-    
+
     .skeleton-header {
       background: linear-gradient(
         90deg,
@@ -257,34 +257,34 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       padding: 1.5rem;
       margin-bottom: 2rem;
     }
-    
+
     /* Responsive grid - Layout from image */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.25rem;
     }
-    
+
     /* Tablet: 2 columns */
     @media (min-width: 640px) {
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    
+
     /* Desktop: 4 columns for layout matching image */
     @media (min-width: 1024px) {
       .stats-grid {
         grid-template-columns: repeat(4, 1fr);
       }
     }
-    
+
     @media (max-width: 640px) {
       .stats-card {
         padding: 1rem;
       }
     }
-    
+
     /* Visitor card special styling */
     .visitor-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(34, 197, 94, 0.03) 100%);
@@ -292,7 +292,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
     }
-    
+
     .visitor-card::before {
       content: '';
       position: absolute;
@@ -304,35 +304,35 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       transition: left 0.6s ease;
       z-index: 0;
     }
-    
+
     .visitor-card:hover::before {
       left: 100%;
     }
-    
+
     .visitor-card:hover {
       border-color: rgba(34, 197, 94, 0.3);
       box-shadow: 0 20px 30px -5px rgba(34, 197, 94, 0.2), 0 10px 15px -5px rgba(34, 197, 94, 0.1), 0 0 0 1px rgba(34, 197, 94, 0.15);
       transform: translate3d(0, -6px, 0) scale(1.01);
     }
-    
+
     .visitor-card > * {
       position: relative;
       z-index: 1;
     }
-    
+
     .visitor-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
-    
+
     @media (max-width: 768px) {
       .visitor-grid {
         grid-template-columns: 1fr;
         gap: 0.75rem;
       }
     }
-    
+
     .visitor-item {
       text-align: center;
       padding: 1rem;
@@ -341,44 +341,44 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       border: 1px solid rgba(34, 197, 94, 0.1);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .visitor-item:hover {
       transform: translateY(-4px) scale(1.05);
       border-color: rgba(34, 197, 94, 0.3);
       box-shadow: 0 8px 16px rgba(34, 197, 94, 0.15);
       background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(255, 255, 255, 0.9));
     }
-    
+
     .visitor-item:hover p:last-child {
       color: rgb(34 197 94);
       transform: scale(1.08);
     }
-    
+
     .visitor-item p {
       transition: all 0.3s ease;
     }
-    
+
     /* Payment Chart Container Styling */
     .payment-chart-container {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .payment-chart-container:hover {
       box-shadow: 0 12px 24px rgba(251, 191, 36, 0.12);
       transform: translateY(-2px);
     }
-    
+
     /* Payment Summary Cards */
     .payment-summary-card {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .payment-summary-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       border-color: rgba(251, 191, 36, 0.3);
     }
-    
+
     /* Chart Canvas Styling - Enhanced Visibility */
     #paymentChart {
       display: block !important;
@@ -391,7 +391,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       height: 100% !important;
       min-height: 300px !important;
     }
-    
+
     .chart-container {
       position: relative !important;
       display: block !important;
@@ -411,52 +411,52 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         height: 250px !important;
         margin-bottom: 1rem;
       }
-      
+
       /* Header responsive */
       .chart-header {
         padding: 1rem !important;
       }
-      
+
       .chart-header h3 {
         font-size: 1.125rem !important;
         line-height: 1.5;
       }
-      
+
       .chart-header p {
         font-size: 0.75rem !important;
         margin-top: 0.25rem !important;
       }
-      
+
       /* Legend responsive */
       .chart-legend {
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 0.5rem !important;
       }
-      
+
       .chart-legend-item {
         font-size: 0.75rem !important;
       }
-      
+
       /* Chart content padding */
       .chart-content {
         padding: 1rem !important;
       }
-      
+
       /* Total amount cards mobile */
       .total-amounts {
         grid-template-columns: 1fr !important;
         gap: 0.75rem !important;
       }
-      
+
       .amount-card {
         padding: 0.75rem !important;
       }
-      
+
       .amount-card p:first-child {
         font-size: 0.75rem !important;
       }
-      
+
       .amount-card p:last-child {
         font-size: 1.25rem !important;
         font-weight: 700;
@@ -468,11 +468,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       .chart-container {
         height: 220px !important;
       }
-      
+
       .chart-header h3 {
         font-size: 1rem !important;
       }
-      
+
       .amount-card p:last-child {
         font-size: 1.125rem !important;
       }
@@ -483,11 +483,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       .chart-container {
         height: 280px !important;
       }
-      
+
       .chart-header {
         padding: 1.25rem !important;
       }
-      
+
       .chart-content {
         padding: 1.25rem !important;
       }
@@ -496,13 +496,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       pointer-events: auto !important;
       cursor: pointer !important;
     }
-    
+
     #logout-btn:disabled {
       pointer-events: auto !important;
       cursor: pointer !important;
       opacity: 1 !important;
     }
-    
+
     /* Stats visibility and layout */
     .stats-set {
       width: 100%;
@@ -515,7 +515,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     .stats-set.hidden {
       display: none;
     }
-    
+
     /* User stats - centered layout */
     .user-stats .stats-grid {
       max-width: 700px;
@@ -716,7 +716,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('adminToken');
       const user = localStorage.getItem('adminUser');
-      
+
       if (!token || !user) {
         window.location.href = '/login';
       } else {
@@ -749,7 +749,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             </div>
          </div>
       </div>
-      
+
       <!-- Welcome Header -->
       <div id="actual-header" class="mb-8 pt-2 sm:mb-8 content-hidden">
          <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl">
@@ -804,7 +804,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                      </div>
                   </div>
                </div>
-               
+
                <!-- Skeleton User Card -->
                <div class="skeleton-card">
                   <div class="flex items-center space-x-4">
@@ -816,7 +816,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                      </div>
                   </div>
                </div>
-               
+
                <!-- Skeleton DP Card -->
                <div class="skeleton-card">
                   <div class="flex items-center space-x-4">
@@ -827,7 +827,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                      </div>
                   </div>
                </div>
-               
+
                <!-- Skeleton FP Card -->
                <div class="skeleton-card">
                   <div class="flex items-center space-x-4">
@@ -838,7 +838,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                      </div>
                   </div>
                </div>
-               
+
                <!-- Skeleton Pending Card -->
                <div class="skeleton-card">
                   <div class="flex items-center space-x-4">
@@ -852,7 +852,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                </div>
             </div>
          </div>
-         
+
          <!-- Dashboard Stats (default) -->
          <div class="stats-set dashboard-stats content-hidden" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
             <div class="stats-grid">
@@ -977,7 +977,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                </div>
             </div>
          </div>
-         
+
          <!-- User Stats (for User menu) -->
          <div class="stats-set user-stats content-hidden">
             <div class="stats-grid">
@@ -1037,7 +1037,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                <div class="skeleton skeleton-chart"></div>
             </div>
          </div>
-         
+
          <!-- Actual Chart -->
          <div id="actual-chart" class="payment-chart-container bg-gradient-to-br from-white via-orange-50/20 to-white rounded-2xl shadow-lg border border-orange-100/50 overflow-hidden content-hidden">
             <!-- Header -->
@@ -1126,7 +1126,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
     <!-- Background overlay -->
     <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity" onclick="closeMitraDetailModal()" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;"></div>
-    
+
     <!-- Modal panel -->
     <div class="modal-panel relative bg-white rounded-xl shadow-2xl transform transition-all max-w-6xl w-full mx-auto" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <!-- Modal Header -->
@@ -1150,12 +1150,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
           </button>
         </div>
       </div>
-        
+
       <!-- Modal Content -->
       <div class="modal-detail-content p-4 sm:p-6">
         <div id="mitraDetailContent" class="info-grid grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6"></div>
       </div>
-        
+
       <!-- Modal Footer -->
       <div class="modal-footer bg-gray-50 px-4 sm:px-6 py-4 border-t border-gray-100 rounded-b-xl flex justify-end space-x-3">
         <button onclick="closeMitraDetailModal()" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-medium rounded-lg hover:from-gray-600 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl">
@@ -1178,7 +1178,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
-    
+
     <!-- Image container -->
     <div class="max-w-full max-h-full" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
       <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain" style="transform: translate3d(0, 0, 0); -webkit-backface-visibility: hidden; backface-visibility: hidden;">
@@ -1189,8 +1189,42 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
 <script>
   // API URL configuration
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
-  
+  const rawApiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+  const API_URL = rawApiUrl.replace(/\/$/, '');
+
+  // Determine if we should proxy uploads through API based on API_URL structure
+  // If API_URL ends with '/api' (like https://www.sagawagroup.id/api),
+  // then uploads need to go through API gateway (https://www.sagawagroup.id/api/uploads/)
+  // If API_URL is root domain (like https://www.sagawagroup.id),
+  // then uploads go directly (https://www.sagawagroup.id/uploads/)
+  const shouldProxyUploadsThroughApi = API_URL.endsWith('/api');
+
+  const buildUploadsUrl = (rawPath: string): string => {
+    if (!rawPath) return '';
+
+    // If rawPath is already a full URL with uploads in it, return as is
+    if (rawPath.startsWith('http://') || rawPath.startsWith('https://')) {
+      if (rawPath.includes('/uploads/')) {
+        return rawPath; // Return full URL as-is
+      }
+    }
+
+    // Normalize the path to make sure it starts correctly
+    let normalizedPath = rawPath;
+
+    // If path doesn't start with /uploads/, prepend it
+    if (!rawPath.startsWith('/uploads/')) {
+      // Remove any leading slashes and then add /uploads/
+      normalizedPath = `/uploads/${rawPath.replace(/^\/+/, '')}`;
+    }
+
+    // When using proxy, the path should be to the API endpoint that serves uploads
+    // For nginx configuration, API_URL + /api/uploads/ points to the backend endpoint
+    // that serves files from the ./uploads/ directory
+    const proxyPrefix = shouldProxyUploadsThroughApi ? '/api' : '';
+    return `${API_URL}${proxyPrefix}${normalizedPath}`;
+  };
+
   // Robust loader for SweetAlert2: try native dynamic import first, fall back to CDN.
   async function loadSweetAlert(): Promise<any> {
     if (typeof window === 'undefined') return null;
@@ -1226,20 +1260,20 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       });
     }
   }
-  
+
   // Listen for navbar actions
   document.addEventListener('adminNavbarAction', function(event: Event) {
     const customEvent = event as CustomEvent;
     const action = customEvent.detail.action;
-    
+
     if (action === 'logout') {
       // Hapus data dari localStorage
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      
+
       // Jangan hapus remembered credentials saat logout
       // Biarkan credentials tersimpan untuk login berikutnya
-      
+
       // Redirect ke login page utama
       window.location.href = '/login';
     }
@@ -1250,20 +1284,20 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     // Apply scroll stability fixes
     document.documentElement.style.scrollBehavior = 'smooth';
     (document.documentElement.style as any).webkitOverflowScrolling = 'touch';
-    
+
     // Force repaint to fix any initial layout issues
     document.body.offsetHeight;
-    
+
     const userString = localStorage.getItem('adminUser');
     if (userString) {
       try {
         const user = JSON.parse(userString);
-        
+
         // Update navbar user info using the exposed function
         if (typeof (window as any).adminNavbar !== 'undefined') {
           (window as any).adminNavbar.updateUserInfo(user);
         }
-        
+
       } catch (error) {
         console.error('Error parsing user data:', error);
       }
@@ -1279,7 +1313,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     document.addEventListener('adminSidebarAction', function(event: Event) {
       const customEvent = event as CustomEvent;
       const action = customEvent.detail.action;
-      
+
       switch(action) {
         case 'showAllUsers':
           switchToUserStats();
@@ -1315,17 +1349,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   function initializeSidebarState() {
     const sidebar = document.getElementById('logo-sidebar');
     const backdrop = document.getElementById('sidebar-backdrop');
-    
+
     if (sidebar) {
       // Always start with sidebar hidden (overlay mode)
       sidebar.classList.add('-translate-x-full');
       localStorage.setItem('sidebarVisible', 'false');
-      
+
       // Listen for sidebar toggle events from navbar
       window.addEventListener('sidebarToggle', function(e: Event) {
         const customEvent = e as CustomEvent;
         const visible = customEvent.detail?.visible;
-        
+
         // Show/hide backdrop for overlay effect on all screen sizes
         if (backdrop && typeof visible === 'boolean') {
           if (visible) {
@@ -1339,11 +1373,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   }
 
   // updateMainContentMargin function removed - using overlay mode instead
-  
+
   function switchToUserStats() {
     const dashboardStats = document.querySelector('.dashboard-stats');
     const userStats = document.querySelector('.user-stats');
-    
+
     if (dashboardStats && userStats) {
       dashboardStats.classList.add('hidden');
       userStats.classList.remove('hidden');
@@ -1355,12 +1389,12 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const dashboardStats = document.querySelector('.dashboard-stats');
     const userStats = document.querySelector('.user-stats');
     const usersDropdown = document.getElementById('users-dropdown');
-    
+
     if (dashboardStats && userStats) {
       userStats.classList.add('hidden');
       dashboardStats.classList.remove('hidden');
     }
-    
+
     // Close users dropdown when switching to dashboard
     if (usersDropdown) {
       usersDropdown.classList.add('hidden');
@@ -1375,29 +1409,29 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const skeletonChart = document.getElementById('skeleton-chart');
     const dashboardStats = document.querySelector('.dashboard-stats');
     const actualChart = document.getElementById('actual-chart');
-    
+
     if (skeletonHeader) {
       skeletonHeader.style.display = 'none';
     }
-    
+
     if (actualHeader) {
       actualHeader.classList.remove('content-hidden');
       actualHeader.classList.add('content-visible');
     }
-    
+
     if (skeletonStats) {
       skeletonStats.style.display = 'none';
     }
-    
+
     if (skeletonChart) {
       skeletonChart.style.display = 'none';
     }
-    
+
     if (dashboardStats) {
       dashboardStats.classList.remove('content-hidden');
       dashboardStats.classList.add('content-visible');
     }
-    
+
     if (actualChart) {
       actualChart.classList.remove('content-hidden');
       actualChart.classList.add('content-visible');
@@ -1407,50 +1441,50 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   // Function to update stats with smooth animation
   function updateStats(mitras: any[], isUserMenu: boolean = false) {
     console.log('Updating stats with mitras data:', mitras); // Debug log
-    
+
     // Hide skeleton and show actual content on first data load
     hideSkeletonAndShowContent();
-    
+
     const totalUsers = mitras.length;
     const pendingCount = mitras.filter(m => m.status === 'pending').length;
     const approvedCount = mitras.filter(m => m.status === 'approved').length;
-    
+
     // Calculate DP and FP totals with more flexible filtering
     const dpMitra = mitras.filter(m => {
       // Check multiple possible values for DP
-      return m.nilaiPaketUsaha === 'DP' || 
-             m.nilaiPaketUsaha === 'Down Payment' || 
+      return m.nilaiPaketUsaha === 'DP' ||
+             m.nilaiPaketUsaha === 'Down Payment' ||
              m.paketUsaha === 'DP' ||
              m.paketUsaha === 'Down Payment';
     });
-    
+
     const fpMitra = mitras.filter(m => {
       // Check multiple possible values for Full Payment
-      return m.nilaiPaketUsaha === 'Full Payment' || 
-             m.nilaiPaketUsaha === 'FP' || 
+      return m.nilaiPaketUsaha === 'Full Payment' ||
+             m.nilaiPaketUsaha === 'FP' ||
              m.paketUsaha === 'Full Payment' ||
              m.paketUsaha === 'FP';
     });
-    
+
     console.log('DP Mitra:', dpMitra); // Debug log
     console.log('FP Mitra:', fpMitra); // Debug log
-    
+
     const dpTotal = dpMitra.reduce((sum, m) => sum + (m.yangHarusDibayar || m.nominalDP || m.hargaPaket || 0), 0);
     const fpTotal = fpMitra.reduce((sum, m) => sum + (m.yangHarusDibayar || m.nominalFull || m.hargaPaket || 0), 0);
 
     // Animate stats updates
     const animateNumber = (element: HTMLElement | null, finalValue: string, duration: number = 800) => {
       if (!element) return;
-      
+
       // Remove loading state
       element.classList.remove('loading-pulse');
-      
+
       // If it's a currency, animate from 0 to final value
       if (finalValue.includes('Rp')) {
         const finalNumber = parseInt(finalValue.replace(/[^\d]/g, ''));
         let currentNumber = 0;
         const increment = finalNumber / (duration / 16); // 60fps
-        
+
         const animate = () => {
           currentNumber += increment;
           if (currentNumber >= finalNumber) {
@@ -1466,7 +1500,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         const finalNumber = parseInt(finalValue);
         let currentNumber = 0;
         const increment = finalNumber / (duration / 16);
-        
+
         const animate = () => {
           currentNumber += increment;
           if (currentNumber >= finalNumber) {
@@ -1484,7 +1518,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       // Update User stats with animation
       const totalUsersEl = document.getElementById('total-users-user');
       const pendingUserEl = document.getElementById('pending-user');
-      
+
       setTimeout(() => animateNumber(totalUsersEl, totalUsers.toString()), 100);
       setTimeout(() => animateNumber(pendingUserEl, pendingCount.toString()), 200);
     } else {
@@ -1493,21 +1527,21 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       const dpMasukEl = document.getElementById('dp-masuk');
       const fpMasukEl = document.getElementById('fp-masuk');
       const pendingEl = document.getElementById('pending-dashboard');
-      
+
       setTimeout(() => animateNumber(totalUsersEl, totalUsers.toString()), 100);
       setTimeout(() => animateNumber(dpMasukEl, formatCurrency(dpTotal)), 200);
       setTimeout(() => animateNumber(fpMasukEl, formatCurrency(fpTotal)), 300);
       setTimeout(() => animateNumber(pendingEl, pendingCount.toString()), 400);
     }
   }
-  
+
   // Function to update chart with real mitra data (7 days focus)
   function updateChartWithRealData(mitras: any[]) {
     if (!mitras) {
       console.log('No mitra data available');
       return;
     }
-    
+
     // If chart not ready yet, queue the data
     if (!isChartReady || !paymentChart) {
       console.log('Chart not ready yet, queueing data...');
@@ -1518,31 +1552,31 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     console.log('Updating chart with', mitras.length, 'mitras');
 
     // Process payment data from mitras
-    const dpPayments = mitras.filter(m => 
+    const dpPayments = mitras.filter(m =>
       (m.nilaiPaketUsaha === 'DP' || m.paketUsaha === 'DP') && m.status === 'approved'
     );
-    const fpPayments = mitras.filter(m => 
-      (m.nilaiPaketUsaha === 'Full Payment' || m.paketUsaha === 'Full Payment' || 
+    const fpPayments = mitras.filter(m =>
+      (m.nilaiPaketUsaha === 'Full Payment' || m.paketUsaha === 'Full Payment' ||
        m.nilaiPaketUsaha === 'FP' || m.paketUsaha === 'FP') && m.status === 'approved'
     );
-    
+
     console.log('DP Payments:', dpPayments.length, 'FP Payments:', fpPayments.length);
-    
+
     // Create time series data for the last 7 days
     const now = new Date();
     const timeLabels = [];
     const dpData = [];
     const fpData = [];
-    
+
     // Generate daily slots for the last 7 days
     for (let i = 6; i >= 0; i--) {
       const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-      const dateStr = i === 0 ? 'Hari ini' : date.toLocaleDateString('id-ID', { 
-        weekday: 'short', 
-        day: 'numeric' 
+      const dateStr = i === 0 ? 'Hari ini' : date.toLocaleDateString('id-ID', {
+        weekday: 'short',
+        day: 'numeric'
       });
       timeLabels.push(dateStr);
-      
+
       // Count payments for this specific date
       const dpCountForDay = dpPayments.filter(payment => {
         if (payment.createdAt) {
@@ -1551,7 +1585,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         }
         return false;
       }).length;
-      
+
       const fpCountForDay = fpPayments.filter(payment => {
         if (payment.createdAt) {
           const paymentDate = new Date(payment.createdAt);
@@ -1559,7 +1593,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         }
         return false;
       }).length;
-      
+
       dpData.push(dpCountForDay);
       fpData.push(fpCountForDay);
     }
@@ -1573,16 +1607,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const totalFPAmount = fpPayments.reduce((sum, m) => sum + (m.yangHarusDibayar || m.hargaPaket || 0), 0);
     const totalDPCount = dpPayments.length;
     const totalFPCount = fpPayments.length;
-    
+
     // Update chart
     paymentChart.data.labels = timeLabels;
     paymentChart.data.datasets[0].data = dpData;
     paymentChart.data.datasets[1].data = fpData;
-    
+
     paymentChart.update('active');
 
     // Summary cards removed - chart only mode
-    
+
     console.log('Chart updated successfully');
   }
 
@@ -1605,16 +1639,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const showAllUsers = document.getElementById('show-all-users');
     const showApprovedMitra = document.getElementById('show-approved-mitra');
     const showPendingMitra = document.getElementById('show-pending-mitra');
-    
+
     // Check if dashboard menu is active
     if (dashboardBtn && dashboardBtn.classList.contains('active-menu')) {
       return 'dashboard';
     }
-    
+
     // Check if we're in dashboard stats mode
     const dashboardStats = document.querySelector('.dashboard-stats');
     const userStats = document.querySelector('.user-stats');
-    
+
     if (dashboardStats && !dashboardStats.classList.contains('hidden')) {
       return 'dashboard';
     }
@@ -1626,7 +1660,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     } else if (showPendingMitra && showPendingMitra.classList.contains('bg-gray-100')) {
       return 'pending';
     }
-    
+
     return 'dashboard'; // default to dashboard
   }
 
@@ -1694,7 +1728,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
           `;
-          
+
           if (filter === 'approved') {
             emptyMessage = 'Tidak ada mitra yang disetujui';
             emptyDescription = 'Belum ada mitra yang mendapat persetujuan';
@@ -1712,7 +1746,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               </svg>
             `;
           }
-          
+
           tableBody.innerHTML = `
             <tr>
               <td colspan="7" class="px-6 py-12 text-center">
@@ -1726,7 +1760,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               </td>
             </tr>
           `;
-          
+
           // Still update stats even if no data
           const isUserMenu = filter !== 'dashboard';
           updateStats(result.data, isUserMenu);
@@ -1738,7 +1772,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
           const statusColor = mitra.status === 'pending' ? 'bg-amber-100 text-amber-800 border-amber-200' :
                              mitra.status === 'approved' ? 'bg-green-100 text-green-800 border-green-200' :
                              'bg-red-100 text-red-800 border-red-200';
-          
+
           const actionButtons = `
             <div class="flex flex-wrap gap-2">
               <button onclick="showMitraDetail('${mitra._id}')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md">
@@ -1748,7 +1782,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 </svg>
                 Detail
               </button>
-              ${mitra.status === 'pending' ? 
+              ${mitra.status === 'pending' ?
                 `<button onclick="approveMitra('${mitra._id}', 'approve')" class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-medium rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow-md">
                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -1763,7 +1797,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                  </button>` :
                 `<span class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-medium rounded-lg">
                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     ${mitra.status === 'approved' ? 
+                     ${mitra.status === 'approved' ?
                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>' :
                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
                      }
@@ -1793,16 +1827,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 </span>
               </td>
               <td class="px-6 py-4">
-                ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ? 
-                  `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">${mitra.rmNusantaraSubMenu}</span>` : 
+                ${mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu ?
+                  `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">${mitra.rmNusantaraSubMenu}</span>` :
                   '<span class="text-gray-400 text-xs">-</span>'
                 }
               </td>
               <td class="px-6 py-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${statusColor}">
-                  ${mitra.status === 'pending' ? 
+                  ${mitra.status === 'pending' ?
                     '<svg class="w-3 h-3 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>' :
-                    mitra.status === 'approved' ? 
+                    mitra.status === 'approved' ?
                     '<svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>' :
                     '<svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>'
                   }
@@ -1817,11 +1851,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         });
 
         tableBody.innerHTML = tableHTML;
-        
+
         // Update stats based on current view
         const isUserMenu = filter !== 'dashboard';
         updateStats(result.data, isUserMenu);
-        
+
         // Update chart with real data
         updateChartWithRealData(result.data);
       } else {
@@ -1844,7 +1878,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }
 
     const actionText = action === 'approve' ? 'menyetujui' : 'menolak';
-    
+
     const Swal = await loadSweetAlert();
     const result = await Swal.fire({
       title: `Apakah anda ${actionText} Mitra?`,
@@ -1994,7 +2028,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               'Content-Type': 'application/json',
             },
           });
-          
+
           // Log pelunasan deletion result, tapi tidak block proses jika tidak ada data
           if (pelunasanResponse.ok) {
             const pelunasanData = await pelunasanResponse.json();
@@ -2014,7 +2048,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             confirmButtonColor: "#10b981"
           });
         }
-        
+
         // Reload mitra data with current filter
         const activeFilter = getCurrentActiveFilter();
         loadMitraData(activeFilter);
@@ -2134,56 +2168,69 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     };
 
-    // Helper function to process image data for display
+    // Helper function to process image data for display from Supabase Storage
     const processImageData = (imageData: string | undefined): string => {
       if (!imageData || imageData === '') return '';
-      
+
+      console.log('[processImageData] Input:', imageData.substring(0, 100));
+
       // If already a data URL, return as is
-      if (imageData.startsWith('data:')) return imageData;
-      
-      // If it's a URL, normalize uploads domain to current API_URL
-      if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
-        try {
-          const parsed = new URL(imageData);
-          if (parsed.pathname.startsWith('/uploads/')) {
-            return `${API_URL}${parsed.pathname}`;
-          }
-        } catch (error) {
-          console.warn('[Dashboard] Failed to normalize image URL', error);
-        }
+      if (imageData.startsWith('data:')) {
+        console.log('[processImageData] ✓ Data URL detected');
         return imageData;
       }
-      
-      // If it's a file path
-      if (imageData.startsWith('/uploads/')) return `${API_URL}${imageData}`;
-      
+
+      // PRIORITY: Check if it's a Supabase Storage URL
+      // Supabase URLs typically contain the bucket name and object path
+      if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+        console.log('[processImageData] ✓ Full URL detected (likely Supabase Storage):', imageData);
+        // Return Supabase Storage URL as is - it's already public and accessible
+        return imageData;
+      }
+
+      // If it's already a path starting with /uploads/ (legacy local storage)
+      if (imageData.startsWith('/uploads/')) {
+        const result = buildUploadsUrl(imageData);
+        console.log('[processImageData] ✓ Legacy local uploads path:', result);
+        return result;
+      }
+
       // If it looks like base64 (long string without dots or slashes)
       if (imageData.length > 100 && !imageData.includes('.') && !imageData.includes('/')) {
-        return `data:image/jpeg;base64,${imageData}`;
+        const result = `data:image/jpeg;base64,${imageData}`;
+        console.log('[processImageData] ✓ Base64 detected, added prefix');
+        return result;
       }
-      
-      // Default: treat as filename in uploads folder
-      return `${API_URL}/uploads/${imageData}`;
+
+      // Default: treat as filename and add /uploads/ prefix (legacy fallback)
+      const result = buildUploadsUrl(imageData);
+      console.log('[processImageData] ⚠ Default handling:', result);
+      return result;
     };
 
-    // PRIORITY: Use new upload_ktp and upload_tf fields first, fallback to legacy fields
+    // PRIORITY: Use new upload_ktp and upload_tf fields from Supabase Storage first, fallback to legacy fields
+    // The upload_ktp and upload_tf fields store full Supabase Storage URLs like:
+    // https://your-project.supabase.co/storage/v1/object/public/bucket-name/mitra/documents/filename.jpg
     const ktpImage = mitra.upload_ktp || mitra.fotoKTP;
     const tfImage = mitra.upload_tf || mitra.buktiTransfer;
 
     // Log image data for debugging
-    console.log('Image data in mitra object:');
-    console.log('upload_ktp (NEW):', mitra.upload_ktp || 'NOT SET');
-    console.log('upload_tf (NEW):', mitra.upload_tf || 'NOT SET');
-    console.log('fotoKTP (legacy):', mitra.fotoKTP || 'EMPTY');
-    console.log('buktiTransfer (legacy):', mitra.buktiTransfer || 'EMPTY');
+    console.log('=== Image Data from Supabase Storage ===');
+    console.log('upload_ktp (Supabase URL):', mitra.upload_ktp || 'NOT SET');
+    console.log('upload_tf (Supabase URL):', mitra.upload_tf || 'NOT SET');
+    console.log('fotoKTP (legacy fallback):', mitra.fotoKTP || 'EMPTY');
+    console.log('buktiTransfer (legacy fallback):', mitra.buktiTransfer || 'EMPTY');
     console.log('Using KTP:', ktpImage || 'NONE');
     console.log('Using TF:', tfImage || 'NONE');
-    console.log('KTP (processed):', processImageData(ktpImage));
-    console.log('TF (processed):', processImageData(tfImage));
+    const processedKTP = processImageData(ktpImage);
+    const processedTF = processImageData(tfImage);
+    console.log('KTP (processed URL):', processedKTP);
+    console.log('TF (processed URL):', processedTF);
+    console.log('======================================');
 
     // ENHANCED: Determine payment/pelunasan status with comprehensive logic
     let pelunasanStatusHTML = '';
-    
+
     // Helper function to parse numeric values
     const parseNumeric = (value: any): number => {
       if (value === null || value === undefined || value === '') return 0;
@@ -2199,7 +2246,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const kekurangan = parseNumeric(mitra.kekurangan);
     const hargaPaket = parseNumeric(mitra.hargaPaket);
     const totalPaid = parseNumeric(mitra.totalPaid || mitra.yangHarusDibayar || 0);
-    
+
     console.log('[PELUNASAN DEBUG] Payment analysis:', {
       email: mitra.email,
       nilaiPaketUsaha: mitra.nilaiPaketUsaha,
@@ -2224,7 +2271,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     });
 
     // Check 1: Full Payment package = automatically lunas
-    if (mitra.nilaiPaketUsaha === 'Full Payment' || 
+    if (mitra.nilaiPaketUsaha === 'Full Payment' ||
         String(mitra.nilaiPaketUsaha || '').toLowerCase().includes('full')) {
       isPaidOff = true;
       statusReason = 'Full Payment package';
@@ -2234,7 +2281,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     // This is CRITICAL: DP users must submit pelunasan form to be considered LUNAS
     else if (mitra.nilaiPaketUsaha === 'DP') {
       console.log('[PELUNASAN DEBUG] 🔍 Check 2: DP package - checking database...');
-      
+
       try {
         const token = localStorage.getItem('adminToken');
         const pelunasanResponse = await fetch(`${API_URL}/api/admin/mitra_pelunasan`, {
@@ -2249,7 +2296,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
           const pelunasanResult = await pelunasanResponse.json();
           if (pelunasanResult.success && pelunasanResult.data) {
             // Find pelunasan by email or mitraId
-            const pelunasan = pelunasanResult.data.find((p: any) => 
+            const pelunasan = pelunasanResult.data.find((p: any) =>
               p.email === mitra.email || p.mitraId === mitra._id
             );
 
@@ -2261,7 +2308,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 pelunasanApproved: pelunasan.pelunasanApproved,
                 nominalPelunasan: pelunasan.nominalPelunasan
               });
-              
+
               // CRITICAL FIX: Check if admin has approved the pelunasan
               // Backend sets statusPelunasan='lunas' when admin approves via /api/admin/approve-pelunasan
               // Also check for alternative approved flags
@@ -2272,14 +2319,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 pelunasan.pelunasanApproved === true ||       // Alternative flag
                 pelunasan.isApproved === true                 // Alternative flag
               );
-              
+
               // Additional validation: Check if there's actual payment data
               const hasPaymentData = (
                 pelunasan.nominalPelunasan > 0 ||
                 pelunasan.jumlahPelunasan > 0 ||
                 pelunasan.buktiTransfer
               );
-              
+
               if (isApprovedByAdmin && hasPaymentData) {
                 isPaidOff = true;
                 statusReason = 'Pelunasan approved by admin';
@@ -2315,7 +2362,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     }
     // Check 3: Pelunasan explicitly approved in mitra record
-    else if (mitra.pelunasanApproved === true || 
+    else if (mitra.pelunasanApproved === true ||
              mitra.statusPelunasan === 'lunas' ||
              mitra.statusPelunasan === 'approved') {
       isPaidOff = true;
@@ -2342,8 +2389,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.log('[PELUNASAN DEBUG] ❌ Default: Not paid off');
     }
 
-    console.log('[PELUNASAN DEBUG] 🎯 Final status:', { 
-      isPaidOff, 
+    console.log('[PELUNASAN DEBUG] 🎯 Final status:', {
+      isPaidOff,
       statusReason,
       nilaiPaketUsaha: mitra.nilaiPaketUsaha
     });
@@ -2496,26 +2543,18 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               <span class="font-medium text-gray-700">Foto KTP & Dokumen</span>
             </div>
             ${ktpImage && ktpImage !== '' ? `
-              <div class="image-container aspect-video relative">
-                <img src="${processImageData(ktpImage)}" 
-                     alt="Foto KTP" 
-                     class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${processImageData(ktpImage).replace(/'/g, "\\'")}', 'Foto KTP - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="image-overlay">
-                  <span>Klik untuk memperbesar</span>
-                </div>
-                <div class="hidden absolute inset-0 flex items-center justify-center bg-red-50 text-red-500">
-                  <div class="text-center">
-                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <p class="text-sm">Gagal memuat gambar</p>
-                  </div>
-                </div>
-              </div>
+              <button
+                type="button"
+                onclick="openImageModal('${processImageData(ktpImage).replace(/'/g, "\\'")}', 'Foto KTP - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
+                class="w-full px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 group">
+                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                <span>Lihat Foto KTP</span>
+              </button>
             ` : `
-              <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+              <div class="w-full px-4 py-3 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
                 <div class="text-center">
                   <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -2524,9 +2563,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 </div>
               </div>
             `}
-          </div>
-          
-          <!-- Bukti Transfer -->
+          </div>          <!-- Bukti Transfer -->
           <div class="space-y-3">
             <div class="flex items-center space-x-2">
               <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2535,26 +2572,18 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               <span class="font-medium text-gray-700">Bukti Transfer</span>
             </div>
             ${tfImage && tfImage !== '' ? `
-              <div class="image-container aspect-video relative">
-                <img src="${processImageData(tfImage)}" 
-                     alt="Bukti Transfer" 
-                     class="w-full h-full object-contain bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer"
-                     onclick="openImageModal('${processImageData(tfImage).replace(/'/g, "\\'")}', 'Bukti Transfer - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="image-overlay">
-                  <span>Klik untuk memperbesar</span>
-                </div>
-                <div class="hidden absolute inset-0 flex items-center justify-center bg-red-50 text-red-500">
-                  <div class="text-center">
-                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <p class="text-sm">Gagal memuat gambar</p>
-                  </div>
-                </div>
-              </div>
+              <button
+                type="button"
+                onclick="openImageModal('${processImageData(tfImage).replace(/'/g, "\\'")}', 'Bukti Transfer - ${mitra.namaMitra.replace(/'/g, "\\'")}')"
+                class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 group">
+                <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                <span>Lihat Bukti Transfer</span>
+              </button>
             ` : `
-              <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+              <div class="w-full px-4 py-3 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
                 <div class="text-center">
                   <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -2597,7 +2626,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       modal.classList.add('hidden');
     }
   }
-  
+
   function isBase64OrDataUrl(str: string): boolean {
     if (!str) return false;
     // Cek jika string dimulai dengan data URL
@@ -2611,17 +2640,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     const modal = document.getElementById('imageModal');
     const image = document.getElementById('modalImage') as HTMLImageElement;
     const titleElement = document.getElementById('modalImageTitle');
-    
+
     if (modal && image && titleElement) {
       console.log('Opening image modal for:', title);
       console.log('Image data format:', imageData ? imageData.substring(0, 50) + '...' : 'empty');
-      
+
       // Show modal first
       modal.classList.remove('hidden');
-      
+
       // Handle different image data formats
       let imageSrc = '';
-      
+
       if (!imageData || imageData === '') {
         console.error('No image data provided');
         imageSrc = '';
@@ -2635,7 +2664,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         console.log('✓ Using HTTP URL');
       } else if (imageData.startsWith('/uploads/')) {
         // It's a file path, construct URL
-        imageSrc = `${API_URL}${imageData}`;
+        imageSrc = buildUploadsUrl(imageData);
         console.log('✓ Constructed URL from path:', imageSrc);
       } else if (imageData.length > 100 && !imageData.includes('.') && !imageData.includes('/')) {
         // Likely base64 without prefix
@@ -2649,31 +2678,31 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         }
       } else {
         // Unknown format, try as filename in uploads folder
-        imageSrc = `${API_URL}/uploads/${imageData}`;
+        imageSrc = buildUploadsUrl(imageData);
         console.log('⚠ Unknown format, trying as filename:', imageSrc);
       }
-      
+
       image.src = imageSrc;
       image.alt = title;
       titleElement.textContent = title;
-      
+
       // Clear any previous error messages
       const existingError = image.parentElement?.querySelector('.error-message');
       if (existingError) existingError.remove();
       image.style.display = 'block';
-      
+
       image.onload = function() {
         console.log('✅ Image loaded successfully');
       };
-      
+
       image.onerror = function() {
         console.error('❌ Failed to load image');
         console.error('   Image src:', imageSrc.substring(0, 100));
         console.error('   Original data:', imageData.substring(0, 100));
-        
+
         titleElement.textContent = title + ' (Gagal memuat gambar)';
         image.style.display = 'none';
-        
+
         const errorMsg = document.createElement('div');
         errorMsg.className = 'error-message text-white text-center p-8';
         errorMsg.innerHTML = `
@@ -2683,7 +2712,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             </svg>
             <p class="text-lg font-semibold">Gagal memuat gambar</p>
             <p class="text-sm mt-2 text-gray-600">Format gambar tidak didukung atau data rusak</p>
-            <p class="text-xs mt-2 text-gray-500">Format: ${imageData.substring(0, 30)}...</p>
+            <p class="text-xs mt-2 text-gray-500 break-all">URL: ${imageSrc.substring(0, 100)}${imageSrc.length > 100 ? '...' : ''}</p>
+            <p class="text-xs mt-1 text-gray-400 break-all">Original: ${imageData.substring(0, 50)}${imageData.length > 50 ? '...' : ''}</p>
           </div>
         `;
         image.parentElement?.appendChild(errorMsg);
@@ -2703,7 +2733,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   document.addEventListener('click', function(event) {
     const imageModal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
-    
+
     if (imageModal && !imageModal.classList.contains('hidden')) {
       if (event.target === imageModal && event.target !== modalImage) {
         closeImageModal();
@@ -2722,7 +2752,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   (window as any).closeMitraDetailModal = closeMitraDetailModal;
   (window as any).openImageModal = openImageModal;
   (window as any).closeImageModal = closeImageModal;
-  
+
   // Expose chart functions for debugging
   (window as any).refreshChart = function() {
     console.log('Manual chart refresh triggered');
@@ -2736,7 +2766,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     console.log('🟢 Chart.js library loaded:', typeof (window as any).Chart !== 'undefined');
     console.log('🟢 Chart.js flag:', (window as any).chartJsLoaded);
     console.log('🟢 Pending data:', pendingChartData);
-    
+
     const canvas = document.getElementById('paymentChart') as HTMLCanvasElement;
     if (canvas) {
       console.log('🟢 Canvas element found');
@@ -2748,7 +2778,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     } else {
       console.log('🔴 Canvas element NOT found');
     }
-    
+
     if (paymentChart) {
       console.log('🟢 Chart instance details:');
       console.log('   - Chart type:', paymentChart.config?.type);
@@ -2761,7 +2791,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     } else {
       console.log('🔴 No chart instance available');
     }
-    
+
     console.log('================================');
     return {
       chartReady: isChartReady,
@@ -2791,28 +2821,28 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.log('Canvas attribute size:', canvas.getAttribute('width'), 'x', canvas.getAttribute('height'));
       console.log('Canvas display:', window.getComputedStyle(canvas).display);
       console.log('Canvas visibility:', window.getComputedStyle(canvas).visibility);
-      
+
       const ctx = canvas.getContext('2d');
       if (ctx) {
         // Clear canvas first
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         // Draw vibrant test pattern
         ctx.fillStyle = 'rgba(59, 130, 246, 0.9)'; // Blue
         ctx.fillRect(50, 50, 150, 70);
-        
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.9)'; // Red  
+
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.9)'; // Red
         ctx.fillRect(250, 50, 150, 70);
-        
+
         ctx.fillStyle = 'rgba(34, 197, 94, 0.9)'; // Green
         ctx.fillRect(450, 50, 150, 70);
-        
+
         ctx.fillStyle = 'rgba(251, 191, 36, 0.9)'; // Amber
         ctx.fillRect(150, 140, 150, 70);
-        
+
         ctx.fillStyle = 'rgba(168, 85, 247, 0.9)'; // Purple
         ctx.fillRect(350, 140, 150, 70);
-        
+
         // Add text
         ctx.fillStyle = '#1f2937';
         ctx.font = 'bold 20px Arial';
@@ -2822,10 +2852,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         ctx.font = '14px Arial';
         ctx.fillText('If you see these colors, canvas rendering is perfect!', 50, 280);
         ctx.fillText('Chart.js should definitely work now.', 50, 300);
-        
+
         console.log('✅ Colorful test pattern successfully drawn');
         console.log('✅ Canvas is fully functional - Chart.js ready');
-        
+
         // Try to initialize chart after test
         setTimeout(() => {
           if (!isChartReady) {
@@ -2833,7 +2863,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             tryInitializeChart();
           }
         }, 1000);
-        
+
         return true;
       } else {
         console.error('❌ Could not get 2D context from canvas');
@@ -2869,7 +2899,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     console.log('Canvas element:', canvas);
     console.log('Canvas dimensions:', canvas.offsetWidth, 'x', canvas.offsetHeight);
     console.log('Canvas parent dimensions:', canvas.parentElement?.offsetWidth, 'x', canvas.parentElement?.offsetHeight);
-    
+
     const computedStyle = window.getComputedStyle(canvas);
     console.log('Canvas computed style:', {
       display: computedStyle.display,
@@ -2879,7 +2909,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       width: computedStyle.width,
       height: computedStyle.height
     });
-    
+
     // Ensure canvas has proper context
     const ctx = canvas.getContext('2d');
     if (!ctx) {
@@ -2887,19 +2917,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       return;
     }
     console.log('✅ Canvas 2D context obtained');
-    
+
     // Clear and prepare canvas
     try {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // Test canvas functionality with background
       ctx.fillStyle = '#f8fafc';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
+
       ctx.fillStyle = 'red';
       ctx.fillRect(10, 10, 50, 50);
       console.log('✅ Canvas drawing test successful - red square drawn');
-      
+
       // Clear test drawing
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     } catch (e) {
@@ -2917,22 +2947,22 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     }
 
     console.log('📊 Creating new Chart.js instance...');
-    
+
     // Force clear canvas and set proper dimensions
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     // Ensure canvas is properly sized
     if (canvas.width === 0 || canvas.height === 0) {
       canvas.width = 800;
       canvas.height = 320;
       console.log('📏 Forced canvas dimensions to 800x320');
     }
-    
+
     // Add a light background to make chart area visible
     ctx.fillStyle = '#fafafa';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     // Enhanced chart configuration for better visibility
     try {
       paymentChart = new (window as any).Chart(ctx, {
@@ -3070,9 +3100,9 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.log('Chart instance:', paymentChart);
       console.log('Chart canvas:', paymentChart.canvas);
       console.log('Chart width:', paymentChart.canvas.width, 'height:', paymentChart.canvas.height);
-      
+
       isChartReady = true;
-      
+
       // Hide skeleton chart and show actual chart
       const skeletonChart = document.getElementById('skeleton-chart');
       const actualChart = document.getElementById('actual-chart');
@@ -3083,21 +3113,21 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         actualChart.classList.remove('content-hidden');
         actualChart.classList.add('content-visible');
       }
-      
+
       // CRITICAL: Force chart visibility with simplified rendering
       console.log('🚀 Starting critical rendering sequence...');
-      
+
       // First: Update with animation to make chart visible
       paymentChart.update('active');
       console.log('✅ First render with animation completed');
-      
+
       // Second: Ensure proper sizing and final render
       setTimeout(() => {
         if (paymentChart && !paymentChart.destroyed) {
           console.log('🎯 Final sizing and render');
           paymentChart.resize();
           paymentChart.update();
-          
+
           // Force repaint of container
           const container = canvas.parentElement;
           if (container) {
@@ -3105,19 +3135,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             container.offsetHeight;
             container.style.opacity = '1';
           }
-          
+
           console.log('🎉 Chart should now be visible!');
         }
       }, 200);
 
-      
+
       // Process pending data if any
       if (pendingChartData) {
         console.log('📦 Processing pending chart data...');
         updateChartWithRealData(pendingChartData);
         pendingChartData = null;
       }
-      
+
       startRealTimeUpdates();
     } catch (error) {
       console.error('❌ Error creating chart:', error);
@@ -3195,18 +3225,18 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Helper function to animate number
         const animateNumber = (element: HTMLElement | null, newValue: number) => {
           if (!element) return;
           element.classList.remove('loading-pulse');
-          
+
           const currentValue = parseInt(element.textContent || '0');
           if (currentValue !== newValue) {
             const duration = 500;
             const increment = (newValue - currentValue) / (duration / 16);
             let current = currentValue;
-            
+
             const animate = () => {
               current += increment;
               if ((increment > 0 && current >= newValue) || (increment < 0 && current <= newValue)) {
@@ -3221,19 +3251,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
             element.textContent = newValue.toLocaleString('id-ID');
           }
         };
-        
+
         // Update today visitors
         const visitorsTodayEl = document.getElementById('visitors-today');
         animateNumber(visitorsTodayEl, data.today || 0);
-        
+
         // Update week visitors
         const visitorsWeekEl = document.getElementById('visitors-week');
         animateNumber(visitorsWeekEl, data.thisWeek || 0);
-        
+
         // Update month visitors
         const visitorsMonthEl = document.getElementById('visitors-month');
         animateNumber(visitorsMonthEl, data.thisMonth || 0);
-        
+
         console.log('[Visitor] Stats updated from AstraDB:', data);
       } else if (response.status === 401 || response.status === 403) {
         console.log('[Visitor] Unauthorized, clearing token');
@@ -3245,7 +3275,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       const visitorsTodayEl = document.getElementById('visitors-today');
       const visitorsWeekEl = document.getElementById('visitors-week');
       const visitorsMonthEl = document.getElementById('visitors-month');
-      
+
       if (visitorsTodayEl) {
         visitorsTodayEl.classList.remove('loading-pulse');
         visitorsTodayEl.textContent = '0';
@@ -3268,13 +3298,13 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.debug('[Visitor] No admin token found, visitor stats disabled');
       return;
     }
-    
+
     // Initial update
     updateVisitorStats();
-    
+
     // Update every 10 seconds
     visitorUpdateInterval = setInterval(updateVisitorStats, 10000);
-    
+
     console.log('[Visitor] ✅ Started visitor stats tracking (updates every 10s)');
   }
 
@@ -3285,11 +3315,11 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.log('[Visitor] Stopped visitor tracking');
     }
   }
-  
+
   // Initialize chart when DOM is ready
   function tryInitializeChart(attempt: number = 1) {
     const maxAttempts = 15;
-    
+
     if (attempt > maxAttempts) {
       console.error('❌ Failed to initialize chart after', maxAttempts, 'attempts');
       console.error('Debug info:');
@@ -3298,27 +3328,27 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       console.error('- Chart.js flag:', (window as any).chartJsLoaded);
       return;
     }
-    
+
     const canvas = document.getElementById('paymentChart') as HTMLCanvasElement;
     if (!canvas) {
       console.log('⏳ Canvas not found, retry', attempt, 'of', maxAttempts);
       setTimeout(() => tryInitializeChart(attempt + 1), 150);
       return;
     }
-    
+
     // Check Chart.js availability with multiple conditions
     if (typeof (window as any).Chart === 'undefined' || !(window as any).chartJsLoaded) {
       console.log('⏳ Chart.js not fully ready, retry', attempt, 'of', maxAttempts);
       setTimeout(() => tryInitializeChart(attempt + 1), 150);
       return;
     }
-    
+
     // Check if canvas is visible and has proper dimensions
     const canvasDisplay = window.getComputedStyle(canvas).display;
     const canvasWidth = canvas.offsetWidth;
     const canvasHeight = canvas.offsetHeight;
     const canvasRect = canvas.getBoundingClientRect();
-    
+
     console.log('Canvas check attempt', attempt, ':', {
       display: canvasDisplay,
       offsetWidth: canvasWidth,
@@ -3329,29 +3359,29 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       attributeHeight: canvas.getAttribute('height'),
       parent: canvas.parentElement?.className
     });
-    
+
     // Use attribute dimensions if offset dimensions are not available
     const effectiveWidth = canvasWidth || parseInt(canvas.getAttribute('width') || '0');
     const effectiveHeight = canvasHeight || parseInt(canvas.getAttribute('height') || '0');
-    
+
     if (canvasDisplay === 'none' || (effectiveWidth === 0 && effectiveHeight === 0)) {
       console.log('⏳ Canvas not visible or has no dimensions, retry', attempt, 'of', maxAttempts);
       setTimeout(() => tryInitializeChart(attempt + 1), 150);
       return;
     }
-    
+
     console.log('✅ All conditions met, initializing chart on attempt', attempt);
     console.log('Chart.js version:', (window as any).Chart?.version);
     initializePaymentChart();
   }
-  
+
   // Multiple initialization attempts for better reliability
   function startChartInitialization() {
     console.log('🚀 Starting chart initialization sequence...');
-    
+
     // Immediate attempt
     tryInitializeChart();
-    
+
     // Backup attempts
     setTimeout(() => {
       if (!isChartReady) {
@@ -3359,14 +3389,14 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         tryInitializeChart();
       }
     }, 200);
-    
+
     setTimeout(() => {
       if (!isChartReady) {
         console.log('🔄 Backup attempt 2...');
         tryInitializeChart();
       }
     }, 500);
-    
+
     setTimeout(() => {
       if (!isChartReady) {
         console.log('🔄 Final backup attempt...');
@@ -3374,19 +3404,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
     }, 1000);
   }
-  
+
   // Check if we're on admin dashboard before starting visitor tracking
   const currentPath = window.location.pathname;
   const isAdminDashboard = currentPath === '/admin/dashboard';
-  
+
   console.log('[Dashboard] Current path:', currentPath);
   console.log('[Dashboard] Is admin dashboard:', isAdminDashboard);
-  
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       console.log('📄 DOM loaded, initializing chart...');
       setTimeout(startChartInitialization, 100);
-      
+
       // Only start visitor tracking on admin dashboard
       if (isAdminDashboard) {
         console.log('📊 Admin dashboard detected, will start visitor tracking...');
@@ -3399,7 +3429,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     // DOM is already loaded
     console.log('📄 DOM already loaded, initializing chart now...');
     setTimeout(startChartInitialization, 100);
-    
+
     // Only start visitor tracking on admin dashboard
     if (isAdminDashboard) {
       console.log('📊 Admin dashboard detected, will start visitor tracking...');

@@ -6,6 +6,10 @@ import {
   normalizeUploadsPath,
   resolveBaseUrlFromRequest,
 } from "../utils/url.utils";
+import {
+  isSupabaseStorageEnabled,
+  uploadFileToSupabase,
+} from "../utils/supabaseStorage";
 
 export const pelunasanMitraController = async (
   req: Request
@@ -14,10 +18,19 @@ export const pelunasanMitraController = async (
     const formData = await req.formData();
     const baseUploadsUrl = resolveBaseUrlFromRequest(req);
     console.log(`[PELUNASAN UPLOAD] Using base URL: ${baseUploadsUrl}`);
+
+    const supabaseEnabled = isSupabaseStorageEnabled();
+    console.log(
+      `[PELUNASAN UPLOAD] Supabase storage enabled: ${
+        supabaseEnabled ? "yes" : "no"
+      }`
+    );
+
     const pelunasanData: any = {};
     for (const [key, value] of formData.entries()) {
       if (key !== "buktiTransfer") pelunasanData[key] = value;
     }
+
     // Validasi dan normalisasi nama bank pengirim
     if (pelunasanData.bankPengirim) {
       const validBank = validateBankInput(pelunasanData.bankPengirim);
@@ -31,24 +44,78 @@ export const pelunasanMitraController = async (
       }
       pelunasanData.bankPengirim = validBank;
     }
-    // Handle file upload
+
+    // Handle file upload - Supabase Storage or Local
     const buktiTransfer = formData.get("buktiTransfer") as unknown as File;
     if (buktiTransfer && buktiTransfer.size > 0) {
-      const timestamp = Date.now();
-      const originalName = buktiTransfer.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-      const fileName = `${timestamp}_${originalName}`;
-      const uploadsDir = join(process.cwd(), "uploads");
-      await mkdir(uploadsDir, { recursive: true });
+      // Validate file type - only allow JPG/PNG
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!allowedTypes.includes(buktiTransfer.type)) {
+        return new Response(
+          JSON.stringify({
+            error: `File type ${buktiTransfer.type} tidak diizinkan. Hanya menerima format JPG atau PNG.`,
+          }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      }
 
-      const filePath = join(uploadsDir, fileName);
-      await Bun.write(filePath, buktiTransfer);
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (buktiTransfer.size > maxSize) {
+        return new Response(
+          JSON.stringify({
+            error: `Ukuran file terlalu besar. Maksimal 5MB.`,
+          }),
+          {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      }
 
-      const relativePath = normalizeUploadsPath(`/uploads/${fileName}`);
-      pelunasanData.buktiTransfer = relativePath;
-      pelunasanData.buktiTransferPath = relativePath;
-      console.log(
-        `[PELUNASAN UPLOAD] File saved with path: ${relativePath} (absolute preview: ${baseUploadsUrl}${relativePath})`
-      );
+      if (supabaseEnabled) {
+        // Upload to Supabase Storage
+        console.log(
+          `[PELUNASAN UPLOAD] Uploading to Supabase bucket folder: pelunasan`
+        );
+        const uploadResult = await uploadFileToSupabase(buktiTransfer, {
+          prefix: "mitra/pelunasan",
+        });
+        console.log(
+          `[PELUNASAN UPLOAD] Supabase upload complete: ${uploadResult.publicUrl}`
+        );
+
+        // Store both legacy path and new Supabase URL
+        pelunasanData.buktiTransfer = uploadResult.publicUrl; // Store full Supabase URL
+        pelunasanData.buktiTransferPath = uploadResult.publicUrl;
+        pelunasanData.upload_tf = uploadResult.publicUrl; // New field for consistency
+
+        console.log(
+          `[PELUNASAN UPLOAD] File saved to Supabase: ${uploadResult.publicUrl}`
+        );
+      } else {
+        // Fallback to local storage
+        const timestamp = Date.now();
+        const originalName = buktiTransfer.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+        const fileName = `${timestamp}_${originalName}`;
+        const uploadsDir = join(process.cwd(), "uploads");
+        await mkdir(uploadsDir, { recursive: true });
+
+        const filePath = join(uploadsDir, fileName);
+        await Bun.write(filePath, buktiTransfer);
+
+        const relativePath = normalizeUploadsPath(`/uploads/${fileName}`);
+        pelunasanData.buktiTransfer = relativePath;
+        pelunasanData.buktiTransferPath = relativePath;
+        pelunasanData.upload_tf = relativePath; // New field for consistency
+
+        console.log(
+          `[PELUNASAN UPLOAD] File saved locally with path: ${relativePath} (absolute preview: ${baseUploadsUrl}${relativePath})`
+        );
+      }
     } else {
       return new Response(
         JSON.stringify({ error: "Bukti transfer wajib diupload" }),
@@ -58,11 +125,19 @@ export const pelunasanMitraController = async (
         }
       );
     }
+
     // Log data pelunasan yang akan disimpan
-    console.log("[DEBUG] Data pelunasan yang akan disimpan:", pelunasanData);
+    console.log(
+      "[PELUNASAN DEBUG] Data pelunasan yang akan disimpan:",
+      pelunasanData
+    );
+    console.log("  - buktiTransfer (legacy):", pelunasanData.buktiTransfer);
+    console.log("  - upload_tf (new):", pelunasanData.upload_tf);
+    console.log("  - Supabase enabled:", supabaseEnabled ? "YES" : "NO");
+
     // Simpan ke DB
     const result = await MitraPelunasanModel.create(pelunasanData);
-    console.log("[DEBUG] Data pelunasan berhasil disimpan:", result);
+    console.log("[PELUNASAN DEBUG] Data pelunasan berhasil disimpan:", result);
     return new Response(JSON.stringify({ success: true, data: result }), {
       status: 201,
       headers: { "Content-Type": "application/json" },

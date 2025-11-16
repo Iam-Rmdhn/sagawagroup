@@ -15,12 +15,12 @@ export interface Mitra {
   noHp: string;
   email: string;
 
-  // File uploads (legacy fields - keep for backward compatibility)
-  fotoKTP: string;
+  // File uploads - store Supabase URLs or local paths
+  fotoKTP: string; // Legacy field - stores URL/path to KTP image
 
-  // New upload fields with clearer names
-  upload_ktp?: string; 
-  upload_tf?: string; 
+  // New upload fields with clearer names (store Supabase URLs)
+  upload_ktp?: string; // URL to KTP image in Supabase Storage
+  upload_tf?: string; // URL to bukti transfer image in Supabase Storage
 
   // Nilai Paket Usaha
   nilaiPaketUsaha: "DP" | "Full Payment";

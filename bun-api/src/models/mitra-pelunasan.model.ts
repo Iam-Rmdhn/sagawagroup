@@ -13,8 +13,9 @@ export interface MitraPelunasan {
   namaPengirim: string;
   noRekPengirim: string;
   bankPengirim: string;
-  buktiTransfer: string; // URL/filepath
-  buktiTransferPath?: string; // Normalized relative uploads path
+  buktiTransfer: string; // Legacy field - URL/filepath
+  buktiTransferPath?: string; // Normalized relative uploads path (legacy)
+  upload_tf?: string; // New field - Supabase Storage URL or local path
   statusPelunasan?: string; // 'lunas' | 'belum' | undefined
   createdAt: string;
   updatedAt: string;

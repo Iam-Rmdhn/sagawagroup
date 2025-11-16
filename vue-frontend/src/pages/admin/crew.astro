@@ -664,6 +664,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">No HP</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Divisi</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Kemitraan</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nomor Rekening</th>
+                <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Bank</th>
                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
                 <th class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
               </tr>
@@ -737,6 +739,32 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
               placeholder="Masukkan nomor HP"
               required
             />
+          </div>
+        </div>
+
+        <!-- Nomor Rekening dan Bank -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="crewAccountNumber">Nomor Rekening</label>
+            <input 
+              type="text" 
+              id="crewAccountNumber" 
+              name="nomorRekening" 
+              placeholder="Masukkan nomor rekening"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="crewBank">Bank</label>
+            <input 
+              type="text" 
+              id="crewBank" 
+              name="bank" 
+              list="addCrewBankSuggestions"
+              placeholder="Masukkan nama bank"
+              required
+            />
+            <datalist id="addCrewBankSuggestions"></datalist>
           </div>
         </div>
 
@@ -889,6 +917,32 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
           </div>
         </div>
 
+        <!-- Nomor Rekening dan Bank -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editCrewAccountNumber">Nomor Rekening</label>
+            <input
+              type="text"
+              id="editCrewAccountNumber"
+              name="nomorRekening"
+              placeholder="Masukkan nomor rekening"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editCrewBank">Bank</label>
+            <input
+              type="text"
+              id="editCrewBank"
+              name="bank"
+              list="editCrewBankSuggestions"
+              placeholder="Masukkan nama bank"
+              required
+            />
+            <datalist id="editCrewBankSuggestions"></datalist>
+          </div>
+        </div>
+
         <!-- Password (optional for edit) -->
         <div class="form-group">
           <label for="editCrewPassword">Password Baru <span class="text-sm text-gray-500">(kosongkan jika tidak ingin mengubah)</span></label>
@@ -973,6 +1027,244 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 </Layout>
 
 <script>
+  type BankOption = {
+    name: string;
+    aliases: string[];
+  };
+
+  const BANK_OPTIONS: BankOption[] = [
+    { name: "Allo Bank", aliases: ["allo"] },
+    { name: "Bank Aladin Syariah", aliases: ["aladin", "bank aladin"] },
+    { name: "Bank BCA", aliases: ["bca"] },
+    { name: "Bank BCA Syariah", aliases: ["bca syariah"] },
+    { name: "Bank BJB (Bank Jabar Banten)", aliases: ["bjb", "bank bjb"] },
+    { name: "Bank BPD DIY", aliases: ["bpd diy"] },
+    { name: "Bank Danamon", aliases: ["danamon"] },
+    { name: "Bank NTB", aliases: ["ntb", "bank nusa tenggara barat"] },
+    { name: "Bank NTT", aliases: ["ntb", "bank nusa tenggara timur"] },
+    { name: "Bank DKI", aliases: ["dki"] },
+    { name: "Bank HSBC", aliases: ["hsbc"] },
+    { name: "MNC Bank", aliases: ["mnc", "bank mnc"] },
+    { name: "Bank Jago", aliases: ["jago"] },
+    { name: "Bank Jambi", aliases: ["jambi"] },
+    { name: "Bank Lampung", aliases: ["lampung"] },
+    { name: "Bank Jateng", aliases: ["jateng"] },
+    { name: "Bank Jatim", aliases: ["jatim"] },
+    { name: "Bank Nationalnobu", aliases: ["nobu", "bank nobu"] },
+    { name: "Bank KEB Hana (LINE Bank)", aliases: ["hana", "line bank"] },
+    { name: "Bank Mandiri", aliases: ["mandiri"] },
+    { name: "Bank Mayapada", aliases: ["mayapada"] },
+    { name: "Bank Mega", aliases: ["mega"] },
+    { name: "Bank Mega Syariah", aliases: ["mega syariah"] },
+    { name: "Bank Muamalat", aliases: ["muamalat"] },
+    { name: "Bank Negara Indonesia (BNI)", aliases: ["bni"] },
+    { name: "Bank Neo Commerce (BNC)", aliases: ["bnc", "neo commerce"] },
+    { name: "Bank OCBC NISP", aliases: ["ocbc", "nisp"] },
+    { name: "Bank Panin", aliases: ["panin"] },
+    {
+      name: "Bank Panin Dubai Syariah",
+      aliases: ["panin dubai", "panin syariah"],
+    },
+    { name: "Bank Rakyat Indonesia (BRI)", aliases: ["bri"] },
+    { name: "Bank Raya", aliases: ["raya"] },
+    { name: "Bank Sinarmas", aliases: ["sinarmas"] },
+    { name: "Bank Sumsel Babel", aliases: ["sumsel babel"] },
+    { name: "Bank Sumut", aliases: ["sumut"] },
+    { name: "Bank Syariah Indonesia (BSI)", aliases: ["bsi"] },
+    { name: "Bank BTN", aliases: ["bank btn", "btn"] },
+    { name: "Krom Bank Indonesia", aliases: ["krom", "krom indonesia"] },
+    { name: "Bank UOB Indonesia", aliases: ["uob"] },
+    { name: "blu by BCA Digital", aliases: ["blu", "blu bca", "bca digital"] },
+    { name: "Citibank Indonesia", aliases: ["citibank"] },
+    { name: "Deutsche Bank AG", aliases: ["deutsche"] },
+    { name: "JP Morgan Chase Bank", aliases: ["jp morgan", "chase"] },
+    { name: "MUFG Bank", aliases: ["mufg", "bank mufg"] },
+    { name: "SeaBank", aliases: ["seabank", "sea bank"] },
+    {
+      name: "Standard Chartered Bank",
+      aliases: ["standard chartered", "standard"],
+    },
+    { name: "Bank Nagari", aliases: ["nagari"] },
+    { name: "Bank Bukopin", aliases: ["bukopin"] },
+    { name: "Permata Bank", aliases: ["permata"] },
+    { name: "Bank Saqu Indonesia", aliases: ["saqu", "saqu indonesia"] },
+    { name: "Superbank", aliases: ["super"] },
+    {
+      name: "Bank Kalbar",
+      aliases: ["kalbar", "bank kalimantan barat", "kalbar bank"],
+    },
+    { name: "Bank Kalsel", aliases: ["bank kalsel", "kalimantan selatan"] },
+    {
+      name: "Bankaltimtara",
+      aliases: [
+        "kalimantan utara",
+        "kalimantan timur",
+        "kaltimtara",
+        "bank kalimantan utara",
+        "bank kalimantan timur",
+      ],
+    },
+    { name: "Bank Kalteng", aliases: ["kalteng", "bank kalimantan tengah"] },
+    { name: "CIMB Niaga", aliases: ["bank cimb", "cimb"] },
+    { name: "Bank Aceh", aliases: ["aceh", "aceh syariah"] },
+    { name: "JTrust Bank", aliases: ["jtrust"] },
+  ];
+
+  // Robust loader for SweetAlert2: try native dynamic import first, fall back to CDN.
+  async function loadSweetAlert(): Promise<any> {
+    if (typeof window === 'undefined') return null;
+    // If already loaded globally, return it
+    if ((window as any).Swal) return (window as any).Swal;
+
+    try {
+      const mod = await import('sweetalert2');
+      const Swal = (mod && mod.default) ? mod.default : mod;
+      (window as any).Swal = Swal;
+      return Swal;
+    } catch (err) {
+      // Dynamic import failed (dev server issue). Fallback to CDN script.
+      return new Promise((resolve, reject) => {
+        if ((window as any).Swal) return resolve((window as any).Swal);
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js';
+        script.async = true;
+        script.onload = () => {
+          // sweetalert2 exposes Swal globally
+          const Swal = (window as any).Swal || (window as any).swal || (window as any).Sweetalert2;
+          if (Swal) {
+            (window as any).Swal = Swal;
+            resolve(Swal);
+          } else {
+            // As a last resort try default export-like name
+            resolve((window as any).Swal);
+          }
+        };
+        script.onerror = () => reject(new Error('Failed to load SweetAlert2 from CDN'));
+        document.head.appendChild(script);
+      });
+    }
+  }
+
+  function sanitizeAccountNumber(value: string): string {
+    return value ? value.replace(/[^0-9]/g, "").slice(0, 30) : "";
+  }
+
+  function setupAccountNumberField(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    if (!input) return;
+
+    input.addEventListener("input", (event) => {
+      const target = event.target as HTMLInputElement;
+      const sanitized = sanitizeAccountNumber(target.value);
+      if (target.value !== sanitized) {
+        const cursor = target.selectionStart ?? sanitized.length;
+        target.value = sanitized;
+        const newPos = Math.min(cursor, sanitized.length);
+        target.setSelectionRange(newPos, newPos);
+      }
+    });
+  }
+
+  function normalizeBankName(input: string): string | null {
+    if (!input) return null;
+
+    const trimmed = input.trim().toLowerCase();
+    if (!trimmed) return null;
+
+    const exactMatch = BANK_OPTIONS.find(
+      (option) =>
+        option.name.toLowerCase() === trimmed ||
+        option.aliases.some((alias) => alias.toLowerCase() === trimmed)
+    );
+    if (exactMatch) return exactMatch.name;
+
+    const partialMatch = BANK_OPTIONS.find(
+      (option) =>
+        option.name.toLowerCase().includes(trimmed) ||
+        option.aliases.some((alias) => alias.toLowerCase().includes(trimmed))
+    );
+
+    return partialMatch ? partialMatch.name : null;
+  }
+
+  function getBankSuggestions(query: string): string[] {
+    const defaultSuggestions = BANK_OPTIONS.slice(0, 5).map(
+      (option) => option.name
+    );
+
+    if (!query) {
+      return defaultSuggestions;
+    }
+
+    const lowerQuery = query.trim().toLowerCase();
+    if (!lowerQuery) {
+      return defaultSuggestions;
+    }
+
+    const seen = new Set<string>();
+    const matches: string[] = [];
+
+    for (const option of BANK_OPTIONS) {
+      const normalizedName = option.name;
+      const nameMatches = option.name.toLowerCase().includes(lowerQuery);
+      const aliasMatches = option.aliases.some((alias) =>
+        alias.toLowerCase().includes(lowerQuery)
+      );
+
+      if (nameMatches || aliasMatches) {
+        if (!seen.has(normalizedName)) {
+          matches.push(normalizedName);
+          seen.add(normalizedName);
+        }
+      }
+
+      if (matches.length >= 5) {
+        break;
+      }
+    }
+
+    return matches.length > 0 ? matches : defaultSuggestions;
+  }
+
+  function setupBankField(inputId: string, datalistId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    const datalist = document.getElementById(
+      datalistId
+    ) as HTMLDataListElement | null;
+
+    if (!input || !datalist) return;
+
+    const renderOptions = (value: string) => {
+      const suggestions = getBankSuggestions(value);
+      datalist.innerHTML = suggestions
+        .map((name) => `<option value="${name}"></option>`)
+        .join("");
+    };
+
+    renderOptions(input.value);
+
+    input.addEventListener("input", (event) => {
+      const target = event.target as HTMLInputElement;
+      renderOptions(target.value);
+    });
+
+    input.addEventListener("blur", (event) => {
+      const target = event.target as HTMLInputElement;
+      const normalized = normalizeBankName(target.value);
+      if (normalized) {
+        target.value = normalized;
+      }
+    });
+  }
+
+  function refreshBankSuggestions(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    if (!input) return;
+
+    input.dispatchEvent(new Event("input"));
+  }
+
   // API URL configuration
   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -997,9 +1289,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
     // Filter data
     const filteredData = crewList.filter(crew => {
-      const matchesSearch = crew.nama.toLowerCase().includes(searchTerm) ||
-                           crew.email.toLowerCase().includes(searchTerm) ||
-                           crew.divisi.toLowerCase().includes(searchTerm);
+      const nameMatch = crew.nama?.toLowerCase().includes(searchTerm);
+      const emailMatch = crew.email?.toLowerCase().includes(searchTerm);
+      const divisiMatch = crew.divisi?.toLowerCase().includes(searchTerm);
+      const phoneMatch = crew.nomorHP?.toLowerCase().includes(searchTerm);
+      const rekeningValue = typeof crew.nomorRekening === 'string' ? crew.nomorRekening : '';
+      const bankValue = crew.bank ? crew.bank.toLowerCase() : '';
+      const rekeningMatch = searchTerm ? rekeningValue.includes(searchTerm) : false;
+      const bankMatch = bankValue.includes(searchTerm);
+
+      const matchesSearch = nameMatch || emailMatch || divisiMatch || phoneMatch || rekeningMatch || bankMatch;
       const matchesStatus = statusFilter === 'all' || crew.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -1007,7 +1306,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
     if (filteredData.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center py-12 bg-gray-50">
+          <td colspan="9" class="text-center py-12 bg-gray-50">
             <div class="flex flex-col items-center justify-center space-y-4">
               <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -1038,6 +1337,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
         <td class="px-6 py-4">
           ${crew.kemitraan ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">${crew.kemitraan}</span>` : '<span class="text-gray-400">-</span>'}
         </td>
+        <td class="px-6 py-4 text-gray-700">${crew.nomorRekening || '-'}</td>
+        <td class="px-6 py-4 text-gray-700">${crew.bank || '-'}</td>
         <td class="px-6 py-4">
           <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
             crew.status === 'active' 
@@ -1136,7 +1437,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       // Still hide skeleton even on error
       hideSkeletonAndShowContent();
       
-      alert('Gagal memuat data crew');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Gagal memuat data crew",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Gagal memuat data crew');
+      }
     }
   }
 
@@ -1167,6 +1478,7 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       document.getElementById('kemitraanGroup')!.style.display = 'none';
       document.getElementById('subBrandGroup')!.style.display = 'none';
       document.getElementById('outletGroup')!.style.display = 'none';
+      refreshBankSuggestions('crewBank');
     }
   }
 
@@ -1221,14 +1533,76 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      alert('Token tidak ditemukan. Silakan login kembali.');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Token tidak ditemukan. Silakan login kembali.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Token tidak ditemukan. Silakan login kembali.');
+      }
       return;
     }
 
     const crewId = getStringValue('crewId');
     if (!crewId) {
-      alert('ID crew tidak ditemukan');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "ID crew tidak ditemukan",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('ID crew tidak ditemukan');
+      }
       return;
+    }
+
+    const sanitizedAccountNumber = sanitizeAccountNumber(getStringValue('nomorRekening'));
+    if (!sanitizedAccountNumber) {
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Nomor rekening harus diisi dengan angka yang valid.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Nomor rekening harus diisi dengan angka yang valid.');
+      }
+      return;
+    }
+
+    const editAccountField = document.getElementById('editCrewAccountNumber') as HTMLInputElement | null;
+    if (editAccountField) {
+      editAccountField.value = sanitizedAccountNumber;
+    }
+
+    const normalizedBank = normalizeBankName(getStringValue('bank'));
+    if (!normalizedBank) {
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Bank tidak valid atau tidak ditemukan.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Bank tidak valid atau tidak ditemukan.');
+      }
+      return;
+    }
+
+    const editBankField = document.getElementById('editCrewBank') as HTMLInputElement | null;
+    if (editBankField) {
+      editBankField.value = normalizedBank;
     }
 
     const crewPayload: any = {
@@ -1239,6 +1613,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       subBrand: getStringValue('subBrand') || null,
       outlet: getStringValue('outlet') || null,
       nomorHP: getStringValue('nomorHP'),
+      nomorRekening: sanitizedAccountNumber,
+      bank: normalizedBank,
     };
 
     // Only include password if it's provided
@@ -1269,10 +1645,30 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       loadCrewData();
 
       // Show success message
-      alert(`Crew ${result.data.nama} berhasil diperbarui!`);
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Berhasil!",
+          text: `Data ${result.data.nama} berhasil diperbarui!`,
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(`Data ${result.data.nama} berhasil diperbarui!`);
+      }
     } catch (error) {
       console.error('Error updating crew:', error);
-      alert(error instanceof Error ? error.message : 'Gagal memperbarui crew');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: error instanceof Error ? error.message : 'Gagal memperbarui crew',
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(error instanceof Error ? error.message : 'Gagal memperbarui crew');
+      }
     }
   }
 
@@ -1289,8 +1685,62 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      alert('Token tidak ditemukan. Silakan login kembali.');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Token tidak ditemukan. Silakan login kembali.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Token tidak ditemukan. Silakan login kembali.');
+      }
       return;
+    }
+
+    const accountNumberInput = getStringValue('nomorRekening');
+    const sanitizedAccountNumber = sanitizeAccountNumber(accountNumberInput);
+    if (!sanitizedAccountNumber) {
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Nomor rekening harus diisi dengan angka yang valid.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Nomor rekening harus diisi dengan angka yang valid.');
+      }
+      return;
+    }
+
+    const accountInputElement = document.getElementById('crewAccountNumber') as HTMLInputElement | null;
+    if (accountInputElement) {
+      accountInputElement.value = sanitizedAccountNumber;
+    }
+
+    const bankInputValue = getStringValue('bank');
+    const normalizedBank = normalizeBankName(bankInputValue);
+    if (!normalizedBank) {
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Bank tidak valid atau tidak ditemukan.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Bank tidak valid atau tidak ditemukan.');
+      }
+      return;
+    }
+
+    const bankInputElement = document.getElementById('crewBank') as HTMLInputElement | null;
+    if (bankInputElement) {
+      bankInputElement.value = normalizedBank;
     }
 
     const crewPayload = {
@@ -1302,6 +1752,8 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       subBrand: getStringValue('subBrand') || null,
       outlet: getStringValue('outlet') || null,
       nomorHP: getStringValue('nomorHP'),
+      nomorRekening: sanitizedAccountNumber,
+      bank: normalizedBank,
     };
 
     try {
@@ -1326,10 +1778,30 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       loadCrewData();
 
       // Show success message
-      alert(`Crew ${result.data.nama} berhasil ditambahkan!`);
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Berhasil!",
+          text: `Crew ${result.data.nama} berhasil ditambahkan!`,
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(`Crew ${result.data.nama} berhasil ditambahkan!`);
+      }
     } catch (error) {
       console.error('Error adding crew:', error);
-      alert(error instanceof Error ? error.message : 'Gagal menambahkan crew');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: error instanceof Error ? error.message : 'Gagal menambahkan crew',
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(error instanceof Error ? error.message : 'Gagal menambahkan crew');
+      }
     }
   }
 
@@ -1337,7 +1809,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   async function editCrew(crewId: string) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      alert('Token tidak ditemukan. Silakan login kembali.');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Token tidak ditemukan. Silakan login kembali.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Token tidak ditemukan. Silakan login kembali.');
+      }
       return;
     }
 
@@ -1365,6 +1847,17 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       (document.getElementById('editCrewPhone') as HTMLInputElement).value = crew.nomorHP || '';
       (document.getElementById('editCrewDivisi') as HTMLSelectElement).value = crew.divisi || '';
       (document.getElementById('editCrewPassword') as HTMLInputElement).value = ''; // Always empty for security
+      const editAccountInput = document.getElementById('editCrewAccountNumber') as HTMLInputElement | null;
+      if (editAccountInput) {
+        editAccountInput.value = crew.nomorRekening || '';
+        editAccountInput.dispatchEvent(new Event('input'));
+      }
+
+      const editBankInput = document.getElementById('editCrewBank') as HTMLInputElement | null;
+      if (editBankInput) {
+        editBankInput.value = crew.bank || '';
+      }
+      refreshBankSuggestions('editCrewBank');
 
       // Handle conditional fields
       const divisiSelect = document.getElementById('editCrewDivisi') as HTMLSelectElement;
@@ -1407,21 +1900,51 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       openEditCrewModal();
     } catch (error) {
       console.error('Error loading crew data for edit:', error);
-      alert(error instanceof Error ? error.message : 'Gagal memuat data crew untuk edit');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: error instanceof Error ? error.message : 'Gagal memuat data crew untuk edit',
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(error instanceof Error ? error.message : 'Gagal memuat data crew untuk edit');
+      }
     }
   }
 
   async function toggleCrewStatus(crewId: string) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      alert('Token tidak ditemukan. Silakan login kembali.');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Token tidak ditemukan. Silakan login kembali.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Token tidak ditemukan. Silakan login kembali.');
+      }
       return;
     }
 
     // Find current crew and toggle status
     const crew = crewData.find(c => c._id === crewId);
     if (!crew) {
-      alert('Crew tidak ditemukan');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Crew tidak ditemukan",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Crew tidak ditemukan');
+      }
       return;
     }
 
@@ -1443,21 +1966,63 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
 
       loadCrewData();
-      alert(`Status crew berhasil diubah menjadi ${newStatus === 'active' ? 'Aktif' : 'Non-Aktif'}`);
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Berhasil!",
+          text: `Status crew berhasil diubah menjadi ${newStatus === 'active' ? 'Aktif' : 'Non-Aktif'}`,
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(`Status crew berhasil diubah menjadi ${newStatus === 'active' ? 'Aktif' : 'Non-Aktif'}`);
+      }
     } catch (error) {
       console.error('Error toggling crew status:', error);
-      alert(error instanceof Error ? error.message : 'Gagal mengubah status crew');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: error instanceof Error ? error.message : 'Gagal mengubah status crew',
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(error instanceof Error ? error.message : 'Gagal mengubah status crew');
+      }
     }
   }
 
   async function deleteCrew(crewId: string) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      alert('Token tidak ditemukan. Silakan login kembali.');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: "Token tidak ditemukan. Silakan login kembali.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Token tidak ditemukan. Silakan login kembali.');
+      }
       return;
     }
 
-    if (!confirm('Apakah Anda yakin ingin menghapus crew ini?')) {
+    const Swal = await loadSweetAlert();
+    const result = await Swal.fire({
+      title: "Hapus Crew?",
+      text: "Apakah Anda yakin ingin menghapus crew ini?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal"
+    });
+
+    if (!result.isConfirmed) {
       return;
     }
 
@@ -1476,16 +2041,41 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       }
 
       loadCrewData();
-      alert('Crew berhasil dihapus');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Terhapus!",
+          text: "Crew berhasil dihapus",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert('Crew berhasil dihapus');
+      }
     } catch (error) {
       console.error('Error deleting crew:', error);
-      alert(error instanceof Error ? error.message : 'Gagal menghapus crew');
+      const Swal = await loadSweetAlert();
+      if (Swal) {
+        await Swal.fire({
+          title: "Error",
+          text: error instanceof Error ? error.message : 'Gagal menghapus crew',
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      } else {
+        alert(error instanceof Error ? error.message : 'Gagal menghapus crew');
+      }
     }
   }
 
   // Initialize page
   document.addEventListener('DOMContentLoaded', function() {
     if (!checkAuth()) return;
+
+    setupAccountNumberField('crewAccountNumber');
+    setupAccountNumberField('editCrewAccountNumber');
+    setupBankField('crewBank', 'addCrewBankSuggestions');
+    setupBankField('editCrewBank', 'editCrewBankSuggestions');
 
     // Load initial data
     loadCrewData();

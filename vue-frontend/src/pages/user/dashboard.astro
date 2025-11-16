@@ -701,8 +701,63 @@ function formatRupiah(amount: number): string {
                </div>
             </div>
          </div>
-         
-         <!-- Nilai Paket Card - Mobile Only -->
+        
+           <!-- Status Overview Cards -->
+           <div class="stats-grid mb-6 sm:mb-8">
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0s">
+                  <div class="flex items-center justify-between mb-4">
+                     <h3 class="text-lg font-semibold text-gray-900">Status Kemitraan</h3>
+                     <div class="icon-container success w-10 h-10 rounded-xl flex items-center justify-center text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Status Saat Ini</p>
+                  <p id="kemitraan-status" class="text-2xl font-bold text-gray-900 mt-1">Memuat...</p>
+               </div>
+
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.05s">
+                  <div class="flex items-center justify-between mb-4">
+                     <h3 class="text-lg font-semibold text-gray-900">Status Pelunasan</h3>
+                     <div class="icon-container warning w-10 h-10 rounded-xl flex items-center justify-center text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86L12 5z"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Status Pelunasan</span>
+                  <p id="pelunasan-status" class="text-2xl font-bold text-gray-900 mt-1">Memuat...</p>
+               </div>
+
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.1s">
+                  <div class="flex items-center justify-between mb-4">
+                     <h3 class="text-lg font-semibold text-gray-900">Sistem Kemitraan</h3>
+                     <div class="icon-container info w-10 h-10 rounded-xl flex items-center justify-center text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 4a8 8 0 100 16 8 8 0 000-16z"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipe Sistem</span>
+                  <p id="sistem-kemitraan" class="text-xl font-semibold text-gray-900 mt-1">Memuat...</p>
+               </div>
+
+               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.15s">
+                  <div class="flex items-center justify-between mb-4">
+                     <h3 class="text-lg font-semibold text-gray-900">Paket Usaha</h3>
+                     <div class="icon-container w-10 h-10 rounded-xl flex items-center justify-center text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l2-2 2 2m0 0l2-2 2 2m-2-2v6m-2 4h-4a2 2 0 01-2-2v-5l6-6 6 6v5a2 2 0 01-2 2zM9 8h6"></path>
+                        </svg>
+                     </div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nama Paket</span>
+                  <p id="paket-usaha" class="text-xl font-semibold text-gray-900 mt-1">Memuat...</p>
+               </div>
+            </div>
+
+           <!-- Nilai Paket Card - Mobile Only -->
          <div class="mb-6 sm:mb-8 lg:hidden">
             <div class="modern-card rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl">
                <div class="text-center">
@@ -1280,6 +1335,116 @@ function formatRupiah(amount: number): string {
       return email ? `mitraAgreementConfirmed:${email}` : 'mitraAgreementConfirmed';
    }
 
+   function normalizeStatus(value: any): string {
+      if (value === null || typeof value === 'undefined') return '';
+      return String(value).trim().toLowerCase();
+   }
+
+   function hasStatusKeyword(statuses: string[], keywords: string[]): boolean {
+      if (!Array.isArray(statuses) || statuses.length === 0) return false;
+      return statuses.some((status) => keywords.some((keyword) => status.includes(keyword)));
+   }
+
+   function collectPelunasanStatuses(source: any): string[] {
+      const statuses: string[] = [];
+      const pushStatus = (raw: any) => {
+         const normalized = normalizeStatus(raw);
+         if (normalized) statuses.push(normalized);
+      };
+
+      if (!source) return statuses;
+
+      const pelunasanEntries = source.pelunasan;
+      if (Array.isArray(pelunasanEntries)) {
+         pelunasanEntries.forEach((entry) => {
+            if (!entry) return;
+            pushStatus(entry.status);
+            if (typeof entry.isPaid === 'boolean') {
+               pushStatus(entry.isPaid ? 'paid' : 'unpaid');
+            }
+            pushStatus(entry.keterangan);
+         });
+      } else if (pelunasanEntries && typeof pelunasanEntries === 'object') {
+         pushStatus(pelunasanEntries.status);
+         pushStatus(pelunasanEntries.keterangan);
+      }
+
+      pushStatus(source.statusPelunasan);
+      pushStatus(source.pelunasanStatus);
+      pushStatus(source.pelunasan_status);
+      pushStatus(source.paymentStatus);
+      pushStatus(source.keteranganPelunasan);
+      pushStatus(source.statusPembayaran);
+
+      return statuses;
+   }
+
+   function parseFlexibleNumber(value: any): number | null {
+      if (value === null || typeof value === 'undefined') return null;
+      if (typeof value === 'number') return Number.isNaN(value) ? null : value;
+      if (typeof value !== 'string') return null;
+
+      const trimmed = value.trim();
+      if (!trimmed) return null;
+
+      const sanitized = trimmed.replace(/[^0-9,.\-]/g, '');
+      if (!sanitized) return null;
+
+      const lastComma = sanitized.lastIndexOf(',');
+      const lastDot = sanitized.lastIndexOf('.');
+      const hasComma = lastComma !== -1;
+      const hasDot = lastDot !== -1;
+
+      let normalized = sanitized;
+
+      if (hasComma && hasDot) {
+         if (lastComma > lastDot) {
+            normalized = sanitized.replace(/\./g, '').replace(/,/g, '.');
+         } else {
+            normalized = sanitized.replace(/,/g, '');
+         }
+      } else if (hasComma) {
+         const segments = sanitized.split(',');
+         if (segments.length > 1 && segments[segments.length - 1].length === 3) {
+            normalized = sanitized.replace(/,/g, '');
+         } else {
+            normalized = sanitized.replace(/,/g, '.');
+         }
+      } else if (hasDot) {
+         const segments = sanitized.split('.');
+         if (segments.length > 1 && segments[segments.length - 1].length === 3) {
+            normalized = sanitized.replace(/\./g, '');
+         } else {
+            normalized = sanitized.replace(/\.(?=\d{3}(?:\D|$))/g, '').replace(/,/g, '');
+         }
+      } else {
+         normalized = sanitized;
+      }
+
+      const parsed = parseFloat(normalized);
+      return Number.isNaN(parsed) ? null : parsed;
+   }
+
+   function isFullPaymentPackage(source: any): boolean {
+      const packageLabel = normalizeStatus(
+         source?.nilaiPaketUsaha ??
+         source?.paketUsaha ??
+         source?.jenisPembayaran ??
+         source?.tipePembayaran ??
+         ''
+      );
+      if (!packageLabel) return false;
+      return (
+         packageLabel.includes('full payment') ||
+         packageLabel.includes('fullpayment') ||
+         packageLabel.includes('full-payment') ||
+         packageLabel.includes('full_payment') ||
+         packageLabel.includes('full pay') ||
+         packageLabel.includes('pelunasan penuh') ||
+         packageLabel.includes('lunas penuh')
+      );
+   }
+
    document.addEventListener('DOMContentLoaded', async function() {
       // Prevent copying and text selection for all agreement content sections
       const agreementContents = document.querySelectorAll('.agreement-content');
@@ -1361,7 +1526,7 @@ function formatRupiah(amount: number): string {
       // CRITICAL FIX: Force show agreement modal (bypass all checks)
       // Used when redirected from kewajiban page with ?showAgreement=true
       (window as any).forceShowAgreement = function() {
-         console.log('[AGREEMENT] 🎯 Force show agreement (bypass cache check)');
+         console.log('[AGREEMENT] Force show agreement (bypass cache check)');
          updateAgreementModalWithCurrentData();
          showAgreementModal();
       };
@@ -1778,83 +1943,34 @@ function formatRupiah(amount: number): string {
 
    // Small helper to determine if a user/mitra is considered paid off.
    function isUserPaidOff(user: any) {
-         // Hardened rule: parse numeric-like strings (e.g. "1.234,00" or "1234")
-         // and check several alternate field names used across backends.
          if (!user) return false;
 
-         const parseNumber = (v: any) => {
-            if (v === null || typeof v === 'undefined') return null;
-            if (typeof v === 'number') return v;
-            if (typeof v === 'string') {
-               // remove anything except digits, minus, dot and comma
-               const cleaned = v.replace(/[^0-9.,-]/g, '');
-               if (cleaned === '') return null;
-               // If comma used as decimal separator (e.g. '1.234,56'), convert to '1234.56'
-               const commaCount = (cleaned.match(/,/g) || []).length;
-               const dotCount = (cleaned.match(/\./g) || []).length;
-               let normalized = cleaned;
-               if (commaCount > 0 && dotCount > 0 && cleaned.indexOf(',') > cleaned.indexOf('.')) {
-                  // format like '1.234,56' -> remove dots and replace comma with dot
-                  normalized = cleaned.replace(/\./g, '').replace(/,/g, '.');
-               } else if (commaCount > 0 && dotCount === 0) {
-                  // format like '1234,56' -> replace comma with dot
-                  normalized = cleaned.replace(/,/g, '.');
-               } else {
-                  // remove all commas
-                  normalized = cleaned.replace(/,/g, '');
-               }
-               const n = parseFloat(normalized);
-               return isNaN(n) ? null : n;
-            }
-            return null;
-         };
-
-         // Try multiple possible field names
          const rawKekurangan = user.kekurangan ?? user.sisa ?? user.sisaPembayaran ?? user.sisa_pelunasan ?? null;
-         const kekuranganNum = parseNumber(rawKekurangan);
-         const isKekuranganZero = kekuranganNum !== null && kekuranganNum <= 0;
+         const kekuranganNum = parseFlexibleNumber(rawKekurangan);
+         const totalPaid = parseFlexibleNumber(user.totalPaid ?? user.paidAmount ?? user.total_pembayaran ?? user.jumlahPembayaran ?? user.pembayaranTotal ?? null);
+         const packagePrice = parseFlexibleNumber(user.hargaPaket ?? user.nilaiPaketUsaha ?? user.totalPrice ?? user.totalHarga ?? user.harga ?? null);
+         const paidByComparison = totalPaid !== null && packagePrice !== null && packagePrice > 0 && totalPaid >= packagePrice;
 
-         // numeric comparison: total paid vs package price
-         const totalPaid = parseNumber(user.totalPaid ?? user.paidAmount ?? user.total_pembayaran ?? user.jumlahPembayaran ?? user.pembayaranTotal ?? null);
-         const packagePrice = parseNumber(user.hargaPaket ?? user.nilaiPaketUsaha ?? user.totalPrice ?? user.totalHarga ?? user.harga ?? null);
-         const paidByComparison = (totalPaid !== null && packagePrice !== null && totalPaid >= packagePrice);
+         const pelunasanStatuses = collectPelunasanStatuses(user);
+         const hasLunasStatus = hasStatusKeyword(pelunasanStatuses, ['lunas', 'sudah lunas', 'paid']);
+         const isPelunasanApproved = hasStatusKeyword(pelunasanStatuses, ['approve', 'approved', 'acc', 'disetujui', 'verified', 'verif']);
 
-         // Collect various status fields (backend may use different shapes)
-         const pelunasanStatuses: string[] = [];
-         try {
-            if (Array.isArray(user?.pelunasan)) {
-               user.pelunasan.forEach((p: any) => {
-                  if (p && p.status) pelunasanStatuses.push(String(p.status).toLowerCase());
-                  if (p && typeof p.isPaid !== 'undefined' && p.isPaid === true) pelunasanStatuses.push('paid');
-               });
-            } else if (user?.pelunasan && typeof user.pelunasan === 'object' && user.pelunasan.status) {
-               pelunasanStatuses.push(String(user.pelunasan.status).toLowerCase());
-            }
-            if (user?.statusPelunasan) pelunasanStatuses.push(String(user.statusPelunasan).toLowerCase());
-            if (user?.pelunasanStatus) pelunasanStatuses.push(String(user.pelunasanStatus).toLowerCase());
-            if (user?.paymentStatus) pelunasanStatuses.push(String(user.paymentStatus).toLowerCase());
-            if (user?.keteranganPelunasan) pelunasanStatuses.push(String(user.keteranganPelunasan).toLowerCase());
-         } catch (e) { /* ignore */ }
-
-         const isPelunasanApproved = (
+         const explicitFlags = Boolean(
             user?.pelunasanApproved === true ||
-            pelunasanStatuses.includes('approved') ||
-            pelunasanStatuses.includes('lunas') ||
-            pelunasanStatuses.includes('paid') ||
-            // Some backends may use explicit status fields for payment
-            (typeof user?.statusPelunasan === 'string' && ['approved', 'lunas', 'paid'].includes(user.statusPelunasan.toLowerCase()))
+            user?.isFullPayment === true ||
+            user?.isPaidOff === true
          );
 
-         const isPaidOff = (
-            user?.nilaiPaketUsaha === 'Full Payment' ||
-            user?.isFullPayment === true ||
-            user?.isPaidOff === true ||
+         const isKekuranganZero = typeof kekuranganNum === 'number' && kekuranganNum <= 0;
+
+         return Boolean(
+            explicitFlags ||
+            isFullPaymentPackage(user) ||
             isPelunasanApproved ||
+            hasLunasStatus ||
             isKekuranganZero ||
             paidByComparison
          );
-
-         return Boolean(isPaidOff);
    }
 
    // Check agreement status; if `userProfile` is supplied we use it (avoids double fetching when
@@ -1883,68 +1999,7 @@ function formatRupiah(amount: number): string {
          });
 
          // Only run agreement checks for users who have completed payment
-         // Use the same logic as in updateStatisticsCards to ensure consistency
-         const parseNumber = (v: any) => {
-            if (v === null || typeof v === 'undefined') return null;
-            if (typeof v === 'number') return v;
-            if (typeof v === 'string') {
-               const cleaned = v.replace(/[^0-9.,-]/g, '');
-               if (cleaned === '') return null;
-               const commaCount = (cleaned.match(/,/g) || []).length;
-               const dotCount = (cleaned.match(/\./g) || []).length;
-               let normalized = cleaned;
-               if (commaCount > 0 && dotCount > 0 && cleaned.indexOf(',') > cleaned.indexOf('.')) {
-                  normalized = cleaned.replace(/\./g, '').replace(/,/g, '.');
-               } else if (commaCount > 0 && dotCount === 0) {
-                  normalized = cleaned.replace(/,/g, '.');
-               } else {
-                  normalized = cleaned.replace(/,/g, '');
-               }
-               const n = parseFloat(normalized);
-               return isNaN(n) ? null : n;
-            }
-            return null;
-         };
-
-         const rawKekurangan = user.kekurangan ?? user.sisa ?? user.sisaPembayaran ?? user.sisa_pelunasan ?? null;
-         const kekuranganNum = parseNumber(rawKekurangan);
-         const isKekuranganZero = kekuranganNum !== null && kekuranganNum <= 0;
-
-         const totalPaid = parseNumber(user.totalPaid ?? user.paidAmount ?? user.total_pembayaran ?? user.jumlahPembayaran ?? user.pembayaranTotal ?? null);
-         const packagePrice = parseNumber(user.hargaPaket ?? user.nilaiPaketUsaha ?? user.totalPrice ?? user.totalHarga ?? user.harga ?? null);
-         const paidByComparison = (totalPaid !== null && packagePrice !== null && totalPaid >= packagePrice);
-
-         const pelunasanStatuses = [];
-         try {
-            if (Array.isArray(user?.pelunasan)) {
-               user.pelunasan.forEach((p: any) => {
-                  if (p && typeof p.isPaid !== 'undefined' && p.isPaid === true) pelunasanStatuses.push('paid');
-               });
-            } else if (user?.pelunasan && typeof user.pelunasan === 'object' && user.pelunasan.status) {
-               pelunasanStatuses.push(String(user.pelunasan.status).toLowerCase());
-            }
-            if (user?.statusPelunasan) pelunasanStatuses.push(String(user.statusPelunasan).toLowerCase());
-            if (user?.pelunasanStatus) pelunasanStatuses.push(String(user.pelunasanStatus).toLowerCase());
-            if (user?.paymentStatus) pelunasanStatuses.push(String(user.paymentStatus).toLowerCase());
-            if (user?.keteranganPelunasan) pelunasanStatuses.push(String(user.keteranganPelunasan).toLowerCase());
-         } catch (e) { /* ignore */ }
-
-         const isPelunasanApproved = (
-            user?.pelunasanApproved === true ||
-            pelunasanStatuses.includes('approved') ||
-            pelunasanStatuses.includes('lunas') ||
-            pelunasanStatuses.includes('paid') ||
-            (typeof user?.statusPelunasan === 'string' && ['approved', 'lunas', 'paid'].includes(user.statusPelunasan.toLowerCase()))
-         );
-
-         const userIsPaidOff = (
-            user?.nilaiPaketUsaha === 'Full Payment' ||
-            user?.isFullPayment === true ||
-            user?.isPaidOff === true ||
-            isPelunasanApproved ||
-            isKekuranganZero ||
-            paidByComparison
-         );
+         const userIsPaidOff = isUserPaidOff(user);
 
          // BUSINESS RULE: Agreement ONLY shown after mitra has paid and been approved by admin
          // Self Managed DP users (not yet paid off) will NOT see agreement
@@ -1955,8 +2010,11 @@ function formatRupiah(amount: number): string {
             return;
          }
 
+         const pelunasanStatuses = collectPelunasanStatuses(user);
+
          console.log('[AGREEMENT DEBUG] User sudah lunas dan di-ACC, checking agreement...');
          console.log('[AGREEMENT DEBUG] Storage key will be:', agreementStorageKey());
+         console.log('[AGREEMENT DEBUG] Pelunasan statuses:', pelunasanStatuses);
 
          // CRITICAL FIX: Check cache FIRST to prevent modal from showing repeatedly
          // If user already accepted in this browser/session, don't show again
@@ -2341,100 +2399,38 @@ function formatRupiah(amount: number): string {
       const pelunasanStatus = document.getElementById('pelunasan-status');
       const pelunasanStatusLabel = pelunasanStatus?.previousElementSibling;
       if (pelunasanStatus) {
-         // Use the same logic as in kewajiban.astro
-         const hasKekurangan = data && typeof data.kekurangan !== 'undefined' && data.kekurangan !== null;
-         const isKekuranganZero = hasKekurangan && !isNaN(Number(data.kekurangan)) && Number(data.kekurangan) <= 0;
+         const pelunasanStatuses = collectPelunasanStatuses(data);
+         const isPaidOff = isUserPaidOff(data);
+         const hasLunasStatus = hasStatusKeyword(pelunasanStatuses, ['lunas', 'paid']);
+         const isPelunasanApproved = hasStatusKeyword(pelunasanStatuses, ['approve', 'approved', 'acc', 'disetujui', 'verified', 'verif']);
 
-         // Parse numeric values for comparison (same as isUserPaidOff function)
-         const parseNumber = (v: any) => {
-            if (v === null || typeof v === 'undefined') return null;
-            if (typeof v === 'number') return v;
-            if (typeof v === 'string') {
-               const cleaned = v.replace(/[^0-9.,-]/g, '');
-               if (cleaned === '') return null;
-               const commaCount = (cleaned.match(/,/g) || []).length;
-               const dotCount = (cleaned.match(/\./g) || []).length;
-               let normalized = cleaned;
-               if (commaCount > 0 && dotCount > 0 && cleaned.indexOf(',') > cleaned.indexOf('.')) {
-                  normalized = cleaned.replace(/\./g, '').replace(/,/g, '.');
-               } else if (commaCount > 0 && dotCount === 0) {
-                  normalized = cleaned.replace(/,/g, '.');
-               } else {
-                  normalized = cleaned.replace(/,/g, '.');
-               }
-               const n = parseFloat(normalized);
-               return isNaN(n) ? null : n;
-            }
-            return null;
-         };
+         const rawKekurangan = data?.kekurangan ?? data?.sisa ?? data?.sisaPembayaran ?? data?.sisa_pelunasan ?? null;
+         const kekuranganNum = parseFlexibleNumber(rawKekurangan);
+         const totalPaid = parseFlexibleNumber(data.totalPaid ?? data.paidAmount ?? data.total_pembayaran ?? data.jumlahPembayaran ?? data.pembayaranTotal ?? null);
+         const packagePrice = parseFlexibleNumber(data.hargaPaket ?? data.nilaiPaketUsaha ?? data.totalPrice ?? data.totalHarga ?? data.harga ?? null);
+         const paidByComparison = totalPaid !== null && packagePrice !== null && packagePrice > 0 && totalPaid >= packagePrice;
+         const isKekuranganZero = typeof kekuranganNum === 'number' && kekuranganNum <= 0;
 
-         const totalPaid = parseNumber(data.totalPaid ?? data.paidAmount ?? data.total_pembayaran ?? data.jumlahPembayaran ?? data.pembayaranTotal ?? null);
-         const packagePrice = parseNumber(data.hargaPaket ?? data.nilaiPaketUsaha ?? data.totalPrice ?? data.totalHarga ?? data.harga ?? null);
-         const paidByComparison = (totalPaid !== null && packagePrice !== null && totalPaid >= packagePrice);
+         const shouldShowAgreement = isPaidOff || hasLunasStatus || isPelunasanApproved;
 
-         const pelunasanStatuses = [];
-         try {
-            if (Array.isArray(data?.pelunasan)) {
-               data.pelunasan.forEach((p: any) => {
-                  if (p && typeof p.isPaid !== 'undefined' && p.isPaid === true) pelunasanStatuses.push('paid');
-               });
-            } else if (data?.pelunasan && typeof data.pelunasan === 'object' && data.pelunasan.status) {
-               pelunasanStatuses.push(String(data.pelunasan.status).toLowerCase());
-            }
-            if (data?.statusPelunasan) pelunasanStatuses.push(String(data.statusPelunasan).toLowerCase());
-            if (data?.pelunasanStatus) pelunasanStatuses.push(String(data.pelunasanStatus).toLowerCase());
-            if (data?.paymentStatus) pelunasanStatuses.push(String(data.paymentStatus).toLowerCase());
-            if (data?.keteranganPelunasan) pelunasanStatuses.push(String(data.keteranganPelunasan).toLowerCase());
-         } catch (e) { /* ignore shape issues */ }
-
-         // Only treat payment-specific approval signals as pelunasan approved.
-         const isPelunasanApproved = (
-            data?.pelunasanApproved === true ||
-            pelunasanStatuses.includes('approved') ||
-            pelunasanStatuses.includes('lunas') ||
-            pelunasanStatuses.includes('paid') ||
-            (typeof data?.statusPelunasan === 'string' && ['approved', 'lunas', 'paid'].includes(data.statusPelunasan.toLowerCase()))
-         );
-
-         const isPaidOff = (
-            data?.nilaiPaketUsaha === 'Full Payment' ||
-            data?.isFullPayment === true ||
-            data?.isPaidOff === true ||
-            isPelunasanApproved ||
-            isKekuranganZero ||
-            paidByComparison
-         );
-
-         // Additional simple check for "Lunas" status
-         const hasLunasStatus = (
-            String(data?.statusPelunasan).toLowerCase() === 'lunas' ||
-            String(data?.pelunasanStatus).toLowerCase() === 'lunas' ||
-            String(data?.paymentStatus).toLowerCase() === 'lunas' ||
-            (data?.pelunasan && String(data.pelunasan.status).toLowerCase() === 'lunas')
-         );
-
-         // Force show agreement if status is explicitly "Lunas" or isPaidOff is true
-         const shouldShowAgreement = isPaidOff || hasLunasStatus;
-
-         // Debug logging
          console.log('[PELUNASAN DEBUG] Status check:', {
             isPaidOff,
             hasLunasStatus,
-            shouldShowAgreement,
-            pelunasanApproved: data.pelunasanApproved,
-            statusPelunasan: data.statusPelunasan,
             isPelunasanApproved,
+            shouldShowAgreement,
+            pelunasanApproved: data?.pelunasanApproved,
+            statusPelunasan: data?.statusPelunasan,
+            pelunasanStatuses,
             isKekuranganZero,
             paidByComparison
          });
 
          if (shouldShowAgreement) {
-            // Show explicitly as "Lunas" and keep element visible so user sees the status
-            pelunasanStatus.textContent = 'Lunas';
-            pelunasanStatus.className = 'text-green-600 font-bold';
+            pelunasanStatus.textContent = '✓ Lunas';
+            pelunasanStatus.className = 'text-2xl font-bold text-green-600';
             pelunasanStatus.style.display = '';
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
-            
+
             console.log('[PELUNASAN DEBUG] ✅ User LUNAS - akan check agreement modal...');
             console.log('[PELUNASAN DEBUG] Data yang akan digunakan untuk check agreement:', {
                email: data?.email,
@@ -2442,11 +2438,10 @@ function formatRupiah(amount: number): string {
                pelunasanApproved: data?.pelunasanApproved,
                statusPelunasan: data?.statusPelunasan,
                isPaidOff,
-               hasLunasStatus
+               hasLunasStatus,
+               isPelunasanApproved
             });
-            
-            // CRITICAL: Check agreement status from backend and show modal if needed
-            // This will show modal if user hasn't accepted yet
+
             try {
                await checkAgreementStatusFromBackend(data);
                console.log('[PELUNASAN DEBUG] ✅ Agreement check completed');
@@ -2455,10 +2450,10 @@ function formatRupiah(amount: number): string {
             }
          } else {
             pelunasanStatus.textContent = 'Belum Lunas';
-            pelunasanStatus.className = 'text-red-600 font-bold';
+            pelunasanStatus.className = 'text-2xl font-bold text-red-600';
             pelunasanStatus.style.display = '';
             if (pelunasanStatusLabel && pelunasanStatusLabel instanceof HTMLElement) pelunasanStatusLabel.style.display = '';
-            
+
             console.log('[PELUNASAN DEBUG] User BELUM LUNAS - skip agreement check');
          }
       }
@@ -2530,65 +2525,7 @@ function formatRupiah(amount: number): string {
 
       // Payment/Pelunasan badge
       if (detailPaymentBadge) {
-         // Parse numeric values for comparison (same logic as isUserPaidOff)
-         const parseNumber = (v: any) => {
-            if (v === null || typeof v === 'undefined') return null;
-            if (typeof v === 'number') return v;
-            if (typeof v === 'string') {
-               const cleaned = v.replace(/[^0-9.,-]/g, '');
-               if (cleaned === '') return null;
-               const commaCount = (cleaned.match(/,/g) || []).length;
-               const dotCount = (cleaned.match(/\./g) || []).length;
-               let normalized = cleaned;
-               if (commaCount > 0 && dotCount > 0 && cleaned.indexOf(',') > cleaned.indexOf('.')) {
-                  normalized = cleaned.replace(/\./g, '').replace(/,/g, '.');
-               } else if (commaCount > 0 && dotCount === 0) {
-                  normalized = cleaned.replace(/,/g, '.');
-               }
-               const n = parseFloat(normalized);
-               return isNaN(n) ? null : n;
-            }
-            return null;
-         };
-
-         const rawKekurangan = data.kekurangan ?? data.sisa ?? data.sisaPembayaran ?? data.sisa_pelunasan ?? null;
-         const kekuranganNum = parseNumber(rawKekurangan);
-         const isKekuranganZero = kekuranganNum !== null && kekuranganNum <= 0;
-
-         const totalPaid = parseNumber(data.totalPaid ?? data.paidAmount ?? data.total_pembayaran ?? data.jumlahPembayaran ?? data.pembayaranTotal ?? null);
-         const packagePrice = parseNumber(data.hargaPaket ?? data.nilaiPaketUsaha ?? data.totalPrice ?? data.totalHarga ?? data.harga ?? null);
-         const paidByComparison = (totalPaid !== null && packagePrice !== null && totalPaid >= packagePrice);
-
-         const pelunasanStatuses: string[] = [];
-         try {
-            if (Array.isArray(data?.pelunasan)) {
-               data.pelunasan.forEach((p: any) => {
-                  if (p && typeof p.status === 'string') pelunasanStatuses.push(p.status.toLowerCase());
-                  if (p && typeof p.isPaid !== 'undefined' && p.isPaid === true) pelunasanStatuses.push('paid');
-               });
-            } else if (data?.pelunasan && typeof data.pelunasan === 'object' && data.pelunasan.status) {
-               pelunasanStatuses.push(String(data.pelunasan.status).toLowerCase());
-            }
-            if (data?.statusPelunasan) pelunasanStatuses.push(String(data.statusPelunasan).toLowerCase());
-            if (data?.pelunasanStatus) pelunasanStatuses.push(String(data.pelunasanStatus).toLowerCase());
-            if (data?.paymentStatus) pelunasanStatuses.push(String(data.paymentStatus).toLowerCase());
-         } catch (e) { /* ignore */ }
-
-         const isPelunasanApproved = (
-            data?.pelunasanApproved === true ||
-            pelunasanStatuses.includes('approved') ||
-            pelunasanStatuses.includes('lunas') ||
-            pelunasanStatuses.includes('paid')
-         );
-
-         const isPaidOff = (
-            data?.nilaiPaketUsaha === 'Full Payment' ||
-            data?.isFullPayment === true ||
-            data?.isPaidOff === true ||
-            isPelunasanApproved ||
-            isKekuranganZero ||
-            paidByComparison
-         );
+         const isPaidOff = isUserPaidOff(data);
 
          let badgeClass = 'bg-yellow-100 text-yellow-800';
          let badgeText = 'Belum Lunas';

@@ -5,6 +5,10 @@ import {
   normalizeUploadsPath,
   resolveBaseUrlFromRequest,
 } from "../utils/url.utils";
+import {
+  isSupabaseStorageEnabled,
+  uploadFileToSupabase,
+} from "../utils/supabaseStorage";
 
 interface ApproveMitraBody {
   userId: string;
@@ -40,6 +44,12 @@ export const registerMitraController = async (
 
     const baseUploadsUrl = resolveBaseUrlFromRequest(req);
     console.log(`[IMAGE UPLOAD] Using base URL: ${baseUploadsUrl}`);
+    const supabaseEnabled = isSupabaseStorageEnabled();
+    console.log(
+      `[IMAGE UPLOAD] Supabase storage enabled: ${
+        supabaseEnabled ? "yes" : "no"
+      }`
+    );
 
     // Extract form fields
     const mitraData: any = {};
@@ -63,7 +73,8 @@ export const registerMitraController = async (
 
     // Helper function to validate and save file and return URL
     const saveFileAndGetUrl = async (
-      file: File
+      file: File,
+      folder: string
     ): Promise<{ absoluteUrl: string; relativePath: string }> => {
       console.log(`Saving file: ${file.name}, size: ${file.size} bytes`);
 
@@ -81,12 +92,27 @@ export const registerMitraController = async (
         throw new Error(`Ukuran file terlalu besar. Maksimal 5MB.`);
       }
 
-      // Generate unique filename to avoid conflicts
+      if (supabaseEnabled) {
+        console.log(
+          `[IMAGE UPLOAD] Uploading file to Supabase bucket folder: ${folder}`
+        );
+        const uploadResult = await uploadFileToSupabase(file, {
+          prefix: `mitra/${folder}`,
+        });
+        console.log(
+          `[IMAGE UPLOAD] Supabase upload complete: ${uploadResult.publicUrl}`
+        );
+        return {
+          absoluteUrl: uploadResult.publicUrl,
+          relativePath: uploadResult.publicUrl,
+        };
+      }
+
+      // Generate unique filename to avoid conflicts (local fallback)
       const timestamp = Date.now();
-      const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_"); // Sanitize filename
+      const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const fileName = `${timestamp}_${originalName}`;
 
-      // Save file to uploads directory
       const uploadsDir = join(process.cwd(), "uploads");
       await mkdir(uploadsDir, { recursive: true });
 
@@ -96,7 +122,7 @@ export const registerMitraController = async (
       const relativePath = normalizeUploadsPath(`/uploads/${fileName}`);
       const absoluteUrl = `${baseUploadsUrl}${relativePath}`;
       console.log(
-        `File saved successfully: ${absoluteUrl} (relative: ${relativePath})`
+        `File saved locally: ${absoluteUrl} (relative: ${relativePath})`
       );
       return { absoluteUrl, relativePath };
     };
@@ -108,13 +134,17 @@ export const registerMitraController = async (
         console.log(
           `[IMAGE UPLOAD] Processing KTP file: ${documents[0].name}, size: ${documents[0].size} bytes`
         );
-        const savedKTP = await saveFileAndGetUrl(documents[0]);
+        const savedKTP = await saveFileAndGetUrl(documents[0], "documents");
         const normalizedKTPPath = normalizeUploadsPath(savedKTP.relativePath);
-        mitraData.fotoKTP = normalizedKTPPath; // Store relative path
-        mitraData.upload_ktp = normalizedKTPPath;
+        mitraData.fotoKTP = normalizedKTPPath; // Store relative path for legacy compatibility
+        // Store Supabase full URL in upload_ktp (or relative path if using local storage)
+        mitraData.upload_ktp = supabaseEnabled
+          ? savedKTP.absoluteUrl
+          : normalizedKTPPath;
         console.log(
           `[IMAGE UPLOAD] Foto KTP saved with path: ${mitraData.fotoKTP} (absolute preview: ${savedKTP.absoluteUrl})`
         );
+        console.log(`[IMAGE UPLOAD] upload_ktp field: ${mitraData.upload_ktp}`);
       } else {
         console.log(`[IMAGE UPLOAD] KTP file is empty or invalid`);
       }
@@ -132,15 +162,22 @@ export const registerMitraController = async (
       console.log(
         `[IMAGE UPLOAD] Processing bukti transfer file: ${buktiTransfer.name}, size: ${buktiTransfer.size} bytes`
       );
-      const savedTransfer = await saveFileAndGetUrl(buktiTransfer);
+      const savedTransfer = await saveFileAndGetUrl(
+        buktiTransfer,
+        "bukti-transfer"
+      );
       const normalizedTransferPath = normalizeUploadsPath(
         savedTransfer.relativePath
       );
-      mitraData.buktiTransfer = normalizedTransferPath; // Store relative path
-      mitraData.upload_tf = normalizedTransferPath;
+      mitraData.buktiTransfer = normalizedTransferPath; // Store relative path for legacy compatibility
+      // Store Supabase full URL in upload_tf (or relative path if using local storage)
+      mitraData.upload_tf = supabaseEnabled
+        ? savedTransfer.absoluteUrl
+        : normalizedTransferPath;
       console.log(
         `[IMAGE UPLOAD] Bukti Transfer saved with path: ${mitraData.buktiTransfer} (absolute preview: ${savedTransfer.absoluteUrl})`
       );
+      console.log(`[IMAGE UPLOAD] upload_tf field: ${mitraData.upload_tf}`);
     } else {
       console.log(
         `[IMAGE UPLOAD] Bukti transfer file is empty or not received`
@@ -150,12 +187,18 @@ export const registerMitraController = async (
     // Ensure new fields are populated when legacy data exists
     if (!mitraData.upload_ktp && mitraData.fotoKTP) {
       const normalized = normalizeUploadsPath(mitraData.fotoKTP);
-      mitraData.upload_ktp = normalized;
+      // If it's already a full URL (Supabase), keep it as is
+      mitraData.upload_ktp = mitraData.fotoKTP.startsWith("http")
+        ? mitraData.fotoKTP
+        : normalized;
       mitraData.fotoKTP = normalized;
     }
     if (!mitraData.upload_tf && mitraData.buktiTransfer) {
       const normalized = normalizeUploadsPath(mitraData.buktiTransfer);
-      mitraData.upload_tf = normalized;
+      // If it's already a full URL (Supabase), keep it as is
+      mitraData.upload_tf = mitraData.buktiTransfer.startsWith("http")
+        ? mitraData.buktiTransfer
+        : normalized;
       mitraData.buktiTransfer = normalized;
     }
 
@@ -206,12 +249,32 @@ export const registerMitraController = async (
     console.log(`[IMAGE UPLOAD] 📦 Final mitraData before DB save:`);
     console.log(`  - namaMitra: ${mitraData.namaMitra}`);
     console.log(`  - email: ${mitraData.email}`);
-    console.log(`  - fotoKTP (stored): ${mitraData.fotoKTP || "EMPTY"}`);
     console.log(
-      `  - buktiTransfer (stored): ${mitraData.buktiTransfer || "EMPTY"}`
+      `  - fotoKTP (legacy/relative): ${mitraData.fotoKTP || "EMPTY"}`
     );
-    console.log(`  - upload_ktp (NEW): ${mitraData.upload_ktp || "EMPTY"}`);
-    console.log(`  - upload_tf (NEW): ${mitraData.upload_tf || "EMPTY"}`);
+    console.log(
+      `  - buktiTransfer (legacy/relative): ${
+        mitraData.buktiTransfer || "EMPTY"
+      }`
+    );
+    console.log(
+      `  - upload_ktp (Supabase URL or relative): ${
+        mitraData.upload_ktp || "EMPTY"
+      }`
+    );
+    console.log(
+      `  - upload_tf (Supabase URL or relative): ${
+        mitraData.upload_tf || "EMPTY"
+      }`
+    );
+    console.log(`  - Supabase enabled: ${supabaseEnabled ? "YES" : "NO"}`);
+
+    // Summary: Field usage strategy
+    // - fotoKTP & buktiTransfer: Legacy fields, store relative path (/uploads/...)
+    // - upload_ktp & upload_tf: New fields, store:
+    //   * Full Supabase Storage URL when Supabase is enabled (https://...)
+    //   * Relative path when using local storage (/uploads/...)
+    // Frontend will prioritize upload_ktp & upload_tf, fallback to legacy fields
 
     const result = await registerMitra(mitraData);
 

@@ -427,6 +427,21 @@ deploy_api() {
         chmod 600 "$DEPLOY_DIR/api/.env.production"
     fi
     
+    # Sync uploads folder from development to production
+    print_status "Syncing uploads folder..."
+    if [ -d "$PROJECT_DIR/bun-api/uploads" ]; then
+        mkdir -p "$DEPLOY_DIR/uploads"
+        rsync -av "$PROJECT_DIR/bun-api/uploads/" "$DEPLOY_DIR/uploads/"
+        chown -R www-data:www-data "$DEPLOY_DIR/uploads"
+        chmod -R 755 "$DEPLOY_DIR/uploads"
+        print_success "Uploads folder synced successfully"
+    else
+        print_warning "No uploads folder found in development"
+        mkdir -p "$DEPLOY_DIR/uploads"
+        chown -R www-data:www-data "$DEPLOY_DIR/uploads"
+        chmod -R 755 "$DEPLOY_DIR/uploads"
+    fi
+    
     print_success "API dependencies installed successfully"
     
     # Copy PM2 ecosystem config

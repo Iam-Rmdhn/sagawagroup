@@ -707,7 +707,23 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 	</div>
 
 	<script>
-		const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+		const rawApiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+		const API_URL = rawApiUrl.replace(/\/$/, '');
+		const shouldProxyUploadsThroughApi = import.meta.env.PROD ? !API_URL.endsWith('/api') : false;
+
+		const buildUploadsUrl = (rawPath: string): string => {
+			if (!rawPath) return '';
+			const uploadsSegment = rawPath.includes('/uploads/')
+				? rawPath.substring(rawPath.indexOf('/uploads/'))
+				: null;
+			const normalizedPath = uploadsSegment || (rawPath.startsWith('/uploads/')
+				? rawPath
+				: rawPath.startsWith('uploads/')
+					? `/${rawPath}`
+					: `/uploads/${rawPath.replace(/^\/+/,'')}`);
+			const proxyPrefix = shouldProxyUploadsThroughApi ? '/api' : '';
+			return `${API_URL}${proxyPrefix}${normalizedPath}`;
+		};
 		
 		// Chart instance
 		let pelunasanChart: any = null;
@@ -720,8 +736,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
 				try {
 					const parsed = new URL(imageData);
-					if (parsed.pathname.startsWith('/uploads/')) {
-						return `${API_URL}${parsed.pathname}`;
+					if (parsed.pathname.includes('/uploads/')) {
+						const uploadsIndex = parsed.pathname.indexOf('/uploads/');
+						const uploadsPath = parsed.pathname.substring(uploadsIndex);
+						return buildUploadsUrl(uploadsPath);
 					}
 				} catch (error) {
 					console.warn('[Pelunasan] Failed to normalize image URL', error);
@@ -736,16 +754,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 			
 			// If it starts with /uploads/, prepend API_URL
 			if (imageData.startsWith('/uploads/')) {
-				return `${API_URL}${imageData}`;
+				return buildUploadsUrl(imageData);
 			}
 			
 			// If it's just a filename, assume it's in uploads folder
 			if (!imageData.startsWith('/')) {
-				return `${API_URL}/uploads/${imageData}`;
+				return buildUploadsUrl(imageData);
 			}
 			
 			// Fallback: prepend API_URL
-			return `${API_URL}${imageData}`;
+			return buildUploadsUrl(imageData);
 		}
 		
 		// Handle token expiration

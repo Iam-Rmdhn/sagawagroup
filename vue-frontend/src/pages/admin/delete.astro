@@ -29,39 +29,110 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Custom Amber Scrollbar */
+    /* Skeleton Loading Animations */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #e0e0e0 20%,
+        #f0f0f0 40%,
+        #f0f0f0 100%
+      );
+      background-size: 1000px 100%;
+      animation: shimmer 1.5s linear infinite;
+      border-radius: 4px;
+    }
+
+    .skeleton-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .skeleton-text {
+      height: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .skeleton-title {
+      height: 2.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .skeleton-circle {
+      border-radius: 50%;
+    }
+
+    .content-hidden {
+      display: none;
+    }
+
+    .skeleton-header {
+      background: linear-gradient(
+        90deg,
+        rgba(245, 158, 11, 0.3) 0%,
+        rgba(249, 115, 22, 0.3) 20%,
+        rgba(245, 158, 11, 0.3) 40%,
+        rgba(245, 158, 11, 0.3) 100%
+      );
+      background-size: 1000px 100%;
+      animation: shimmer 1.5s linear infinite;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Custom Orange Scrollbar - konsisten dengan theme */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
 
     ::-webkit-scrollbar-track {
-      background: rgba(251, 191, 36, 0.1);
+      background: rgba(249, 115, 22, 0.1);
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+      background: linear-gradient(135deg, rgb(249 115 22), rgb(234 88 12));
       border-radius: 4px;
       transition: all 0.3s ease;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, rgb(251 191 36), rgb(252 211 77));
-      transform: scale(1.1);
+      background: linear-gradient(135deg, rgb(234 88 12), rgb(194 65 12));
     }
 
     /* Firefox scrollbar styling */
     * {
       scrollbar-width: thin;
-      scrollbar-color: rgb(245 158 11) rgba(251, 191, 36, 0.1);
+      scrollbar-color: rgb(249 115 22) rgba(249, 115, 22, 0.1);
+    }
+
+    /* Action buttons */
+    .action-btn {
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.05);
     }
 
     /* Delete form styling */
     .delete-form {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 191, 36, 0.05) 100%);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 115, 22, 0.05) 100%);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.1);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       transform: translate3d(0, 0, 0);
       -webkit-backface-visibility: hidden;
@@ -107,102 +178,334 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
       border: 1px solid rgba(239, 68, 68, 0.2);
     }
+
+    /* Form styling consistent with crew page */
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group::after {
+      content: '';
+      position: absolute;
+      bottom: -0.75rem;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 50%, rgba(249, 115, 22, 0.1) 100%);
+    }
+
+    .form-group:last-of-type::after {
+      display: none;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group label::before {
+      content: '';
+      width: 3px;
+      height: 0.875rem;
+      background: linear-gradient(135deg, rgb(245, 158, 11), rgb(249, 115, 22));
+      border-radius: 2px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group input:hover,
+    .form-group select:hover {
+      border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: rgb(249, 115, 22);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    /* Required field indicator */
+    .form-group input:required,
+    .form-group select:required {
+      border-left: 3px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .form-group input:required:valid,
+    .form-group select:required:valid {
+      border-left-color: rgba(34, 197, 94, 0.3);
+    }
+
+    /* Form select styling */
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23f97316'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1.25rem;
+      padding-right: 2.5rem;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    /* Button styling consistent with crew page */
+    .btn-preview {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(37, 99, 235) 100%);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-preview:hover {
+      background: linear-gradient(135deg, rgb(37, 99, 235) 0%, rgb(29, 78, 216) 100%);
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-preview:active {
+      transform: translateY(0);
+    }
+
+    .btn-delete {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, rgb(239, 68, 68) 0%, rgb(220, 38, 38) 100%);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-delete:hover {
+      background: linear-gradient(135deg, rgb(220, 38, 38) 0%, rgb(185, 28, 28) 100%);
+      box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-delete:active {
+      transform: translateY(0);
+    }
+
+    .btn-delete:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Smooth transitions for form groups */
+    .form-group {
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Success state for valid inputs */
+    .form-group input:valid:not(:placeholder-shown),
+    .form-group select:valid:not([value=""]) {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322c55e'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1.25rem;
+      padding-right: 2.5rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .delete-form {
+        padding: 1.5rem;
+      }
+
+      .warning-box {
+        padding: 1rem;
+      }
+
+      .data-preview {
+        padding: 1rem;
+      }
+
+      .form-actions {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn-preview,
+      .btn-delete {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
 
-  <!-- Main Content -->
-  <div class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-    <AdminSidebar />
-    <AdminNavbar />
+  <!-- Admin Navbar -->
+  <AdminNavbar />
 
-    <!-- Main Content Area -->
-    <div class="ml-64 pt-16">
-      <div class="p-8">
-        <!-- Header -->
-        <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Hapus Data</h1>
-          <p class="text-gray-600">Halaman untuk menghapus data dari database. Gunakan dengan hati-hati.</p>
+  <!-- Admin Sidebar -->
+  <AdminSidebar currentPage="delete" />
+
+  <!-- Main Content -->
+  <div class="p-4 sm:ml-0">
+    <div class="p-4 mt-14">
+      <!-- Skeleton Header -->
+      <div id="skeleton-header" class="skeleton-header mt-2 mb-6">
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="skeleton skeleton-circle" style="width: 3rem; height: 3rem;"></div>
+          <div class="flex-1">
+            <div class="skeleton skeleton-title w-48 mb-2" style="background: rgba(255, 255, 255, 0.5);"></div>
+            <div class="skeleton skeleton-text w-64" style="background: rgba(255, 255, 255, 0.4);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Header -->
+      <div id="actual-header" class="mb-6 mt-2 sm:mb-6 content-hidden">
+        <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-2xl">
+          <div class="flex items-center space-x-3 mb-2">
+            <div class="w-12 h-12 mr-3 ml-2 flex items-center justify-center">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-3xl font-black text-white">Hapus Data</h1>
+              <p class="text-sm text-red-100 mt-1">Halaman untuk menghapus data dari database. Gunakan dengan hati-hati.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Form Section -->
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-red-50 to-red-50 px-6 py-4 border-b border-red-100">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-gray-900">Form Hapus Data</h2>
+              <p class="text-sm text-gray-600 mt-1">Pilih koleksi dan ID data yang akan dihapus</p>
+            </div>
+          </div>
         </div>
 
-        <!-- Delete Form -->
-        <div class="delete-form rounded-xl p-8 mb-8">
-          <div class="warning-box rounded-lg p-4 mb-6">
-            <div class="flex items-start">
-              <svg class="w-6 h-6 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-              </svg>
-              <div>
-                <h3 class="text-lg font-semibold text-red-800 mb-1">Peringatan Penting</h3>
-                <p class="text-red-700 text-sm">
-                  Tindakan penghapusan data bersifat permanen dan tidak dapat dibatalkan.
-                  Pastikan Anda memiliki backup data sebelum melanjutkan.
-                </p>
+        <div class="p-6">
+          <!-- Delete Form -->
+          <div class="delete-form rounded-xl p-8 mb-8">
+            <div class="warning-box rounded-lg p-4 mb-6">
+              <div class="flex items-start">
+                <svg class="w-6 h-6 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <div>
+                  <h3 class="text-lg font-semibold text-red-800 mb-1">Peringatan Penting</h3>
+                  <p class="text-red-700 text-sm">
+                    Tindakan penghapusan data bersifat permanen dan tidak dapat dibatalkan.
+                    Pastikan Anda memiliki backup data sebelum melanjutkan.
+                  </p>
+                </div>
               </div>
             </div>
+
+            <form id="deleteForm" class="space-y-6">
+              <!-- Collection Selection -->
+              <div class="form-group">
+                <label for="collection">Pilih Koleksi Data</label>
+                <select id="collection" name="collection" required>
+                  <option value="">-- Pilih Koleksi --</option>
+                  <option value="mitra">Mitra</option>
+                  <option value="mitra_pelunasan">Pelunasan Mitra</option>
+                  <option value="users">Users</option>
+                  <option value="admin_login">Admin Login</option>
+                  <option value="visitor">Visitor</option>
+                </select>
+              </div>
+
+              <!-- ID Input -->
+              <div class="form-group">
+                <label for="dataId">ID Data yang Akan Dihapus</label>
+                <input type="text" id="dataId" name="dataId" required
+                  placeholder="Masukkan ID data yang akan dihapus">
+                <p class="text-xs text-gray-500 mt-1">
+                  ID dapat ditemukan di halaman dashboard atau detail data
+                </p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="form-actions">
+                <button type="button" id="previewBtn" class="btn-preview">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                  Preview Data
+                </button>
+
+                <button type="submit" id="deleteBtn" class="btn-delete disabled">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                  Hapus Data
+                </button>
+              </div>
+            </form>
           </div>
 
-          <form id="deleteForm" class="space-y-6">
-            <!-- Collection Selection -->
-            <div>
-              <label for="collection" class="block text-sm font-medium text-gray-700 mb-2">
-                Pilih Koleksi Data
-              </label>
-              <select id="collection" name="collection" required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors">
-                <option value="">-- Pilih Koleksi --</option>
-                <option value="mitra">Mitra</option>
-                <option value="mitra_pelunasan">Pelunasan Mitra</option>
-                <option value="users">Users</option>
-                <option value="admin_login">Admin Login</option>
-                <option value="visitor">Visitor</option>
-              </select>
+          <!-- Data Preview Section -->
+          <div id="previewSection" class="data-preview rounded-xl p-6 hidden">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Preview Data</h3>
+            <div id="previewContent" class="space-y-3">
+              <!-- Data will be populated here -->
             </div>
-
-            <!-- ID Input -->
-            <div>
-              <label for="dataId" class="block text-sm font-medium text-gray-700 mb-2">
-                ID Data yang Akan Dihapus
-              </label>
-              <input type="text" id="dataId" name="dataId" required
-                placeholder="Masukkan ID data yang akan dihapus"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors">
-              <p class="text-xs text-gray-500 mt-1">
-                ID dapat ditemukan di halaman dashboard atau detail data
-              </p>
-            </div>
-
-            <!-- Preview Button -->
-            <div class="flex space-x-4">
-              <button type="button" id="previewBtn"
-                class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-                Preview Data
-              </button>
-
-              <button type="submit" id="deleteBtn"
-                class="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-                Hapus Data
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Data Preview Section -->
-        <div id="previewSection" class="data-preview rounded-xl p-6 hidden">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Preview Data</h3>
-          <div id="previewContent" class="space-y-3">
-            <!-- Data will be populated here -->
           </div>
-        </div>
 
-        <!-- Messages Section -->
-        <div id="messages" class="space-y-4">
-          <!-- Success/Error messages will appear here -->
+          <!-- Messages Section -->
+          <div id="messages" class="space-y-4">
+            <!-- Success/Error messages will appear here -->
+          </div>
         </div>
       </div>
     </div>
@@ -221,6 +524,15 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       return false;
     }
     return true;
+  }
+
+  // Hide skeleton and show actual content
+  function hideSkeletonAndShowContent() {
+    const skeletonHeader = document.getElementById('skeleton-header');
+    const actualHeader = document.getElementById('actual-header');
+
+    if (skeletonHeader) skeletonHeader.style.display = 'none';
+    if (actualHeader) actualHeader.classList.remove('content-hidden');
   }
 
   // Show message function
@@ -310,9 +622,19 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       displayPreview(data, collection);
       document.getElementById('previewSection')!.classList.remove('hidden');
 
+      // Enable delete button after successful preview
+      const deleteBtn = document.getElementById('deleteBtn') as HTMLButtonElement;
+      deleteBtn.disabled = false;
+      deleteBtn.classList.remove('disabled');
+
     } catch (error) {
       console.error('Error previewing data:', error);
       showMessage(error instanceof Error ? error.message : 'Gagal memuat preview data', 'error');
+
+      // Disable delete button on error
+      const deleteBtn = document.getElementById('deleteBtn') as HTMLButtonElement;
+      deleteBtn.disabled = true;
+      deleteBtn.classList.add('disabled');
     } finally {
       previewBtn.innerHTML = originalText;
       previewBtn.disabled = false;
@@ -411,6 +733,10 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
       (document.getElementById('deleteForm') as HTMLFormElement).reset();
       document.getElementById('previewSection')!.classList.add('hidden');
 
+      // Disable delete button after successful deletion
+      deleteBtn.disabled = true;
+      deleteBtn.classList.add('disabled');
+
     } catch (error) {
       console.error('Error deleting data:', error);
       showMessage(error instanceof Error ? error.message : 'Gagal menghapus data', 'error');
@@ -423,6 +749,16 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
   // Initialize page
   document.addEventListener('DOMContentLoaded', function() {
     if (!checkAuth()) return;
+
+    // Show content after a brief delay to simulate loading
+    setTimeout(() => {
+      hideSkeletonAndShowContent();
+    }, 500);
+
+    // Initially disable delete button
+    const deleteBtn = document.getElementById('deleteBtn') as HTMLButtonElement;
+    deleteBtn.disabled = true;
+    deleteBtn.classList.add('disabled');
 
     // Preview button handler
     document.getElementById('previewBtn')!.addEventListener('click', function() {
@@ -451,5 +787,26 @@ import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
 
       deleteData(collection, dataId);
     });
+
+    // Enable/disable delete button based on form completion
+    const collectionSelect = document.getElementById('collection') as HTMLSelectElement;
+    const dataIdInput = document.getElementById('dataId') as HTMLInputElement;
+
+    function updateDeleteButtonState() {
+      const hasCollection = collectionSelect.value.trim() !== '';
+      const hasDataId = dataIdInput.value.trim() !== '';
+      const hasPreview = !document.getElementById('previewSection')!.classList.contains('hidden');
+
+      if (hasCollection && hasDataId && hasPreview) {
+        deleteBtn.disabled = false;
+        deleteBtn.classList.remove('disabled');
+      } else {
+        deleteBtn.disabled = true;
+        deleteBtn.classList.add('disabled');
+      }
+    }
+
+    collectionSelect.addEventListener('change', updateDeleteButtonState);
+    dataIdInput.addEventListener('input', updateDeleteButtonState);
   });
 </script>
