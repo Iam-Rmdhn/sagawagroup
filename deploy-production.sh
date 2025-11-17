@@ -1122,7 +1122,7 @@ show_status() {
     echo -e "  ${GREEN}https://${DOMAIN}${NC}"
     echo -e "  ${GREEN}https://${WWW_DOMAIN}${NC}"
     echo ""
-    print_warning "📝 IMPORTANT: If you still see old content:"
+    print_warning "IMPORTANT: If you still see old content:"
     echo "   1. Hard refresh: Ctrl+Shift+R (or Cmd+Shift+R on Mac)"
     echo "   2. Clear browser cache"
     echo "   3. Or test in incognito/private mode"

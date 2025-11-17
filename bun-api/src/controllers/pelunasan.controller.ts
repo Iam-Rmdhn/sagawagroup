@@ -62,12 +62,12 @@ export const pelunasanMitraController = async (
         );
       }
 
-      // Validate file size (5MB max)
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      // Validate file size (1MB max)
+      const maxSize = 1 * 1024 * 1024; // 1MB
       if (buktiTransfer.size > maxSize) {
         return new Response(
           JSON.stringify({
-            error: `Ukuran file terlalu besar. Maksimal 5MB.`,
+            error: `Ukuran file terlalu besar. Maksimal 1MB.`,
           }),
           {
             status: 400,

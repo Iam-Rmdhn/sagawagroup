@@ -1,0 +1,215 @@
+---
+// ModalsBrand.astro - Promotional modals for brand partnerships
+interface Props {
+  brandType?: 'nusantara' | 'coffee-corner' | 'coffee-ricebowl';
+  autoShow?: boolean;
+}
+
+const { brandType = 'nusantara', autoShow = false } = Astro.props;
+
+const brandData = {
+  nusantara: {
+    title: 'RM Nusantara',
+    promo: 'FREE 100 porsi menu Warnas, Mas Gaw & Masakan Mas Gawa. Promo saat Grand Opening',
+    buttonText: 'Daftar Jadi Mitra Sekarang',
+    bgGradient: 'from-amber-500 to-orange-500',
+    iconColor: 'text-orange-600',
+    registerLink: '/form?paket=RM%20Nusantara'
+  },
+  'coffee-corner': {
+    title: 'Kagawa Coffee Corner',
+    promo: 'FREE 100 Porsi Minuman Kopi. Promo saat Grand Opening',
+    buttonText: 'Daftar Jadi Mitra Sekarang',
+    bgGradient: 'from-amber-500 to-orange-500',
+    iconColor: 'text-orange-600',
+    registerLink: '/form?paket=Kagawa%20Coffee%20Corner'
+  },
+  'coffee-ricebowl': {
+    title: 'Kagawa Coffee & Rice Bowl Corner',
+    promo: 'FREE 100 Porsi Rice Bowl & Minuman Non Coffee. Promo saat Grand Opening',
+    buttonText: 'Daftar Jadi Mitra Sekarang',
+    bgGradient: 'from-amber-500 to-orange-500',
+    iconColor: 'text-orange-600',
+    registerLink: '/form?paket=Kagawa%20Coffee%20%26%20Ricebowl%20Corner'
+  }
+};
+
+const currentBrand = brandData[brandType];
+---
+
+<div 
+  id={`modal-${brandType}`}
+  class="modal-brand fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 opacity-0 invisible transition-all duration-300 ease-in-out p-4"
+  data-auto-show={autoShow}
+>
+  <div class="modal-content bg-white rounded-3xl shadow-2xl max-w-2xl w-full transform scale-95 transition-all duration-300 ease-out relative overflow-hidden">
+    
+    <!-- Decorative background pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 20px 20px;"></div>
+    </div>
+
+    <!-- Close button -->
+    <button 
+      class="close-modal absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-all duration-200 z-10 group"
+      aria-label="Tutup modal"
+    >
+      <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <!-- Modal content -->
+    <div class="relative p-8 md:p-12">
+      
+      <!-- Badge PROMO -->
+      <div class="flex justify-center mb-6">
+        <div class={`inline-flex items-center gap-2 bg-gradient-to-r ${currentBrand.bgGradient} px-6 py-3 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-200`}>
+          <span class="text-2xl font-bold text-white tracking-wider">PROMO!</span>
+        </div>
+      </div>
+
+      <!-- Brand title -->
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">
+        Kemitraan {currentBrand.title}
+      </h2>
+
+      <!-- Promo text -->
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 mb-8 border-2 border-amber-200 shadow-inner">
+        <p class="text-xl md:text-2xl font-semibold text-center text-gray-800 leading-relaxed">
+          {currentBrand.promo}
+        </p>
+      </div>
+
+      <!-- Benefits list -->
+      <div class="mb-8 space-y-3">
+        <div class="flex items-start gap-3 group">
+          <div class={`mt-1 w-6 h-6 bg-gradient-to-br ${currentBrand.bgGradient} rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <p class="text-gray-700 font-medium">Peluang bisnis yang menguntungkan</p>
+        </div>
+        <div class="flex items-start gap-3 group">
+          <div class={`mt-1 w-6 h-6 bg-gradient-to-br ${currentBrand.bgGradient} rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <p class="text-gray-700 font-medium">Dukungan penuh dari pusat</p>
+        </div>
+        <div class="flex items-start gap-3 group">
+          <div class={`mt-1 w-6 h-6 bg-gradient-to-br ${currentBrand.bgGradient} rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <p class="text-gray-700 font-medium">Brand yang sudah terpercaya</p>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="flex justify-center">
+        <a 
+          href={currentBrand.registerLink}
+          class={`inline-block bg-gradient-to-r ${currentBrand.bgGradient} text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 hover:-translate-y-1`}
+        >
+          {currentBrand.buttonText}
+        </a>
+      </div>
+
+      <!-- Additional info -->
+      <p class="text-center text-gray-500 text-sm mt-6">
+        *Syarat dan ketentuan berlaku
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-brand.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-brand.show .modal-content {
+    transform: scale(1);
+  }
+
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Custom scrollbar for modal */
+  .modal-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .modal-content::-webkit-scrollbar-track {
+    background: rgba(251, 191, 36, 0.1);
+    border-radius: 3px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgb(245 158 11), rgb(251 191 36));
+    border-radius: 3px;
+  }
+
+  @media (max-width: 768px) {
+    .modal-content {
+      max-height: 85vh;
+    }
+  }
+</style>
+
+<script>
+  // Modal functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const modals = document.querySelectorAll('.modal-brand');
+    
+    modals.forEach(modal => {
+      const closeBtn = (modal as HTMLElement).querySelector('.close-modal');
+      const autoShow = (modal as HTMLElement).dataset.autoShow === 'true';
+
+      // Auto show if enabled
+      if (autoShow) {
+        setTimeout(() => {
+          modal.classList.add('show');
+        }, 500);
+      }
+
+      // Close button
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('show');
+        });
+      }
+
+      // Close on backdrop click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('show');
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+          modal.classList.remove('show');
+        }
+      });
+    });
+  });
+
+  // Global function to show modal by ID
+  if (typeof window !== 'undefined') {
+    (window as any).showBrandModal = (brandType: string) => {
+      const modal = document.getElementById(`modal-${brandType}`);
+      if (modal) {
+        modal.classList.add('show');
+      }
+    };
+  }
+</script>

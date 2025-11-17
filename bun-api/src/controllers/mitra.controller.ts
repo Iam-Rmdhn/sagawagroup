@@ -86,10 +86,10 @@ export const registerMitraController = async (
         );
       }
 
-      // Validate file size (5MB max)
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      // Validate file size (1MB max)
+      const maxSize = 1 * 1024 * 1024; // 1MB
       if (file.size > maxSize) {
-        throw new Error(`Ukuran file terlalu besar. Maksimal 5MB.`);
+        throw new Error(`Ukuran file terlalu besar. Maksimal 1MB.`);
       }
 
       if (supabaseEnabled) {
