@@ -46,7 +46,7 @@ user-files/
 #Spreadsheets
 mitra-sheets.json
 
-# Gdrive tokens
+# Gdrive key
 service-account-key.json
 
 # caches
@@ -69,3 +69,4 @@ ehthumbs.db
 *.temp
 .temp/
 
+bun-api/service-account-key.json
