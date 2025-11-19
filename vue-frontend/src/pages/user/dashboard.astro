@@ -701,61 +701,6 @@ function formatRupiah(amount: number): string {
                </div>
             </div>
          </div>
-        
-           <!-- Status Overview Cards -->
-           <div class="stats-grid mb-6 sm:mb-8">
-               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0s">
-                  <div class="flex items-center justify-between mb-4">
-                     <h3 class="text-lg font-semibold text-gray-900">Status Kemitraan</h3>
-                     <div class="icon-container success w-10 h-10 rounded-xl flex items-center justify-center text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                     </div>
-                  </div>
-                  <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Status Saat Ini</p>
-                  <p id="kemitraan-status" class="text-2xl font-bold text-gray-900 mt-1">Memuat...</p>
-               </div>
-
-               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.05s">
-                  <div class="flex items-center justify-between mb-4">
-                     <h3 class="text-lg font-semibold text-gray-900">Status Pelunasan</h3>
-                     <div class="icon-container warning w-10 h-10 rounded-xl flex items-center justify-center text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86L12 5z"></path>
-                        </svg>
-                     </div>
-                  </div>
-                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Status Pelunasan</span>
-                  <p id="pelunasan-status" class="text-2xl font-bold text-gray-900 mt-1">Memuat...</p>
-               </div>
-
-               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.1s">
-                  <div class="flex items-center justify-between mb-4">
-                     <h3 class="text-lg font-semibold text-gray-900">Sistem Kemitraan</h3>
-                     <div class="icon-container info w-10 h-10 rounded-xl flex items-center justify-center text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 4a8 8 0 100 16 8 8 0 000-16z"></path>
-                        </svg>
-                     </div>
-                  </div>
-                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipe Sistem</span>
-                  <p id="sistem-kemitraan" class="text-xl font-semibold text-gray-900 mt-1">Memuat...</p>
-               </div>
-
-               <div class="modern-card stats-card-animate stats-glow rounded-2xl p-6 shadow-lg overflow-hidden relative transition-all duration-300" style="animation-delay: 0.15s">
-                  <div class="flex items-center justify-between mb-4">
-                     <h3 class="text-lg font-semibold text-gray-900">Paket Usaha</h3>
-                     <div class="icon-container w-10 h-10 rounded-xl flex items-center justify-center text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l2-2 2 2m0 0l2-2 2 2m-2-2v6m-2 4h-4a2 2 0 01-2-2v-5l6-6 6 6v5a2 2 0 01-2 2zM9 8h6"></path>
-                        </svg>
-                     </div>
-                  </div>
-                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nama Paket</span>
-                  <p id="paket-usaha" class="text-xl font-semibold text-gray-900 mt-1">Memuat...</p>
-               </div>
-            </div>
 
            <!-- Nilai Paket Card - Mobile Only -->
          <div class="mb-6 sm:mb-8 lg:hidden">
@@ -1019,7 +964,7 @@ function formatRupiah(amount: number): string {
                         <div class="border-t border-gray-200 my-6"></div>
 
                         <!-- Partnership Info -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="partnership-info-grid">
                            <div class="info-item">
                               <div class="flex items-center gap-2 mb-1">
                                  <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1038,6 +983,17 @@ function formatRupiah(amount: number): string {
                                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Paket</span>
                               </div>
                               <p class="text-sm font-semibold text-gray-900 pl-6" id="detail-paket">-</p>
+                           </div>
+
+                           <!-- Sub Paket RM Nusantara (only shown for RM Nusantara package) -->
+                           <div class="info-item hidden" id="detail-sub-paket-container">
+                              <div class="flex items-center gap-2 mb-1">
+                                 <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                 </svg>
+                                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Sub Paket</span>
+                              </div>
+                              <p class="text-sm font-semibold text-amber-900 pl-6" id="detail-sub-paket">-</p>
                            </div>
 
                            <div class="info-item">
@@ -1192,6 +1148,12 @@ function formatRupiah(amount: number): string {
                   <div class="bg-white rounded-lg p-3 border border-green-200">
                      <label class="block text-xs font-medium text-gray-500 mb-1">Sistem Kemitraan</label>
                      <p class="text-sm font-semibold text-gray-900" id="agreement-kemitraan">-</p>
+                  </div>
+                  
+                  <!-- Sub Paket RM Nusantara (conditional display) -->
+                  <div class="bg-amber-50 rounded-lg p-3 border border-amber-300 hidden" id="agreement-sub-paket-container">
+                     <label class="block text-xs font-medium text-amber-700 mb-1">Sub Paket RM Nusantara</label>
+                     <p class="text-sm font-semibold text-amber-900" id="agreement-sub-paket">-</p>
                   </div>
                   
                   <div class="bg-white rounded-lg p-3 border border-green-200">
@@ -2241,6 +2203,23 @@ function formatRupiah(amount: number): string {
          kemitraanElement.textContent = sistemKemitraan + paketUsaha;
       }
 
+      // Update Sub Paket RM Nusantara (conditional display)
+      const subPaketContainer = document.getElementById('agreement-sub-paket-container');
+      const subPaketElement = document.getElementById('agreement-sub-paket');
+      console.log('[Agreement Sub Paket Debug] Paket:', mitraData?.paketUsaha);
+      console.log('[Agreement Sub Paket Debug] Sub Menu:', mitraData?.rmNusantaraSubMenu);
+      
+      if (mitraData?.paketUsaha === 'RM Nusantara') {
+         if (subPaketContainer) subPaketContainer.classList.remove('hidden');
+         if (subPaketElement) {
+            const subPaket = mitraData?.rmNusantaraSubMenu || mitraData?.subPaket || 'Tidak dipilih';
+            subPaketElement.textContent = subPaket;
+            console.log('[Agreement Sub Paket Debug] Displaying:', subPaket);
+         }
+      } else {
+         if (subPaketContainer) subPaketContainer.classList.add('hidden');
+      }
+
       // Update Alamat
       const alamatElement = document.getElementById('agreement-alamat');
       if (alamatElement) {
@@ -2515,12 +2494,42 @@ function formatRupiah(amount: number): string {
       // Partnership Information
       const detailSistem = document.getElementById('detail-sistem');
       const detailPaket = document.getElementById('detail-paket');
+      const detailSubPaket = document.getElementById('detail-sub-paket');
+      const detailSubPaketContainer = document.getElementById('detail-sub-paket-container');
       const detailSales = document.getElementById('detail-sales');
       const detailPaymentBadge = document.getElementById('detail-payment-badge');
       const detailJoinDate = document.getElementById('detail-join-date');
 
       if (detailSistem) detailSistem.textContent = data.sistemKemitraan || 'Tidak tersedia';
       if (detailPaket) detailPaket.textContent = data.paketUsaha || 'Tidak tersedia';
+      
+      // Show sub-package field only for RM Nusantara
+      console.log('[Sub Paket Debug] Paket Usaha:', data.paketUsaha);
+      console.log('[Sub Paket Debug] rmNusantaraSubMenu:', data.rmNusantaraSubMenu);
+      console.log('[Sub Paket Debug] Full data:', data);
+      
+      const partnershipGrid = document.getElementById('partnership-info-grid');
+      if (data.paketUsaha === 'RM Nusantara') {
+         // Show sub-package container
+         if (detailSubPaketContainer) detailSubPaketContainer.classList.remove('hidden');
+         if (detailSubPaket) {
+            const subPaket = data.rmNusantaraSubMenu || data.subPaket || 'Tidak dipilih';
+            detailSubPaket.textContent = subPaket;
+            console.log('[Sub Paket Debug] Displaying sub paket:', subPaket);
+         }
+         // Change grid to 5 columns on desktop
+         if (partnershipGrid) {
+            partnershipGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4';
+         }
+      } else {
+         // Hide sub-package container
+         if (detailSubPaketContainer) detailSubPaketContainer.classList.add('hidden');
+         // Keep grid at 4 columns on desktop
+         if (partnershipGrid) {
+            partnershipGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4';
+         }
+      }
+      
       if (detailSales) detailSales.textContent = data.sales || 'Tidak tersedia';
 
       // Payment/Pelunasan badge

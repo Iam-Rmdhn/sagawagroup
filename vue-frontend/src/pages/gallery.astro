@@ -5,7 +5,6 @@ import Footer from '../components/Footer.astro';
 
 // Import gambar dari assets sesuai list
 import rmnusantara from '../assets/img/gallery/rmnus.jpg?url';
-import sagawaPapan from '../assets/img/papan/sagawa_papan.png?url';
 import masakanmasgawa from '../assets/img/gallery/masgawa-sore.jpg?url';
 import rmdalam from '../assets/img/gallery/rmnus-in.png?url';
 import interior from '../assets/img/gallery/interior-rmnus.png?url';
@@ -13,62 +12,72 @@ import kopi from '../assets/img/gallery/coffee-cc.png?url';
 import ricebowlcc from '../assets/img/gallery/ricebowl-cc.jpg?url';
 import squash from '../assets/img/gallery/icesquash.png?url';
 import kbd from '../assets/img/gerobak/indepandent_brand.jpg?url';
+import masgawmargo1 from '../assets/img/gallery/masgaw-margonda-interior.jpg?url';
+import masgawmargo2 from '../assets/img/gallery/masgaw-margonda-dpn.jpg?url';
+import masgawmargo3 from '../assets/img/gallery/masgaw-margonda-kanan.jpg?url';
+import masgawmargo4 from '../assets/img/gallery/masgaw-margonda-kiri.jpg?url';
 
 // Data untuk gallery images
 const galleryImages = [
   { 
     src: rmnusantara, 
     alt: "RM Nusantara (MasGaw, WarNas, Masakan Mas Gawa)", 
-    title: "RM Nusantara",
-    subtitle: "RM Nusantara (MasGaw, WarNas, Masakan Mas Gawa)"
-  },
-  { 
-    src: sagawaPapan, 
-    alt: "Sagawa Group Papan", 
-    title: "Logo Sagawa Group",
-    subtitle: "Brand Signage"
+    title: "3 Brand RM Nusantara (MasGaw, WarNas, Masakan Mas Gawa)",
   },
   { 
     src: masakanmasgawa, 
     alt: "Masakan Mas Gawa", 
-    title: "Masakan Mas Gawa",
-    subtitle: "RM Masakan Mas Gawa"
+    title: "Desain Masakan Mas Gawa",
   },
   { 
     src: rmdalam, 
     alt: "RM Nusantara/WarNas", 
-    title: "WarNas",
-    subtitle: "Tampak Dalam WarNas"
+    title: "Desain interior dalam WarNas cabang Mampang",
   },
   { 
     src: interior, 
     alt: "Interior WarNas", 
-    title: "WarNas",
-    subtitle: "Interior WarNas"
+    title: "Grand Opening WarNas cabang Mampang",
+  },
+  { 
+    src: masgawmargo1, 
+    alt: "MasGaw Margo", 
+    title: "Desain Interior Dalam Mas Gaw Margoda Depok",
+  },
+  { 
+    src: masgawmargo2, 
+    alt: "MasGaw Margo", 
+    title: "Desain Tampak Depan Mas Gaw Margoda Depok",
+  },
+  { 
+    src: masgawmargo3, 
+    alt: "MasGaw Margo", 
+    title: "Desain Tampak Kanan Mas Gaw Margoda Depok",
+  },
+  { 
+    src: masgawmargo4, 
+    alt: "MasGaw Margo", 
+    title: "Desain Tampak Kiri Mas Gaw Margoda Depok",
   },
   { 
     src: kopi, 
     alt: "Kopi", 
     title: "Segelas Kopi Kagawa Coffee Corner",
-    subtitle: "Premium Kopi"
   },
   { 
     src: ricebowlcc, 
     alt: "Kagawa Coffee Rice Bowl", 
     title: "Kagawa Coffee and Rice Bowl Corner",
-    subtitle: "Kagawa Coffee and Rice Bowl Corner"
   },
   { 
     src: squash, 
     alt: "Squash Drink Menu", 
     title: "Pinaple Squash",
-    subtitle: "Fresh Pineapple Squash"
   },
   { 
     src: kbd, 
     alt: "Development Business", 
     title: "Development Business",
-    subtitle: "Development Business"
   }
 ];
 ---
@@ -149,7 +158,6 @@ const galleryImages = [
                           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                           <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 lg:p-8 text-white">
                             <h3 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">{image.title}</h3>
-                            <p class="text-sm sm:text-base lg:text-lg text-white/90">{image.subtitle}</p>
                           </div>
                           
                           <!-- Image Counter -->
