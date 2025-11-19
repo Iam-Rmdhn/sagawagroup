@@ -323,3 +323,7 @@ vue-frontend/.astro/
 *.json
 bun-api/service-account-key.json
 bun-api/*.key.json
+bun-api/service-account-key.json
+bun-api/*.key.json
+bun-api/service-account-key.json
+bun-api/*.key.json

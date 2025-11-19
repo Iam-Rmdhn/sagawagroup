@@ -46,9 +46,6 @@ user-files/
 #Spreadsheets
 mitra-sheets.json
 
-# Gdrive key
-service-account-key.json
-
 # caches
 .eslintcache
 .cache
