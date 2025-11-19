@@ -121,6 +121,24 @@ if (supabaseStorageEnabled) {
   }
 }
 
+// // Google Drive configuration
+// const googleDriveEnabled = parseBoolean(
+//   process.env.GOOGLE_DRIVE_ENABLED,
+//   false
+// );
+
+// const googleDriveServiceAccountKeyPath = getEnvVar(
+//   "GOOGLE_DRIVE_SERVICE_ACCOUNT_KEY_PATH",
+//   "./service-account-key.json"
+// );
+// const googleDriveFolderId = getOptionalEnvVar("GOOGLE_DRIVE_FOLDER_ID") ?? "";
+
+// if (googleDriveEnabled && !googleDriveFolderId) {
+//   throw new Error(
+//     "Google Drive enabled but GOOGLE_DRIVE_FOLDER_ID is not set"
+//   );
+// }
+
 // Export the environment configuration
 export const ENV = {
   NODE_ENV: nodeEnv,
@@ -153,6 +171,9 @@ export const ENV = {
   SUPABASE_STORAGE_REGION: supabaseRegion,
   SUPABASE_STORAGE_ACCESS_KEY: supabaseAccessKey,
   SUPABASE_STORAGE_SECRET_KEY: supabaseSecretKey,
+  // GOOGLE_DRIVE_ENABLED: googleDriveEnabled,
+  // GOOGLE_DRIVE_SERVICE_ACCOUNT_KEY_PATH: googleDriveServiceAccountKeyPath,
+  // GOOGLE_DRIVE_FOLDER_ID: googleDriveFolderId,
 };
 
 // Log environment info in development

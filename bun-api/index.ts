@@ -6,6 +6,7 @@ import { youtubeRoute } from "./src/routes/youtube.route";
 import { analyticsRoute } from "./src/routes/analytics.route";
 import { visitorRoute } from "./src/routes/visitor.route";
 import { crewRoute } from "./src/routes/crew.route";
+// import { galleryRoute } from "./src/routes/gallery.route";
 import "./src/lib/db"; // Initialize database connection
 import { ENV } from "./src/env";
 
@@ -219,6 +220,16 @@ Bun.serve({
         });
         return response;
       }
+
+      // // Gallery routes
+      // if (url.pathname.startsWith("/api/gallery")) {
+      //   const response = await galleryRoute(req);
+      //   // Add CORS headers to response
+      //   Object.entries(corsHeaders).forEach(([key, value]) => {
+      //     response.headers.set(key, value);
+      //   });
+      //   return response;
+      // }
 
       if (url.pathname.startsWith("/api/mitra")) {
         const response = await mitraRoute(req);
