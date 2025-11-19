@@ -319,4 +319,7 @@ vue-frontend/.astro/
 **/playground/
 **/.playground/
 **/.temp/
-**/.debug/
+**/.debug/# Google Cloud Service Account Keys
+*.json
+bun-api/service-account-key.json
+bun-api/*.key.json
