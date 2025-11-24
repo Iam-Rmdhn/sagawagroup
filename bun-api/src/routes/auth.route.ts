@@ -77,6 +77,23 @@ export const authRoute = async (req: Request): Promise<Response> => {
     return await getAllMitra(req);
   }
 
+  // PUT /api/admin/mitra/:id  (admin updates mitra)
+  if (req.method === "PUT" && pathname.startsWith("/api/admin/mitra/")) {
+    return await (async () => {
+      try {
+        return await (
+          await import("../controllers/auth.controller")
+        ).adminUpdateMitra(req);
+      } catch (err) {
+        console.error("Error routing adminUpdateMitra:", err);
+        return new Response(
+          JSON.stringify({ error: "Gagal memperbarui mitra" }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    })();
+  }
+
   if (
     req.method === "GET" &&
     pathname.startsWith("/api/admin/mitra/") &&

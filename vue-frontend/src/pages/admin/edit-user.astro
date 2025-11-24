@@ -1,0 +1,365 @@
+---
+// Admin - Edit User
+import Layout from '../../layouts/Layout.astro';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebar.astro';
+import AdminNavbar from '../../components/admin/navbar/AdminNavbar.astro';
+---
+
+<Layout title="Kelola User - Admin Dashboard">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+	<AdminNavbar />
+	<AdminSidebar currentPage="users" />
+
+	<div class="p-4 sm:ml-0">
+		<div class="p-4 mt-14">
+			<div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-6 text-white shadow-2xl mb-6">
+				<div class="flex items-center justify-between">
+					<div>
+						<h2 class="text-2xl font-bold">Manage User</h2>
+						<p class="text-sm opacity-90">Kelola data mitra — ubah nama, email, foto, dan lainnya</p>
+					</div>
+					<div>
+						<button id="refresh-btn" class="bg-white text-amber-600 px-4 py-2 rounded-lg shadow">Refresh</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="bg-white rounded-xl shadow p-4">
+				<div class="mb-4">
+					<input id="search-input" type="text" placeholder="Cari nama, email, atau ID" class="w-full border rounded-lg px-4 py-3" />
+				</div>
+
+				<div class="overflow-x-auto">
+					<table class="min-w-full divide-y divide-gray-200">
+						<thead class="bg-gray-50">
+									<tr>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kemitraan</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Brand</th>
+										<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+										<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+									</tr>
+						</thead>
+						<tbody id="user-table-body" class="bg-white divide-y divide-gray-200">
+							<!-- Rows injected by JS -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Edit User Modal -->
+	<div id="editUserModal" class="fixed inset-0 z-50 p-4 hidden">
+		<div class="flex items-center justify-center min-h-screen">
+			<div class="fixed inset-0 bg-black bg-opacity-40" onclick="closeEditUserModal()"></div>
+			<div class="relative bg-white rounded-xl shadow-2xl w-full max-w-3xl z-20 overflow-hidden">
+			<div class="bg-red-600 p-6 text-white flex items-center justify-between">
+				<div>
+					<h3 class="text-xl font-bold">Edit User</h3>
+					<p class="text-sm opacity-90" id="edit-user-subtitle">Perbarui data mitra</p>
+				</div>
+				<button onclick="closeEditUserModal()" class="w-10 h-10 rounded-full bg-red-700/80 flex items-center justify-center text-white">✕</button>
+			</div>
+
+			<div class="p-6">
+				<form id="edit-user-form">
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="text-xs font-medium text-gray-600">ID</label>
+							<input id="field-id" class="w-full border rounded-lg px-3 py-2 mt-2 bg-gray-50" readonly />
+						</div>
+
+						<div>
+							<label class="text-xs font-medium text-gray-600">Nama</label>
+							<input id="field-nama" class="w-full border rounded-lg px-3 py-2 mt-2" required />
+						</div>
+
+						<div>
+							<label class="text-xs font-medium text-gray-600">Kemitraan</label>
+							<select id="field-paket" class="w-full border rounded-lg px-3 py-2 mt-2">
+								<option>RM Nusantara</option>
+								<option>Franchise</option>
+								<option>Independent</option>
+							</select>
+						</div>
+
+						<div>
+							<label class="text-xs font-medium text-gray-600">No HP</label>
+							<input id="field-nohp" class="w-full border rounded-lg px-3 py-2 mt-2" />
+						</div>
+
+						<div class="col-span-2">
+							<label class="text-xs font-medium text-gray-600">Sub Brand (opsional)</label>
+							<select id="field-subbrand" class="w-full border rounded-lg px-3 py-2 mt-2">
+								<option value="">-</option>
+								<option>Masakan Mas Gawa</option>
+								<option>Warnas</option>
+								<option>Mas Gaw</option>
+							</select>
+						</div>
+
+						<div class="col-span-2">
+							<label class="text-xs font-medium text-gray-600">Email</label>
+							<input id="field-email" type="email" class="w-full border rounded-lg px-3 py-2 mt-2" required />
+						</div>
+
+						<div class="col-span-2">
+							<label class="text-xs font-medium text-gray-600">Password Baru (opsional)</label>
+							<input id="field-password" type="password" class="w-full border rounded-lg px-3 py-2 mt-2" placeholder="Kosongkan jika tidak ingin mengubah password" />
+						</div>
+
+						<!-- Photo excluded from edit form as requested -->
+					</div>
+
+					<div class="mt-6 flex items-center justify-between">
+						<button type="button" onclick="deleteUser()" class="text-red-600 bg-red-50 px-4 py-2 rounded-lg">Hapus User</button>
+						<div class="space-x-2">
+							<button type="button" onclick="closeEditUserModal()" class="bg-gray-100 px-4 py-2 rounded-lg">Batal</button>
+							<button id="save-btn" type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Simpan Perubahan</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		import { loadMitraData, getMitraDetail, checkAdminAuth } from '../../lib/adminHelpers';
+
+		const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+
+		if (!checkAdminAuth()) {
+			throw new Error('Authentication required');
+		}
+
+		document.addEventListener('DOMContentLoaded', async () => {
+			await loadData();
+		});
+
+		const refreshBtn = document.getElementById('refresh-btn') as HTMLButtonElement | null;
+		if (refreshBtn) refreshBtn.addEventListener('click', loadData);
+
+		const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+		if (searchInput) {
+			searchInput.addEventListener('input', (e: Event) => {
+				const target = e.target as HTMLInputElement;
+				const q = (target.value || '').toLowerCase();
+				filterTable(q);
+			});
+		}
+
+		let currentEditingId: string | null = null;
+
+		async function loadData() {
+			const tableBody = document.getElementById('user-table-body');
+			if (!tableBody) return;
+
+			tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Loading...</td></tr>';
+
+			try {
+				const mitras = await loadMitraData('all');
+
+				if (!mitras || mitras.length === 0) {
+					tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Tidak ada data</td></tr>';
+					return;
+				}
+
+				const rows = mitras.map((mitra: any) => {
+					const statusText = mitra.status === 'approved' ? 'Disetujui' : (mitra.status || 'Pending');
+
+					// Sub brand badge logic (only for RM Nusantara valid submenus)
+					const validSubBrands = ['Masakan Mas Gawa', 'Warnas', 'Mas Gaw'];
+					let subBrandDisplay = '<span class="text-gray-400">-</span>';
+					if (mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu && validSubBrands.includes(mitra.rmNusantaraSubMenu)) {
+						subBrandDisplay = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">${mitra.rmNusantaraSubMenu}</span>`;
+					}
+
+					// Only allow editing when mitra is approved
+					const canEdit = mitra.status === 'approved';
+					const editButtonHtml = canEdit
+						? `<button data-id="${mitra._id}" class="edit-btn px-3 py-2 bg-blue-600 text-white rounded-lg">Edit</button>`
+						: `<button class="px-3 py-2 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed" disabled>Tidak</button>`;
+
+					return `
+						<tr>
+							<td class="px-6 py-4 font-medium text-gray-900">${mitra.namaMitra || mitra.nama || '-'}</td>
+							<td class="px-6 py-4 text-gray-700">${mitra.email || '-'}</td>
+							<td class="px-6 py-4 text-gray-700">${mitra.paketUsaha || '-'}</td>
+							<td class="px-6 py-4">${subBrandDisplay}</td>
+							<td class="px-6 py-4"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100">${statusText}</span></td>
+							<td class="px-6 py-4 text-right">
+								${editButtonHtml}
+							</td>
+						</tr>
+					`;
+				}).join('');
+
+				tableBody.innerHTML = rows;
+
+				// wire up edit buttons
+				Array.from(tableBody.querySelectorAll('.edit-btn')).forEach((btn) => {
+					const el = btn as HTMLButtonElement;
+					el.addEventListener('click', () => {
+						const id = el.getAttribute('data-id');
+						if (id) (window as any).openEditUserModal(id);
+					});
+				});
+			} catch (err) {
+				console.error('Error loading mitra:', err);
+				tableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center text-red-500">Error loading data</td></tr>';
+			}
+		}
+
+		function filterTable(q: string) {
+			const tbody = document.getElementById('user-table-body');
+			if (!tbody) return;
+			const rows = Array.from(tbody.querySelectorAll('tr'));
+			rows.forEach(r => {
+				const text = (r.textContent || '').toLowerCase();
+				(r as HTMLElement).style.display = text.includes(q) ? '' : 'none';
+			});
+		}
+
+		(window as any).openEditUserModal = async (id: string) => {
+			currentEditingId = id;
+			const modal = document.getElementById('editUserModal') as HTMLElement | null;
+			const subtitle = document.getElementById('edit-user-subtitle') as HTMLElement | null;
+
+			try {
+				const mitra = await getMitraDetail(id);
+				if (!mitra) throw new Error('Data mitra tidak ditemukan');
+
+				(document.getElementById('field-id') as HTMLInputElement).value = mitra._id || '';
+				(document.getElementById('field-nama') as HTMLInputElement).value = mitra.namaMitra || mitra.nama || '';
+				(document.getElementById('field-email') as HTMLInputElement).value = mitra.email || '';
+				(document.getElementById('field-paket') as HTMLSelectElement).value = mitra.paketUsaha || '';
+				(document.getElementById('field-nohp') as HTMLInputElement).value = mitra.noHp || '';
+				(document.getElementById('field-subbrand') as HTMLSelectElement).value = mitra.rmNusantaraSubMenu || '';
+
+				const preview = document.getElementById('preview-photo') as HTMLImageElement | null;
+				const photo = mitra.upload_ktp || mitra.fotoKTP || mitra.upload_tf || '';
+				if (preview) preview.src = photo || '/assets/default-avatar.png';
+
+				if (subtitle) subtitle.textContent = `Perbarui data ${mitra.namaMitra || mitra.nama || ''}`;
+
+				if (modal) modal.classList.remove('hidden');
+			} catch (err) {
+				console.error('Error opening edit modal:', err);
+				const Swal = await import('sweetalert2').then(m => m.default);
+				Swal.fire({ title: 'Error', text: String(err), icon: 'error' });
+			}
+		};
+
+		(window as any).closeEditUserModal = () => {
+			const modal = document.getElementById('editUserModal') as HTMLElement | null;
+			if (modal) modal.classList.add('hidden');
+			// reset form
+			const form = document.getElementById('edit-user-form') as HTMLFormElement | null;
+			if (form) form.reset();
+			currentEditingId = null;
+		};
+
+		// Photo upload/preview removed — no file handling here per request
+
+		const formEl = document.getElementById('edit-user-form') as HTMLFormElement | null;
+		if (formEl) {
+			formEl.addEventListener('submit', async (ev) => {
+				ev.preventDefault();
+				if (!currentEditingId) return;
+
+				const saveBtn = document.getElementById('save-btn') as HTMLButtonElement | null;
+				if (saveBtn) saveBtn.disabled = true;
+
+				try {
+					const nama = (document.getElementById('field-nama') as HTMLInputElement).value.trim();
+					const email = (document.getElementById('field-email') as HTMLInputElement).value.trim();
+					const noHp = (document.getElementById('field-nohp') as HTMLInputElement).value.trim();
+					const paketUsaha = (document.getElementById('field-paket') as HTMLSelectElement).value;
+					const rmNusantaraSubMenu = (document.getElementById('field-subbrand') as HTMLSelectElement).value;
+					const password = (document.getElementById('field-password') as HTMLInputElement).value;
+
+					// Basic validation
+					if (!nama || !email) {
+						const Swal = await import('sweetalert2').then(m => m.default);
+						Swal.fire({ title: 'Validasi', text: 'Nama dan email wajib diisi', icon: 'warning' });
+						return;
+					}
+
+					const token = localStorage.getItem('adminToken');
+					if (!token) throw new Error('Token admin tidak ditemukan');
+
+					const formData = new FormData();
+					formData.append('namaMitra', nama);
+					formData.append('email', email);
+					formData.append('noHp', noHp);
+					formData.append('paketUsaha', paketUsaha);
+					formData.append('rmNusantaraSubMenu', rmNusantaraSubMenu || '');
+					if (password) formData.append('password', password);
+
+					// Try to call admin update endpoint for mitra (may not exist on server)
+					const resp = await fetch(`${API_URL}/api/admin/mitra/${currentEditingId}`, {
+						method: 'PUT',
+						headers: {
+							'Authorization': `Bearer ${token}`
+						},
+						body: formData
+					});
+
+					const resultText = await resp.text();
+					let result = null;
+					try { result = JSON.parse(resultText); } catch(e) { result = { success: resp.ok, message: resultText }; }
+
+					if (resp.ok) {
+						const Swal = await import('sweetalert2').then(m => m.default);
+						Swal.fire({ title: 'Berhasil', text: 'Data user berhasil diperbarui', icon: 'success' });
+						(window as any).closeEditUserModal();
+						await loadData();
+					} else {
+						const Swal = await import('sweetalert2').then(m => m.default);
+						Swal.fire({ title: 'Gagal', text: result?.error || result?.message || 'Tidak dapat memperbarui (endpoint mungkin tidak tersedia)', icon: 'error' });
+					}
+				} catch (err) {
+					console.error('Save error:', err);
+					const Swal = await import('sweetalert2').then(m => m.default);
+					Swal.fire({ title: 'Error', text: String(err), icon: 'error' });
+				} finally {
+					const saveBtn = document.getElementById('save-btn') as HTMLButtonElement | null;
+					if (saveBtn) saveBtn.disabled = false;
+				}
+			});
+		}
+
+		(window as any).deleteUser = async () => {
+			if (!currentEditingId) return;
+			const Swal = await import('sweetalert2').then(m => m.default);
+			const res = await Swal.fire({ title: 'Hapus user?', text: 'Data user akan dihapus permanen.', icon: 'warning', showCancelButton: true });
+			if (!res.isConfirmed) return;
+
+			try {
+				const token = localStorage.getItem('adminToken');
+				if (!token) throw new Error('Token admin tidak ditemukan');
+
+				const delResp = await fetch(`${API_URL}/api/admin/users/${currentEditingId}`, {
+					method: 'DELETE',
+					headers: { 'Authorization': `Bearer ${token}` }
+				});
+
+				if (delResp.ok) {
+					await Swal.fire({ title: 'Terhapus', text: 'User berhasil dihapus', icon: 'success' });
+					(window as any).closeEditUserModal();
+					await loadData();
+				} else {
+					const text = await delResp.text();
+					await Swal.fire({ title: 'Gagal', text: text || 'Gagal menghapus user', icon: 'error' });
+				}
+			} catch (err) {
+				console.error('Delete error:', err);
+				await Swal.fire({ title: 'Error', text: String(err), icon: 'error' });
+			}
+		};
+	</script>
+</Layout>
+

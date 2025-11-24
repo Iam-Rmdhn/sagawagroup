@@ -1,35 +1,37 @@
 // Admin Helpers - Reusable functions for admin pages
 // API URL configuration
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000";
 
 // Function to check authentication
 export function checkAdminAuth(): boolean {
-  const token = localStorage.getItem('adminToken');
+  const token = localStorage.getItem("adminToken");
   if (!token) {
-    window.location.href = '/login';
+    window.location.href = "/login";
     return false;
   }
   return true;
 }
 
 // Function to load mitra data with optional filter
-export async function loadMitraData(filter: 'all' | 'approved' | 'pending' = 'all'): Promise<any[]> {
-  const token = localStorage.getItem('adminToken');
-  
+export async function loadMitraData(
+  filter: "all" | "approved" | "pending" = "all"
+): Promise<any[]> {
+  const token = localStorage.getItem("adminToken");
+
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error("No authentication token found");
   }
 
   const response = await fetch(`${API_URL}/api/admin/mitra`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch mitra data');
+    throw new Error("Failed to fetch mitra data");
   }
 
   const result = await response.json();
@@ -38,10 +40,10 @@ export async function loadMitraData(filter: 'all' | 'approved' | 'pending' = 'al
     let mitras = result.data;
 
     // Apply filter
-    if (filter === 'approved') {
-      mitras = mitras.filter((mitra: any) => mitra.status === 'approved');
-    } else if (filter === 'pending') {
-      mitras = mitras.filter((mitra: any) => mitra.status === 'pending');
+    if (filter === "approved") {
+      mitras = mitras.filter((mitra: any) => mitra.status === "approved");
+    } else if (filter === "pending") {
+      mitras = mitras.filter((mitra: any) => mitra.status === "pending");
     }
 
     return mitras;
@@ -51,7 +53,11 @@ export async function loadMitraData(filter: 'all' | 'approved' | 'pending' = 'al
 }
 
 // Function to render table rows - OPTIMIZED
-export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
+export function renderTableRows(
+  mitras: any[],
+  tableBody: HTMLElement,
+  includeEdit: boolean = false
+): void {
   if (mitras.length === 0) {
     tableBody.innerHTML = `
       <tr>
@@ -73,20 +79,25 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
 
   // OPTIMIZED: Use string concatenation with reduced DOM manipulation
   const rows: string[] = [];
-  
+
   for (let i = 0; i < mitras.length; i++) {
     const mitra = mitras[i];
-    const statusClass = mitra.status === 'approved' 
-      ? 'bg-green-100 text-green-800 border-green-200'
-      : 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    
-    const statusText = mitra.status === 'approved' ? 'Disetujui' : 'Pending';
-    
+    const statusClass =
+      mitra.status === "approved"
+        ? "bg-green-100 text-green-800 border-green-200"
+        : "bg-yellow-100 text-yellow-800 border-yellow-200";
+
+    const statusText = mitra.status === "approved" ? "Disetujui" : "Pending";
+
     // Get sub brand - only show if RM Nusantara and has valid submenu
-    const validSubBrands = ['Masakan Mas Gawa', 'Warnas', 'Mas Gaw'];
-    let subBrandBadge = '-';
-    
-    if (mitra.paketUsaha === 'RM Nusantara' && mitra.rmNusantaraSubMenu && validSubBrands.includes(mitra.rmNusantaraSubMenu)) {
+    const validSubBrands = ["Masakan Mas Gawa", "Warnas", "Mas Gaw"];
+    let subBrandBadge = "-";
+
+    if (
+      mitra.paketUsaha === "RM Nusantara" &&
+      mitra.rmNusantaraSubMenu &&
+      validSubBrands.includes(mitra.rmNusantaraSubMenu)
+    ) {
       subBrandBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
         ${mitra.rmNusantaraSubMenu}
       </span>`;
@@ -97,13 +108,13 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
     rows.push(`
       <tr class="hover:bg-orange-50/30 transition-optimized">
         <td class="px-6 py-4">
-          <div class="font-medium text-gray-900">${mitra.namaMitra || mitra.nama || '-'}</div>
+          <div class="font-medium text-gray-900">${mitra.namaMitra || mitra.nama || "-"}</div>
         </td>
-        <td class="px-6 py-4 text-gray-700">${mitra.email || '-'}</td>
-        <td class="px-6 py-4 text-gray-700">${mitra.noHp || '-'}</td>
+        <td class="px-6 py-4 text-gray-700">${mitra.email || "-"}</td>
+        <td class="px-6 py-4 text-gray-700">${mitra.noHp || "-"}</td>
         <td class="px-6 py-4">
           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
-            ${mitra.paketUsaha || '-'}
+            ${mitra.paketUsaha || "-"}
           </span>
         </td>
         <td class="px-6 py-4">${subBrandBadge}</td>
@@ -114,6 +125,19 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
         </td>
         <td class="px-6 py-4">
           <div class="flex items-center space-x-2">
+            ${
+              includeEdit
+                ? `
+              <button onclick="openEditUserModal('${mitra._id}')" 
+                class="inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-medium rounded-lg transition-optimized">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M4 20h4.586a1 1 0 00.707-.293l9.414-9.414a1 1 0 000-1.414L15.414 4.586a1 1 0 00-1.414 0L4.586 14.172A1 1 0 004 14.879V19a1 1 0 001 1z"></path>
+                </svg>
+                Edit
+              </button>
+            `
+                : ""
+            }
             <button onclick="viewMitraDetail('${mitra._id}')" 
               class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-optimized">
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +146,9 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
               </svg>
               Detail
             </button>
-            ${mitra.status === 'pending' ? `
+            ${
+              mitra.status === "pending"
+                ? `
               <button onclick="approveMitra('${mitra._id}')" 
                 class="inline-flex items-center px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-medium rounded-lg transition-optimized">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +156,9 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
                 </svg>
                 Setujui
               </button>
-            ` : ''}
+            `
+                : ""
+            }
             <button onclick="deleteMitra('${mitra._id}')" 
               class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-optimized">
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,131 +171,134 @@ export function renderTableRows(mitras: any[], tableBody: HTMLElement): void {
       </tr>
     `);
   }
-  
+
   // Single DOM update instead of multiple
-  tableBody.innerHTML = rows.join('');
+  tableBody.innerHTML = rows.join("");
 }
 
 // Function to approve mitra
 export async function approveMitra(mitraId: string): Promise<boolean> {
-  const token = localStorage.getItem('adminToken');
-  
+  const token = localStorage.getItem("adminToken");
+
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error("No authentication token found");
   }
 
   try {
     const response = await fetch(`${API_URL}/api/admin/mitra/approve`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         mitraId,
-        action: 'approve'
+        action: "approve",
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      console.error('Failed to approve mitra:', errorData);
-      throw new Error('Failed to approve mitra');
+      console.error("Failed to approve mitra:", errorData);
+      throw new Error("Failed to approve mitra");
     }
 
     const result = await response.json();
-    console.log('Mitra approved successfully:', result);
+    console.log("Mitra approved successfully:", result);
     return true;
   } catch (error) {
-    console.error('Error approving mitra:', error);
+    console.error("Error approving mitra:", error);
     return false;
   }
 }
 
 // Function to delete mitra
 export async function deleteMitra(mitraId: string): Promise<boolean> {
-  const token = localStorage.getItem('adminToken');
-  
+  const token = localStorage.getItem("adminToken");
+
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error("No authentication token found");
   }
 
   try {
     // 1. Hapus data mitra utama
     const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to delete mitra');
+      throw new Error("Failed to delete mitra");
     }
 
     // 2. Hapus data pelunasan terkait (jika ada)
     try {
-      const pelunasanResponse = await fetch(`${API_URL}/api/admin/mitra_pelunasan/by-mitra/${mitraId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
+      const pelunasanResponse = await fetch(
+        `${API_URL}/api/admin/mitra_pelunasan/by-mitra/${mitraId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       // Log result tapi tidak block proses
       if (pelunasanResponse.ok) {
         const pelunasanData = await pelunasanResponse.json();
-        console.log('Pelunasan data deleted:', pelunasanData);
+        console.log("Pelunasan data deleted:", pelunasanData);
       }
     } catch (pelunasanError) {
-      console.warn('No pelunasan data to delete or error:', pelunasanError);
+      console.warn("No pelunasan data to delete or error:", pelunasanError);
       // Continue - pelunasan data mungkin tidak ada
     }
 
     return true;
   } catch (error) {
-    console.error('Error deleting mitra:', error);
+    console.error("Error deleting mitra:", error);
     return false;
   }
 }
 
 // Function to get mitra detail
 export async function getMitraDetail(mitraId: string): Promise<any> {
-  const token = localStorage.getItem('adminToken');
-  
+  const token = localStorage.getItem("adminToken");
+
   if (!token) {
-    throw new Error('No authentication token found');
+    throw new Error("No authentication token found");
   }
 
   try {
     const response = await fetch(`${API_URL}/api/admin/mitra/${mitraId}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch mitra detail');
+      throw new Error("Failed to fetch mitra detail");
     }
 
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('Error fetching mitra detail:', error);
+    console.error("Error fetching mitra detail:", error);
     return null;
   }
 }
 
 // Format currency helper
 export function formatRupiah(amount: number): string {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(amount);
 }

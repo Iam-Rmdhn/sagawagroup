@@ -598,3 +598,87 @@ export async function deleteMitraService(mitraId: string) {
     throw error;
   }
 }
+
+// Service untuk update mitra oleh admin
+export async function adminUpdateMitraService(
+  mitraId: string,
+  updates: Partial<{
+    namaMitra: string;
+    email: string;
+    noHp: string;
+    paketUsaha: string;
+    rmNusantaraSubMenu: string;
+    password: string;
+  }>
+) {
+  try {
+    const mitra = await MitraModel.findById(mitraId);
+    if (!mitra) throw new Error("Mitra tidak ditemukan");
+
+    const toUpdate: any = {};
+    if (updates.namaMitra) toUpdate.namaMitra = updates.namaMitra;
+    if (updates.noHp) toUpdate.noHp = updates.noHp;
+    if (updates.paketUsaha) toUpdate.paketUsaha = updates.paketUsaha;
+    if (updates.rmNusantaraSubMenu)
+      toUpdate.rmNusantaraSubMenu = updates.rmNusantaraSubMenu;
+    if (updates.email) toUpdate.email = updates.email;
+
+    // Update mitra collection
+    const updatedMitra = await MitraModel.updateById(mitraId, toUpdate);
+
+    // If mitra has a login account, update mitra_login collection as well
+    try {
+      const mitraLogin = await MitraLoginModel.findByMitraId(mitraId);
+      if (mitraLogin) {
+        const loginUpdates: any = {};
+        if (updates.email && updates.email !== mitraLogin.email) {
+          loginUpdates.email = updates.email;
+        }
+        if (updates.namaMitra) loginUpdates.namaMitra = updates.namaMitra;
+        if (updates.paketUsaha) loginUpdates.paketUsaha = updates.paketUsaha;
+
+        // If password provided, hash it
+        if (updates.password) {
+          const saltRounds = 10;
+          const hashed = await bcrypt.hash(updates.password, saltRounds);
+          loginUpdates.password = hashed;
+        }
+
+        // Apply updates if any
+        if (Object.keys(loginUpdates).length > 0) {
+          await MitraLoginModel.updateById(
+            mitraLogin._id as string,
+            loginUpdates
+          );
+        }
+
+        // If email changed, send notification email to new address. If admin provided a new password, include it.
+        if (updates.email && updates.email !== mitra.email) {
+          try {
+            const { sendMitraUpdateEmail } = await import("../utils/email");
+            await sendMitraUpdateEmail(
+              updates.email,
+              updates.namaMitra || mitra.namaMitra,
+              {
+                password: updates.password,
+              }
+            );
+          } catch (emailErr) {
+            console.warn("Failed to send update email (non-fatal):", emailErr);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Error updating mitra_login (non-fatal):", err);
+    }
+
+    return {
+      success: true,
+      message: "Mitra berhasil diperbarui",
+      data: updatedMitra || toUpdate,
+    };
+  } catch (error) {
+    console.error("Error in adminUpdateMitraService:", error);
+    throw error;
+  }
+}

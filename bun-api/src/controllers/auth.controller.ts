@@ -483,6 +483,72 @@ export const updateMitraProfile = async (req: Request): Promise<Response> => {
   }
 };
 
+// Admin: update mitra by ID (updates both mitra and mitra_login when applicable)
+export const adminUpdateMitra = async (req: Request): Promise<Response> => {
+  try {
+    // Validate admin token
+    await validateAdminToken(req);
+
+    const url = new URL(req.url);
+    const pathParts = url.pathname.split("/");
+    const mitraId = pathParts[pathParts.length - 1];
+
+    if (!mitraId) {
+      return new Response(
+        JSON.stringify({ error: "Mitra ID tidak ditemukan" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Support form-data or JSON
+    let payload: any = {};
+    const contentType = req.headers.get("content-type") || "";
+    if (
+      contentType.includes("form-data") ||
+      contentType.includes("multipart/form-data")
+    ) {
+      const form = await req.formData();
+      for (const [k, v] of form.entries()) {
+        payload[k] = typeof v === "string" ? v : v;
+      }
+    } else {
+      try {
+        payload = await req.json();
+      } catch (e) {
+        payload = {};
+      }
+    }
+
+    const { adminUpdateMitraService } = await import(
+      "../services/auth.services"
+    );
+    const result = await adminUpdateMitraService(mitraId, payload);
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.error("Error in adminUpdateMitra:", err);
+    if (
+      err.message &&
+      (err.message.includes("Token") || err.message.includes("Akses"))
+    ) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    return new Response(
+      JSON.stringify({ error: err.message || "Gagal memperbarui mitra" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
+
 // Get all users (admin only)
 export const getAllUsers = async (req: Request): Promise<Response> => {
   try {
