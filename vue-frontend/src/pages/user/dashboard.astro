@@ -1690,6 +1690,17 @@ function formatRupiah(amount: number): string {
          }
 
          if (data) {
+            console.log('[Dashboard] ===== DATA LOADED ====>');
+            console.log('[Dashboard] Full data:', JSON.stringify(data, null, 2));
+            console.log('[Dashboard] rmNusantaraSubMenu:', data.rmNusantaraSubMenu);
+            console.log('[Dashboard] paketUsaha:', data.paketUsaha);
+            console.log('[Dashboard] Status Pelunasan fields:', {
+               isPaidOff: data.isPaidOff,
+               statusPelunasan: data.statusPelunasan,
+               pelunasanApproved: data.pelunasanApproved,
+               kekurangan: data.kekurangan
+            });
+            
             // Store mitra data for agreement modal
             localStorage.setItem('mitraUser', JSON.stringify(data));
             (window as any).currentMitraData = data;
@@ -1706,10 +1717,10 @@ function formatRupiah(amount: number): string {
               (window as any).mitraNavbar.updateUserInfo(data);
             }
 
-            // Update statistics cards
+            // Update statistics cards (pelunasan status checked here)
             await updateStatisticsCards(data);
 
-            // Update detailed information
+            // Update detailed information (partnership info including sub brand)
             updateDetailedInfo(data);
 
             // Update activity information
@@ -2378,6 +2389,18 @@ function formatRupiah(amount: number): string {
       const pelunasanStatus = document.getElementById('pelunasan-status');
       const pelunasanStatusLabel = pelunasanStatus?.previousElementSibling;
       if (pelunasanStatus) {
+         console.log('[PELUNASAN DEBUG] ===== CHECKING STATUS ====>');
+         console.log('[PELUNASAN DEBUG] Raw data pelunasan fields:', {
+            isPaidOff: data?.isPaidOff,
+            statusPelunasan: data?.statusPelunasan,
+            pelunasanApproved: data?.pelunasanApproved,
+            pelunasanStatus: data?.pelunasanStatus,
+            kekurangan: data?.kekurangan,
+            totalPaid: data?.totalPaid,
+            hargaPaket: data?.hargaPaket,
+            nilaiPaketUsaha: data?.nilaiPaketUsaha
+         });
+         
          const pelunasanStatuses = collectPelunasanStatuses(data);
          const isPaidOff = isUserPaidOff(data);
          const hasLunasStatus = hasStatusKeyword(pelunasanStatuses, ['lunas', 'paid']);
@@ -2392,16 +2415,18 @@ function formatRupiah(amount: number): string {
 
          const shouldShowAgreement = isPaidOff || hasLunasStatus || isPelunasanApproved;
 
-         console.log('[PELUNASAN DEBUG] Status check:', {
+         console.log('[PELUNASAN DEBUG] Calculated status:', {
             isPaidOff,
             hasLunasStatus,
             isPelunasanApproved,
             shouldShowAgreement,
-            pelunasanApproved: data?.pelunasanApproved,
-            statusPelunasan: data?.statusPelunasan,
             pelunasanStatuses,
             isKekuranganZero,
-            paidByComparison
+            paidByComparison,
+            rawKekurangan,
+            kekuranganNum,
+            totalPaid,
+            packagePrice
          });
 
          if (shouldShowAgreement) {
@@ -2504,24 +2529,54 @@ function formatRupiah(amount: number): string {
       if (detailPaket) detailPaket.textContent = data.paketUsaha || 'Tidak tersedia';
       
       // Show sub-package field only for RM Nusantara
+      console.log('[Sub Paket Debug] ============= START =============');
       console.log('[Sub Paket Debug] Paket Usaha:', data.paketUsaha);
       console.log('[Sub Paket Debug] rmNusantaraSubMenu:', data.rmNusantaraSubMenu);
-      console.log('[Sub Paket Debug] Full data:', data);
+      console.log('[Sub Paket Debug] All possible sub brand fields:', {
+         rmNusantaraSubMenu: data.rmNusantaraSubMenu,
+         subPaket: data.subPaket,
+         subBrand: data.subBrand,
+         sub_brand: data.sub_brand
+      });
+      console.log('[Sub Paket Debug] Full data object:', JSON.stringify(data, null, 2));
       
       const partnershipGrid = document.getElementById('partnership-info-grid');
-      if (data.paketUsaha === 'RM Nusantara') {
+      if (data.paketUsaha === 'RM Nusantara' || data.paketUsaha?.includes('Nusantara')) {
+         console.log('[Sub Paket Debug] ✅ RM Nusantara detected');
+         
          // Show sub-package container
-         if (detailSubPaketContainer) detailSubPaketContainer.classList.remove('hidden');
-         if (detailSubPaket) {
-            const subPaket = data.rmNusantaraSubMenu || data.subPaket || 'Tidak dipilih';
-            detailSubPaket.textContent = subPaket;
-            console.log('[Sub Paket Debug] Displaying sub paket:', subPaket);
+         if (detailSubPaketContainer) {
+            detailSubPaketContainer.classList.remove('hidden');
+            console.log('[Sub Paket Debug] ✅ Container shown');
+         } else {
+            console.warn('[Sub Paket Debug] ❌ Container element not found!');
          }
+         
+         if (detailSubPaket) {
+            const subPaket = data.rmNusantaraSubMenu || data.subPaket || data.subBrand || data.sub_brand || 'Tidak dipilih';
+            detailSubPaket.textContent = subPaket;
+            console.log('[Sub Paket Debug] ✅ Displaying sub paket:', subPaket);
+            
+            // Add visual indicator if no sub brand selected
+            if (subPaket === 'Tidak dipilih') {
+               detailSubPaket.style.color = '#EF4444'; // Red color
+               detailSubPaket.style.fontStyle = 'italic';
+            } else {
+               detailSubPaket.style.color = '#D97706'; // Amber color
+               detailSubPaket.style.fontStyle = 'normal';
+            }
+         } else {
+            console.warn('[Sub Paket Debug] ❌ Sub paket element not found!');
+         }
+         
          // Change grid to 5 columns on desktop
          if (partnershipGrid) {
             partnershipGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4';
+            console.log('[Sub Paket Debug] ✅ Grid changed to 5 columns');
          }
       } else {
+         console.log('[Sub Paket Debug] ❌ Not RM Nusantara, hiding sub paket');
+         
          // Hide sub-package container
          if (detailSubPaketContainer) detailSubPaketContainer.classList.add('hidden');
          // Keep grid at 4 columns on desktop
@@ -2529,6 +2584,7 @@ function formatRupiah(amount: number): string {
             partnershipGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4';
          }
       }
+      console.log('[Sub Paket Debug] ============= END =============');
       
       if (detailSales) detailSales.textContent = data.sales || 'Tidak tersedia';
 
@@ -2928,22 +2984,35 @@ function formatRupiah(amount: number): string {
 
          const result = await response.json();
          
+         console.log('[Dashboard] Sheets API response:', result);
+         
          if (response.ok && result.success) {
             const data = result.data;
             
+            console.log('[Dashboard] Financial data received:', {
+               today: data.today,
+               monthly: data.monthly,
+               weekly: data.weekly,
+               historyCount: data.history?.length
+            });
+            
             if (data.today) {
+               console.log('[Dashboard] Updating today display:', data.today);
                updateTodayFinancialDisplay(data.today);
             }
             
             if (data.monthly) {
+               console.log('[Dashboard] Updating monthly display:', data.monthly);
                updateMonthlyFinancialDisplay(data.monthly);
             }
             
             if (data.weekly) {
+               console.log('[Dashboard] Updating weekly display:', data.weekly);
                updateWeeklyFinancialDisplay(data.weekly);
             }
             
             if (data.history) {
+               console.log('[Dashboard] Updating history, entries:', data.history.length);
                updateFinancialHistory(data.history);
             }
             
@@ -3045,6 +3114,8 @@ function formatRupiah(amount: number): string {
 
    // Update display functions (now receives data from Google Sheets)
    function updateTodayFinancialDisplay(data: any) {
+      console.log('[Dashboard] updateTodayFinancialDisplay called with:', data);
+      
       const profitElement = document.getElementById('profit-bulan-ini');
       const belanjaElement = document.getElementById('belanja-bulan-ini');
       const profitTimeElement = document.getElementById('profit-update-time');
@@ -3053,13 +3124,19 @@ function formatRupiah(amount: number): string {
       if (profitElement) {
          // Use counter animation for profit (omset hari ini)
          const targetValue = data.omset || 0;
+         console.log('[Dashboard] Animating omset to:', targetValue);
          animateCounter(profitElement, targetValue, 1500);
+      } else {
+         console.warn('[Dashboard] profit-bulan-ini element not found');
       }
       
       if (belanjaElement) {
          // Use counter animation for belanja (belanja hari ini)
          const targetValue = data.belanja || 0;
+         console.log('[Dashboard] Animating belanja to:', targetValue);
          animateCounter(belanjaElement, targetValue, 1500);
+      } else {
+         console.warn('[Dashboard] belanja-bulan-ini element not found');
       }
 
       if (profitTimeElement) {

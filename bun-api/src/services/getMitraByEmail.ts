@@ -52,6 +52,13 @@ export async function getMitraByEmail(email: string) {
     hasUserStatus: !!user 
   });
   
+  console.log(`📋 Mitra data being returned:`, {
+    rmNusantaraSubMenu: mitra.rmNusantaraSubMenu,
+    paketUsaha: mitra.paketUsaha,
+    isPaidOff: mitra.isPaidOff,
+    statusPelunasan: mitra.statusPelunasan
+  });
+
   // Return standardized object with 'nama' field for frontend compatibility
   return {
     _id: mitra._id,
@@ -62,7 +69,9 @@ export async function getMitraByEmail(email: string) {
     noHp: mitra.noHp,
     alamatMitra: mitra.alamatMitra,
     sistemKemitraan: mitra.sistemKemitraan,
+    sales: mitra.sales,
     paketUsaha: mitra.paketUsaha,
+    rmNusantaraSubMenu: mitra.rmNusantaraSubMenu, // Sub brand untuk RM Nusantara
     hargaPaket: mitra.hargaPaket,
     nominalDP: mitra.nominalDP,
     nominalFull: mitra.nominalFull,
@@ -74,6 +83,9 @@ export async function getMitraByEmail(email: string) {
     isApproved: mitra.isApproved || false,
     isPaidOff: mitra.isPaidOff,
     statusPelunasan: mitra.statusPelunasan,
+    pelunasanApproved: mitra.pelunasanApproved,
+    userID: mitra.userID,
+    joinDate: mitra.createdAt,
     createdAt: mitra.createdAt,
     updatedAt: mitra.updatedAt
   };

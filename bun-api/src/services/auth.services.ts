@@ -129,6 +129,7 @@ export async function getMitraLoginProfileService(mitraLoginId: string) {
             sistemKemitraan: mitraDetail.sistemKemitraan,
             sales: mitraDetail.sales,
             paketUsaha: mitraDetail.paketUsaha,
+            rmNusantaraSubMenu: mitraDetail.rmNusantaraSubMenu, // Sub brand for RM Nusantara
 
             // Status from mitra collection
             status: mitraDetail.status,
