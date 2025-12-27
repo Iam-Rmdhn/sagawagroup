@@ -19,15 +19,21 @@ interface SheetData {
   history?: FinancialData[];
 }
 
+
 export class SheetsService {
   createMitraSpreadsheet(mitraId: any, mitraName: string): string {
     return ``;
   }
 
-  
-  /**
-   * Read financial data from a Google Spreadsheet
-   */
+  private getMonthlySheetName(): string {
+    const months = [
+      "JAN", "FEB", "MAR", "APR", "MEI", "JUN",
+      "JUL", "AGU", "SEP", "OKT", "NOV", "DES"
+    ];
+    const currentMonth = new Date().getMonth();
+    return `DAILY ${months[currentMonth]}`;
+  }
+
   async readFinancialData(spreadsheetId: string): Promise<SheetData> {
     try {
       const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
@@ -36,77 +42,72 @@ export class SheetsService {
       console.log('[Sheets] Reading spreadsheet:', spreadsheetId);
       console.log('[Sheets] API Key available:', !!API_KEY);
 
-      // Detect sheet name - try common names or use first sheet
-      const sheetName = await this.detectSheetName(spreadsheetId, API_KEY);
+      const sheetName = this.getMonthlySheetName();
+      const encodedSheetName = encodeURIComponent(sheetName);
       console.log('[Sheets] Using sheet name:', sheetName);
 
-      // Ambil data bulanan: K40 (total omset), N40 (total profit)
-      // Total belanja akan dihitung dari data harian L9:L39
-      const [omsetBulanIniRes, profitBulanIniRes] =
-        await Promise.all([
-          fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}K40?key=${API_KEY}`
-          ),
-          fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}N40?key=${API_KEY}`
-          ),
-        ]);
+      const [omsetBulanIniRes, profitBulanIniRes] = await Promise.all([
+        fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${encodedSheetName}'!L40?key=${API_KEY}`
+        ),
+        fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${encodedSheetName}'!O40?key=${API_KEY}`
+        ),
+      ]);
 
-      console.log('[Sheets] K40 status:', omsetBulanIniRes.status);
-      console.log('[Sheets] N40 status:', profitBulanIniRes.status);
+      console.log('[Sheets] L40 status:', omsetBulanIniRes.status);
+      console.log('[Sheets] O40 status:', profitBulanIniRes.status);
 
       const omsetBulanIniJson = await omsetBulanIniRes.json();
       const profitBulanIniJson = await profitBulanIniRes.json();
 
-      console.log('[Sheets] Raw K40 response:', JSON.stringify(omsetBulanIniJson));
-      console.log('[Sheets] Raw N40 response:', JSON.stringify(profitBulanIniJson));
+      console.log('[Sheets] Raw L40 response:', JSON.stringify(omsetBulanIniJson));
+      console.log('[Sheets] Raw O40 response:', JSON.stringify(profitBulanIniJson));
 
-      // Total Omset Bulanan dari K40
       const monthlyOmset =
         omsetBulanIniJson &&
-        typeof omsetBulanIniJson === "object" &&
-        "values" in omsetBulanIniJson &&
-        Array.isArray(omsetBulanIniJson.values) &&
-        omsetBulanIniJson.values[0]
+          typeof omsetBulanIniJson === "object" &&
+          "values" in omsetBulanIniJson &&
+          Array.isArray(omsetBulanIniJson.values) &&
+          omsetBulanIniJson.values[0]
           ? this.parseCurrency(omsetBulanIniJson.values[0][0])
           : 0;
 
-      // Total Profit Bulanan dari N40
       const monthlyProfit =
         profitBulanIniJson &&
-        typeof profitBulanIniJson === "object" &&
-        "values" in profitBulanIniJson &&
-        Array.isArray(profitBulanIniJson.values) &&
-        profitBulanIniJson.values[0]
+          typeof profitBulanIniJson === "object" &&
+          "values" in profitBulanIniJson &&
+          Array.isArray(profitBulanIniJson.values) &&
+          profitBulanIniJson.values[0]
           ? this.parseCurrency(profitBulanIniJson.values[0][0])
           : 0;
 
       console.log('[Sheets] Monthly Data:', { monthlyOmset, monthlyProfit });
 
-      // Ambil data tanggal, omset harian (K), dan belanja harian (L) dari A9:L39
       const rangeRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}A9:L39?key=${API_KEY}`
+        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/'${encodedSheetName}'!A9:M39?key=${API_KEY}`
       );
-      
-      console.log('[Sheets] A9:L39 status:', rangeRes.status);
-      
+
+      console.log('[Sheets] A9:M39 status:', rangeRes.status);
+
       const rangeJson = await rangeRes.json() as any;
-      
-      console.log('[Sheets] Raw A9:L39 response (first 3 rows):', JSON.stringify(rangeJson?.values?.slice(0, 3)));
+
+      console.log('[Sheets] Raw A9:M39 response (first 3 rows):', JSON.stringify(rangeJson?.values?.slice(0, 3)));
       console.log('[Sheets] Total rows received:', rangeJson?.values?.length);
-      
+
       const rows: any[] =
         rangeJson && typeof rangeJson === "object" && "values" in rangeJson
           ? rangeJson.values
           : [];
-      const todayDate = new Date();
+
+      const todayDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" }));
       const todayDay = todayDate.getDate();
       let omsetHariIni = 0;
       let belanjaHariIni = 0;
-      let totalBelanjaHarian = 0; // Untuk menghitung total belanja bulanan
+      let totalBelanjaHarian = 0; 
       const history: FinancialData[] = [];
 
-      console.log('[Sheets] Today is day:', todayDay);
+      console.log('[Sheets] Today (Jakarta):', todayDay, todayDate.toISOString());
       console.log('[Sheets] Processing', rows.length, 'rows');
 
       if (Array.isArray(rows)) {
@@ -118,16 +119,16 @@ export class SheetsService {
           );
           if (Number.isNaN(dayNumber)) continue;
 
-          // Column K (index 10): REVENUE (Total Omset Harian)
-          // Column L (index 11): Belanjaan (Operasional Harian)
-          const omset = this.parseCurrency(row[10]);
-          const belanja = this.parseCurrency(row[11]);
+          // Column L (index 11): REVENUE (Total Omset Harian) - "Offline & Online"
+          // Column M (index 12): Belanjaan (Operasional Harian)
+          const omset = this.parseCurrency(row[11]);
+          const belanja = this.parseCurrency(row[12]);
 
           // Debug: Log first few rows
           if (history.length < 3) {
             console.log(`[Sheets] Row ${dayNumber}:`, {
-              rawK: row[10],
               rawL: row[11],
+              rawM: row[12],
               parsedOmset: omset,
               parsedBelanja: belanja
             });
@@ -153,18 +154,24 @@ export class SheetsService {
             belanja,
           });
 
+          // Match today's date to get daily data
           if (dayNumber === todayDay) {
             omsetHariIni = omset;
             belanjaHariIni = belanja;
-            console.log('[Sheets] Today data found:', { 
-              dayNumber, 
-              rawOmset: row[10],
-              rawBelanja: row[11],
-              parsedOmset: omset, 
-              parsedBelanja: belanja 
+            console.log('[Sheets] Today data found:', {
+              dayNumber,
+              rawOmset: row[11],
+              rawBelanja: row[12],
+              parsedOmset: omset,
+              parsedBelanja: belanja
             });
           }
         }
+      }
+
+      // Fallback logic removed to strictly show today's data
+      if (omsetHariIni === 0 && belanjaHariIni === 0) {
+        console.log('[Sheets] No data found for today (or values are 0)');
       }
 
       const totalDays = history.length;
@@ -172,12 +179,12 @@ export class SheetsService {
       const avgOmset =
         lastSeven.length > 0
           ? lastSeven.reduce((sum, item) => sum + item.omset, 0) /
-            lastSeven.length
+          lastSeven.length
           : 0;
       const avgBelanja =
         lastSeven.length > 0
           ? lastSeven.reduce((sum, item) => sum + item.belanja, 0) /
-            lastSeven.length
+          lastSeven.length
           : 0;
 
       console.log('[Sheets] Summary:', {
@@ -195,7 +202,7 @@ export class SheetsService {
         },
         monthly: {
           totalOmset: monthlyOmset,
-          totalBelanja: totalBelanjaHarian, // Menggunakan total yang dihitung dari data harian
+          totalBelanja: totalBelanjaHarian,
           totalProfit: monthlyProfit,
           totalDays,
         },
@@ -234,7 +241,7 @@ export class SheetsService {
       const metadataRes = await fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}?key=${apiKey}&fields=sheets.properties.title`
       );
-      
+
       if (metadataRes.ok) {
         const metadata = await metadataRes.json() as any;
         if (metadata.sheets && Array.isArray(metadata.sheets) && metadata.sheets.length > 0) {
@@ -249,13 +256,13 @@ export class SheetsService {
 
     // Fallback: try common sheet names
     const commonNames = ['DR!', 'Sheet1!', 'Data!', ''];
-    
+
     for (const name of commonNames) {
       try {
         const testRes = await fetch(
           `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${name}A1?key=${apiKey}`
         );
-        
+
         if (testRes.ok) {
           console.log('[Sheets] Working sheet name found:', name || '(no prefix)');
           return name;
