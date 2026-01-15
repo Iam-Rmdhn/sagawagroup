@@ -4,257 +4,341 @@ export interface Props {
     description?: string;
     image?: string;
     url?: string;
+    showAdsPopup?: boolean;
 }
 
-const { 
+const {
     title = "Sagawa Group",
     description = "Sagawa Group - Jaringan kuliner terlengkap dengan Rice Bowl Jepang, Coffee Corner premium, dan cita rasa Nusantara. Bergabunglah dengan franchise terpercaya kami.",
     image = "/images/og-image.jpg",
-    url = "https://www.sagawagroup.id"
+    url = "https://www.sagawagroup.id",
+    showAdsPopup,
 } = Astro.props;
 
-import '../styles/global.css';
+import "../styles/global.css";
+import AdPopup from "../components/AdPopup.astro";
 
 const baseURL = "https://www.sagawagroup.id";
 const canonicalURL = baseURL + Astro.url.pathname;
 const imageURL = baseURL + image;
 
+// Determine if ads popup should be shown
+// Show on all public pages except: form, admin, login, register, user/*
+const currentPath = Astro.url.pathname;
+const excludedPaths = [
+    "/form",
+    "/admin",
+    "/login",
+    "/register",
+    "/user/",
+    "/error",
+    "/404",
+    "/500",
+];
+const isExcludedPage = excludedPaths.some((path) =>
+    currentPath.startsWith(path),
+);
+const shouldShowAds =
+    showAdsPopup !== undefined ? showAdsPopup : !isExcludedPage;
+
 // Get API URL from environment
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000";
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- API Configuration for client-side scripts -->
-    <meta name="api-url" content={API_URL} />
-    
-    <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    <meta name="keywords" content="sagawa group, rice bowl jepang, coffee corner, franchise kuliner, restoran nusantara, bisnis franchise, makanan jepang, kopi premium" />
-    <meta name="author" content="Sagawa Group" />
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="Indonesian" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="apple-mobile-web-app-title" content="Sagawa Group" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href={canonicalURL} />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={imageURL} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="Sagawa Group" />
-    <meta property="og:locale" content="id_ID" />
+        <!-- API Configuration for client-side scripts -->
+        <meta name="api-url" content={API_URL} />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={imageURL} />
-    <meta name="twitter:creator" content="@sagawagroup" />
+        <!-- Primary Meta Tags -->
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        <meta
+            name="keywords"
+            content="sagawa group, rice bowl jepang, coffee corner, franchise kuliner, restoran nusantara, bisnis franchise, makanan jepang, kopi premium"
+        />
+        <meta name="author" content="Sagawa Group" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="Indonesian" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="apple-mobile-web-app-title" content="Sagawa Group" />
 
-    <!-- Business Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Sagawa Group",
-        "url": "https://www.sagawagroup.id",
-        "logo": "https://www.sagawagroup.id/images/logo-sagawa-group.png",
-        "sameAs": [
-            "https://www.instagram.com/@sagawagroup",
-            "https://www.facebook.com/sagawagroup",
-            "https://www.tiktok.com/@sagawagroup"
-        ],
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+62-812-3456-7890",
-            "contactType": "Customer Service",
-            "availableLanguage": ["Indonesian", "English"]
-        },
-        "description": "Sagawa Group - Jaringan kuliner terlengkap dengan Rice Bowl Jepang, Coffee Corner premium, dan cita rasa Nusantara. Bergabunglah dengan franchise terpercaya kami."
-    }
-    </script>
+        <!-- Canonical URL -->
+        <link rel="canonical" href={canonicalURL} />
 
-    <!-- Restaurant Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Restaurant",
-        "name": "Sagawa Group",
-        "image": "https://www.sagawagroup.id/images/restaurant-hero.jpg",
-        "description": "Sagawa Group menyajikan Rice Bowl Jepang autentik, Coffee Corner premium dengan biji kopi pilihan, dan cita rasa Nusantara yang menggugah selera.",
-        "url": "https://www.sagawagroup.id",
-        "telephone": "+62-812-3456-7890",
-        "servesCuisine": ["Japanese", "Indonesian", "Coffee"],
-        "priceRange": "$",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Indonesia",
-            "addressCountry": "ID"
-        }
-    }
-    </script>
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageURL} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="Sagawa Group" />
+        <meta property="og:locale" content="id_ID" />
 
-    <!-- Favicon - Optimized for all browsers -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    
-    <!-- Additional Favicon Formats for Better Browser Support -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-    
-    <!-- Theme Color for mobile browsers -->
-    <meta name="theme-color" content="#1f2937" />
-    <meta name="msapplication-TileColor" content="#1f2937" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalURL} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={imageURL} />
+        <meta name="twitter:creator" content="@sagawagroup" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3EKRGXR1J5"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){window.dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-3EKRGXR1J5');
-    </script>
-    
-    <!-- Additional SEO Tags -->
-    <meta name="format-detection" content="telephone=no" />
-
-    <!-- Additional Google Site Verification -->
-    <meta name="google-site-verification" content="t4IpNsSi4j_2l4kqi6hOLc9CfzMBFgNURMASGtuSF4U" />
-    
-    <!-- Service Worker Cleanup & Cache Busting -->
-    <script src="/sw-cleanup.js" defer></script>
-    
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Site Verification -->
-    <meta name="google-site-verification" content="KuVB9QPYMVfH0urZQd62EWYWX3hme3xRA_RuqWqhJEo" />
-    <meta name="msvalidate.01" content="FE3752D24C208FEC6C8BB2D824ABF1C9" />
-    
-    <!-- Additional Meta Tags -->
-    <meta name="application-name" content="Sagawa Group" />
-    <meta name="msapplication-tooltip" content="Sagawa Group - Franchise Kuliner Terpercaya" />
-    <meta name="msapplication-starturl" content="/" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-</head>
-
-<body>
-    <main>
-        <slot />
-    </main>
-    <!-- Visitor Analytics Tracking -->
-    <script>
-        (function() {
-            // Get API URL from meta tag (more reliable than import.meta.env in client scripts)
-            const API_URL = document.querySelector('meta[name="api-url"]')?.getAttribute('content') || 'http://localhost:3000';
-            let sessionId = localStorage.getItem('visitor_session_id');
-            let heartbeatInterval = null;
-            
-            // Don't track admin pages
-            if (window.location.pathname.startsWith('/admin')) {
-                console.log('[Analytics] Skipping tracking for admin page:', window.location.pathname);
-                return;
+        <!-- Business Schema -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "Sagawa Group",
+                "url": "https://www.sagawagroup.id",
+                "logo": "https://www.sagawagroup.id/images/logo-sagawa-group.png",
+                "sameAs": [
+                    "https://www.instagram.com/@sagawagroup",
+                    "https://www.facebook.com/sagawagroup",
+                    "https://www.tiktok.com/@sagawagroup"
+                ],
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "+62-812-3456-7890",
+                    "contactType": "Customer Service",
+                    "availableLanguage": ["Indonesian", "English"]
+                },
+                "description": "Sagawa Group - Jaringan kuliner terlengkap dengan Rice Bowl Jepang, Coffee Corner premium, dan cita rasa Nusantara. Bergabunglah dengan franchise terpercaya kami."
             }
-            
-            // Generate or retrieve session ID
-            if (!sessionId) {
-                sessionId = 'vis_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('visitor_session_id', sessionId);
+        </script>
+
+        <!-- Restaurant Schema -->
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "Restaurant",
+                "name": "Sagawa Group",
+                "image": "https://www.sagawagroup.id/images/restaurant-hero.jpg",
+                "description": "Sagawa Group menyajikan Rice Bowl Jepang autentik, Coffee Corner premium dengan biji kopi pilihan, dan cita rasa Nusantara yang menggugah selera.",
+                "url": "https://www.sagawagroup.id",
+                "telephone": "+62-812-3456-7890",
+                "servesCuisine": ["Japanese", "Indonesian", "Coffee"],
+                "priceRange": "$",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Indonesia",
+                    "addressCountry": "ID"
+                }
             }
-            
-            // Track page view
-            async function trackPageView() {
-                try {
-                    console.log('[Analytics] Tracking page view to:', API_URL);
-                    const response = await fetch(`${API_URL}/api/analytics/track`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            sessionId: sessionId,
-                            eventType: 'pageview',
-                            page: window.location.pathname,
-                            timestamp: new Date().toISOString()
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('[Analytics] ✅ Page view tracked:', data);
-                        
-                        // Update session ID if new one was assigned
-                        if (data.sessionId && data.sessionId !== sessionId) {
-                            sessionId = data.sessionId;
-                            if (sessionId) {
-                                localStorage.setItem('visitor_session_id', sessionId);
+        </script>
+
+        <!-- Favicon - Optimized for all browsers -->
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
+        <!-- Additional Favicon Formats for Better Browser Support -->
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+
+        <!-- Theme Color for mobile browsers -->
+        <meta name="theme-color" content="#1f2937" />
+        <meta name="msapplication-TileColor" content="#1f2937" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+
+        <!-- Google tag (gtag.js) -->
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-3EKRGXR1J5"
+        ></script>
+        <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                window.dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-3EKRGXR1J5");
+        </script>
+
+        <!-- Additional SEO Tags -->
+        <meta name="format-detection" content="telephone=no" />
+
+        <!-- Additional Google Site Verification -->
+        <meta
+            name="google-site-verification"
+            content="t4IpNsSi4j_2l4kqi6hOLc9CfzMBFgNURMASGtuSF4U"
+        />
+
+        <!-- Service Worker Cleanup & Cache Busting -->
+        <script src="/sw-cleanup.js" defer></script>
+
+        <!-- Preconnect for Performance -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <!-- Site Verification -->
+        <meta
+            name="google-site-verification"
+            content="KuVB9QPYMVfH0urZQd62EWYWX3hme3xRA_RuqWqhJEo"
+        />
+        <meta name="msvalidate.01" content="FE3752D24C208FEC6C8BB2D824ABF1C9" />
+
+        <!-- Additional Meta Tags -->
+        <meta name="application-name" content="Sagawa Group" />
+        <meta
+            name="msapplication-tooltip"
+            content="Sagawa Group - Franchise Kuliner Terpercaya"
+        />
+        <meta name="msapplication-starturl" content="/" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
+    </head>
+
+    <body>
+        <main>
+            <slot />
+        </main>
+
+        <!-- Advertisement Popup (only on allowed pages) -->
+        {shouldShowAds && <AdPopup />}
+
+        <!-- Visitor Analytics Tracking -->
+        <script>
+            (function () {
+                // Get API URL from meta tag (more reliable than import.meta.env in client scripts)
+                const API_URL =
+                    document
+                        .querySelector('meta[name="api-url"]')
+                        ?.getAttribute("content") || "http://localhost:3000";
+                let sessionId = localStorage.getItem("visitor_session_id");
+                let heartbeatInterval = null;
+
+                // Don't track admin pages
+                if (window.location.pathname.startsWith("/admin")) {
+                    console.log(
+                        "[Analytics] Skipping tracking for admin page:",
+                        window.location.pathname,
+                    );
+                    return;
+                }
+
+                // Generate or retrieve session ID
+                if (!sessionId) {
+                    sessionId =
+                        "vis_" +
+                        Date.now() +
+                        "_" +
+                        Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem("visitor_session_id", sessionId);
+                }
+
+                // Track page view
+                async function trackPageView() {
+                    try {
+                        console.log(
+                            "[Analytics] Tracking page view to:",
+                            API_URL,
+                        );
+                        const response = await fetch(
+                            `${API_URL}/api/analytics/track`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    sessionId: sessionId,
+                                    eventType: "pageview",
+                                    page: window.location.pathname,
+                                    timestamp: new Date().toISOString(),
+                                }),
+                            },
+                        );
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log(
+                                "[Analytics] ✅ Page view tracked:",
+                                data,
+                            );
+
+                            // Update session ID if new one was assigned
+                            if (
+                                data.sessionId &&
+                                data.sessionId !== sessionId
+                            ) {
+                                sessionId = data.sessionId;
+                                if (sessionId) {
+                                    localStorage.setItem(
+                                        "visitor_session_id",
+                                        sessionId,
+                                    );
+                                }
                             }
+                        } else {
+                            console.warn(
+                                "[Analytics] ⚠️ Failed to track page view:",
+                                response.status,
+                                response.statusText,
+                            );
                         }
-                    } else {
-                        console.warn('[Analytics] ⚠️ Failed to track page view:', response.status, response.statusText);
+                    } catch (error) {
+                        console.error("[Analytics] ❌ Tracking error:", error);
                     }
-                } catch (error) {
-                    console.error('[Analytics] ❌ Tracking error:', error);
                 }
-            }
-            
-            // Send heartbeat to keep session alive
-            async function sendHeartbeat() {
-                try {
-                    await fetch(`${API_URL}/api/analytics/heartbeat`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            sessionId: sessionId
-                        })
-                    });
-                } catch (error) {
-                    console.error('[Analytics] Heartbeat failed:', error);
+
+                // Send heartbeat to keep session alive
+                async function sendHeartbeat() {
+                    try {
+                        await fetch(`${API_URL}/api/analytics/heartbeat`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                sessionId: sessionId,
+                            }),
+                        });
+                    } catch (error) {
+                        console.error("[Analytics] Heartbeat failed:", error);
+                    }
                 }
-            }
-            
-            // Track page view when page loads
-            console.log('[Analytics] Will track page view in 1 second...');
-            setTimeout(trackPageView, 1000);
-            
-            // Send heartbeat every 2 minutes to keep session alive
-            heartbeatInterval = setInterval(sendHeartbeat, 2 * 60 * 1000);
-            
-            // Clean up on page unload
-            window.addEventListener('beforeunload', function() {
-                if (heartbeatInterval) {
-                    clearInterval(heartbeatInterval);
-                }
-            });
-        })();
-    </script>
-    
-    <!-- Visitor Tracking
+
+                // Track page view when page loads
+                console.log("[Analytics] Will track page view in 1 second...");
+                setTimeout(trackPageView, 1000);
+
+                // Send heartbeat every 2 minutes to keep session alive
+                heartbeatInterval = setInterval(sendHeartbeat, 2 * 60 * 1000);
+
+                // Clean up on page unload
+                window.addEventListener("beforeunload", function () {
+                    if (heartbeatInterval) {
+                        clearInterval(heartbeatInterval);
+                    }
+                });
+            })();
+        </script>
+
+        <!-- Visitor Tracking
     <script>
         (function() {
             const API_URL = document.querySelector('meta[name="api-url"]')?.getAttribute('content') || 'http://localhost:3000';
@@ -299,50 +383,64 @@ const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000';
         })();
     </script> -->
 
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('SW registered: ', registration);
-                    }, function(registrationError) {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-    </script>
+        <!-- Service Worker Registration -->
+        <script>
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", function () {
+                    navigator.serviceWorker.register("/sw.js").then(
+                        function (registration) {
+                            console.log("SW registered: ", registration);
+                        },
+                        function (registrationError) {
+                            console.log(
+                                "SW registration failed: ",
+                                registrationError,
+                            );
+                        },
+                    );
+                });
+            }
+        </script>
         <!-- Global SweetAlert2 loader (tries dynamic import, falls back to CDN) -->
         <script is:inline>
             (function () {
-                        if (typeof window === 'undefined') return;
-                        if (window['loadSweetAlert']) return; // already defined
+                if (typeof window === "undefined") return;
+                if (window["loadSweetAlert"]) return; // already defined
 
-                        window['loadSweetAlert'] = async function() {
-                            if (window['Swal']) return window['Swal'];
+                window["loadSweetAlert"] = async function () {
+                    if (window["Swal"]) return window["Swal"];
 
-                            try {
-                                // Try to dynamic-import --- bundlers may handle this in production
-                                const mod = await import('sweetalert2');
-                                const Swal = (mod && mod.default) ? mod.default : mod;
-                                window['Swal'] = Swal;
-                                return Swal;
-                            } catch (err) {
-                                // Fallback: inject CDN script
-                                return new Promise(function(resolve, reject) {
-                                    if (window['Swal']) return resolve(window['Swal']);
-                                    var script = document.createElement('script');
-                                    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js';
-                                    script.async = true;
-                                    script.onload = function() {
-                                        resolve(window['Swal'] || window['swal'] || null);
-                                    };
-                                    script.onerror = function() { reject(new Error('Failed to load SweetAlert2 from CDN')); };
-                                    document.head.appendChild(script);
-                                });
-                            }
-                        };
+                    try {
+                        // Try to dynamic-import --- bundlers may handle this in production
+                        const mod = await import("sweetalert2");
+                        const Swal = mod && mod.default ? mod.default : mod;
+                        window["Swal"] = Swal;
+                        return Swal;
+                    } catch (err) {
+                        // Fallback: inject CDN script
+                        return new Promise(function (resolve, reject) {
+                            if (window["Swal"]) return resolve(window["Swal"]);
+                            var script = document.createElement("script");
+                            script.src =
+                                "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js";
+                            script.async = true;
+                            script.onload = function () {
+                                resolve(
+                                    window["Swal"] || window["swal"] || null,
+                                );
+                            };
+                            script.onerror = function () {
+                                reject(
+                                    new Error(
+                                        "Failed to load SweetAlert2 from CDN",
+                                    ),
+                                );
+                            };
+                            document.head.appendChild(script);
+                        });
+                    }
+                };
             })();
         </script>
-</body>
+    </body>
 </html>

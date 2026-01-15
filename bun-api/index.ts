@@ -6,6 +6,7 @@ import { youtubeRoute } from "./src/routes/youtube.route";
 import { analyticsRoute } from "./src/routes/analytics.route";
 import { visitorRoute } from "./src/routes/visitor.route";
 import { crewRoute } from "./src/routes/crew.route";
+import { adsRoute } from "./src/routes/ads.route";
 // import { galleryRoute } from "./src/routes/gallery.route";
 import "./src/lib/db"; // Initialize database connection
 import { ENV } from "./src/env";
@@ -146,7 +147,17 @@ Bun.serve({
         return response;
       }
 
-      // Route handling
+      // Advertisement routes (must be before general /api/admin handler)
+      if (url.pathname.startsWith("/api/admin/ads") || url.pathname.startsWith("/api/ads")) {
+        const response = await adsRoute(req);
+        // Add CORS headers to response
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
+        return response;
+      }
+
+      // Route handling (general /api/admin - must be AFTER specific admin routes)
       if (
         url.pathname.startsWith("/api/auth") ||
         url.pathname.startsWith("/api/admin") ||

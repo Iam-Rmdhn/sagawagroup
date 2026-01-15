@@ -1,0 +1,1196 @@
+---
+// Admin Kelola Iklan Page - Responsive Slide Table, Fixed Modal & SweetAlert2
+import Layout from "../../layouts/Layout.astro";
+import AdminSidebar from "../../components/admin/sidebar/AdminSidebar.astro";
+import AdminNavbar from "../../components/admin/navbar/AdminNavbar.astro";
+---
+
+<Layout title="Admin - Kelola Iklan" showAdsPopup={false}>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/sweetalert2@11"
+    ></script>
+    <script
+        is:inline
+        src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"
+    ></script>
+
+    <style>
+        /* Minimal custom styles */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                #f3f4f6 0%,
+                #e5e7eb 50%,
+                #f3f4f6 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .content-hidden {
+            display: none !important;
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Image Preview Hover Effect */
+        .image-preview-container {
+            position: relative;
+            display: none;
+        }
+        .image-preview-container:hover .image-overlay {
+            opacity: 1;
+        }
+        .image-overlay {
+            opacity: 0;
+            transition: opacity 0.2s;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <div class="flex min-h-screen bg-gray-50 overflow-hidden">
+        <AdminSidebar />
+
+        <div class="flex-1 flex flex-col w-full max-w-full min-w-0">
+            <AdminNavbar />
+
+            <main
+                class="flex-1 p-4 lg:p-8 mt-20 w-full max-w-full overflow-x-hidden"
+            >
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <div
+                        id="skeleton-header"
+                        class="skeleton h-8 w-48 rounded-lg mb-2"
+                    >
+                    </div>
+                    <div
+                        id="skeleton-desc"
+                        class="skeleton h-5 w-72 rounded-lg"
+                    >
+                    </div>
+
+                    <div id="actual-header" class="content-hidden">
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
+                            Kelola Iklan
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-500 mt-1">
+                            Kelola iklan popup yang tampil di halaman utama
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+                >
+                    <div
+                        class="bg-white rounded-xl p-5 shadow-sm border border-gray-100"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    Total Iklan
+                                </p>
+                                <p
+                                    id="totalAds"
+                                    class="text-2xl font-bold text-gray-900"
+                                >
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-purple-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-xl p-5 shadow-sm border border-gray-100"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    Iklan Aktif
+                                </p>
+                                <p
+                                    id="activeAds"
+                                    class="text-2xl font-bold text-green-600"
+                                >
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-green-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-xl p-5 shadow-sm border border-gray-100"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    Total Views
+                                </p>
+                                <p
+                                    id="totalViews"
+                                    class="text-2xl font-bold text-blue-600"
+                                >
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-blue-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    ></path>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-xl p-5 shadow-sm border border-gray-100"
+                    >
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">
+                                    Total Clicks
+                                </p>
+                                <p
+                                    id="totalClicks"
+                                    class="text-2xl font-bold text-amber-600"
+                                >
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-5 h-5 text-amber-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ads Table Section -->
+                <div
+                    class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden w-full"
+                >
+                    <!-- Table Header -->
+                    <div
+                        class="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                        <h2 class="text-lg font-semibold text-gray-900">
+                            Daftar Iklan
+                        </h2>
+                        <div
+                            class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto"
+                        >
+                            <button
+                                id="refreshBtn"
+                                class="inline-flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors w-full sm:w-auto mt-2 sm:mt-0"
+                            >
+                                <svg
+                                    class="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                                    ></path>
+                                    <path d="M21 3v5h-5"></path>
+                                    <path
+                                        d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                                    ></path>
+                                    <path d="M8 16H3v5"></path>
+                                </svg>
+                                Refresh
+                            </button>
+                            <button
+                                id="addAdsBtn"
+                                class="inline-flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors shadow-sm w-full sm:w-auto"
+                            >
+                                <svg
+                                    class="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M12 5v14m-7-7h14"></path>
+                                </svg>
+                                Tambah Iklan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Responsive Slide Table Container -->
+                    <div class="overflow-x-auto w-full custom-scrollbar">
+                        <div
+                            class="min-w-[800px] align-middle inline-block w-full"
+                        >
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50 text-gray-600">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium w-16 whitespace-nowrap"
+                                            >No</th
+                                        >
+                                        <th
+                                            class="px-6 py-3 text-left font-medium min-w-[200px]"
+                                            >Judul Iklan</th
+                                        >
+                                        <th
+                                            class="px-6 py-3 text-left font-medium w-32 whitespace-nowrap"
+                                            >Status</th
+                                        >
+                                        <th
+                                            class="px-6 py-3 text-left font-medium w-32 whitespace-nowrap"
+                                            >Mulai</th
+                                        >
+                                        <th
+                                            class="px-6 py-3 text-left font-medium w-32 whitespace-nowrap"
+                                            >Berakhir</th
+                                        >
+                                        <th
+                                            class="px-6 py-3 text-center font-medium w-40 whitespace-nowrap"
+                                            >Aksi</th
+                                        >
+                                    </tr>
+                                </thead>
+                                <tbody
+                                    id="adsTableBody"
+                                    class="divide-y divide-gray-100 bg-white"
+                                >
+                                    <!-- Rows will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyState" class="hidden py-16 text-center">
+                        <svg
+                            class="w-16 h-16 mx-auto text-gray-300 mb-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                            ></path>
+                        </svg>
+                        <h3 class="text-gray-600 font-medium mb-1">
+                            Belum ada iklan
+                        </h3>
+                        <p class="text-gray-400 text-sm">
+                            Klik "Tambah Iklan" untuk membuat iklan pertama
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div
+        id="adsModal"
+        class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop bg-black/50"
+    >
+        <div
+            class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[calc(100vh-2rem)] flex flex-col relative overflow-hidden"
+        >
+            <!-- Modal Header -->
+            <div
+                class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white z-10 flex-shrink-0"
+            >
+                <h3 id="modalTitle" class="text-lg font-semibold text-gray-900">
+                    Tambah Iklan Baru
+                </h3>
+                <button
+                    onclick="closeAdsModal()"
+                    class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                    <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M18 6 6 18M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <form id="adsForm" class="flex flex-col flex-1 overflow-hidden">
+                <div
+                    class="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1"
+                >
+                    <input type="hidden" id="adsId" name="id" />
+                    <input type="hidden" id="imageUrl" name="imageUrl" />
+                    <input type="hidden" id="imageKey" name="imageKey" />
+
+                    <!-- Inputs -->
+                    <div>
+                        <label
+                            for="adsTitle"
+                            class="block text-sm font-medium text-gray-700 mb-1.5"
+                            >Judul Iklan <span class="text-red-500">*</span
+                            ></label
+                        >
+                        <input
+                            type="text"
+                            id="adsTitle"
+                            name="title"
+                            required
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            placeholder="Masukkan judul iklan"
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            for="adsDescription"
+                            class="block text-sm font-medium text-gray-700 mb-1.5"
+                            >Deskripsi</label
+                        >
+                        <textarea
+                            id="adsDescription"
+                            name="description"
+                            rows="2"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors resize-y min-h-[60px]"
+                            placeholder="Deskripsi iklan (opsional)"
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-gray-700 mb-1.5"
+                            >Gambar Iklan <span class="text-red-500">*</span
+                            ></label
+                        >
+
+                        <!-- Upload Container -->
+                        <div
+                            id="imageUploadContainer"
+                            class="relative border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-purple-400 transition-colors cursor-pointer bg-gray-50/50"
+                        >
+                            <input
+                                type="file"
+                                id="imageInput"
+                                accept="image/*"
+                                class="hidden"
+                            />
+                            <svg
+                                class="w-10 h-10 mx-auto text-gray-300 mb-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="1.5"
+                                    d="m4 16 4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2 1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"
+                                ></path>
+                            </svg>
+                            <p class="text-sm text-gray-500">
+                                Klik atau drag & drop gambar di sini
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">
+                                PNG, JPG, WEBP (Maks 5MB)
+                            </p>
+                        </div>
+
+                        <!-- Preview Container -->
+                        <div
+                            id="imagePreviewContainer"
+                            class="image-preview-container w-full max-h-48 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden cursor-pointer"
+                            title="Klik untuk mengganti gambar"
+                        >
+                            <img
+                                id="imagePreview"
+                                src=""
+                                alt="Preview"
+                                class="w-full h-full object-contain"
+                            />
+                            <div
+                                class="absolute inset-0 image-overlay rounded-lg"
+                            >
+                                <p
+                                    class="text-white font-medium text-sm flex items-center gap-2"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        ><path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        ></path></svg
+                                    >
+                                    Ganti Gambar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                for="whatsappNumber"
+                                class="block text-sm font-medium text-gray-700 mb-1.5"
+                                >Nomor WhatsApp <span class="text-red-500"
+                                    >*</span
+                                ></label
+                            >
+                            <div class="flex items-center">
+                                <span
+                                    class="inline-flex items-center px-4 py-2.5 rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium select-none"
+                                >
+                                    +62
+                                </span>
+                                <input
+                                    type="text"
+                                    id="whatsappNumber"
+                                    name="whatsappNumber"
+                                    required
+                                    class="flex-1 px-4 py-2.5 border border-gray-200 rounded-r-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                    placeholder="81234567890"
+                                />
+                            </div>
+                        </div>
+                        <!-- Display Order removed - handled by Drag & Drop -->
+                    </div>
+
+                    <div>
+                        <label
+                            for="whatsappMessage"
+                            class="block text-sm font-medium text-gray-700 mb-1.5"
+                            >Pesan WhatsApp</label
+                        >
+                        <textarea
+                            id="whatsappMessage"
+                            name="whatsappMessage"
+                            rows="2"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors resize-none"
+                            placeholder="Halo, saya tertarik dengan promo Anda!"
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label
+                            for="adLink"
+                            class="block text-sm font-medium text-gray-700 mb-1.5"
+                            >Link Iklan (Opsional)</label
+                        >
+                        <input
+                            type="url"
+                            id="adLink"
+                            name="adLink"
+                            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            placeholder="https://example.com/promo"
+                        />
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label
+                                for="startDate"
+                                class="block text-sm font-medium text-gray-700 mb-1.5"
+                                >Tanggal Mulai</label
+                            >
+                            <input
+                                type="datetime-local"
+                                id="startDate"
+                                name="startDate"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                for="endDate"
+                                class="block text-sm font-medium text-gray-700 mb-1.5"
+                                >Tanggal Berakhir</label
+                            >
+                            <input
+                                type="datetime-local"
+                                id="endDate"
+                                name="endDate"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <label
+                                for="isActive"
+                                class="block text-sm font-medium text-gray-700 mb-1.5"
+                                >Status</label
+                            >
+                            <select
+                                id="isActive"
+                                name="isActive"
+                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                            >
+                                <option value="true">Aktif</option>
+                                <option value="false">Nonaktif</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div
+                    class="flex flex-col-reverse sm:flex-row justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-white flex-shrink-0"
+                >
+                    <button
+                        type="button"
+                        onclick="closeAdsModal()"
+                        class="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        type="submit"
+                        class="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors shadow-sm"
+                    >
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Auth & Logic Scripts -->
+    <script>
+        // Auth Check
+        (function () {
+            const token = localStorage.getItem("adminToken");
+            const user = localStorage.getItem("adminUser");
+            if (!token || !user) {
+                window.location.href = "/admin/login";
+                return;
+            }
+            try {
+                const userData = JSON.parse(user);
+                if (userData.email !== "admin@sagawagroup.id") {
+                    localStorage.removeItem("adminToken");
+                    localStorage.removeItem("adminUser");
+                    window.location.href = "/admin/login";
+                }
+            } catch {
+                window.location.href = "/admin/login";
+            }
+        })();
+    </script>
+
+    <script>
+        interface Ad {
+            _id: string;
+            title: string;
+            description?: string;
+            imageUrl: string;
+            imageKey: string;
+            whatsappNumber: string;
+            whatsappMessage?: string;
+            adLink?: string;
+            isActive: boolean;
+            displayOrder: number;
+            startDate?: string;
+            endDate?: string;
+            viewCount: number;
+            clickCount: number;
+        }
+
+        const API_BASE_URL =
+            window.location.hostname === "localhost"
+                ? "http://localhost:3000"
+                : "https://www.sagawagroup.id";
+        let adsData: Ad[] = [];
+        let isEditMode = false;
+
+        // Elements
+        const adsTableBody = document.getElementById("adsTableBody");
+        const emptyState = document.getElementById("emptyState");
+        const adsModal = document.getElementById("adsModal");
+        const adsForm = document.getElementById("adsForm") as HTMLFormElement;
+
+        // SweetAlert Mixin for Toast
+        const Toast = {
+            fire: (icon: string, title: string) => {
+                window.Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: icon,
+                    title: title,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            },
+        };
+
+        // Helpers
+        function formatDate(date: string | undefined) {
+            if (!date) return "-";
+            return new Date(date).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+        }
+
+        // Image UI Toggle
+        function updateImageUI(hasImage: boolean) {
+            const uploadCont = document.getElementById("imageUploadContainer");
+            const previewCont = document.getElementById(
+                "imagePreviewContainer",
+            );
+
+            if (uploadCont && previewCont) {
+                if (hasImage) {
+                    uploadCont.style.display = "none";
+                    previewCont.style.display = "block";
+                } else {
+                    uploadCont.style.display = "block";
+                    previewCont.style.display = "none";
+                }
+            }
+        }
+
+        // Init
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadAds();
+            setupEvents();
+            initSortable(); // Initialize drag & drop
+            setTimeout(() => {
+                document
+                    .getElementById("skeleton-header")
+                    ?.classList.add("content-hidden");
+                document
+                    .getElementById("skeleton-desc")
+                    ?.classList.add("content-hidden");
+                document
+                    .getElementById("actual-header")
+                    ?.classList.remove("content-hidden");
+            }, 300);
+        });
+
+        function setupEvents() {
+            document
+                .getElementById("addAdsBtn")
+                ?.addEventListener("click", openAddModal);
+            document
+                .getElementById("refreshBtn")
+                ?.addEventListener("click", loadAds);
+            adsForm?.addEventListener("submit", handleFormSubmit);
+
+            // WA Input Logic
+            const waInput = document.getElementById(
+                "whatsappNumber",
+            ) as HTMLInputElement;
+            if (waInput) {
+                waInput.addEventListener("input", (e) => {
+                    let val = waInput.value.replace(/[^0-9]/g, ""); // Remove non-numeric
+                    if (val.startsWith("0")) val = val.substring(1); // Remove leading 0
+                    if (val.startsWith("62")) val = val.substring(2); // Remove leading 62 (since duplicate)
+                    waInput.value = val;
+                });
+            }
+
+            // Image Upload
+            const cont = document.getElementById("imageUploadContainer");
+            const previewCont = document.getElementById(
+                "imagePreviewContainer",
+            );
+            const inp = document.getElementById(
+                "imageInput",
+            ) as HTMLInputElement;
+
+            if (cont && inp && previewCont) {
+                cont.addEventListener("click", () => inp.click());
+                previewCont.addEventListener("click", () => inp.click()); // Click preview to replace
+
+                inp.addEventListener("change", (e) => {
+                    const f = (e.target as HTMLInputElement).files?.[0];
+                    if (f) handleFileUpload(f);
+                });
+
+                cont.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+                    cont.classList.add("border-purple-400", "bg-purple-50");
+                });
+                cont.addEventListener("dragleave", () => {
+                    cont.classList.remove("border-purple-400", "bg-purple-50");
+                });
+                cont.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    cont.classList.remove("border-purple-400", "bg-purple-50");
+                    const f = e.dataTransfer?.files[0];
+                    if (f && f.type.startsWith("image/")) handleFileUpload(f);
+                });
+            }
+        }
+
+        async function loadAds() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/ads`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                    },
+                });
+                const json = await res.json();
+                if (json.success) {
+                    adsData = json.data || [];
+                    // Sort by displayOrder
+                    adsData.sort(
+                        (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0),
+                    );
+                    renderAds();
+                    updateStats();
+                }
+            } catch (e) {
+                console.error(e);
+                Toast.fire("error", "Gagal memuat data");
+            }
+        }
+
+        function renderAds() {
+            if (!adsTableBody) return;
+            if (adsData.length === 0) {
+                adsTableBody.innerHTML = "";
+                emptyState?.classList.remove("hidden");
+                return;
+            }
+            emptyState?.classList.add("hidden");
+
+            adsTableBody.innerHTML = adsData
+                .map(
+                    (ad, i) => `
+                <tr data-id="${ad._id}" class="hover:bg-gray-50 transition-colors group">
+                    <td class="px-6 py-4 text-gray-500 font-medium whitespace-nowrap flex items-center gap-3">
+                         <div class="cursor-move text-gray-400 hover:text-gray-600 p-1 sortable-handle" title="Drag to reorder">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg>
+                        </div>
+                        ${i + 1}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3 min-w-[200px]">
+                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex-shrink-0 overflow-hidden border border-gray-200">
+                                <img src="${ad.imageUrl}" alt="" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-medium text-gray-900 truncate max-w-xs">${ad.title}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${ad.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}">
+                            ${ad.isActive ? "Aktif" : "Nonaktif"}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-500 text-sm whitespace-nowrap">${formatDate(ad.startDate)}</td>
+                    <td class="px-6 py-4 text-gray-500 text-sm whitespace-nowrap">${formatDate(ad.endDate)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center justify-center gap-1">
+                            <button onclick="openEditModal('${ad._id}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </button>
+                            <button onclick="toggleStatus('${ad._id}')" class="p-2 ${ad.isActive ? "text-amber-600 hover:bg-amber-50" : "text-green-600 hover:bg-green-50"} rounded-lg transition-colors" title="${ad.isActive ? "Nonaktifkan" : "Aktifkan"}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${ad.isActive ? '<circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/>' : '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/>'}</svg>
+                            </button>
+                            <button onclick="confirmDeleteAd('${ad._id}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `,
+                )
+                .join("");
+        }
+
+        function updateStats() {
+            const el = (id: string, v: number) => {
+                const e = document.getElementById(id);
+                if (e) e.textContent = v.toLocaleString();
+            };
+            el("totalAds", adsData.length);
+            el("activeAds", adsData.filter((a) => a.isActive).length);
+            el(
+                "totalViews",
+                adsData.reduce((s, a) => s + (a.viewCount || 0), 0),
+            );
+            el(
+                "totalClicks",
+                adsData.reduce((s, a) => s + (a.clickCount || 0), 0),
+            );
+        }
+
+        // Action Handlers
+        async function handleFileUpload(file: File) {
+            if (file.size > 5 * 1024 * 1024) {
+                Toast.fire("error", "Ukuran file maks 5MB");
+                return;
+            }
+
+            // Local preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.getElementById(
+                    "imagePreview",
+                ) as HTMLImageElement;
+                if (img && e.target?.result) {
+                    img.src = e.target.result as string;
+                    updateImageUI(true); // Switch to preview view immediately
+                }
+            };
+            reader.readAsDataURL(file);
+
+            // Upload
+            const fd = new FormData();
+            fd.append("image", file);
+            try {
+                const res = await fetch(
+                    `${API_BASE_URL}/api/admin/ads/upload`,
+                    {
+                        method: "POST",
+                        body: fd,
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                        },
+                    },
+                );
+                const json = await res.json();
+                if (json.success) {
+                    (
+                        document.getElementById("imageUrl") as HTMLInputElement
+                    ).value = json.data.publicUrl;
+                    (
+                        document.getElementById("imageKey") as HTMLInputElement
+                    ).value = json.data.key;
+                    Toast.fire("success", "Gambar berhasil diupload");
+                } else Toast.fire("error", "Gagal upload gambar");
+            } catch {
+                Toast.fire("error", "Gagal upload gambar");
+            }
+        }
+
+        async function handleFormSubmit(e: Event) {
+            e.preventDefault();
+            const getVal = (id: string) => {
+                const el = document.getElementById(
+                    id,
+                ) as HTMLInputElement | null;
+                return el ? el.value : "";
+            };
+
+            // Format WA number (Add 62 prefix if not empty)
+            let wa = getVal("whatsappNumber");
+            if (wa && !wa.startsWith("62")) wa = "62" + wa;
+
+            const data = {
+                title: getVal("adsTitle"),
+                description: getVal("adsDescription"),
+                imageUrl: getVal("imageUrl"),
+                imageKey: getVal("imageKey"),
+                whatsappNumber: wa,
+                whatsappMessage: getVal("whatsappMessage"),
+                adLink: getVal("adLink"),
+                // displayOrder removed from form, default to 0 for new, existing handled by backend/reorder
+                isActive: getVal("isActive") === "true",
+                startDate: getVal("startDate"),
+                endDate: getVal("endDate"),
+            };
+            if (!data.imageUrl) {
+                Toast.fire("error", "Silakan upload gambar dulu");
+                return;
+            }
+
+            try {
+                const res = await fetch(
+                    isEditMode
+                        ? `${API_BASE_URL}/api/admin/ads/${getVal("adsId")}`
+                        : `${API_BASE_URL}/api/admin/ads/create`,
+                    {
+                        method: isEditMode ? "PUT" : "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                        },
+                        body: JSON.stringify(data),
+                    },
+                );
+                if ((await res.json()).success) {
+                    Toast.fire(
+                        "success",
+                        isEditMode
+                            ? "Iklan berhasil diupdate"
+                            : "Iklan berhasil dibuat",
+                    );
+                    closeAdsModal();
+                    loadAds();
+                } else Toast.fire("error", "Gagal menyimpan data");
+            } catch {
+                Toast.fire("error", "Terjadi kesalahan");
+            }
+        }
+
+        function initSortable() {
+            const el = document.getElementById("adsTableBody");
+            if (el) {
+                // @ts-ignore
+                new Sortable(el, {
+                    handle: ".sortable-handle",
+                    animation: 150,
+                    ghostClass: "bg-indigo-100",
+                    onEnd: async function (evt: any) {
+                        const rows =
+                            document.querySelectorAll("#adsTableBody tr");
+                        const ids = Array.from(rows)
+                            .map((row: any) => row.getAttribute("data-id"))
+                            .filter((id: any) => id);
+
+                        // Update numbering visually without reload
+                        rows.forEach((row, index) => {
+                            const td = row.querySelector("td:first-child");
+                            if (td && td.lastChild) {
+                                td.lastChild.textContent = ` ${index + 1}`;
+                            }
+                        });
+
+                        if (ids.length > 0) {
+                            try {
+                                await fetch(
+                                    `${API_BASE_URL}/api/admin/ads/reorder`,
+                                    {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                                        },
+                                        body: JSON.stringify({ ids }),
+                                    },
+                                );
+                                Toast.fire("success", "Urutan diperbarui");
+                            } catch (error) {
+                                console.error(error);
+                                Toast.fire("error", "Gagal menyimpan urutan");
+                            }
+                        }
+                    },
+                });
+            }
+        }
+
+        async function toggleStatus(id: string) {
+            try {
+                const res = await fetch(
+                    `${API_BASE_URL}/api/admin/ads/${id}/toggle`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                        },
+                    },
+                );
+                if ((await res.json()).success) {
+                    Toast.fire("success", "Status berhasil diubah");
+                    loadAds();
+                } else Toast.fire("error", "Gagal update status");
+            } catch {
+                Toast.fire("error", "Terjadi kesalahan sistem");
+            }
+        }
+
+        function confirmDeleteAd(id: string) {
+            window.Swal.fire({
+                title: "Hapus Iklan?",
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc2626",
+                cancelButtonColor: "#6b7280",
+                confirmButtonText: "Ya, Hapus!",
+                cancelButtonText: "Batal",
+            }).then(async (result: any) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await fetch(
+                            `${API_BASE_URL}/api/admin/ads/${id}`,
+                            {
+                                method: "DELETE",
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                                },
+                            },
+                        );
+                        if ((await res.json()).success) {
+                            Toast.fire("success", "Iklan telah dihapus");
+                            loadAds();
+                        } else Toast.fire("error", "Gagal menghapus iklan");
+                    } catch {
+                        Toast.fire("error", "Terjadi kesalahan sistem");
+                    }
+                }
+            });
+        }
+
+        // Modals
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById("modalTitle")!.textContent =
+                "Tambah Iklan Baru";
+            adsForm.reset();
+            updateImageUI(false);
+            adsModal?.classList.remove("hidden");
+            adsModal?.classList.add("flex");
+        }
+        function openEditModal(id: string) {
+            isEditMode = true;
+            const ad = adsData.find((a) => a._id === id);
+            if (!ad) return;
+            document.getElementById("modalTitle")!.textContent = "Edit Iklan";
+            const set = (k: string, v: any) =>
+                ((document.getElementById(k) as HTMLInputElement).value =
+                    v || "");
+            set("adsId", ad._id);
+            set("adsTitle", ad.title);
+            set("adsDescription", ad.description);
+            set("imageUrl", ad.imageUrl);
+            set("imageKey", ad.imageKey); // set("whatsappNumber", ad.whatsappNumber); <-- Logic below
+            set("whatsappMessage", ad.whatsappMessage);
+            set("adLink", ad.adLink);
+            // displayOrder removed
+            set("isActive", ad.isActive ? "true" : "false");
+            set("startDate", ad.startDate?.slice(0, 16));
+            set("endDate", ad.endDate?.slice(0, 16));
+
+            // Format WA display (remove 62 prefix for viewing)
+            let rawWa = ad.whatsappNumber || "";
+            if (rawWa.startsWith("62")) rawWa = rawWa.substring(2);
+            (
+                document.getElementById("whatsappNumber") as HTMLInputElement
+            ).value = rawWa;
+
+            const img = document.getElementById(
+                "imagePreview",
+            ) as HTMLImageElement;
+            if (ad.imageUrl) {
+                img.src = ad.imageUrl;
+                updateImageUI(true);
+            } else {
+                updateImageUI(false);
+            }
+
+            adsModal?.classList.remove("hidden");
+            adsModal?.classList.add("flex");
+        }
+        function closeAdsModal() {
+            adsModal?.classList.add("hidden");
+            adsModal?.classList.remove("flex");
+        }
+
+        // Expo
+        window.openEditModal = openEditModal;
+        window.confirmDeleteAd = confirmDeleteAd;
+        window.closeAdsModal = closeAdsModal;
+        window.toggleStatus = toggleStatus;
+    </script>
+</Layout>

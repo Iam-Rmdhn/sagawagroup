@@ -14,446 +14,806 @@ const { currentPage = "dashboard" } = Astro.props;
     backface-visibility: hidden;
     will-change: transform;
   }
-  
+
   #logo-sidebar * {
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-  
+
   /* Backdrop overlay styling with stability */
   #sidebar-backdrop {
     transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-  
+
   /* Ensure Tailwind transform classes work */
   #logo-sidebar.transition-transform {
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
   }
-  
+
   /* Force Tailwind translate classes to override any conflicting styles */
   #logo-sidebar.-translate-x-full {
     transform: translateX(-100%) !important;
   }
-  
+
   #logo-sidebar:not(.-translate-x-full) {
     transform: translateX(0) !important;
   }
 </style>
 
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-72 h-screen pt-20 transition-transform -translate-x-full bg-gradient-to-br from-white to-amber-50/30 shadow-2xl border-r border-amber-200/50 backdrop-blur-sm" aria-label="Sidebar">
-   <!-- Gradient Background Overlay -->
-   <div class="absolute inset-0 bg-gradient-to-b from-transparent via-orange-50/20 to-red-50/20 pointer-events-none"></div>
-   
-   <!-- Button group styling -->
-   <div class="relative h-full px-3 pb-4 pt-3 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent">
-      <ul class="space-y-2 font-medium mt-2">
-         <!-- Dashboard -->
+<aside
+  id="logo-sidebar"
+  class="fixed top-0 left-0 z-40 w-72 h-screen pt-20 transition-transform -translate-x-full bg-gradient-to-br from-white to-amber-50/30 shadow-2xl border-r border-amber-200/50 backdrop-blur-sm"
+  aria-label="Sidebar"
+>
+  <!-- Gradient Background Overlay -->
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-transparent via-orange-50/20 to-red-50/20 pointer-events-none"
+  >
+  </div>
+
+  <!-- Button group styling -->
+  <div
+    class="relative h-full px-3 pb-4 pt-3 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-transparent"
+  >
+    <ul class="space-y-2 font-medium mt-2">
+      <!-- Dashboard -->
       <li>
-        <button type="button" id="dashboard-menu-btn" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'dashboard' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md active-menu' : 'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300'}`}
-          onclick="window.location.href='/admin/dashboard'">
-          <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'dashboard' ? 'bg-white/20' : 'bg-amber-100 group-hover:bg-amber-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'dashboard' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-              <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-              <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+        <button
+          type="button"
+          id="dashboard-menu-btn"
+          class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === "dashboard" ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md active-menu" : "bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300"}`}
+          onclick="window.location.href='/admin/dashboard'"
+        >
+          <div
+            class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === "dashboard" ? "bg-white/20" : "bg-amber-100 group-hover:bg-amber-200"}`}
+          >
+            <svg
+              class={`w-5 h-5 transition-colors ${currentPage === "dashboard" ? "text-white" : "text-amber-600 group-hover:text-amber-700"}`}
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 21"
+            >
+              <path
+                d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"
+              ></path>
+              <path
+                d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"
+              ></path>
             </svg>
           </div>
           <span class="ml-3 font-medium">Dashboard</span>
         </button>
       </li>
-         
-         <!-- Users Management with dropdown -->
-         <li>
-            <div class="flex w-full relative overflow-hidden group/buttongroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-               <!-- Main button with light orange background similar to image -->
-               <button type="button" id="users-main-button" class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-r-0 border-orange-200/50 hover:border-orange-300 z-10">
-                  <svg class="w-6 h-6 text-orange-500 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                     <path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"/>
-                  </svg>
-                  <span class="ml-3 font-medium text-orange-900">Kelola Pengguna</span>
-               </button>
-               
-               <!-- Dropdown toggle button with improved hover effect and matching background -->
-               <button type="button" id="users-dropdown-button" class="group flex items-center justify-center w-10 rounded-r-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-l-0 border-orange-200/50 hover:border-orange-300 z-10" aria-controls="users-dropdown" data-collapse-toggle="users-dropdown">
-                  <svg class="w-5 h-5 text-orange-500 transition-all duration-300 ease-in-out transform group-hover:scale-110" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" id="dropdown-arrow">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-               </button>
-               
-               <!-- Hover effect overlay for the entire button group -->
-               <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-amber-50/0 via-orange-50/0 to-red-50/0 group-hover/buttongroup:from-amber-100/50 group-hover/buttongroup:via-orange-100/30 group-hover/buttongroup:to-red-100/50 transition-all duration-300 opacity-0 group-hover/buttongroup:opacity-100 pointer-events-none"></div>
-            </div>
-            
-            <!-- Submenu with refined styling positioned to the right -->
-            <ul id="users-dropdown" class="hidden py-2 mt-1 ml-6 space-y-1 bg-gradient-to-br from-white to-orange-50/30 border border-orange-200/70 rounded-lg shadow-lg relative">
-              <!-- Orange vertical bar on the left side -->
-              <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-l"></div>
-              
-              <li class="px-3">
-                <button id="show-all-users" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-amber-100/70 hover:to-orange-100/70 text-gray-600 hover:text-amber-800 hover:shadow-sm">
-                  <div class="w-6 h-6 rounded-md bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center mr-3 transition-colors">
-                    <svg class="w-3 h-3 text-amber-600 group-hover:text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0ZM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium">Semua Pengguna</span>
-                </button>
-              </li>
-              <li class="px-3">
-                  <button id="show-approved-mitra" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-green-100/70 hover:to-emerald-100/70 text-gray-600 hover:text-green-800 hover:shadow-sm">
-                    <div class="w-6 h-6 rounded-md bg-green-50 group-hover:bg-green-100 flex items-center justify-center mr-3 transition-colors">
-                        <svg class="w-3 h-3 text-green-600 group-hover:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                     </div>
-                     <span class="font-medium">Disetujui</span>
-                  </button>
-               </li>
-               <li class="px-3">
-                  <button id="show-pending-mitra" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100/70 hover:to-orange-100/70 text-gray-600 hover:text-yellow-800 hover:shadow-sm">
-                     <div class="w-6 h-6 rounded-md bg-yellow-50 group-hover:bg-yellow-100 flex items-center justify-center mr-3 transition-colors">
-                                <svg class="w-3 h-3 text-yellow-600 group-hover:text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                     </div>
-                     <span class="font-medium">Menunggu</span>
-                  </button>
-               </li>
-                <li class="px-3">
-                  <button id="show-edit-mitra" onclick="window.location.href='/admin/edit-user'" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100/70 hover:to-orange-100/70 text-gray-600 hover:text-yellow-800 hover:shadow-sm">
-                     <div class="w-6 h-6 rounded-md bg-yellow-50 group-hover:bg-yellow-100 flex items-center justify-center mr-3 transition-colors">
-                        <svg class="w-3 h-3 text-yellow-600 group-hover:text-yellow-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
-                        </svg>
-                     </div>
-                     <span class="font-medium">Edit Mitra</span>
-                  </button>
-               </li>
-            </ul>
-         </li>
-         <!-- Pelunasan Mitra -->
+
+      <!-- Users Management with dropdown -->
       <li>
-        <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'pelunasan' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300'}`}
-          onclick="window.location.href='/admin/pelunasan'">
-          <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'pelunasan' ? 'bg-white/20' : 'bg-amber-100 group-hover:bg-amber-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'pelunasan' ? 'text-white' : 'text-amber-600 group-hover:text-amber-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z" clip-rule="evenodd"/>
+        <div
+          class="flex w-full relative overflow-hidden group/buttongroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+        >
+          <!-- Main button with light orange background similar to image -->
+          <button
+            type="button"
+            id="users-main-button"
+            class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-r-0 border-orange-200/50 hover:border-orange-300 z-10"
+          >
+            <svg
+              class="w-6 h-6 text-orange-500 transition-colors"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"
+              ></path>
+            </svg>
+            <span class="ml-3 font-medium text-orange-900">Kelola Pengguna</span
+            >
+          </button>
+
+          <!-- Dropdown toggle button with improved hover effect and matching background -->
+          <button
+            type="button"
+            id="users-dropdown-button"
+            class="group flex items-center justify-center w-10 rounded-r-lg transition-all duration-200 bg-orange-50/80 hover:bg-orange-100/80 text-gray-700 hover:text-orange-800 border border-l-0 border-orange-200/50 hover:border-orange-300 z-10"
+            aria-controls="users-dropdown"
+            data-collapse-toggle="users-dropdown"
+          >
+            <svg
+              class="w-5 h-5 text-orange-500 transition-all duration-300 ease-in-out transform group-hover:scale-110"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+              id="dropdown-arrow"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 4 4 4-4"></path>
+            </svg>
+          </button>
+
+          <!-- Hover effect overlay for the entire button group -->
+          <div
+            class="absolute inset-0 w-full h-full bg-gradient-to-br from-amber-50/0 via-orange-50/0 to-red-50/0 group-hover/buttongroup:from-amber-100/50 group-hover/buttongroup:via-orange-100/30 group-hover/buttongroup:to-red-100/50 transition-all duration-300 opacity-0 group-hover/buttongroup:opacity-100 pointer-events-none"
+          >
+          </div>
+        </div>
+
+        <!-- Submenu with refined styling positioned to the right -->
+        <ul
+          id="users-dropdown"
+          class="hidden py-2 mt-1 ml-6 space-y-1 bg-gradient-to-br from-white to-orange-50/30 border border-orange-200/70 rounded-lg shadow-lg relative"
+        >
+          <!-- Orange vertical bar on the left side -->
+          <div
+            class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-500 to-red-500 rounded-l"
+          >
+          </div>
+
+          <li class="px-3">
+            <button
+              id="show-all-users"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-amber-100/70 hover:to-orange-100/70 text-gray-600 hover:text-amber-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-amber-600 group-hover:text-amber-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0ZM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="font-medium">Semua Pengguna</span>
+            </button>
+          </li>
+          <li class="px-3">
+            <button
+              id="show-approved-mitra"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-green-100/70 hover:to-emerald-100/70 text-gray-600 hover:text-green-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-green-50 group-hover:bg-green-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-green-600 group-hover:text-green-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <span class="font-medium">Disetujui</span>
+            </button>
+          </li>
+          <li class="px-3">
+            <button
+              id="show-pending-mitra"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100/70 hover:to-orange-100/70 text-gray-600 hover:text-yellow-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-yellow-50 group-hover:bg-yellow-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-yellow-600 group-hover:text-yellow-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <span class="font-medium">Menunggu</span>
+            </button>
+          </li>
+          <li class="px-3">
+            <button
+              id="show-edit-mitra"
+              onclick="window.location.href='/admin/edit-user'"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-100/70 hover:to-orange-100/70 text-gray-600 hover:text-yellow-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-yellow-50 group-hover:bg-yellow-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-yellow-600 group-hover:text-yellow-700"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="font-medium">Edit Mitra</span>
+            </button>
+          </li>
+        </ul>
+      </li>
+      <!-- Pelunasan Mitra -->
+      <li>
+        <button
+          type="button"
+          class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === "pelunasan" ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md" : "bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 text-gray-700 hover:text-amber-800 border border-gray-200 hover:border-amber-300"}`}
+          onclick="window.location.href='/admin/pelunasan'"
+        >
+          <div
+            class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === "pelunasan" ? "bg-white/20" : "bg-amber-100 group-hover:bg-amber-200"}`}
+          >
+            <svg
+              class={`w-5 h-5 transition-colors ${currentPage === "pelunasan" ? "text-white" : "text-amber-600 group-hover:text-amber-700"}`}
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.5 4A1.5 1.5 0 0 0 1 5.5V6h18v-.5A1.5 1.5 0 0 0 17.5 4h-15ZM19 8.5H1v6A1.5 1.5 0 0 0 2.5 16h15a1.5 1.5 0 0 0 1.5-1.5v-6ZM3 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75Zm4.75-.75a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5Z"
+                clip-rule="evenodd"></path>
             </svg>
           </div>
           <span class="ml-3 font-medium">Pelunasan Mitra</span>
         </button>
       </li>
 
-         <!-- Menu -->
+      <!-- Menu -->
       <li>
-        <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'reports' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 text-gray-700 hover:text-orange-800 border border-gray-200 hover:border-orange-300'}`}
-          onclick="window.location.href='/404'">
-          <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'reports' ? 'bg-white/20' : 'bg-orange-100 group-hover:bg-orange-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'reports' ? 'text-white' : 'text-orange-600 group-hover:text-orange-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
-              <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
-              <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
+        <button
+          type="button"
+          class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === "reports" ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-md" : "bg-white hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 text-gray-700 hover:text-orange-800 border border-gray-200 hover:border-orange-300"}`}
+          onclick="window.location.href='/404'"
+        >
+          <div
+            class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === "reports" ? "bg-white/20" : "bg-orange-100 group-hover:bg-orange-200"}`}
+          >
+            <svg
+              class={`w-5 h-5 transition-colors ${currentPage === "reports" ? "text-white" : "text-orange-600 group-hover:text-orange-700"}`}
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"
+              ></path>
+              <path
+                d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"
+              ></path>
+              <path
+                d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"
+              ></path>
             </svg>
           </div>
           <span class="ml-3 font-medium">Kelola Menu</span>
         </button>
       </li>
 
-         <!-- Settings -->
+      <!-- Settings -->
       <li>
-        <button type="button" class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === 'settings' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md' : 'bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-gray-700 hover:text-red-800 border border-gray-200 hover:border-red-300'}`}
-          onclick="window.location.href='/admin/delete'">
-          <div class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === 'settings' ? 'bg-white/20' : 'bg-red-100 group-hover:bg-red-200'}`}>
-            <svg class={`w-5 h-5 transition-colors ${currentPage === 'settings' ? 'text-white' : 'text-red-600 group-hover:text-red-700'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"/>
+        <button
+          type="button"
+          class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === "settings" ? "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md" : "bg-white hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-gray-700 hover:text-red-800 border border-gray-200 hover:border-red-300"}`}
+          onclick="window.location.href='/admin/delete'"
+        >
+          <div
+            class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === "settings" ? "bg-white/20" : "bg-red-100 group-hover:bg-red-200"}`}
+          >
+            <svg
+              class={`w-5 h-5 transition-colors ${currentPage === "settings" ? "text-white" : "text-red-600 group-hover:text-red-700"}`}
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z"
+              ></path>
             </svg>
           </div>
           <span class="ml-3 font-medium">Kelola Aplikasi</span>
         </button>
       </li>
 
-         <!-- Kelola Crew with dropdown -->
-         <li>
-            <div class="flex w-full relative overflow-hidden group/crewgroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-               <!-- Main button with blue background similar to image -->
-               <button type="button" id="crew-main-button" class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-blue-50/80 hover:bg-blue-100/80 text-gray-700 hover:text-blue-800 border border-r-0 border-blue-200/50 hover:border-blue-300 z-10">
-                  <svg class="w-6 h-6 text-blue-500 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                     <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM15 9a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  </svg>
-                  <span class="ml-3 font-medium text-blue-900">Kelola Crew</span>
-               </button>
-               
-               <!-- Dropdown toggle button with matching background -->
-               <button type="button" id="crew-dropdown-button" class="group flex items-center justify-center w-10 rounded-r-lg transition-all duration-200 bg-blue-50/80 hover:bg-blue-100/80 text-gray-700 hover:text-blue-800 border border-l-0 border-blue-200/50 hover:border-blue-300 z-10" aria-controls="crew-dropdown" data-collapse-toggle="crew-dropdown">
-                  <svg class="w-5 h-5 text-blue-500 transition-all duration-300 ease-in-out transform group-hover:scale-110" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" id="crew-dropdown-arrow">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-               </button>
-               
-               <!-- Hover effect overlay for the entire button group -->
-               <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50/0 via-cyan-50/0 to-indigo-50/0 group-hover/crewgroup:from-blue-100/50 group-hover/crewgroup:via-cyan-100/30 group-hover/crewgroup:to-indigo-100/50 transition-all duration-300 opacity-0 group-hover/crewgroup:opacity-100 pointer-events-none"></div>
-            </div>
-            
-            <!-- Submenu with refined styling positioned to the right -->
-            <ul id="crew-dropdown" class="hidden py-2 mt-1 ml-6 space-y-1 bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/70 rounded-lg shadow-lg relative">
-              <!-- Blue vertical bar on the left side -->
-              <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-l"></div>
-              
-              <li class="px-3">
-                <button id="add-crew" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-100/70 hover:to-cyan-100/70 text-gray-600 hover:text-blue-800 hover:shadow-sm">
-                  <div class="w-6 h-6 rounded-md bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center mr-3 transition-colors">
-                    <svg class="w-3 h-3 text-blue-600 group-hover:text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                  </div>
-                  <span class="font-medium">Tambah Crew</span>
-                </button>
-              </li>
-              <li class="px-3">
-                  <button id="crew-salary" class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-100/70 hover:to-indigo-100/70 text-gray-600 hover:text-cyan-800 hover:shadow-sm">
-                     <div class="w-6 h-6 rounded-md bg-cyan-50 group-hover:bg-cyan-100 flex items-center justify-center mr-3 transition-colors">
-                        <svg class="w-3 h-3 text-cyan-600 group-hover:text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        </svg>
-                     </div>
-                     <span class="font-medium">Gaji Crew</span>
-                  </button>
-               </li>
-            </ul>
-         </li>
-      </ul>
-   </div>
+      <!-- Kelola Iklan -->
+      <li>
+        <button
+          type="button"
+          class={`group flex items-center w-full p-3 rounded-lg transition-all duration-200 hover:shadow-md ${currentPage === "ads" ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md" : "bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:to-purple-100 text-gray-700 hover:text-purple-800 border border-gray-200 hover:border-purple-300"}`}
+          onclick="window.location.href='/admin/ads'"
+        >
+          <div
+            class={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${currentPage === "ads" ? "bg-white/20" : "bg-purple-100 group-hover:bg-purple-200"}`}
+          >
+            <svg
+              class={`w-5 h-5 transition-colors ${currentPage === "ads" ? "text-white" : "text-purple-600 group-hover:text-purple-700"}`}
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+              ></path>
+            </svg>
+          </div>
+          <span class="ml-3 font-medium">Kelola Iklan</span>
+        </button>
+      </li>
+
+      <!-- Kelola Crew with dropdown -->
+      <li>
+        <div
+          class="flex w-full relative overflow-hidden group/crewgroup rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+        >
+          <!-- Main button with blue background similar to image -->
+          <button
+            type="button"
+            id="crew-main-button"
+            class="group flex-grow flex items-center p-3 rounded-l-lg transition-all duration-200 bg-blue-50/80 hover:bg-blue-100/80 text-gray-700 hover:text-blue-800 border border-r-0 border-blue-200/50 hover:border-blue-300 z-10"
+          >
+            <svg
+              class="w-6 h-6 text-blue-500 transition-colors"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              <path
+                d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM15 9a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+            <span class="ml-3 font-medium text-blue-900">Kelola Crew</span>
+          </button>
+
+          <!-- Dropdown toggle button with matching background -->
+          <button
+            type="button"
+            id="crew-dropdown-button"
+            class="group flex items-center justify-center w-10 rounded-r-lg transition-all duration-200 bg-blue-50/80 hover:bg-blue-100/80 text-gray-700 hover:text-blue-800 border border-l-0 border-blue-200/50 hover:border-blue-300 z-10"
+            aria-controls="crew-dropdown"
+            data-collapse-toggle="crew-dropdown"
+          >
+            <svg
+              class="w-5 h-5 text-blue-500 transition-all duration-300 ease-in-out transform group-hover:scale-110"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+              id="crew-dropdown-arrow"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 4 4 4-4"></path>
+            </svg>
+          </button>
+
+          <!-- Hover effect overlay for the entire button group -->
+          <div
+            class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-50/0 via-cyan-50/0 to-indigo-50/0 group-hover/crewgroup:from-blue-100/50 group-hover/crewgroup:via-cyan-100/30 group-hover/crewgroup:to-indigo-100/50 transition-all duration-300 opacity-0 group-hover/crewgroup:opacity-100 pointer-events-none"
+          >
+          </div>
+        </div>
+
+        <!-- Submenu with refined styling positioned to the right -->
+        <ul
+          id="crew-dropdown"
+          class="hidden py-2 mt-1 ml-6 space-y-1 bg-gradient-to-br from-white to-blue-50/30 border border-blue-200/70 rounded-lg shadow-lg relative"
+        >
+          <!-- Blue vertical bar on the left side -->
+          <div
+            class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-l"
+          >
+          </div>
+
+          <li class="px-3">
+            <button
+              id="add-crew"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-100/70 hover:to-cyan-100/70 text-gray-600 hover:text-blue-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-blue-600 group-hover:text-blue-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+              </div>
+              <span class="font-medium">Tambah Crew</span>
+            </button>
+          </li>
+          <li class="px-3">
+            <button
+              id="crew-salary"
+              class="group flex items-center w-full p-2 rounded-lg text-sm transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-100/70 hover:to-indigo-100/70 text-gray-600 hover:text-cyan-800 hover:shadow-sm"
+            >
+              <div
+                class="w-6 h-6 rounded-md bg-cyan-50 group-hover:bg-cyan-100 flex items-center justify-center mr-3 transition-colors"
+              >
+                <svg
+                  class="w-3 h-3 text-cyan-600 group-hover:text-cyan-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  ></path>
+                </svg>
+              </div>
+              <span class="font-medium">Gaji Crew</span>
+            </button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </aside>
 
 <!-- Mobile overlay backdrop - now used for all screen sizes -->
-<div id="sidebar-backdrop" class="hidden fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300"></div>
+<div
+  id="sidebar-backdrop"
+  class="hidden fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300"
+>
+</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.getElementById('logo-sidebar');
-    const backdrop = document.getElementById('sidebar-backdrop');
-    
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("logo-sidebar");
+    const backdrop = document.getElementById("sidebar-backdrop");
+
     // Handle backdrop clicks on mobile
     if (backdrop && sidebar) {
-      backdrop.addEventListener('click', function() {
-        sidebar.classList.add('-translate-x-full');
-        backdrop.classList.add('hidden');
-        localStorage.setItem('sidebarVisible', 'false');
-        
+      backdrop.addEventListener("click", function () {
+        sidebar.classList.add("-translate-x-full");
+        backdrop.classList.add("hidden");
+        localStorage.setItem("sidebarVisible", "false");
+
         // Dispatch event to update main content margin if needed
-        window.dispatchEvent(new CustomEvent('sidebarToggle', { 
-          detail: { visible: false } 
-        }));
+        window.dispatchEvent(
+          new CustomEvent("sidebarToggle", {
+            detail: { visible: false },
+          }),
+        );
       });
     }
-    
+
     // Listen for sidebar state changes to show/hide backdrop
     if (sidebar && backdrop) {
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.attributeName === 'class') {
-            const sidebarVisible = !sidebar.classList.contains('-translate-x-full');
-            
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName === "class") {
+            const sidebarVisible =
+              !sidebar.classList.contains("-translate-x-full");
+
             // Show/hide backdrop on all screen sizes for overlay effect
             if (sidebarVisible) {
-              backdrop.classList.remove('hidden');
+              backdrop.classList.remove("hidden");
             } else {
-              backdrop.classList.add('hidden');
+              backdrop.classList.add("hidden");
             }
           }
         });
       });
-      
+
       observer.observe(sidebar, { attributes: true });
     }
 
     // Handle Users dropdown toggle with modern animations
-    const usersDropdownButton = document.getElementById('users-dropdown-button');
-    const usersMainButton = document.getElementById('users-main-button');
-    const usersDropdown = document.getElementById('users-dropdown');
-    const dropdownArrow = document.getElementById('dropdown-arrow');
-    
+    const usersDropdownButton = document.getElementById(
+      "users-dropdown-button",
+    );
+    const usersMainButton = document.getElementById("users-main-button");
+    const usersDropdown = document.getElementById("users-dropdown");
+    const dropdownArrow = document.getElementById("dropdown-arrow");
+
     // Make main button also toggle dropdown
     if (usersMainButton) {
-      usersMainButton.addEventListener('click', function() {
+      usersMainButton.addEventListener("click", function () {
         // Trigger dropdown button click
         if (usersDropdownButton) {
           usersDropdownButton.click();
         }
       });
     }
-    
+
     if (usersDropdownButton && usersDropdown) {
-      usersDropdownButton.addEventListener('click', function(e) {
+      usersDropdownButton.addEventListener("click", function (e) {
         e.preventDefault();
-        
+
         // Toggle dropdown with smooth animation
-        if (usersDropdown.classList.contains('hidden')) {
-          usersDropdown.classList.remove('hidden');
-          usersDropdown.style.opacity = '0';
-          usersDropdown.style.transform = 'translateY(-5px)';
-          
+        if (usersDropdown.classList.contains("hidden")) {
+          usersDropdown.classList.remove("hidden");
+          usersDropdown.style.opacity = "0";
+          usersDropdown.style.transform = "translateY(-5px)";
+
           requestAnimationFrame(() => {
-            usersDropdown.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-            usersDropdown.style.opacity = '1';
-            usersDropdown.style.transform = 'translateY(0)';
+            usersDropdown.style.transition =
+              "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+            usersDropdown.style.opacity = "1";
+            usersDropdown.style.transform = "translateY(0)";
           });
-          
+
           // Update button appearance with refined styling
-          usersDropdownButton.classList.add('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
-          usersDropdownButton.setAttribute('aria-expanded', 'true');
-          
+          usersDropdownButton.classList.add(
+            "bg-gradient-to-b",
+            "from-orange-100",
+            "to-red-100",
+            "text-orange-800",
+            "border-orange-300",
+            "shadow-inner",
+          );
+          usersDropdownButton.setAttribute("aria-expanded", "true");
+
           // Also update main button for consistency
           if (usersMainButton) {
-            usersMainButton.classList.add('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+            usersMainButton.classList.add(
+              "bg-gradient-to-r",
+              "from-orange-100",
+              "to-red-100",
+              "text-orange-800",
+              "border-orange-300",
+              "shadow-inner",
+            );
           }
         } else {
-          usersDropdown.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-          usersDropdown.style.opacity = '0';
-          usersDropdown.style.transform = 'translateY(-5px)';
-          
+          usersDropdown.style.transition =
+            "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)";
+          usersDropdown.style.opacity = "0";
+          usersDropdown.style.transform = "translateY(-5px)";
+
           setTimeout(() => {
-            usersDropdown.classList.add('hidden');
+            usersDropdown.classList.add("hidden");
           }, 200);
-          
+
           // Reset button appearance with proper attribute change
-          usersDropdownButton.classList.remove('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
-          usersDropdownButton.setAttribute('aria-expanded', 'false');
-          
+          usersDropdownButton.classList.remove(
+            "bg-gradient-to-b",
+            "from-orange-100",
+            "to-red-100",
+            "text-orange-800",
+            "border-orange-300",
+            "shadow-inner",
+          );
+          usersDropdownButton.setAttribute("aria-expanded", "false");
+
           // Reset main button appearance
           if (usersMainButton) {
-            usersMainButton.classList.remove('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+            usersMainButton.classList.remove(
+              "bg-gradient-to-r",
+              "from-orange-100",
+              "to-red-100",
+              "text-orange-800",
+              "border-orange-300",
+              "shadow-inner",
+            );
           }
         }
-        
+
         // Rotate arrow animation with enhanced effects
         if (dropdownArrow) {
-          if (usersDropdown.classList.contains('hidden')) {
+          if (usersDropdown.classList.contains("hidden")) {
             // Arrow pointing down when closed (default state)
-            dropdownArrow.classList.remove('rotated', 'bounce');
-            dropdownArrow.style.transform = 'rotate(0deg) scale(1)';
-            dropdownArrow.classList.remove('text-orange-600');
-            dropdownArrow.classList.add('text-orange-500');
+            dropdownArrow.classList.remove("rotated", "bounce");
+            dropdownArrow.style.transform = "rotate(0deg) scale(1)";
+            dropdownArrow.classList.remove("text-orange-600");
+            dropdownArrow.classList.add("text-orange-500");
           } else {
             // Arrow pointing up when open
-            dropdownArrow.classList.add('rotated', 'bounce', 'text-orange-600');
-            dropdownArrow.classList.remove('text-orange-500');
-            
+            dropdownArrow.classList.add("rotated", "bounce", "text-orange-600");
+            dropdownArrow.classList.remove("text-orange-500");
+
             // Add active classes to button group
-            usersMainButton?.classList.add('active');
-            usersDropdownButton?.classList.add('active');
-            
+            usersMainButton?.classList.add("active");
+            usersDropdownButton?.classList.add("active");
+
             // Remove bounce class after animation completes
             setTimeout(() => {
-              dropdownArrow.classList.remove('bounce');
+              dropdownArrow.classList.remove("bounce");
             }, 600);
           }
         }
-        
+
         // Remove active class from dashboard when opening users menu
-        const dashboardBtn = document.getElementById('dashboard-menu-btn');
-        if (dashboardBtn && !usersDropdown.classList.contains('hidden')) {
-          dashboardBtn.classList.remove('active-menu');
-          dashboardBtn.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
-          dashboardBtn.classList.add('bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
-          
+        const dashboardBtn = document.getElementById("dashboard-menu-btn");
+        if (dashboardBtn && !usersDropdown.classList.contains("hidden")) {
+          dashboardBtn.classList.remove("active-menu");
+          dashboardBtn.classList.remove(
+            "bg-gradient-to-r",
+            "from-amber-500",
+            "to-orange-600",
+            "text-white",
+            "shadow-lg",
+          );
+          dashboardBtn.classList.add(
+            "bg-white",
+            "hover:bg-gradient-to-r",
+            "hover:from-amber-50",
+            "hover:to-orange-50",
+            "text-gray-700",
+            "hover:text-amber-800",
+            "border",
+            "border-gray-200",
+            "hover:border-amber-300",
+          );
+
           // Restore icon colors when dashboard becomes inactive
-          const dashboardIcon = dashboardBtn.querySelector('svg');
-          const dashboardIconContainer = dashboardBtn.querySelector('div');
+          const dashboardIcon = dashboardBtn.querySelector("svg");
+          const dashboardIconContainer = dashboardBtn.querySelector("div");
           if (dashboardIcon) {
-            dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700');
+            dashboardIcon.setAttribute(
+              "class",
+              "w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700",
+            );
           }
           if (dashboardIconContainer) {
-            dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200');
+            dashboardIconContainer.setAttribute(
+              "class",
+              "w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200",
+            );
           }
         }
       });
     }
 
     // Handle Crew dropdown toggle with modern animations
-    const crewDropdownButton = document.getElementById('crew-dropdown-button');
-    const crewMainButton = document.getElementById('crew-main-button');
-    const crewDropdown = document.getElementById('crew-dropdown');
-    const crewDropdownArrow = document.getElementById('crew-dropdown-arrow');
-    
+    const crewDropdownButton = document.getElementById("crew-dropdown-button");
+    const crewMainButton = document.getElementById("crew-main-button");
+    const crewDropdown = document.getElementById("crew-dropdown");
+    const crewDropdownArrow = document.getElementById("crew-dropdown-arrow");
+
     // Make main button also toggle dropdown
     if (crewMainButton) {
-      crewMainButton.addEventListener('click', function() {
+      crewMainButton.addEventListener("click", function () {
         // Trigger dropdown button click
         if (crewDropdownButton) {
           crewDropdownButton.click();
         }
       });
     }
-    
+
     if (crewDropdownButton && crewDropdown) {
-      crewDropdownButton.addEventListener('click', function(e) {
+      crewDropdownButton.addEventListener("click", function (e) {
         e.preventDefault();
-        
+
         // Toggle dropdown with smooth animation
-        if (crewDropdown.classList.contains('hidden')) {
-          crewDropdown.classList.remove('hidden');
-          crewDropdown.style.opacity = '0';
-          crewDropdown.style.transform = 'translateY(-5px)';
-          
+        if (crewDropdown.classList.contains("hidden")) {
+          crewDropdown.classList.remove("hidden");
+          crewDropdown.style.opacity = "0";
+          crewDropdown.style.transform = "translateY(-5px)";
+
           requestAnimationFrame(() => {
-            crewDropdown.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-            crewDropdown.style.opacity = '1';
-            crewDropdown.style.transform = 'translateY(0)';
+            crewDropdown.style.transition =
+              "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+            crewDropdown.style.opacity = "1";
+            crewDropdown.style.transform = "translateY(0)";
           });
-          
+
           // Update button appearance with refined styling
-          crewDropdownButton.classList.add('bg-gradient-to-b', 'from-blue-100', 'to-cyan-100', 'text-blue-800', 'border-blue-300', 'shadow-inner');
-          crewDropdownButton.setAttribute('aria-expanded', 'true');
-          
+          crewDropdownButton.classList.add(
+            "bg-gradient-to-b",
+            "from-blue-100",
+            "to-cyan-100",
+            "text-blue-800",
+            "border-blue-300",
+            "shadow-inner",
+          );
+          crewDropdownButton.setAttribute("aria-expanded", "true");
+
           // Also update main button for consistency
           if (crewMainButton) {
-            crewMainButton.classList.add('bg-gradient-to-r', 'from-blue-100', 'to-cyan-100', 'text-blue-800', 'border-blue-300', 'shadow-inner');
+            crewMainButton.classList.add(
+              "bg-gradient-to-r",
+              "from-blue-100",
+              "to-cyan-100",
+              "text-blue-800",
+              "border-blue-300",
+              "shadow-inner",
+            );
           }
         } else {
-          crewDropdown.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-          crewDropdown.style.opacity = '0';
-          crewDropdown.style.transform = 'translateY(-5px)';
-          
+          crewDropdown.style.transition =
+            "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)";
+          crewDropdown.style.opacity = "0";
+          crewDropdown.style.transform = "translateY(-5px)";
+
           setTimeout(() => {
-            crewDropdown.classList.add('hidden');
+            crewDropdown.classList.add("hidden");
           }, 200);
-          
+
           // Reset button appearance with proper attribute change
-          crewDropdownButton.classList.remove('bg-gradient-to-b', 'from-blue-100', 'to-cyan-100', 'text-blue-800', 'border-blue-300', 'shadow-inner');
-          crewDropdownButton.setAttribute('aria-expanded', 'false');
-          
+          crewDropdownButton.classList.remove(
+            "bg-gradient-to-b",
+            "from-blue-100",
+            "to-cyan-100",
+            "text-blue-800",
+            "border-blue-300",
+            "shadow-inner",
+          );
+          crewDropdownButton.setAttribute("aria-expanded", "false");
+
           // Reset main button appearance
           if (crewMainButton) {
-            crewMainButton.classList.remove('bg-gradient-to-r', 'from-blue-100', 'to-cyan-100', 'text-blue-800', 'border-blue-300', 'shadow-inner');
+            crewMainButton.classList.remove(
+              "bg-gradient-to-r",
+              "from-blue-100",
+              "to-cyan-100",
+              "text-blue-800",
+              "border-blue-300",
+              "shadow-inner",
+            );
           }
         }
-        
+
         // Rotate arrow animation with enhanced effects
         if (crewDropdownArrow) {
-          if (crewDropdown.classList.contains('hidden')) {
+          if (crewDropdown.classList.contains("hidden")) {
             // Arrow pointing down when closed (default state)
-            crewDropdownArrow.classList.remove('rotated', 'bounce');
-            crewDropdownArrow.style.transform = 'rotate(0deg) scale(1)';
-            crewDropdownArrow.classList.remove('text-blue-600');
-            crewDropdownArrow.classList.add('text-blue-500');
+            crewDropdownArrow.classList.remove("rotated", "bounce");
+            crewDropdownArrow.style.transform = "rotate(0deg) scale(1)";
+            crewDropdownArrow.classList.remove("text-blue-600");
+            crewDropdownArrow.classList.add("text-blue-500");
           } else {
             // Arrow pointing up when open
-            crewDropdownArrow.classList.add('rotated', 'bounce', 'text-blue-600');
-            crewDropdownArrow.classList.remove('text-blue-500');
-            
+            crewDropdownArrow.classList.add(
+              "rotated",
+              "bounce",
+              "text-blue-600",
+            );
+            crewDropdownArrow.classList.remove("text-blue-500");
+
             // Add active classes to button group
-            crewMainButton?.classList.add('active');
-            crewDropdownButton?.classList.add('active');
-            
+            crewMainButton?.classList.add("active");
+            crewDropdownButton?.classList.add("active");
+
             // Remove bounce class after animation completes
             setTimeout(() => {
-              crewDropdownArrow.classList.remove('bounce');
+              crewDropdownArrow.classList.remove("bounce");
             }, 600);
           }
         }
@@ -461,201 +821,325 @@ const { currentPage = "dashboard" } = Astro.props;
     }
 
     // Handle Crew submenu clicks with enhanced styling
-    const addCrewBtn = document.getElementById('add-crew');
-    const crewSalaryBtn = document.getElementById('crew-salary');
+    const addCrewBtn = document.getElementById("add-crew");
+    const crewSalaryBtn = document.getElementById("crew-salary");
 
     if (addCrewBtn) {
-      addCrewBtn.addEventListener('click', function(e) {
+      addCrewBtn.addEventListener("click", function (e) {
         e.preventDefault();
         // Navigate to add crew page
-        window.location.href = '/admin/crew';
+        window.location.href = "/admin/crew";
       });
     }
 
     if (crewSalaryBtn) {
-      crewSalaryBtn.addEventListener('click', function(e) {
+      crewSalaryBtn.addEventListener("click", function (e) {
         e.preventDefault();
         // Navigate to crew salary page
-        window.location.href = '/admin/gaji';
+        window.location.href = "/admin/gaji";
       });
     }
 
     // Handle Users submenu clicks with navigation
-    const showAllUsersBtn = document.getElementById('show-all-users');
-    const showApprovedMitraBtn = document.getElementById('show-approved-mitra');
-    const showPendingMitraBtn = document.getElementById('show-pending-mitra');
+    const showAllUsersBtn = document.getElementById("show-all-users");
+    const showApprovedMitraBtn = document.getElementById("show-approved-mitra");
+    const showPendingMitraBtn = document.getElementById("show-pending-mitra");
 
     if (showAllUsersBtn) {
-      showAllUsersBtn.addEventListener('click', function(e) {
+      showAllUsersBtn.addEventListener("click", function (e) {
         e.preventDefault();
         // Navigate to all users page
-        window.location.href = '/admin/users/all';
+        window.location.href = "/admin/users/all";
       });
     }
 
     if (showApprovedMitraBtn) {
-      showApprovedMitraBtn.addEventListener('click', function(e) {
+      showApprovedMitraBtn.addEventListener("click", function (e) {
         e.preventDefault();
         // Navigate to approved users page
-        window.location.href = '/admin/users/approved';
+        window.location.href = "/admin/users/approved";
       });
     }
 
     if (showPendingMitraBtn) {
-      showPendingMitraBtn.addEventListener('click', function(e) {
+      showPendingMitraBtn.addEventListener("click", function (e) {
         e.preventDefault();
         // Navigate to pending users page
-        window.location.href = '/admin/users/pending';
+        window.location.href = "/admin/users/pending";
       });
     }
 
-  // Remove custom event and allow default navigation for Dashboard
+    // Remove custom event and allow default navigation for Dashboard
 
     // Enhanced function to update active menu item with color themes
-    function updateActiveMenuItem(activeButton: Element, colorTheme: string = 'amber') {
+    function updateActiveMenuItem(
+      activeButton: Element,
+      colorTheme: string = "amber",
+    ) {
       // Remove active class from all submenu items
-      const allSubMenus = document.querySelectorAll('#users-dropdown button');
-      allSubMenus.forEach(btn => {
-        btn.classList.remove('active');
+      const allSubMenus = document.querySelectorAll("#users-dropdown button");
+      allSubMenus.forEach((btn) => {
+        btn.classList.remove("active");
         btn.classList.remove(
-          'bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900',
-          'from-green-200', 'to-emerald-200', 'text-green-900',
-          'from-yellow-200', 'to-orange-200', 'text-yellow-900',
-          'border-amber-300', 'border-green-300', 'border-yellow-300',
-          'shadow-lg', 'scale-105'
+          "bg-gradient-to-r",
+          "from-amber-200",
+          "to-orange-200",
+          "text-amber-900",
+          "from-green-200",
+          "to-emerald-200",
+          "text-green-900",
+          "from-yellow-200",
+          "to-orange-200",
+          "text-yellow-900",
+          "border-amber-300",
+          "border-green-300",
+          "border-yellow-300",
+          "shadow-lg",
+          "scale-105",
         );
       });
-      
+
       // Remove active class from dashboard with proper styling restoration
-      const dashboardBtn = document.getElementById('dashboard-menu-btn');
+      const dashboardBtn = document.getElementById("dashboard-menu-btn");
       if (dashboardBtn) {
-        dashboardBtn.classList.remove('active-menu', 'bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg');
-        dashboardBtn.classList.add('bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
-        
+        dashboardBtn.classList.remove(
+          "active-menu",
+          "bg-gradient-to-r",
+          "from-amber-500",
+          "to-orange-600",
+          "text-white",
+          "shadow-lg",
+        );
+        dashboardBtn.classList.add(
+          "bg-white",
+          "hover:bg-gradient-to-r",
+          "hover:from-amber-50",
+          "hover:to-orange-50",
+          "text-gray-700",
+          "hover:text-amber-800",
+          "border",
+          "border-gray-200",
+          "hover:border-amber-300",
+        );
+
         // Restore icon colors
-        const dashboardIcon = dashboardBtn.querySelector('svg');
-        const dashboardIconContainer = dashboardBtn.querySelector('div');
+        const dashboardIcon = dashboardBtn.querySelector("svg");
+        const dashboardIconContainer = dashboardBtn.querySelector("div");
         if (dashboardIcon) {
-          dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700');
+          dashboardIcon.setAttribute(
+            "class",
+            "w-5 h-5 transition-colors text-amber-600 group-hover:text-amber-700",
+          );
         }
         if (dashboardIconContainer) {
-          dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200');
+          dashboardIconContainer.setAttribute(
+            "class",
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-amber-100 group-hover:bg-amber-200",
+          );
         }
       }
-      
+
       // Add active class to selected item with appropriate color
       const colorClasses = {
-        amber: ['bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900', 'border-amber-300'],
-        green: ['bg-gradient-to-r', 'from-green-200', 'to-emerald-200', 'text-green-900', 'border-green-300'],
-        yellow: ['bg-gradient-to-r', 'from-yellow-200', 'to-orange-200', 'text-yellow-900', 'border-yellow-300']
+        amber: [
+          "bg-gradient-to-r",
+          "from-amber-200",
+          "to-orange-200",
+          "text-amber-900",
+          "border-amber-300",
+        ],
+        green: [
+          "bg-gradient-to-r",
+          "from-green-200",
+          "to-emerald-200",
+          "text-green-900",
+          "border-green-300",
+        ],
+        yellow: [
+          "bg-gradient-to-r",
+          "from-yellow-200",
+          "to-orange-200",
+          "text-yellow-900",
+          "border-yellow-300",
+        ],
       };
-      
-      activeButton.classList.add('active');
-      activeButton.classList.add(...(colorClasses[colorTheme as keyof typeof colorClasses] || colorClasses.amber));
-      activeButton.classList.add('shadow-lg', 'transform', 'scale-105');
-      
+
+      activeButton.classList.add("active");
+      activeButton.classList.add(
+        ...(colorClasses[colorTheme as keyof typeof colorClasses] ||
+          colorClasses.amber),
+      );
+      activeButton.classList.add("shadow-lg", "transform", "scale-105");
+
       // Ensure the dropdown stays open when a submenu item is clicked
-      const usersDropdown = document.getElementById('users-dropdown');
+      const usersDropdown = document.getElementById("users-dropdown");
       if (usersDropdown) {
-        usersDropdown.classList.remove('hidden');
-        usersDropdown.style.opacity = '1';
-        usersDropdown.style.transform = 'translateX(0)';
+        usersDropdown.classList.remove("hidden");
+        usersDropdown.style.opacity = "1";
+        usersDropdown.style.transform = "translateX(0)";
       }
-      
+
       // Keep dropdown buttons in active state
-      const usersDropdownButton = document.getElementById('users-dropdown-button');
-      const usersMainButton = document.getElementById('users-main-button');
-      
+      const usersDropdownButton = document.getElementById(
+        "users-dropdown-button",
+      );
+      const usersMainButton = document.getElementById("users-main-button");
+
       if (usersDropdownButton) {
-        usersDropdownButton.classList.add('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
-        usersDropdownButton.setAttribute('aria-expanded', 'true');
+        usersDropdownButton.classList.add(
+          "bg-gradient-to-b",
+          "from-orange-100",
+          "to-red-100",
+          "text-orange-800",
+          "border-orange-300",
+          "shadow-inner",
+        );
+        usersDropdownButton.setAttribute("aria-expanded", "true");
       }
-      
+
       if (usersMainButton) {
-        usersMainButton.classList.add('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-inner');
+        usersMainButton.classList.add(
+          "bg-gradient-to-r",
+          "from-orange-100",
+          "to-red-100",
+          "text-orange-800",
+          "border-orange-300",
+          "shadow-inner",
+        );
       }
-      
+
       // Keep arrow rotated
-      const dropdownArrow = document.getElementById('dropdown-arrow');
+      const dropdownArrow = document.getElementById("dropdown-arrow");
       if (dropdownArrow) {
-        dropdownArrow.classList.add('rotated', 'text-orange-600');
-        dropdownArrow.classList.remove('text-orange-500');
+        dropdownArrow.classList.add("rotated", "text-orange-600");
+        dropdownArrow.classList.remove("text-orange-500");
       }
     }
 
     // Enhanced function to update active main menu item
     function updateActiveMainMenuItem(activeButton: Element) {
       // Remove active class from all main menu items and restore proper styling
-      const dashboardBtn = document.getElementById('dashboard-menu-btn');
+      const dashboardBtn = document.getElementById("dashboard-menu-btn");
       if (dashboardBtn) {
-        dashboardBtn.classList.remove('active-menu', 'bg-white', 'hover:bg-gradient-to-r', 'hover:from-amber-50', 'hover:to-orange-50', 'text-gray-700', 'hover:text-amber-800', 'border', 'border-gray-200', 'hover:border-amber-300');
-        dashboardBtn.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-white', 'shadow-lg', 'active-menu');
-        
+        dashboardBtn.classList.remove(
+          "active-menu",
+          "bg-white",
+          "hover:bg-gradient-to-r",
+          "hover:from-amber-50",
+          "hover:to-orange-50",
+          "text-gray-700",
+          "hover:text-amber-800",
+          "border",
+          "border-gray-200",
+          "hover:border-amber-300",
+        );
+        dashboardBtn.classList.add(
+          "bg-gradient-to-r",
+          "from-amber-500",
+          "to-orange-600",
+          "text-white",
+          "shadow-lg",
+          "active-menu",
+        );
+
         // Restore active icon colors
-        const dashboardIcon = dashboardBtn.querySelector('svg');
-        const dashboardIconContainer = dashboardBtn.querySelector('div');
+        const dashboardIcon = dashboardBtn.querySelector("svg");
+        const dashboardIconContainer = dashboardBtn.querySelector("div");
         if (dashboardIcon) {
-          dashboardIcon.setAttribute('class', 'w-5 h-5 transition-colors text-white');
+          dashboardIcon.setAttribute(
+            "class",
+            "w-5 h-5 transition-colors text-white",
+          );
         }
         if (dashboardIconContainer) {
-          dashboardIconContainer.setAttribute('class', 'w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-white/20');
+          dashboardIconContainer.setAttribute(
+            "class",
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-white/20",
+          );
         }
       }
-      
+
       // Remove active class from all submenu items
-      const allSubMenus = document.querySelectorAll('#users-dropdown button');
-      allSubMenus.forEach(btn => {
+      const allSubMenus = document.querySelectorAll("#users-dropdown button");
+      allSubMenus.forEach((btn) => {
         btn.classList.remove(
-          'bg-gradient-to-r', 'from-amber-200', 'to-orange-200', 'text-amber-900',
-          'from-green-200', 'to-emerald-200', 'text-green-900',
-          'from-yellow-200', 'to-orange-200', 'text-yellow-900',
-          'border-amber-300', 'border-green-300', 'border-yellow-300',
-          'shadow-lg', 'scale-105'
+          "bg-gradient-to-r",
+          "from-amber-200",
+          "to-orange-200",
+          "text-amber-900",
+          "from-green-200",
+          "to-emerald-200",
+          "text-green-900",
+          "from-yellow-200",
+          "to-orange-200",
+          "text-yellow-900",
+          "border-amber-300",
+          "border-green-300",
+          "border-yellow-300",
+          "shadow-lg",
+          "scale-105",
         );
       });
-      
+
       // Close users dropdown
-      const usersDropdown = document.getElementById('users-dropdown');
-      const usersDropdownButton = document.getElementById('users-dropdown-button');
-      const usersMainButton = document.getElementById('users-main-button');
-      const dropdownArrow = document.getElementById('dropdown-arrow');
-      
-      if (usersDropdown && !usersDropdown.classList.contains('hidden')) {
-        usersDropdown.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-        usersDropdown.style.opacity = '0';
-        usersDropdown.style.transform = 'translateX(-10px)';
-        
+      const usersDropdown = document.getElementById("users-dropdown");
+      const usersDropdownButton = document.getElementById(
+        "users-dropdown-button",
+      );
+      const usersMainButton = document.getElementById("users-main-button");
+      const dropdownArrow = document.getElementById("dropdown-arrow");
+
+      if (usersDropdown && !usersDropdown.classList.contains("hidden")) {
+        usersDropdown.style.transition =
+          "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)";
+        usersDropdown.style.opacity = "0";
+        usersDropdown.style.transform = "translateX(-10px)";
+
         setTimeout(() => {
-          usersDropdown.classList.add('hidden');
+          usersDropdown.classList.add("hidden");
         }, 200);
-        
+
         if (usersDropdownButton) {
-          usersDropdownButton.classList.remove('bg-gradient-to-b', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-md');
+          usersDropdownButton.classList.remove(
+            "bg-gradient-to-b",
+            "from-orange-100",
+            "to-red-100",
+            "text-orange-800",
+            "border-orange-300",
+            "shadow-md",
+          );
         }
-        
+
         if (usersMainButton) {
-          usersMainButton.classList.remove('bg-gradient-to-r', 'from-orange-100', 'to-red-100', 'text-orange-800', 'border-orange-300', 'shadow-md');
+          usersMainButton.classList.remove(
+            "bg-gradient-to-r",
+            "from-orange-100",
+            "to-red-100",
+            "text-orange-800",
+            "border-orange-300",
+            "shadow-md",
+          );
         }
-        
+
         if (dropdownArrow) {
-          dropdownArrow.classList.remove('rotated', 'bounce');
-          dropdownArrow.style.transform = 'rotate(0deg) scale(1)';
+          dropdownArrow.classList.remove("rotated", "bounce");
+          dropdownArrow.style.transform = "rotate(0deg) scale(1)";
         }
       }
     }
 
     // Add hover effects for better UX
-    const menuItems = document.querySelectorAll('.group');
-    menuItems.forEach(item => {
-      item.addEventListener('mouseenter', function(this: HTMLElement) {
-        if (!this.classList.contains('active-menu')) {
-          this.style.transform = 'scale(1.02)';
+    const menuItems = document.querySelectorAll(".group");
+    menuItems.forEach((item) => {
+      item.addEventListener("mouseenter", function (this: HTMLElement) {
+        if (!this.classList.contains("active-menu")) {
+          this.style.transform = "scale(1.02)";
         }
       });
-      
-      item.addEventListener('mouseleave', function(this: HTMLElement) {
-        if (!this.classList.contains('active-menu')) {
-          this.style.transform = 'scale(1)';
+
+      item.addEventListener("mouseleave", function (this: HTMLElement) {
+        if (!this.classList.contains("active-menu")) {
+          this.style.transform = "scale(1)";
         }
       });
     });
@@ -664,41 +1148,45 @@ const { currentPage = "dashboard" } = Astro.props;
     (window as any).adminSidebar = {
       updateActiveMenuItem,
       updateActiveMainMenuItem,
-      showNotification: function(message: string, type: string = 'success') {
+      showNotification: function (message: string, type: string = "success") {
         // Create mini notification in sidebar
-        const notification = document.createElement('div');
+        const notification = document.createElement("div");
         notification.className = `fixed top-24 left-6 z-50 p-3 rounded-xl shadow-lg transition-all duration-300 transform -translate-x-full ${
-          type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
-          type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
-          'bg-amber-100 text-amber-800 border border-amber-200'
+          type === "success"
+            ? "bg-green-100 text-green-800 border border-green-200"
+            : type === "error"
+              ? "bg-red-100 text-red-800 border border-red-200"
+              : "bg-amber-100 text-amber-800 border border-amber-200"
         }`;
-        
+
         notification.innerHTML = `
           <div class="flex items-center space-x-2">
             <div class="w-4 h-4 rounded-full ${
-              type === 'success' ? 'bg-green-500' :
-              type === 'error' ? 'bg-red-500' :
-              'bg-amber-500'
+              type === "success"
+                ? "bg-green-500"
+                : type === "error"
+                  ? "bg-red-500"
+                  : "bg-amber-500"
             }"></div>
             <p class="text-sm font-medium">${message}</p>
           </div>
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Show notification
         requestAnimationFrame(() => {
-          notification.style.transform = 'translateX(0)';
+          notification.style.transform = "translateX(0)";
         });
-        
+
         // Hide after 3 seconds
         setTimeout(() => {
-          notification.style.transform = 'translateX(-100%)';
+          notification.style.transform = "translateX(-100%)";
           setTimeout(() => {
             document.body.removeChild(notification);
           }, 300);
         }, 3000);
-      }
+      },
     };
   });
 </script>
@@ -711,30 +1199,30 @@ const { currentPage = "dashboard" } = Astro.props;
     box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
     transform: scale(1.02);
   }
-  
+
   /* Custom Scrollbar for modern look */
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
     border-radius: 3px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, rgb(217 119 6), rgb(234 88 12));
   }
-  
+
   /* Crew dropdown enhanced animations */
   #crew-dropdown.hidden {
     display: none;
   }
-  
+
   #crew-dropdown {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -746,35 +1234,41 @@ const { currentPage = "dashboard" } = Astro.props;
     width: calc(100% - 2rem);
     background-color: rgba(255, 255, 255, 0.9);
   }
-  
+
   /* Crew submenu item hover effects */
   #crew-dropdown button {
     position: relative;
     overflow: hidden;
   }
-  
+
   #crew-dropdown button::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(120deg, transparent 0%, transparent 50%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      transparent 50%,
+      rgba(59, 130, 246, 0.1) 50%,
+      transparent 100%
+    );
     transform: translateX(-100%);
     transition: transform 0.4s ease;
   }
-  
+
   #crew-dropdown button:hover::after {
     transform: translateX(0);
   }
-  
+
   /* Add subtle pulsing glow to active crew submenu items */
   #crew-dropdown button.active {
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     animation: subtlePulseBlue 2s infinite;
   }
-  
+
   @keyframes subtlePulseBlue {
     0% {
       box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
@@ -786,21 +1280,29 @@ const { currentPage = "dashboard" } = Astro.props;
       box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     }
   }
-  
+
   /* Ensure active crew submenu items have proper styling */
   #add-crew.active {
-    background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.3));
+    background: linear-gradient(
+      to right,
+      rgba(59, 130, 246, 0.2),
+      rgba(6, 182, 212, 0.3)
+    );
     color: rgb(30, 64, 175);
   }
-  
+
   #crew-salary.active {
-    background: linear-gradient(to right, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.3));
+    background: linear-gradient(
+      to right,
+      rgba(6, 182, 212, 0.2),
+      rgba(99, 102, 241, 0.3)
+    );
     color: rgb(67, 56, 202);
   }
-  
+
   /* Gradient border for crew submenu */
   #crew-dropdown::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -809,31 +1311,37 @@ const { currentPage = "dashboard" } = Astro.props;
     background: linear-gradient(135deg, rgb(59 130 246), rgb(6 182 212));
     border-radius: 2px;
   }
-  
+
   /* Crew button group styling with enhanced effects */
   .group\/crewgroup {
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
     transition: filter 0.3s ease;
   }
-  
+
   .group\/crewgroup:hover {
     filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.1));
   }
-  
+
   /* Ensure proper z-index and transitions for crew buttons */
-  #crew-main-button, #crew-dropdown-button {
+  #crew-main-button,
+  #crew-dropdown-button {
     transition: all 0.3s ease;
     position: relative;
     z-index: 10;
   }
-  
-  #crew-main-button.active, #crew-dropdown-button.active {
-    background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.3));
+
+  #crew-main-button.active,
+  #crew-dropdown-button.active {
+    background: linear-gradient(
+      to right,
+      rgba(59, 130, 246, 0.2),
+      rgba(147, 197, 253, 0.3)
+    );
   }
-  
+
   /* Crew button group border effect */
   #crew-dropdown-button::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 25%;
@@ -842,33 +1350,37 @@ const { currentPage = "dashboard" } = Astro.props;
     background: rgba(59, 130, 246, 0.1);
     transition: all 0.3s ease;
   }
-  
+
   #crew-dropdown-button:hover::before {
     background: rgba(59, 130, 246, 0.3);
     top: 15%;
     bottom: 15%;
   }
-  
+
   /* Crew icon rotation animation with enhanced effects */
   #crew-dropdown-arrow {
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     transform-origin: center;
     transform: rotate(0deg); /* Default state: arrow pointing down */
   }
-  
+
   #crew-dropdown-arrow.rotated {
     transform: rotate(180deg) scale(1.1); /* Rotated state: arrow pointing up */
   }
-  
+
   /* Enhanced hover effects for crew dropdown button */
   #crew-dropdown-button:hover #crew-dropdown-arrow {
     transform: scale(1.15);
     color: rgb(59 130 246);
   }
-  
+
   /* Crew arrow bounce animation */
   @keyframes crewArrowBounce {
-    0%, 20%, 50%, 80%, 100% {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0) rotate(180deg) scale(1.1);
     }
     40% {
@@ -878,20 +1390,21 @@ const { currentPage = "dashboard" } = Astro.props;
       transform: translateY(-1px) rotate(180deg) scale(1.1);
     }
   }
-  
+
   #crew-dropdown-arrow.bounce {
     animation: crewArrowBounce 0.6s ease-out;
   }
-  
+
   /* Responsive adjustments */
   @media (max-width: 640px) {
     #logo-sidebar {
       width: 16rem;
     }
   }
-  
+
   /* Focus states for accessibility */
-  button:focus-visible, a:focus-visible {
+  button:focus-visible,
+  a:focus-visible {
     outline: 3px solid rgb(245 158 11);
     outline-offset: 2px;
     border-radius: 1rem;

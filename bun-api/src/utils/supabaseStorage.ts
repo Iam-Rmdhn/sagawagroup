@@ -3,6 +3,7 @@ import { ENV } from "../env";
 
 interface UploadOptions {
   prefix?: string;
+  bucket?: string; // Optional custom bucket name
 }
 
 interface UploadResult {
@@ -41,6 +42,9 @@ export const uploadFileToSupabase = async (
   )}`;
   const key = sanitizedPrefix ? `${sanitizedPrefix}/${uniqueName}` : uniqueName;
 
+  // Use custom bucket if specified, otherwise use default
+  const bucketName = options.bucket || ENV.SUPABASE_STORAGE_BUCKET;
+
   const arrayBuffer = await file.arrayBuffer();
   const blob = new Blob([arrayBuffer], {
     type: file.type || "application/octet-stream",
@@ -50,7 +54,7 @@ export const uploadFileToSupabase = async (
   const uploadUrl = `${ENV.SUPABASE_STORAGE_ENDPOINT?.replace(
     "/storage/v1/s3",
     ""
-  )}/storage/v1/object/${ENV.SUPABASE_STORAGE_BUCKET}/${key}`;
+  )}/storage/v1/object/${bucketName}/${key}`;
 
   const response = await fetch(uploadUrl, {
     method: "POST",
@@ -66,8 +70,73 @@ export const uploadFileToSupabase = async (
     throw new Error(`Supabase upload failed: ${response.status} ${errorText}`);
   }
 
-  const publicBase = ENV.SUPABASE_STORAGE_PUBLIC_URL.replace(/\/$/, "");
-  const publicUrl = `${publicBase}/${key}`;
+  // Robust URL Construction
+  let projectBaseUrl = "";
+
+  if (ENV.SUPABASE_STORAGE_PUBLIC_URL) {
+    const url = String(ENV.SUPABASE_STORAGE_PUBLIC_URL);
+    const match = url.match(/^(https?:\/\/[^\/]+)/);
+    if (match) projectBaseUrl = match[1];
+  }
+
+  if (!projectBaseUrl && ENV.SUPABASE_STORAGE_ENDPOINT) {
+    const end = String(ENV.SUPABASE_STORAGE_ENDPOINT);
+    const match = end.match(/^(https?:\/\/[^\/]+)/);
+    if (match) projectBaseUrl = match[1];
+  }
+
+  if (!projectBaseUrl) {
+    projectBaseUrl = "https://rnrxmpmvoqxcdpazikwe.supabase.co";
+  }
+
+  const publicUrl = `${projectBaseUrl}/storage/v1/object/public/${bucketName}/${key}`;
 
   return { key, publicUrl };
+};
+
+// Convenience function to upload to ads bucket (photoIklan)
+export const uploadAdsImageToSupabase = async (
+  file: File,
+  options: Omit<UploadOptions, 'bucket'> = {}
+): Promise<UploadResult> => {
+  return uploadFileToSupabase(file, {
+    ...options,
+    bucket: "photoIklan"
+  });
+};
+
+export const deleteFileFromSupabase = async (
+  key: string,
+  bucketName: string = "photoIklan"
+): Promise<boolean> => {
+  if (!ENV.SUPABASE_STORAGE_ENABLED) return false;
+  if (!key) return false;
+
+  const endpoint = ENV.SUPABASE_STORAGE_ENDPOINT?.replace("/storage/v1/s3", "").replace(/\/+$/, "");
+  const url = `${endpoint}/storage/v1/object/${bucketName}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${ENV.SUPABASE_STORAGE_SECRET_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prefixes: [key]
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Failed to delete file from Supabase: ${response.status} - ${errorText}`);
+      return false;
+    }
+
+    console.log(`Successfully deleted file from Supabase: ${key}`);
+    return true;
+  } catch (error) {
+    console.error("Error deleting file from Supabase:", error);
+    return false;
+  }
 };

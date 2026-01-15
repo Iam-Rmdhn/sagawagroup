@@ -1,0 +1,875 @@
+---
+// AdPopup.astro - Advertisement Popup Modal Component
+// This component shows an advertisement popup when a user first visits the landing page
+---
+
+<!-- Advertisement Popup Modal -->
+<div id="ads-popup-overlay" class="ads-popup-overlay hidden">
+    <div id="ads-popup-modal" class="ads-popup-modal-wrapper">
+        <!-- Close button (Outside) -->
+        <button
+            id="ads-popup-close"
+            class="ads-popup-close-external"
+            aria-label="Close"
+        >
+            <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Navigation Buttons (Outside for Desktop) -->
+        <button
+            id="ads-prev"
+            class="ads-nav-btn-external ads-prev-external hidden"
+            aria-label="Previous Ad"
+        >
+            <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button
+            id="ads-next"
+            class="ads-nav-btn-external ads-next-external hidden"
+            aria-label="Next Ad"
+        >
+            <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+
+        <!-- Modal Card Content -->
+        <div class="ads-popup-card">
+            <!-- Main Content (Image + Desc) -->
+            <div class="ads-body">
+                <div class="ads-image-container">
+                    <img
+                        id="ads-popup-image"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                        alt="Advertisement"
+                        class="ads-popup-image"
+                        loading="eager"
+                    />
+                    <!-- Progress Bar -->
+                    <div
+                        class="ads-progress-container hidden"
+                        id="ads-progress-container"
+                    >
+                        <div class="ads-progress-bar" id="ads-progress-bar">
+                        </div>
+                    </div>
+                </div>
+                <div class="ads-info">
+                    <h3 id="ads-popup-title" class="ads-title"></h3>
+                    <div id="ads-popup-desc" class="ads-desc"></div>
+                </div>
+            </div>
+
+            <!-- Pagination Dots -->
+            <div id="ads-pagination" class="ads-pagination hidden"></div>
+        </div>
+
+        <!-- Footer (CTA) - Outside Card -->
+        <div class="ads-footer-external">
+            <a
+                id="ads-popup-cta"
+                href="#"
+                target="_blank"
+                class="ads-popup-cta"
+            >
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488z"
+                    ></path>
+                </svg>
+                <span>Hubungi Sekarang</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Ads Button (appears after modal is closed) -->
+<button
+    id="ads-floating-btn"
+    class="ads-floating-btn hidden"
+    aria-label="Lihat Promo"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <path d="M15 18h-5"></path>
+        <path d="M18 14h-8"></path>
+        <path
+            d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"
+        ></path>
+        <rect width="8" height="4" x="10" y="6" rx="1"></rect>
+    </svg>
+    <span class="ads-floating-tooltip">Lihat Promo</span>
+</button>
+
+<style>
+    /* Popup Overlay */
+    .ads-popup-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .ads-popup-overlay.hidden {
+        display: none;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Modal Wrapper (for relative positioning of external buttons) */
+    .ads-popup-modal-wrapper {
+        position: relative;
+        max-width: 850px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Card Content */
+    .ads-popup-card {
+        width: 100%;
+        max-height: 75vh; /* Reduced to make room for external CTA */
+        background: white;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    /* External Buttons Style */
+    .ads-popup-close-external,
+    .ads-nav-btn-external {
+        position: absolute;
+        z-index: 50;
+        color: white; /* White text on dark overlay */
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .ads-popup-close-external:hover,
+    .ads-nav-btn-external:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+    }
+
+    /* Positions for Desktop */
+    .ads-popup-close-external {
+        top: -3.5rem;
+        right: -3.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    .ads-nav-btn-external {
+        top: 40%;
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .ads-prev-external {
+        left: -4.5rem;
+    }
+
+    .ads-next-external {
+        right: -4.5rem;
+    }
+
+    .ads-nav-btn-external.hidden {
+        display: none;
+    }
+
+    /* Layout Structure & Body */
+    .ads-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: hidden;
+    }
+    .ads-body {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+        .ads-body {
+            flex-direction: row;
+            align-items: stretch;
+        }
+        .ads-image-container {
+            flex: 1.2;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .ads-info {
+            flex: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid #f3f4f6;
+        }
+    }
+
+    .ads-image-container {
+        position: relative; /* For progress bar overlay */
+    }
+
+    /* Image Styling */
+    .ads-popup-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        min-height: 250px;
+        max-height: 500px;
+        transition: transform 0.5s ease;
+    }
+
+    /* Progress Bar */
+    .ads-progress-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px; /* Thin line */
+        background: rgba(255, 255, 255, 0.3);
+        z-index: 10;
+    }
+    .ads-progress-container.hidden {
+        display: none;
+    }
+
+    .ads-progress-bar {
+        height: 100%;
+        background: #3b82f6; /* Blue progress */
+        width: 0%;
+        transition: width linear; /* Linear transition for smooth bar */
+    }
+
+    /* Info Area */
+    .ads-info {
+        padding: 1.5rem;
+        text-align: left;
+    }
+    .ads-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+        text-align: left;
+    }
+    .ads-desc {
+        color: #4b5563;
+        line-height: 1.6;
+        font-size: 1rem;
+        text-align: left;
+        white-space: pre-line;
+    }
+
+    /* Footer / CTA Area (External) */
+    .ads-footer-external {
+        margin-top: 1.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        z-index: 60;
+    }
+
+    .ads-popup-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.875rem 2.5rem;
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        color: white;
+        font-size: 1.125rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 9999px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        width: 100%;
+        max-width: 320px;
+    }
+    @media (min-width: 768px) {
+        .ads-popup-cta {
+            width: auto;
+        }
+    }
+    .ads-popup-cta:hover {
+        background: linear-gradient(135deg, #128c7e, #075e54);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(18, 140, 126, 0.4);
+    }
+
+    /* Pagination */
+    .ads-pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem 0.5rem;
+        background: #fff;
+    }
+    .ads-pagination.hidden {
+        display: none;
+    }
+    .ads-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .ads-dot.active {
+        background: #3b82f6;
+        transform: scale(1.25);
+    }
+
+    /* Floating Btn */
+    .ads-floating-btn {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        border: none;
+        border-radius: 16px 0 0 16px;
+        color: white;
+        cursor: pointer;
+        box-shadow: -4px 4px 20px rgba(59, 130, 246, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ads-floating-btn:hover {
+        width: 64px;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        box-shadow: -6px 6px 25px rgba(59, 130, 246, 0.5);
+    }
+    .ads-floating-btn.hidden {
+        display: none;
+    }
+    .ads-floating-tooltip {
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.5rem 0.875rem;
+        margin-right: 0.75rem;
+        background: #1e293b;
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 500;
+        white-space: nowrap;
+        border-radius: 0.5rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+        pointer-events: none;
+    }
+    .ads-floating-btn:hover .ads-floating-tooltip {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Animations */
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-50%) translateX(100%);
+        }
+        60% {
+            transform: translateY(-50%) translateX(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+    }
+    .ads-floating-btn:not(.hidden) {
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 640px) {
+        .ads-popup-modal-wrapper {
+            max-width: 90%;
+        }
+        .ads-popup-card {
+            max-height: 70vh;
+        }
+
+        .ads-popup-close-external {
+            /* Position at top-right corner of CARD */
+            top: -2.5rem;
+            right: -0.5rem;
+            width: 2.25rem;
+            height: 2.25rem;
+        }
+
+        .ads-nav-btn-external {
+            /* Move specific prev/next for mobile */
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(0, 0, 0, 0.5); /* Stronger contrast */
+            border: none;
+        }
+
+        .ads-prev-external {
+            left: -1rem;
+        }
+        .ads-next-external {
+            right: -1rem;
+        }
+
+        .ads-popup-cta {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+        }
+
+        .ads-footer-external {
+            margin-top: 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Ad interface
+    interface Ad {
+        _id: string;
+        title: string;
+        description: string;
+        imageUrl: string;
+        whatsappNumber: string;
+        whatsappMessage?: string;
+        adLink?: string;
+    }
+
+    // Configuration
+    const API_BASE_URL: string =
+        window.location.hostname === "localhost"
+            ? "http://localhost:3000"
+            : "https://www.sagawagroup.id";
+
+    const POPUP_SESSION_KEY: string = "sagawa_ads_shown";
+    const SLIDE_DURATION = 5000; // 5 seconds
+
+    // State
+    let currentAds: Ad[] = [];
+    let currentIndex: number = 0;
+    let slideInterval: any = null;
+
+    // Check if popup should be shown (only on first visit per session)
+    function shouldShowPopup(): boolean {
+        const hasShown = sessionStorage.getItem(POPUP_SESSION_KEY);
+        return !hasShown;
+    }
+
+    function markPopupAsShown(): void {
+        sessionStorage.setItem(POPUP_SESSION_KEY, "true");
+    }
+
+    // Fetch active ads
+    async function fetchActiveAds(): Promise<Ad[]> {
+        try {
+            console.log(
+                "Fetching active ads from:",
+                `${API_BASE_URL}/api/ads/active`,
+            );
+            const response = await fetch(`${API_BASE_URL}/api/ads/active`);
+            if (!response.ok)
+                throw new Error(`HTTP error! status: ${response.status}`);
+
+            const result = await response.json();
+            console.log("Active ads fetch result:", result);
+
+            if (result.success && result.data && Array.isArray(result.data)) {
+                return result.data;
+            }
+            return [];
+        } catch (error) {
+            console.error("Error fetching ads:", error);
+            return [];
+        }
+    }
+
+    // Track ad view
+    async function trackView(adId: string): Promise<void> {
+        try {
+            await fetch(`${API_BASE_URL}/api/ads/${adId}/view`, {
+                method: "POST",
+            });
+        } catch (error) {
+            console.error("Error tracking view:", error);
+        }
+    }
+
+    // Track ad click
+    async function trackClick(adId: string): Promise<void> {
+        try {
+            await fetch(`${API_BASE_URL}/api/ads/${adId}/click`, {
+                method: "POST",
+            });
+        } catch (error) {
+            console.error("Error tracking click:", error);
+        }
+    }
+
+    function buildWhatsAppUrl(phoneNumber: string, message?: string): string {
+        let cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
+        if (cleanPhone.startsWith("0"))
+            cleanPhone = "62" + cleanPhone.substring(1);
+        else if (!cleanPhone.startsWith("62")) cleanPhone = "62" + cleanPhone;
+
+        const encodedMessage = encodeURIComponent(
+            message || "Halo, saya tertarik dengan promo Anda!",
+        );
+        return `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+    }
+
+    // Auto Slide Logic
+    function startAutoSlide() {
+        stopAutoSlide(); // Clear existing
+        if (currentAds.length <= 1) return;
+
+        // Reset and animate progress bar
+        const progressBar = document.getElementById("ads-progress-bar");
+        if (progressBar) {
+            // Remove transition to reset instantly
+            progressBar.style.transition = "none";
+            progressBar.style.width = "0%";
+
+            // Force reflow
+            void progressBar.offsetWidth;
+
+            // Start animation
+            progressBar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+            progressBar.style.width = "100%";
+        }
+
+        slideInterval = setInterval(() => {
+            nextAd();
+        }, SLIDE_DURATION);
+    }
+
+    function stopAutoSlide() {
+        if (slideInterval) clearInterval(slideInterval);
+        slideInterval = null;
+
+        // Stop progress bar
+        const progressBar = document.getElementById("ads-progress-bar");
+        if (progressBar) {
+            progressBar.style.transition = "none";
+            progressBar.style.width = "0%";
+        }
+    }
+
+    // Navigation & Rendering Logic
+    function updateNavigation() {
+        const prevBtn = document.getElementById("ads-prev");
+        const nextBtn = document.getElementById("ads-next");
+        const pagination = document.getElementById("ads-pagination");
+        const progContainer = document.getElementById("ads-progress-container");
+
+        if (currentAds.length > 1) {
+            prevBtn?.classList.remove("hidden");
+            nextBtn?.classList.remove("hidden");
+            pagination?.classList.remove("hidden");
+            progContainer?.classList.remove("hidden");
+            renderPaginationDots();
+        } else {
+            prevBtn?.classList.add("hidden");
+            nextBtn?.classList.add("hidden");
+            pagination?.classList.add("hidden");
+            progContainer?.classList.add("hidden");
+        }
+    }
+
+    function renderPaginationDots() {
+        const container = document.getElementById("ads-pagination");
+        if (!container) return;
+
+        container.innerHTML = "";
+        currentAds.forEach((_, idx) => {
+            const dot = document.createElement("div");
+            dot.className = `ads-dot ${idx === currentIndex ? "active" : ""}`;
+            // Allow clicking dots to navigate
+            dot.addEventListener("click", (e) => {
+                e.stopPropagation();
+                currentIndex = idx;
+                renderCurrentAd();
+                startAutoSlide(); // Restart timer
+            });
+            container.appendChild(dot);
+        });
+    }
+
+    function renderCurrentAd() {
+        if (currentAds.length === 0) return;
+        const ad = currentAds[currentIndex];
+
+        const image = document.getElementById(
+            "ads-popup-image",
+        ) as HTMLImageElement;
+        const title = document.getElementById("ads-popup-title");
+        const desc = document.getElementById("ads-popup-desc");
+        const cta = document.getElementById(
+            "ads-popup-cta",
+        ) as HTMLAnchorElement;
+
+        if (image) {
+            // Simple fade effect
+            image.style.opacity = "0.5";
+            setTimeout(() => {
+                image.src = ad.imageUrl;
+                image.alt = ad.title || "Advertisement";
+                image.style.opacity = "1";
+            }, 100);
+        }
+
+        if (title) title.textContent = ad.title || "";
+        if (desc) desc.textContent = ad.description || "";
+
+        if (cta) {
+            if (ad.adLink && ad.adLink.trim() !== "") {
+                cta.href = ad.adLink;
+            } else {
+                cta.href = buildWhatsAppUrl(
+                    ad.whatsappNumber,
+                    ad.whatsappMessage,
+                );
+            }
+        }
+
+        trackView(ad._id);
+
+        // Update dots state
+        const dots = document.querySelectorAll(".ads-dot");
+        dots.forEach((dot, idx) => {
+            if (idx === currentIndex) dot.classList.add("active");
+            else dot.classList.remove("active");
+        });
+    }
+
+    function nextAd() {
+        if (currentAds.length <= 1) return;
+        currentIndex = (currentIndex + 1) % currentAds.length;
+        renderCurrentAd();
+        startAutoSlide(); // Restart timer logic
+    }
+
+    function prevAd() {
+        if (currentAds.length <= 1) return;
+        currentIndex =
+            (currentIndex - 1 + currentAds.length) % currentAds.length;
+        renderCurrentAd();
+        startAutoSlide(); // Restart timer logic
+    }
+
+    // Show popup (starts with index 0 or current)
+    function showPopup(): void {
+        if (currentAds.length === 0) return;
+
+        const overlay = document.getElementById("ads-popup-overlay");
+        const floatingBtn = document.getElementById("ads-floating-btn");
+
+        if (!overlay) return;
+
+        currentIndex = 0;
+
+        renderCurrentAd();
+        updateNavigation();
+        startAutoSlide(); // START AUTO SLIDE
+
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+
+        markPopupAsShown();
+        floatingBtn?.classList.add("hidden");
+
+        // Pause on hover interactions
+        const card = document.querySelector(".ads-popup-card");
+        card?.addEventListener("mouseenter", stopAutoSlide);
+        card?.addEventListener("mouseleave", startAutoSlide);
+    }
+
+    function hidePopup(): void {
+        stopAutoSlide();
+        const overlay = document.getElementById("ads-popup-overlay");
+        const floatingBtn = document.getElementById("ads-floating-btn");
+
+        if (overlay) {
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "";
+        }
+
+        if (currentAds.length > 0 && floatingBtn) {
+            floatingBtn.classList.remove("hidden");
+        }
+    }
+
+    async function initPopup(): Promise<void> {
+        const floatingBtn = document.getElementById("ads-floating-btn");
+
+        try {
+            const ads = await fetchActiveAds();
+            currentAds = ads;
+
+            if (currentAds.length === 0) {
+                console.log("No active ads. Hiding floating button.");
+                floatingBtn?.classList.add("hidden");
+                return;
+            }
+
+            console.log(`Found ${currentAds.length} active ads.`);
+            currentIndex = 0;
+
+            // Show floating button
+            floatingBtn?.classList.remove("hidden");
+
+            if (shouldShowPopup()) {
+                setTimeout(() => {
+                    showPopup();
+                }, 1500);
+            }
+        } catch (e) {
+            console.error("Ad init error", e);
+            floatingBtn?.classList.add("hidden");
+        }
+    }
+
+    // Reopen logic
+    function reopenPopup() {
+        if (currentAds.length > 0) {
+            showPopup();
+        } else {
+            initPopup();
+        }
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+        initPopup();
+
+        // Event Listeners
+        document
+            .getElementById("ads-popup-close")
+            ?.addEventListener("click", hidePopup);
+        document
+            .getElementById("ads-floating-btn")
+            ?.addEventListener("click", reopenPopup);
+
+        document.getElementById("ads-next")?.addEventListener("click", nextAd);
+        document.getElementById("ads-prev")?.addEventListener("click", prevAd);
+
+        // Modal Overlay Click
+        const overlay = document.getElementById("ads-popup-overlay");
+        overlay?.addEventListener("click", (e) => {
+            if (e.target === overlay) hidePopup();
+        });
+
+        // CTA track click
+        document
+            .getElementById("ads-popup-cta")
+            ?.addEventListener("click", () => {
+                if (currentAds.length > 0 && currentAds[currentIndex]) {
+                    trackClick(currentAds[currentIndex]._id);
+                }
+            });
+
+        // Keyboard support
+        document.addEventListener("keydown", (e) => {
+            const overlay = document.getElementById("ads-popup-overlay");
+            if (overlay && !overlay.classList.contains("hidden")) {
+                if (e.key === "Escape") hidePopup();
+                if (e.key === "ArrowRight") nextAd();
+                if (e.key === "ArrowLeft") prevAd();
+            }
+        });
+    });
+</script>
