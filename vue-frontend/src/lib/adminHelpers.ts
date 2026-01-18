@@ -90,7 +90,15 @@ export function renderTableRows(
     const statusText = mitra.status === "approved" ? "Disetujui" : "Pending";
 
     // Get sub brand - only show if RM Nusantara and has valid submenu
-    const validSubBrands = ["Masakan Mas Gawa", "Warnas", "Mas Gaw"];
+    const validSubBrands = [
+      "Masakan Mas Gawa",
+      "Warnas",
+      "WarNas",
+      "WarNas Booth",
+      "WarNas Medium",
+      "WarNas Reguler",
+      "Mas Gaw"
+    ];
     let subBrandBadge = "-";
 
     if (
@@ -98,8 +106,20 @@ export function renderTableRows(
       mitra.rmNusantaraSubMenu &&
       validSubBrands.includes(mitra.rmNusantaraSubMenu)
     ) {
+      let displayText = mitra.rmNusantaraSubMenu;
+      // Format display text if it matches WarNas variants
+      if (displayText.includes("WarNas")) {
+        displayText = displayText.replace("WarNas ", "WarNas (") + ")";
+        // Hande edge case if it is just "WarNas"
+        if (displayText === "WarNas)") displayText = "WarNas";
+        // Handle specific replacements to be sure
+        if (mitra.rmNusantaraSubMenu === "WarNas Booth") displayText = "WarNas (Booth)";
+        if (mitra.rmNusantaraSubMenu === "WarNas Medium") displayText = "WarNas (Medium)";
+        if (mitra.rmNusantaraSubMenu === "WarNas Reguler") displayText = "WarNas (Reguler)";
+      }
+
       subBrandBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
-        ${mitra.rmNusantaraSubMenu}
+        ${displayText}
       </span>`;
     } else {
       subBrandBadge = '<span class="text-gray-400">-</span>';
@@ -125,9 +145,8 @@ export function renderTableRows(
         </td>
         <td class="px-6 py-4">
           <div class="flex items-center space-x-2">
-            ${
-              includeEdit
-                ? `
+            ${includeEdit
+        ? `
               <button onclick="openEditUserModal('${mitra._id}')" 
                 class="inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-medium rounded-lg transition-optimized">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,8 +155,8 @@ export function renderTableRows(
                 Edit
               </button>
             `
-                : ""
-            }
+        : ""
+      }
             <button onclick="viewMitraDetail('${mitra._id}')" 
               class="inline-flex items-center px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-optimized">
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,9 +165,8 @@ export function renderTableRows(
               </svg>
               Detail
             </button>
-            ${
-              mitra.status === "pending"
-                ? `
+            ${mitra.status === "pending"
+        ? `
               <button onclick="approveMitra('${mitra._id}')" 
                 class="inline-flex items-center px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-medium rounded-lg transition-optimized">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,8 +175,8 @@ export function renderTableRows(
                 Setujui
               </button>
             `
-                : ""
-            }
+        : ""
+      }
             <button onclick="deleteMitra('${mitra._id}')" 
               class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition-optimized">
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

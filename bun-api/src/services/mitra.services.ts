@@ -12,6 +12,8 @@ export async function generateUserID(paketUsaha: string) {
     prefix = "MKCR";
   } else if (paketUsaha === "RM Nusantara") {
     prefix = "MWN";
+  } else if (paketUsaha === "Independent Brand") {
+    prefix = "MIB";
   } else {
     throw new Error("Jenis usaha tidak dikenali");
   }
@@ -102,7 +104,7 @@ export async function registerMitra(mitraData: any) {
     );
     throw new Error(
       "Gagal menyimpan data mitra: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
