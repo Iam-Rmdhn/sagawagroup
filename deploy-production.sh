@@ -159,7 +159,8 @@ install_dependencies() {
     print_status "Installing system dependencies..."
     
     # Update package list
-    apt update
+    print_status "Updating package lists..."
+    apt-get update || print_warning "apt-get update encountered errors, continuing anyway..."
     
     # Install Nginx if not installed
     if ! command -v nginx &> /dev/null; then
@@ -316,7 +317,7 @@ deploy_api() {
             # Ensure unzip is available for bun installer
             if ! command -v unzip &> /dev/null; then
                 print_status "Installing unzip (required by Bun installer)..."
-                apt-get update && apt-get install -y unzip
+                (apt-get update || true) && apt-get install -y unzip
             fi
             curl -fsSL https://bun.sh/install | bash
             BUN_PATH="/root/.bun/bin/bun"
@@ -329,7 +330,7 @@ deploy_api() {
         print_status "Bun not found, installing for root..."
         # Ensure unzip is installed (required by bun installer)
         if ! command -v unzip &> /dev/null; then
-            apt-get update && apt-get install -y unzip
+            (apt-get update || true) && apt-get install -y unzip
         fi
         curl -fsSL https://bun.sh/install | bash
         if [ -f "/root/.bun/bin/bun" ]; then
