@@ -4099,11 +4099,11 @@ import AdminNavbar from "../../components/admin/navbar/AdminNavbar.astro";
       }, 1000);
     }
 
-    // Check if we're on admin dashboard before starting visitor tracking
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname.replace(/\/$/, "");
     const isAdminDashboard = currentPath === "/admin/dashboard";
 
-    console.log("[Dashboard] Current path:", currentPath);
+    console.log("[Dashboard] Raw path:", window.location.pathname);
+    console.log("[Dashboard] Normalized path:", currentPath);
     console.log("[Dashboard] Is admin dashboard:", isAdminDashboard);
 
     if (document.readyState === "loading") {
