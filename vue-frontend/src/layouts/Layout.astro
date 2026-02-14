@@ -338,50 +338,53 @@ const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000";
             })();
         </script>
 
-        <!-- Visitor Tracking
-    <script>
-        (function() {
-            const API_URL = document.querySelector('meta[name="api-url"]')?.getAttribute('content') || 'http://localhost:3000';
-            
-            // Don't track admin pages
-            if (window.location.pathname.startsWith('/admin')) {
-                console.log('[Visitor] Skipping tracking for admin page:', window.location.pathname);
-                return;
-            }
+        <!-- AstraDB Visitor Tracking (persistent, for admin dashboard stats) -->
+        <script>
+            (function () {
+                const API_URL =
+                    document
+                        .querySelector('meta[name="api-url"]')
+                        ?.getAttribute("content") || "http://localhost:3000";
 
-            async function trackVisitor() {
-                try {
-                    console.log('[Visitor] Tracking visit to:', window.location.pathname);
-                    console.log('[Visitor] API URL:', API_URL);
-                    
-                    const response = await fetch(`${API_URL}/api/visitor/track`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            path: window.location.pathname,
-                            referer: document.referrer || undefined,
-                        }),
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('[Visitor] ✅ Visit tracked successfully:', data);
-                    } else {
-                        console.warn('[Visitor] ⚠️ Failed to track visit:', response.status, response.statusText);
-                    }
-                } catch (error) {
-                    // Silently fail - don't disrupt user experience
-                    console.warn('[Visitor] ❌ Tracking error:', error);
+                // Don't track admin pages
+                if (window.location.pathname.startsWith("/admin")) {
+                    return;
                 }
-            }
 
-            // Track after a short delay to ensure page is loaded
-            console.log('[Visitor] Will track in 1 second...');
-            setTimeout(trackVisitor, 1000);
-        })();
-    </script> -->
+                async function trackVisitorToDB() {
+                    try {
+                        const response = await fetch(
+                            `${API_URL}/api/visitor/track`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    path: window.location.pathname,
+                                    referer: document.referrer || undefined,
+                                }),
+                            },
+                        );
+
+                        if (response.ok) {
+                            console.log("[Visitor] ✅ Visit recorded to DB");
+                        } else {
+                            console.warn(
+                                "[Visitor] ⚠️ DB tracking failed:",
+                                response.status,
+                            );
+                        }
+                    } catch (error) {
+                        // Silently fail - don't disrupt user experience
+                        console.warn("[Visitor] ❌ DB tracking error:", error);
+                    }
+                }
+
+                // Track after a short delay to ensure page is loaded
+                setTimeout(trackVisitorToDB, 1500);
+            })();
+        </script>
 
         <!-- Service Worker Registration -->
         <script>
