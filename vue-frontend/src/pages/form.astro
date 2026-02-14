@@ -740,7 +740,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                       type="button"
                       data-package="Kagawa Ricebowl"
                       data-original="89000000"
-                      data-discounted="59000000"
+                      data-discounted="69000000"
                       class="desktop-package-option w-full text-left px-4 py-4 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 transition-all duration-200 group"
                     >
                       <div class="flex justify-between items-center">
@@ -755,11 +755,11 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                               >Rp 89.000.000</span
                             >
                             <span class="text-xs text-green-600 font-medium"
-                              >→ Rp 59.000.000</span
+                              >→ Rp 69.000.000</span
                             >
                           </div>
                           <p class="text-xs text-green-600 mt-0.5">
-                            Hemat Rp 30.000.000
+                            Hemat Rp 20.000.000
                           </p>
                         </div>
                         <div
@@ -905,9 +905,9 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                   <option
                     value="Kagawa Ricebowl"
                     data-original="89000000"
-                    data-discounted="59000000"
+                    data-discounted="69000000"
                   >
-                    Kagawa Ricebowl - Rp 59 Jt (Hemat 30 Jt)
+                    Kagawa Ricebowl - Rp 69 Jt (Hemat 20 Jt)
                   </option>
                   <option
                     value="Kagawa Coffee & Ricebowl Corner"
@@ -1067,65 +1067,189 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                     </div>
                   </div>
 
-                  <!-- Mas Gaw Option -->
-                  <label
-                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                  <!-- Mas Gaw Option with Sub-pricing -->
+                  <div
+                    class="bg-white rounded-lg border border-amber-200 overflow-hidden"
                   >
-                    <input
-                      id="mas-gaw"
-                      name="rmNusantaraSubMenu"
-                      type="radio"
-                      value="Mas Gaw"
-                      class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
-                    />
-                    <div class="ml-3 flex-1">
-                      <span class="text-sm font-medium text-gray-800"
-                        >Mas Gaw</span
-                      >
-                      <div class="flex items-center space-x-2 mt-0.5">
-                        <span class="text-xs text-gray-400 line-through"
-                          >Rp 199.000.000</span
-                        >
-                        <span class="text-sm text-green-600 font-semibold"
-                          >Rp 139.000.000</span
-                        >
-                      </div>
-                    </div>
-                    <span
-                      class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
-                      >Hemat 60jt</span
+                    <div
+                      class="flex items-center p-3 border-b border-amber-100 bg-gradient-to-r from-orange-50 to-amber-50"
                     >
-                  </label>
+                      <input
+                        id="mas-gaw"
+                        name="rmNusantaraSubMenu"
+                        type="radio"
+                        value="Mas Gaw"
+                        class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        data-has-submenu="true"
+                      />
+                      <label
+                        for="mas-gaw"
+                        class="ml-2 text-sm font-semibold text-orange-700"
+                        >Mas Gaw</label
+                      >
+                      <span
+                        class="ml-auto text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full"
+                        >2 Pilihan</span
+                      >
+                    </div>
+                    <!-- Mas Gaw Sub-options (Harga berbeda) -->
+                    <div
+                      id="masGawSubOptions"
+                      class="hidden p-3 space-y-2 bg-gray-50"
+                    >
+                      <p class="text-xs text-gray-600 mb-2">
+                        Pilih Paket Kemitraan Mas Gaw:
+                      </p>
+                      <label
+                        class="masgaw-price-option flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="masGawPrice"
+                          value="139000000"
+                          data-original="199000000"
+                          class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        />
+                        <div class="ml-3 flex-1">
+                          <span class="text-sm font-medium text-gray-800"
+                            >Mas Gaw</span
+                          >
+                          <div class="flex items-center space-x-2 mt-0.5">
+                            <span class="text-xs text-gray-400 line-through"
+                              >Rp 199.000.000</span
+                            >
+                            <span class="text-sm text-green-600 font-semibold"
+                              >Rp 139.000.000</span
+                            >
+                          </div>
+                        </div>
+                        <span
+                          class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
+                          >Hemat 60jt</span
+                        >
+                      </label>
+                      <label
+                        class="masgaw-price-option flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="masGawPrice"
+                          value="169000000"
+                          data-original="199000000"
+                          class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        />
+                        <div class="ml-3 flex-1">
+                          <span class="text-sm font-medium text-gray-800"
+                            >Mas Gaw Reguler</span
+                          >
+                          <div class="flex items-center space-x-2 mt-0.5">
+                            <span class="text-xs text-gray-400 line-through"
+                              >Rp 199.000.000</span
+                            >
+                            <span class="text-sm text-green-600 font-semibold"
+                              >Rp 169.000.000</span
+                            >
+                          </div>
+                        </div>
+                        <span
+                          class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
+                          >Hemat 30jt</span
+                        >
+                      </label>
+                    </div>
+                  </div>
 
-                  <!-- Masakan Mas Gawa Option -->
-                  <label
-                    class="flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                  <!-- Masakan Mas Gawa Option with Sub-pricing -->
+                  <div
+                    class="bg-white rounded-lg border border-amber-200 overflow-hidden"
                   >
-                    <input
-                      id="masakan-mas-gawa"
-                      name="rmNusantaraSubMenu"
-                      type="radio"
-                      value="Masakan Mas Gawa"
-                      class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
-                    />
-                    <div class="ml-3 flex-1">
-                      <span class="text-sm font-medium text-gray-800"
-                        >Masakan Mas Gawa</span
-                      >
-                      <div class="flex items-center space-x-2 mt-0.5">
-                        <span class="text-xs text-gray-400 line-through"
-                          >Rp 199.000.000</span
-                        >
-                        <span class="text-sm text-green-600 font-semibold"
-                          >Rp 139.000.000</span
-                        >
-                      </div>
-                    </div>
-                    <span
-                      class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
-                      >Hemat 60jt</span
+                    <div
+                      class="flex items-center p-3 border-b border-amber-100 bg-gradient-to-r from-orange-50 to-amber-50"
                     >
-                  </label>
+                      <input
+                        id="masakan-mas-gawa"
+                        name="rmNusantaraSubMenu"
+                        type="radio"
+                        value="Masakan Mas Gawa"
+                        class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        data-has-submenu="true"
+                      />
+                      <label
+                        for="masakan-mas-gawa"
+                        class="ml-2 text-sm font-semibold text-orange-700"
+                        >Masakan Mas Gawa</label
+                      >
+                      <span
+                        class="ml-auto text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full"
+                        >2 Pilihan</span
+                      >
+                    </div>
+                    <!-- Masakan Mas Gawa Sub-options (Harga berbeda) -->
+                    <div
+                      id="masakanMasGawaSubOptions"
+                      class="hidden p-3 space-y-2 bg-gray-50"
+                    >
+                      <p class="text-xs text-gray-600 mb-2">
+                        Pilih Paket Kemitraan Masakan Mas Gawa:
+                      </p>
+                      <label
+                        class="masakanmasgawa-price-option flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="masakanMasGawaPrice"
+                          value="139000000"
+                          data-original="199000000"
+                          class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        />
+                        <div class="ml-3 flex-1">
+                          <span class="text-sm font-medium text-gray-800"
+                            >Masakan Mas Gawa</span
+                          >
+                          <div class="flex items-center space-x-2 mt-0.5">
+                            <span class="text-xs text-gray-400 line-through"
+                              >Rp 199.000.000</span
+                            >
+                            <span class="text-sm text-green-600 font-semibold"
+                              >Rp 139.000.000</span
+                            >
+                          </div>
+                        </div>
+                        <span
+                          class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
+                          >Hemat 60jt</span
+                        >
+                      </label>
+                      <label
+                        class="masakanmasgawa-price-option flex items-center p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all"
+                      >
+                        <input
+                          type="radio"
+                          name="masakanMasGawaPrice"
+                          value="169000000"
+                          data-original="199000000"
+                          class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 focus:ring-amber-500 flex-shrink-0"
+                        />
+                        <div class="ml-3 flex-1">
+                          <span class="text-sm font-medium text-gray-800"
+                            >Masakan Mas Gawa Reguler</span
+                          >
+                          <div class="flex items-center space-x-2 mt-0.5">
+                            <span class="text-xs text-gray-400 line-through"
+                              >Rp 199.000.000</span
+                            >
+                            <span class="text-sm text-green-600 font-semibold"
+                              >Rp 169.000.000</span
+                            >
+                          </div>
+                        </div>
+                        <span
+                          class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"
+                          >Hemat 30jt</span
+                        >
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1814,7 +1938,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                   type="button"
                   data-package="Kagawa Ricebowl"
                   data-original="89000000"
-                  data-discounted="59000000"
+                  data-discounted="69000000"
                   class="package-option w-full text-left px-6 py-4 hover:bg-amber-50 transition-colors"
                 >
                   <div class="flex justify-between items-center">
@@ -1827,11 +1951,11 @@ import contohMitra from "../assets/img/contoh-mitra.png";
                           >Rp 89.000.000</span
                         >
                         <span class="text-xs text-green-600 font-medium"
-                          >→ Rp 59.000.000</span
+                          >→ Rp 69.000.000</span
                         >
                       </div>
                       <p class="text-xs text-green-600 mt-0.5">
-                        Hemat Rp 30.000.000
+                        Hemat Rp 20.000.000
                       </p>
                     </div>
                     <svg
@@ -2253,7 +2377,9 @@ import contohMitra from "../assets/img/contoh-mitra.png";
           "WarNas Medium",
           "WarNas Reguler",
           "Mas Gaw",
+          "Mas Gaw Reguler",
           "Masakan Mas Gawa",
+          "Masakan Mas Gawa Reguler",
         ];
 
         // Sanitize each field
@@ -2709,7 +2835,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
         );
 
         // Calculate final amounts
-        const dpAmount = DP_FIXED_AMOUNT; // Fixed 5 million
+        const dpAmount = DP_FIXED_AMOUNT; // Fixed 10 million
         const discountedFullPrice = packagePrice - dayDiscount;
         const finalAmount =
           formData.nilaiPaket === "DP"
@@ -2837,7 +2963,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
     // Package prices with original and discounted prices
     const packagePrices = {
       "Kagawa Coffee Corner": { original: 169000000, discounted: 139000000 },
-      "Kagawa Ricebowl": { original: 89000000, discounted: 59000000 },
+      "Kagawa Ricebowl": { original: 89000000, discounted: 69000000 },
       "Kagawa Coffee & Ricebowl Corner": {
         original: 199000000,
         discounted: 169000000,
@@ -2853,11 +2979,30 @@ import contohMitra from "../assets/img/contoh-mitra.png";
       "WarNas Reguler": { original: 199000000, discounted: 139000000 },
     };
 
+    // Mas Gaw sub-pricing options
+    const masGawPrices = {
+      "Mas Gaw": { original: 199000000, discounted: 139000000 },
+      "Mas Gaw Reguler": { original: 199000000, discounted: 169000000 },
+    };
+
+    // Masakan Mas Gawa sub-pricing options
+    const masakanMasGawaPrices = {
+      "Masakan Mas Gawa": { original: 199000000, discounted: 139000000 },
+      "Masakan Mas Gawa Reguler": {
+        original: 199000000,
+        discounted: 169000000,
+      },
+    };
+
     // Track selected WarNas pricing tier
     let selectedWarnasPrice: string | null = null;
 
+    // Track selected Mas Gaw and Masakan Mas Gawa pricing tier
+    let selectedMasGawPrice: string | null = null;
+    let selectedMasakanMasGawaPrice: string | null = null;
+
     // DP
-    const DP_FIXED_AMOUNT = 5000000;
+    const DP_FIXED_AMOUNT = 10000000;
 
     // Current date for discount calculation
     const currentDate = new Date();
@@ -2982,6 +3127,22 @@ import contohMitra from "../assets/img/contoh-mitra.png";
             if (warnasPriceRadios.length === 0) {
               allValid = false;
               invalidFields.push("warnasPrice");
+            }
+          } else if (selectedSubMenu === "Mas Gaw") {
+            const masGawPriceRadios = document.querySelectorAll(
+              'input[name="masGawPrice"]:checked',
+            );
+            if (masGawPriceRadios.length === 0) {
+              allValid = false;
+              invalidFields.push("masGawPrice");
+            }
+          } else if (selectedSubMenu === "Masakan Mas Gawa") {
+            const masakanMasGawaPriceRadios = document.querySelectorAll(
+              'input[name="masakanMasGawaPrice"]:checked',
+            );
+            if (masakanMasGawaPriceRadios.length === 0) {
+              allValid = false;
+              invalidFields.push("masakanMasGawaPrice");
             }
           }
         }
@@ -3690,34 +3851,44 @@ import contohMitra from "../assets/img/contoh-mitra.png";
       .forEach((radio) => {
         radio.addEventListener("change", function (this: HTMLInputElement) {
           const warnasSubOptions = document.getElementById("warnasSubOptions");
+          const masGawSubOptions = document.getElementById("masGawSubOptions");
+          const masakanMasGawaSubOptions = document.getElementById(
+            "masakanMasGawaSubOptions",
+          );
+
+          // Hide all sub-options first
+          warnasSubOptions?.classList.add("hidden");
+          masGawSubOptions?.classList.add("hidden");
+          masakanMasGawaSubOptions?.classList.add("hidden");
+
+          // Reset all sub-pricing selections
+          selectedWarnasPrice = null;
+          selectedMasGawPrice = null;
+          selectedMasakanMasGawaPrice = null;
+          const warnasPriceRadios = document.querySelectorAll(
+            'input[name="warnasPrice"]',
+          ) as NodeListOf<HTMLInputElement>;
+          warnasPriceRadios.forEach((radio) => (radio.checked = false));
+          const masGawPriceRadios = document.querySelectorAll(
+            'input[name="masGawPrice"]',
+          ) as NodeListOf<HTMLInputElement>;
+          masGawPriceRadios.forEach((radio) => (radio.checked = false));
+          const masakanMasGawaPriceRadios = document.querySelectorAll(
+            'input[name="masakanMasGawaPrice"]',
+          ) as NodeListOf<HTMLInputElement>;
+          masakanMasGawaPriceRadios.forEach((radio) => (radio.checked = false));
+
+          toggleAutopilot(false);
 
           if (this.value === "WarNas") {
             // Show WarNas sub-pricing options
             warnasSubOptions?.classList.remove("hidden");
-            // Reset to default RM Nusantara price until user selects a WarNas tier
-            selectedWarnasPrice = null;
-            // Clear previous WarNas price selection
-            const warnasPriceRadios = document.querySelectorAll(
-              'input[name="warnasPrice"]',
-            ) as NodeListOf<HTMLInputElement>;
-            warnasPriceRadios.forEach((radio) => (radio.checked = false));
-            toggleAutopilot(false);
-          } else {
-            // Hide WarNas sub-pricing for other options (Mas Gaw, Masakan Mas Gawa)
-            warnasSubOptions?.classList.add("hidden");
-            selectedWarnasPrice = null;
-            // Clear WarNas price selection
-            const warnasPriceRadios = document.querySelectorAll(
-              'input[name="warnasPrice"]',
-            ) as NodeListOf<HTMLInputElement>;
-            warnasPriceRadios.forEach((radio) => (radio.checked = false));
-            toggleAutopilot(false);
-
-            // Use default RM Nusantara price for Mas Gaw and Masakan Mas Gawa
-            const priceData = packagePrices["RM Nusantara"];
-            packagePrice = priceData.discounted;
-            updatePriceDisplay(priceData);
-            updatePaymentCards();
+          } else if (this.value === "Mas Gaw") {
+            // Show Mas Gaw sub-pricing options
+            masGawSubOptions?.classList.remove("hidden");
+          } else if (this.value === "Masakan Mas Gawa") {
+            // Show Masakan Mas Gawa sub-pricing options
+            masakanMasGawaSubOptions?.classList.remove("hidden");
           }
 
           checkFormValidation();
@@ -3750,6 +3921,52 @@ import contohMitra from "../assets/img/contoh-mitra.png";
         checkFormValidation();
       });
     });
+
+    // Handle Mas Gaw price tier selection
+    document.querySelectorAll('input[name="masGawPrice"]').forEach((radio) => {
+      radio.addEventListener("change", function (this: HTMLInputElement) {
+        const priceValue = parseInt(this.value);
+        const originalValue = parseInt(
+          this.getAttribute("data-original") || "0",
+        );
+
+        packagePrice = priceValue;
+        selectedMasGawPrice = this.value;
+
+        const customPriceData = {
+          original: originalValue,
+          discounted: priceValue,
+        };
+
+        updatePriceDisplay(customPriceData);
+        updatePaymentCards();
+        checkFormValidation();
+      });
+    });
+
+    // Handle Masakan Mas Gawa price tier selection
+    document
+      .querySelectorAll('input[name="masakanMasGawaPrice"]')
+      .forEach((radio) => {
+        radio.addEventListener("change", function (this: HTMLInputElement) {
+          const priceValue = parseInt(this.value);
+          const originalValue = parseInt(
+            this.getAttribute("data-original") || "0",
+          );
+
+          packagePrice = priceValue;
+          selectedMasakanMasGawaPrice = this.value;
+
+          const customPriceData = {
+            original: originalValue,
+            discounted: priceValue,
+          };
+
+          updatePriceDisplay(customPriceData);
+          updatePaymentCards();
+          checkFormValidation();
+        });
+      });
 
     function updatePriceDisplay(
       priceData: { original: number; discounted: number } | undefined,
@@ -3791,7 +4008,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
     function updatePaymentCards() {
       if (!packagePrice) return;
 
-      const dpAmount = DP_FIXED_AMOUNT; // Fixed 5 million
+      const dpAmount = DP_FIXED_AMOUNT; // Fixed 10 million
       const discountedFullPrice = packagePrice - dayDiscount;
       const kekurangan = packagePrice - dpAmount;
 
@@ -4014,6 +4231,12 @@ import contohMitra from "../assets/img/contoh-mitra.png";
       const warnasPriceElement = document.querySelector(
         'input[name="warnasPrice"]:checked',
       ) as HTMLInputElement;
+      const masGawPriceElement = document.querySelector(
+        'input[name="masGawPrice"]:checked',
+      ) as HTMLInputElement;
+      const masakanMasGawaPriceElement = document.querySelector(
+        'input[name="masakanMasGawaPrice"]:checked',
+      ) as HTMLInputElement;
       const namaMitraElement = document.getElementById(
         "namaMitra",
       ) as HTMLInputElement;
@@ -4054,6 +4277,23 @@ import contohMitra from "../assets/img/contoh-mitra.png";
         } else if (priceValue === "139000000") {
           rmSubMenuValue = "WarNas Reguler";
         }
+      } else if (rmSubMenuValue === "Mas Gaw" && masGawPriceElement) {
+        const priceValue = masGawPriceElement.value;
+        if (priceValue === "139000000") {
+          rmSubMenuValue = "Mas Gaw";
+        } else if (priceValue === "169000000") {
+          rmSubMenuValue = "Mas Gaw Reguler";
+        }
+      } else if (
+        rmSubMenuValue === "Masakan Mas Gawa" &&
+        masakanMasGawaPriceElement
+      ) {
+        const priceValue = masakanMasGawaPriceElement.value;
+        if (priceValue === "139000000") {
+          rmSubMenuValue = "Masakan Mas Gawa";
+        } else if (priceValue === "169000000") {
+          rmSubMenuValue = "Masakan Mas Gawa Reguler";
+        }
       }
 
       return {
@@ -4075,7 +4315,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
     }
 
     function generateConfirmationHTML(data: any) {
-      const dpAmount = DP_FIXED_AMOUNT; // Fixed 5 million
+      const dpAmount = DP_FIXED_AMOUNT; // Fixed 10 million
       const discountedFullPrice = packagePrice - dayDiscount;
       const finalAmount =
         data.nilaiPaket === "DP" ? dpAmount - dayDiscount : discountedFullPrice;
@@ -4204,7 +4444,7 @@ import contohMitra from "../assets/img/contoh-mitra.png";
         formData.bankPengirim = await validateBank(formData.bankPengirim);
 
         // Calculate final amounts
-        const dpAmount = DP_FIXED_AMOUNT; // Fixed 5 million
+        const dpAmount = DP_FIXED_AMOUNT; // Fixed 10 million
         const discountedFullPrice = packagePrice - dayDiscount;
         const finalAmount =
           formData.nilaiPaket === "DP"
