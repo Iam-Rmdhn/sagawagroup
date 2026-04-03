@@ -3958,15 +3958,9 @@ import AdminNavbar from "../../components/admin/navbar/AdminNavbar.astro";
         return;
       }
 
-      // Initial update
       updateVisitorStats();
 
-      // Update every 10 seconds
-      visitorUpdateInterval = setInterval(updateVisitorStats, 10000);
-
-      console.log(
-        "[Visitor] ✅ Started visitor stats tracking (updates every 10s)",
-      );
+      visitorUpdateInterval = setInterval(updateVisitorStats, 60000);
     }
 
     function stopVisitorTracking() {
